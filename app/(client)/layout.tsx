@@ -1,11 +1,11 @@
-export default function AdminLayout({
+export default function ClientLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div>
-      I am the layout for admin
+      I am the layout for client
       {children}
     </div>
   );
