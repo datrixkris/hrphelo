@@ -10,11 +10,11 @@ const Sidebar = () => {
       <div className="">
         <h1 className="">
           <Image
-            src="/HRphelo.png"
+            src="/images/HRphelo.png"
             alt="logo"
-            width="150"
-            height="150"
-            className="w-full h-auto object-contain"
+            width="100"
+            height="40"
+            className="w-auto mx-auto h-auto object-contain"
             priority={true}
           />
         </h1>
