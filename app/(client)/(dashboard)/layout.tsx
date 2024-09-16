@@ -1,11 +1,7 @@
-import Sidebar from "./components/Sidebar";
-import Topnav from "./components/Topnav";
+import Sidebar from "../components/Sidebar";
+import Topnav from "../components/Topnav";
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <div className="fixed top-0 bottom-0 w-[250px]">
