@@ -9,7 +9,14 @@ const Sidebar = () => {
       {/* logo  */}
       <div className="">
         <h1 className="">
-          <Image src="/HRphelo.png" alt="logo" width="150" height="150" />
+          <Image
+            src="/HRphelo.png"
+            alt="logo"
+            width="150"
+            height="150"
+            className="w-full h-auto object-contain"
+            priority={true}
+          />
         </h1>
       </div>
       {/* title  */}

@@ -5,7 +5,12 @@ import { Icon } from "@iconify/react";
 // import { useState, useEffect } from "react";
 
 const Theme = () => {
-  const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  let isDarkMode;
+
+  if (typeof window !== "undefined") {
+    // Safe to use window here
+    isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
 
   return (
     <label className="swap swap-rotate">
