@@ -29,7 +29,11 @@ export const ModalTrigger = ({
   children: React.ReactNode;
   id: string;
 }) => {
-  //   return <button className="btn" onClick={()=>document.getElementById(id).showModal()}>{children}</button>;
+  return (
+    <button className="btn" onClick={() => document.getElementById(id)}>
+      {children}
+    </button>
+  );
 };
 
 export const Modal = () => {};
