@@ -2,6 +2,7 @@ import Image from "next/image";
 import React from "react";
 import ActiveLink from "../../components/ActiveLink";
 import { Icon } from "@iconify/react";
+import logo from "@/public/images/HRphelo.png"
 
 const Sidebar = () => {
   return (
@@ -10,7 +11,7 @@ const Sidebar = () => {
       <div className="">
         <h1 className="">
           <Image
-            src="/images/HRphelo.png"
+            src={logo}
             alt="logo"
             width="100"
             height="40"
