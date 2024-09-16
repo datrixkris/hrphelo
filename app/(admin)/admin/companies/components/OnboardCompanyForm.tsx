@@ -39,40 +39,40 @@ const OnboardCompanyForm = () => {
           {/* Contact person's number */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Contact person's number</span>
+              <span className="label-text">Contact person&apos;s number</span>
             </div>
             <input
               required
               type="text"
-              placeholder="Contact person's number here"
+              placeholder="Contact person&apos;s number here"
               className="input input-bordered w-full"
             />
           </label>
 
-          {/* Contact person's name */}
+          {/* Contact person&apos;s name */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Contact person's name</span>
+              <span className="label-text">Contact person&apos;s name</span>
             </div>
             <input
               required
               type="text"
-              placeholder="Contact person's name here"
+              placeholder="Contact person&apos;s name here"
               className="input input-bordered w-full"
             />
           </label>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-5">
-          {/* Company's Telephone */}
+          {/* Company&apos;s Telephone */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Company's Telephone</span>
+              <span className="label-text">Company&apos;s Telephone</span>
             </div>
             <input
               required
               type="text"
-              placeholder="Company's Telephone here"
+              placeholder="Company&apos;s Telephone here"
               className="input input-bordered w-full"
             />
           </label>
@@ -105,17 +105,17 @@ const OnboardCompanyForm = () => {
             />
           </label>
 
-          {/* Company's Registration Document */}
+          {/* Company&apos;s Registration Document */}
           <label className="form-control w-full">
             <div className="label">
               <span className="label-text">
-                Company's Registration Document
+                Company&apos;s Registration Document
               </span>
             </div>
             <input
               required
               type="file"
-              placeholder="Company's Registration Document here"
+              placeholder="Company&apos;s Registration Document here"
               className="file-input input-bordered w-full"
             />
           </label>
@@ -125,24 +125,24 @@ const OnboardCompanyForm = () => {
           {/* Director's National ID */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Director's National ID</span>
+              <span className="label-text">Director&apos;s National ID</span>
             </div>
             <input
               required
               type="text"
-              placeholder="Director's National ID here"
+              placeholder="Director&apos;s National ID here"
               className="input input-bordered w-full"
             />
           </label>
 
-          {/* Director's National ID */}
+          {/* Director&apos;s National ID */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Director's National ID</span>
+              <span className="label-text">Director&apos;s National ID</span>
             </div>
             <input
               type="text"
-              placeholder="Director's National ID here"
+              placeholder="Director&apos;s National ID here"
               className="input input-bordered w-full"
             />
           </label>

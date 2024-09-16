@@ -1,7 +1,5 @@
-import Button from "@/app/components/Button";
 import React from "react";
 import CompanyTable from "./components/CompanyTable";
-import Modal from "@/app/components/Modal";
 import OnboardCompanyButton from "./components/OnboardCompanyButton";
 
 const page = () => {
