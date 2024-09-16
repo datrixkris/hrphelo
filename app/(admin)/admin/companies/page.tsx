@@ -1,6 +1,6 @@
-import Button from "@/app/components/Button";
 import React from "react";
 import CompanyTable from "./components/CompanyTable";
+import OnboardCompanyButton from "./components/OnboardCompanyButton";
 
 const page = () => {
   const companies = [
@@ -38,9 +38,7 @@ const page = () => {
     <div className="space-y-5">
       {/* onboard a company */}
       <div className="flex justify-end">
-        <Button icon="mdi:office-building-plus-outline">
-          Onboard a company
-        </Button>
+        <OnboardCompanyButton />
       </div>
 
       {/* Company lists */}
