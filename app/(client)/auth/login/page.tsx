@@ -12,7 +12,7 @@ const page = () => {
             <img
               className="object-cover object-top w-full h-full"
               src="https://cdn.rareblocks.xyz/collection/celebration/images/signin/4/girl-thinking.jpg"
-              alt=""
+              alt="hr phelo"
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
