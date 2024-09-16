@@ -57,7 +57,7 @@ const Page = () => {
         </div>
         <div className="mt-3 flex items-center justify-between">
           <p className="text-sm text-gray-600 dark:text-gray-200">
-            Didn't receive code?
+            Didn&apos;t receive code?
           </p>
           <button className="rounded px-3 py-2 text-center text-sm font-medium text-hr-yellow-light hover:bg-hr-yellow">
             Request Again
