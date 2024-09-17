@@ -1,0 +1,172 @@
+"use client"
+
+import React from 'react'
+import {SubmitHandler, useForm} from 'react-hook-form'
+import { CompanyDetails } from "../types";
+import Button from '@/app/components/Button';
+
+const page = () => {
+    const { register, handleSubmit } = useForm<CompanyDetails>()
+
+    const onSubmit: SubmitHandler<CompanyDetails> = (data) => {
+        console.log(data)
+    }
+
+  return (
+    <div>
+      <div className="flex justify-between">
+        <h2 className="font-semibold text-2xl">Company Details</h2>
+      </div>
+
+      {/* form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-10 ">
+        <div className="grid grid-cols-3 gap-5">
+          {/* Company name */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Company Name</span>
+            </div>
+            <input
+            {...register("companyName")}
+              required
+              type="text"
+              placeholder="Company name here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Company Location */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Company Location</span>
+            </div>
+            <input
+            {...register("locationAddress")}
+              required
+              type="text"
+              placeholder="Company location here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Contact person's number */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Contact person&apos;s number</span>
+            </div>
+            <input
+            {...register("contactPersonNumber")}
+              required
+              type="text"
+              placeholder="Contact person&apos;s number here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Contact person&apos;s name */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Contact person&apos;s name</span>
+            </div>
+            <input
+            {...register("contactPersonName")}
+              required
+              type="text"
+              placeholder="Contact person&apos;s name here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Company&apos;s Telephone */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Company&apos;s Telephone</span>
+            </div>
+            <input
+            {...register("companyTelephone")}
+              required
+              type="text"
+              placeholder="Company&apos;s Telephone here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Number of staff */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Number of staff</span>
+            </div>
+            <input
+            {...register("numberOfStaff")}
+              required
+              type="number"
+              placeholder="Number of staff here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Company email */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Company email</span>
+            </div>
+            <input
+            {...register("companyEmail")}
+              required
+              type="email"
+              placeholder="Company email here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Company&apos;s Registration Document */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">
+                Company&apos;s Registration Document
+              </span>
+            </div>
+            <input
+            {...register("companyRegistrationDocument")}
+              required
+              type="file"
+              placeholder="Company&apos;s Registration Document here"
+              className="file-input input-bordered w-full"
+            />
+          </label>
+
+          {/* Director's National ID */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Director&apos;s National ID</span>
+            </div>
+            <input
+            //   required
+              type="text"
+              placeholder="Director&apos;s National ID here"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          {/* Director&apos;s National ID */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Director&apos;s National ID</span>
+            </div>
+            <input
+              type="text"
+              placeholder="Director&apos;s National ID here"
+              className="input input-bordered w-full"
+            />
+          </label>
+          </div>
+        {/* submit */}
+        <div className="!mt-10">
+          <Button className="w-[300px]">Edit</Button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default page
