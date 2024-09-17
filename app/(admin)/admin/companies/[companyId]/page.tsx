@@ -5,7 +5,7 @@ import {SubmitHandler, useForm} from 'react-hook-form'
 import { CompanyDetails } from "../types";
 import Button from '@/app/components/Button';
 
-const page = () => {
+const Page = () => {
     const { register, handleSubmit } = useForm<CompanyDetails>()
 
     const onSubmit: SubmitHandler<CompanyDetails> = (data) => {
@@ -169,4 +169,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
