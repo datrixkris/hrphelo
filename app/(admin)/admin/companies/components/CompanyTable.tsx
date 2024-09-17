@@ -1,6 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import { Company } from "../types";
+import Link from "next/link";
 
 interface CompanyTableProps {
   companies: Company[];
@@ -30,10 +31,18 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
               <td>{company.noOfStaff}</td>
               <td>{company.dateRegistered}</td>
               <td>
-                <Icon
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} role="button" className="">
+                  <Icon
                   className="text-2xl cursor-pointer"
                   icon="heroicons:ellipsis-vertical"
-                />
+                  />
+                </div>
+                <ul tabIndex={0} className="border border-base-300 dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                  <li><Link href={`/admin/companies/${company.id}`}><Icon icon="heroicons:eye" /><span>View Details</span></Link></li>
+                  <li><a><Icon icon="heroicons:trash" /><span>Delete</span></a></li>
+                </ul>
+              </div>       
               </td>
             </tr>
           ))}
