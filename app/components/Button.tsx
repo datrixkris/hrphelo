@@ -6,6 +6,7 @@ interface ButtonProps {
   icon?: string;
   buttonType?: "submit" | "reset" | "button";
   children: React.ReactNode;
+  disabled: boolean;
   onClick?: () => void;
 }
 const Button = ({
@@ -14,10 +15,11 @@ const Button = ({
   children,
   onClick,
   buttonType = "submit",
+  disabled,
 }: ButtonProps) => {
   return (
     <button
-      type={buttonType}
+      type={buttonType} disabled={disabled} 
       className={`${className} button flex items-center justify-center gap-2`}
       onClick={onClick}
     >
