@@ -60,7 +60,7 @@ const Page = () => {
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
             <div className="mb-5 flex w-full justify-center text-center">
               <Image
-                src="/images/HRphelo.png"
+                src="/images/hrphelo.png"
                 alt="logo"
                 width="200"
                 height="150"

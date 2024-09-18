@@ -10,7 +10,7 @@ const Sidebar = () => {
       <div className="">
         <h1 className="">
           <Image
-            src="/images/hrphello.png"
+            src="/images/hrphelo.png"
             alt="logo"
             width={100}
             height={40}

@@ -29,7 +29,7 @@ const Page = () => {
       <div className="mx-auto max-w-2xl text-center">
         <div className="mb-7 flex w-full justify-center text-center">
           <Image
-            src="/images/HRphelo.png"
+            src="/images/hrphelo.png"
             alt="logo"
             width="200"
             height="150"
