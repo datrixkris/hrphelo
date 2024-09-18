@@ -1,38 +1,22 @@
-import React from "react";
+"use client"
+
+import React, { useEffect } from "react";
 import CompanyTable from "./components/CompanyTable";
 import OnboardCompanyButton from "./components/OnboardCompanyButton";
+import { useCompanyStore } from "@/app/stores/company-store";
 
 const page = () => {
-  const companies = [
-    {
-      id: 1,
-      companyName: "Tech Innovators Ltd",
-      location: "San Francisco, USA",
-      noOfStaff: 120,
-      dateRegistered: "2020-05-15",
-    },
-    {
-      id: 2,
-      companyName: "Green Energy Corp",
-      location: "Berlin, Germany",
-      noOfStaff: 350,
-      dateRegistered: "2018-10-01",
-    },
-    {
-      id: 3,
-      companyName: "AI Solutions",
-      location: "Tokyo, Japan",
-      noOfStaff: 85,
-      dateRegistered: "2019-07-23",
-    },
-    {
-      id: 4,
-      companyName: "FinTech World",
-      location: "London, UK",
-      noOfStaff: 500,
-      dateRegistered: "2017-03-12",
-    },
-  ];
+  const { companies, loading, error, fetchCompanies } = useCompanyStore()
+
+  useEffect(() => {
+    fetchCompanies();
+  }, [])
+
+  if(loading && companies.length < 1) {
+    return <div className="rounded py-20 text-center">
+    Getting companies data...
+  </div>
+  }
 
   return (
     <div className="space-y-5">
@@ -43,7 +27,7 @@ const page = () => {
 
       {/* Company lists */}
       <div className="">
-        {true ? (
+        {companies.length > 0 ? (
           <div className="py-10">
             <CompanyTable companies={companies} />
           </div>

@@ -8,7 +8,7 @@ interface CompanyTableProps {
 }
 const CompanyTable = ({ companies }: CompanyTableProps) => {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto overflow-y-visible">
       <table className="table  table-lg bg-base-100 rounded border border-base-300 ">
         {/* head */}
         <thead className="">
@@ -26,10 +26,10 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
           {companies.map((company, index) => (
             <tr key={company.id} className="hover !text-sm">
               <th>{index + 1}</th>
-              <td>{company.companyName}</td>
-              <td>{company.location}</td>
-              <td>{company.noOfStaff}</td>
-              <td>{company.dateRegistered}</td>
+              <td>{company.name}</td>
+              <td>{company.address}</td>
+              <td>{company.company_size}</td>
+              <td>{company.createdAt}</td>
               <td>
               <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="">
