@@ -1,12 +1,12 @@
 import Button from "@/app/components/Button";
 import React from "react";
 import {SubmitHandler, useForm} from 'react-hook-form'
-import { CompanyDetails } from "../types";
+import { Company } from "../types";
 
 const OnboardCompanyForm = () => {
-    const { register, handleSubmit } = useForm<CompanyDetails>()
+    const { register, handleSubmit } = useForm<Company>()
 
-    const onSubmit: SubmitHandler<CompanyDetails> = (data) => {
+    const onSubmit: SubmitHandler<Company> = (data) => {
         console.log(data)
     }
 
@@ -22,7 +22,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Company Name</span>
             </div>
             <input
-            {...register("companyName")}
+            {...register("name")}
               required
               type="text"
               placeholder="Company name here"
@@ -36,7 +36,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Company Location</span>
             </div>
             <input
-            {...register("locationAddress")}
+            {...register("address")}
               required
               type="text"
               placeholder="Company location here"
@@ -52,7 +52,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Contact person&apos;s number</span>
             </div>
             <input
-            {...register("contactPersonNumber")}
+            {...register("contact_person_contact")}
               required
               type="text"
               placeholder="Contact person&apos;s number here"
@@ -66,7 +66,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Contact person&apos;s name</span>
             </div>
             <input
-            {...register("contactPersonName")}
+            {...register("contact_person")}
               required
               type="text"
               placeholder="Contact person&apos;s name here"
@@ -82,7 +82,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Company&apos;s Telephone</span>
             </div>
             <input
-            {...register("companyTelephone")}
+            {...register("contact")}
               required
               type="text"
               placeholder="Company&apos;s Telephone here"
@@ -96,7 +96,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Number of staff</span>
             </div>
             <input
-            {...register("numberOfStaff")}
+            {...register("company_size")}
               required
               type="number"
               placeholder="Number of staff here"
@@ -112,7 +112,7 @@ const OnboardCompanyForm = () => {
               <span className="label-text">Company email</span>
             </div>
             <input
-            {...register("companyEmail")}
+            {...register("email")}
               required
               type="email"
               placeholder="Company email here"
@@ -128,7 +128,7 @@ const OnboardCompanyForm = () => {
               </span>
             </div>
             <input
-            {...register("companyRegistrationDocument")}
+            {...register("document")}
               required
               type="file"
               placeholder="Company&apos;s Registration Document here"
