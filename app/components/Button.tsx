@@ -5,10 +5,11 @@ interface ButtonProps {
   className?: string;
   icon?: string;
   children: React.ReactNode;
+  disabled?: boolean;
 }
-const Button = ({ className, icon, children }: ButtonProps) => {
+const Button = ({ className, icon, children ,disabled}: ButtonProps) => {
   return (
-    <button className={`${className} button flex items-center gap-2`}>
+    <button    disabled={disabled}  className={`${className} button flex items-center gap-2`}>
       {icon && <Icon icon={icon} />} <span>{children}</span>
     </button>
   );
