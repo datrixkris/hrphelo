@@ -3,13 +3,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { useCompanyStore } from '@/app/stores/company-store'
+import { Company } from '../types'
 // import Button from '@/app/components/Button';
 
 const Page = () => {
     const params = useParams()
     const fetchCompanyById = useCompanyStore((state) => state.fetchCompanyById)
     const loading = useCompanyStore((state) => state.loading)
-    const [companyDetails, setCompanyDetails] = useState<any | null>(null)
+    const [companyDetails, setCompanyDetails] = useState<Company | null>(null)
     
     useEffect(() => {
         if(params.companyId) {

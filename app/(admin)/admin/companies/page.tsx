@@ -5,8 +5,8 @@ import CompanyTable from "./components/CompanyTable";
 import OnboardCompanyButton from "./components/OnboardCompanyButton";
 import { useCompanyStore } from "@/app/stores/company-store";
 
-const page = () => {
-  const { companies, loading, error, fetchCompanies } = useCompanyStore()
+const Page = () => {
+  const { companies, loading, fetchCompanies } = useCompanyStore()
 
   useEffect(() => {
     fetchCompanies();
@@ -41,4 +41,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

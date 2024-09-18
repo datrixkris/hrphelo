@@ -6,7 +6,7 @@ interface ButtonProps {
   icon?: string;
   buttonType?: "submit" | "reset" | "button";
   children: React.ReactNode;
-  disabled: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 }
 const Button = ({
