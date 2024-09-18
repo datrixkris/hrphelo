@@ -10,11 +10,11 @@ const Sidebar = () => {
       <div className="">
         <h1 className="">
           <Image
-            src="/images/HRphelo.png"
+            src="/images/hrphello.png"
             alt="logo"
-            width="150"
-            height="150"
-            className="w-full h-auto object-contain"
+            width={100}
+            height={40}
+            className="w-auto mx-auto h-auto object-contain"
             priority={true}
           />
         </h1>
@@ -24,7 +24,7 @@ const Sidebar = () => {
         <div className="my-7 space-y-3 ">
           {/* dashboard */}
           <div className="">
-            <ActiveLink href="/admin">
+            <ActiveLink href="/admin/dashboard">
               <div className="flex gap-2 items-center">
                 <Icon icon="hugeicons:dashboard-square-03" />
                 <span>Dashboard</span>
