@@ -1,4 +1,3 @@
-import { resolve } from "path"
 import { create } from "zustand"
 import { api } from "../axiosApi/api"
 import { Company } from "../(admin)/admin/companies/types"
@@ -8,7 +7,7 @@ interface CompanyStore {
     loading?: boolean;
     error?: string | null;
     fetchCompanies: () => Promise<void>
-    fetchCompanyById: (id: number) => Promise<any>
+    fetchCompanyById: (id: number) => Promise<Company>
 }
 
 export const useCompanyStore = create<CompanyStore>((set) => ({
