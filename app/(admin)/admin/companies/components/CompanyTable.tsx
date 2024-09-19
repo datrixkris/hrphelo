@@ -8,7 +8,7 @@ interface CompanyTableProps {
 }
 const CompanyTable = ({ companies }: CompanyTableProps) => {
   return (
-    <div className="overflow-x-auto overflow-y-visible">
+    <div className="overflow-x-auto">
       <table className="table  table-lg bg-base-100 rounded border border-base-300 ">
         {/* head */}
         <thead className="">
@@ -31,17 +31,10 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
               <td>{company.company_size}</td>
               <td>{company.createdAt}</td>
               <td>
-              <div className="dropdown dropdown-end">
-                <div tabIndex={0} role="button" className="">
-                  <Icon
-                  className="text-2xl cursor-pointer"
-                  icon="heroicons:ellipsis-vertical"
-                  />
-                </div>
-                <ul tabIndex={0} className="border border-base-300 dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                  <li><Link href={`/admin/companies/${company.id}`}><Icon icon="heroicons:eye" /><span>View Details</span></Link></li>
-                  <li><a><Icon icon="heroicons:trash" /><span>Delete</span></a></li>
-                </ul>
+              <div className="">
+                
+                <Link href={`/admin/companies/${company.id}`}><Icon icon="heroicons:eye" className="inline-block text-xl" /><span className="relative top-0.5 ml-1">View</span></Link>
+               
               </div>       
               </td>
             </tr>
