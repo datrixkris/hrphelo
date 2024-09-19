@@ -10,7 +10,7 @@ const page = () => {
         <div className="max-w-2xl mx-auto text-center">
           <div className="w-full flex justify-center text-center mb-5">
             <Image
-              src="/images/HRphelo.png"
+              src="/images/hrphelo.png"
               alt="logo"
               width="200"
               height="150"
