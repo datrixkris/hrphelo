@@ -9,11 +9,10 @@ export const submitLoginForm = async (formData: LoginData) => {
     console.log("response:", response);
 
     if (response.data.token) {
-      // Store the token using Zustand (assuming you have a store setup)
-      // import { useStore } from "@/app/store"; 
-      // const setToken = useStore((state) => state.setToken);
-      // setToken(response.data.token);
+      // set access token
       useAuthStore.setState({accessToken: response.data.token})
+      // store in localhost
+      localStorage.setItem('accessToken', JSON.stringify(response.data.token))
       // fetch user data on successful login
       const fetchUserData = useAuthStore.getState().fetchUserData
       fetchUserData()

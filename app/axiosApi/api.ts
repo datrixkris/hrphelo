@@ -34,19 +34,19 @@ api.interceptors.response.use((response) => {
 },async (error) => {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
-  const originalRequest = error.config
-  if (error.response?.status === 401 && !originalRequest._retry) {
-    originalRequest._retry = true
+  // const originalRequest = error.config
+  // if (error.response?.status === 401 && !originalRequest._retry) {
+  //   originalRequest._retry = true
 
-    try {
-      const response = await api.get('/v1/auth/refresh-token')
-      useAuthStore.setState({accessToken: response.data.accessToken})
-      return api(originalRequest)
-    } catch (err){
-      console.log(err)
-      // logout()
-    }
-  }
+  //   try {
+  //     const response = await api.get('/v1/auth/refresh-token')
+  //     useAuthStore.setState({accessToken: response.data.accessToken})
+  //     return api(originalRequest)
+  //   } catch (err){
+  //     console.log(err)
+  //     // logout()
+  //   }
+  // }
   console.log("i am here too")
   return Promise.reject(error);
 });
