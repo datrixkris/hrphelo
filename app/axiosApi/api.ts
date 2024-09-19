@@ -16,7 +16,7 @@ api.interceptors.request.use( async (config) => {
   // Do something before request is sent
   const token = useAuthStore.getState().accessToken;
       if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = token;
       }
   console.log("I am going hahahhahahahha ", config.headers.Authorization)
   return config;
