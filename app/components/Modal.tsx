@@ -3,7 +3,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   clickOutside?: boolean;
@@ -24,13 +24,13 @@ const Modal = ({
   };
   return (
     <div
-      className={`modal-backdrop fixed z-50 top-0 left-0 size-full bg-black/50 flex justify-center items-center transition-opacity opacity-0 invisible ${
-        isOpen ? "!opacity-100 !visible" : "!opacity-0 !invisible"
+      className={`modal-backdrop invisible fixed left-0 top-0 z-50 flex size-full items-center justify-center bg-black/50 opacity-0 transition-opacity ${
+        isOpen ? "!visible !opacity-100" : "!invisible !opacity-0"
       }`}
       onClick={clickOutside ? handleBackdropClick : () => {}}
     >
       <div
-        className={`modal-content p-5 bg-base-100 rounded border border-base-300 max-h-[90vh] overflow-y-auto text-base-content relative transition-transform -translate-y-7 ${
+        className={`modal-content relative max-h-[90vh] -translate-y-7 overflow-y-auto rounded border border-base-300 bg-base-100 p-5 text-base-content transition-transform ${
           isOpen ? "!translate-y-0" : "!-translate-y-7"
         }`}
       >
@@ -39,7 +39,7 @@ const Modal = ({
         </button> */}
         <Icon
           icon="heroicons:x-circle"
-          className="modal-close absolute top-2 right-2 text-base-content cursor-pointer text-xl"
+          className="modal-close absolute right-2 top-2 cursor-pointer text-xl text-base-content"
           onClick={onClose}
         />
         {children}

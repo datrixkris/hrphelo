@@ -1,13 +1,14 @@
 import { create } from "zustand"
-import { api } from "../axiosApi/api"
-import { Company } from "../(admin)/admin/companies/types"
+import { api } from "../../../axiosApi/api"
+import { Company } from "./types"
 
 interface CompanyStore {
     companies: Company[];
     loading?: boolean;
     error?: string | null;
-    fetchCompanies: () => Promise<void>
-    fetchCompanyById: (id: number) => Promise<Company>
+    fetchCompanies: () => Promise<void>;
+    OnboardCompany: (data: Company) => Promise<void>;
+    fetchCompanyById: (id: number) => Promise<Company>;
 }
 
 export const useCompanyStore = create<CompanyStore>((set) => ({
@@ -41,6 +42,20 @@ export const useCompanyStore = create<CompanyStore>((set) => ({
         } catch (err) {
             console.error(err)
             set({error: 'Failed to fetch data', loading: false})
+        }
+    },
+
+    // add or onboard a company
+    OnboardCompany: async(data) => {
+        set({loading: true, error: null});
+
+        try {
+            const response = await api.post('/v1/companies', data)
+            set(() => ({loading: false}))
+            console.log(response.data)
+        } catch (err) {
+            console.log(err)
+            set({error: 'Failed to post data', loading: false})
         }
     }
 }))
