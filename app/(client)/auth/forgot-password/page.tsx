@@ -1,3 +1,4 @@
+"use client";
 import Button from "@/app/components/Button";
 import { useAuthStore } from "@/app/stores/auth-store";
 import Image from "next/image";
