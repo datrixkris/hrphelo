@@ -1,13 +1,25 @@
 import Button from "@/app/components/Button";
+import { useAuthStore } from "@/app/stores/auth-store";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useLayoutEffect } from "react";
 
 const page = () => {
+  const router = useRouter();
+
+  useLayoutEffect(() => {
+    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+    
+
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [router]);
   return (
-    <section className="py-10 bg-base-100 sm:py-16 lg:py-24 h-screen">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="w-full flex justify-center text-center mb-5">
+    <section className="h-screen bg-base-100 py-10 sm:py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="mb-5 flex w-full justify-center text-center">
             <Image
               src="/images/hrphelo.png"
               alt="logo"
@@ -17,10 +29,10 @@ const page = () => {
           </div>
         </div>
 
-        <div className="relative max-w-md mx-auto mt-8 md:mt-16">
-          <div className="overflow-hidden bg-base-300 rounded-md shadow-md">
+        <div className="relative mx-auto mt-8 max-w-md md:mt-16">
+          <div className="overflow-hidden rounded-md bg-base-300 shadow-md">
             <div className="px-4 py-6 sm:px-8 sm:py-7">
-              <div className="text-center mb-10">
+              <div className="mb-10 text-center">
                 {" "}
                 <h2 className="text-2xl font-bold leading-tight text-black dark:text-white">
                   Forgot your password?{" "}
@@ -40,7 +52,7 @@ const page = () => {
                       {" "}
                       Email address{" "}
                     </label>
-                    <div className="input rounded mt-2 input-bordered flex items-center gap-2">
+                    <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -55,7 +67,7 @@ const page = () => {
                   </div>
 
                   <div>
-                    <Button className="inline-flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-white">
+                    <Button className="inline-flex w-full items-center justify-center px-4 py-3 text-base font-semibold text-white">
                       Request for password reset
                     </Button>
                   </div>

@@ -7,17 +7,15 @@ export const api = axios.create({
   baseURL,
   timeout: 50000,
   headers: {
-    // 'Access-Control-Allow-Origin': 'http://localhost:5173'
   },
 });
 
 // Add a request interceptor
-api.interceptors.request.use( async (config) => {
-  // Do something before request is sent
+api.interceptors.request.use(async (config) => {
   const token = useAuthStore.getState().accessToken;
-      if (token) {
-        config.headers.Authorization = token;
-      }
+  if (token) {
+    config.headers.Authorization = token;
+  }
   console.log("I am going hahahhahahahha ", config.headers.Authorization)
   return config;
 }, (error) => {
@@ -31,7 +29,14 @@ api.interceptors.response.use((response) => {
   // Do something with response data
   console.log("i am heere")
   return response;
-},async (error) => {
+}, async (error) => {
+  if (error.response?.status === 401) {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem('accessToken');
+    }
+  }
+
+
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
   // const originalRequest = error.config

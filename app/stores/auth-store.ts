@@ -1,31 +1,51 @@
-import { create } from "zustand"
+import { create } from "zustand";
 import { User } from "../types/user-types";
 import { api } from "../axiosApi/api";
 
 interface AuthStore {
-    accessToken: string;
+    accessToken: string | null;
     user: User | null;
-    fetchUserData: () => Promise<void>
+    isAuthenticated: boolean;
+    fetchUserData: () => Promise<void>;
+    resetData: {
+        password: string;
+        confirmPassword: string;
+        otp: string;
+    } | null;
 }
 
-// Helper function to load data from localStorage
 const getLocalStorage = (key: string) => {
-    const storedValue = localStorage.getItem(key);
-    return storedValue ? JSON.parse(storedValue) : null;
+    if (typeof window !== "undefined") {
+        const storedValue = localStorage.getItem(key);
+        return storedValue ? JSON.parse(storedValue) : null;
+    }
+    return null;
 };
 
 export const useAuthStore = create<AuthStore>((set) => ({
-    // state variables
     accessToken: getLocalStorage('accessToken'),
     user: null,
+    isAuthenticated: false, // Initialize to false
 
-    // Actions
-    fetchUserData: async() => {
+    fetchUserData: async () => {
         try {
-            const response = await api.get('/v1/user')
-            set({user: response.data})
+            const response = await api.get('/v1/user');
+            set({ user: response.data });
+            // Update isAuthenticated based on user and access token
+            const isAuthenticated = !!getLocalStorage('accessToken') && response.data.isPasswordReset === true;
+
+            set({ isAuthenticated });
+
+          
+
         } catch (err) {
-            console.error(err)
+            console.error('Error fetching user data:', err);
         }
+    },
+
+    resetData: {
+        password: '',
+        confirmPassword: '',
+        otp: ''
     }
-}))
+}));
