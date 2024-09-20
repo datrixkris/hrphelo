@@ -1,9 +1,10 @@
 "use client";
 import { requestOtp, submitOtpForm } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
+import { useAuthStore } from "@/app/stores/auth-store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 const Page = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -80,6 +81,14 @@ const Page = () => {
       if (countdownInterval) clearInterval(countdownInterval);
     };
   }, [timer, canRequestOtp]);
+
+  useLayoutEffect(() => {
+    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [router]);
 
   return (
     <section className="flex h-screen w-full flex-col items-center justify-center bg-base-100">
