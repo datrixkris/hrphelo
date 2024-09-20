@@ -2,12 +2,13 @@
 import { submitLoginForm } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
 import { LoginData, loginSchema } from "@/app/schemas";
+import { useAuthStore } from "@/app/stores/auth-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Page = () => {
@@ -35,6 +36,21 @@ const Page = () => {
       setLoading(false);
     }
   };
+
+  useLayoutEffect(() => {
+    const fetchUser = async () => {
+      await useAuthStore.getState().fetchUserData();
+      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      console.log("looo:", isAuthenticated);
+      const userData = useAuthStore.getState().user;
+      console.log("Current user data:", userData);
+      if (isAuthenticated) {
+        router.push("/");
+      }
+    };
+
+    fetchUser();
+  }, [router]);
 
   return (
     <section className="bg-base-300">
