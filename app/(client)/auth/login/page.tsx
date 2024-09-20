@@ -6,11 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Page = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -23,11 +25,14 @@ const Page = () => {
   const onSubmit = async (data: LoginData) => {
     setLoading(true);
     try {
-      await submitLoginForm(data);
+      const respond = await submitLoginForm(data);
+      if (respond?.route) {
+        router.push(respond.route);
+      }
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -35,7 +40,7 @@ const Page = () => {
     <section className="bg-base-300">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left side */}
-        <div className="relative flex h-screen items-end bg-gray-50 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
+        <div className="relative hidden h-screen items-end bg-gray-50 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:flex md:justify-center lg:px-8 lg:pb-24">
           <div className="absolute inset-0">
             <img
               className="h-full w-full object-cover object-top"

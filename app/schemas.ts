@@ -7,6 +7,11 @@ export const loginSchema = z.object({
   password: z.string().min(6),
 });
 
+export const resetSchema = z.object({
+  password: z.string().min(6),
+  confirmPassword: z.string().min(6),
+});
+
 // Example schema for user registration
 export const registerSchema = z.object({
   name: z.string().min(2),
@@ -20,4 +25,10 @@ export const registerSchema = z.object({
 
 // Inferring types from Zod schemas
 export type LoginData = z.infer<typeof loginSchema>;
-export type RegisterData = z.infer<typeof registerSchema>;
+export type ResetFormData = z.infer<typeof resetSchema>;
+
+export type FirstResetData = {
+  password: String,
+  confirmPassword: String,
+  otp: String,
+}

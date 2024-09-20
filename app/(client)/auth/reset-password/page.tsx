@@ -1,14 +1,43 @@
+"use client";
+import { submitSetForm } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
+import { ResetFormData, resetSchema } from "@/app/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
-const page = () => {
+const Page = () => {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetFormData>({
+    resolver: zodResolver(resetSchema),
+  });
+
+  const onSubmit = async (data: ResetFormData) => {
+    setLoading(true);
+    try {
+      const respond = await submitSetForm(data);
+      if (respond?.route) {
+        router.push(respond.route);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <section className="py-10 bg-base-100 sm:py-16 lg:py-24 h-screen">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="w-full flex justify-center text-center mb-5">
+    <section className="h-screen bg-base-100 py-10 sm:py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <div className="mb-5 flex w-full justify-center text-center">
             <Image
               src="/images/hrphelo.png"
               alt="logo"
@@ -18,16 +47,16 @@ const page = () => {
           </div>
         </div>
 
-        <div className="relative max-w-md mx-auto mt-8 md:mt-16">
-          <div className="overflow-hidden bg-base-300 rounded-md shadow-md">
+        <div className="relative mx-auto mt-8 max-w-md md:mt-16">
+          <div className="overflow-hidden rounded-md bg-base-300 shadow-md">
             <div className="px-4 py-6 sm:px-8 sm:py-7">
-              <div className="text-center mb-10">
+              <div className="mb-10 text-center">
                 {" "}
                 <h2 className="text-2xl font-bold leading-tight text-black dark:text-white">
                   Reset new password{" "}
                 </h2>
               </div>
-              <form action="#" method="POST">
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-5">
                   <div>
                     <label
@@ -36,13 +65,14 @@ const page = () => {
                     >
                       Password{" "}
                     </label>
-                    <div className="input rounded mt-2 input-bordered flex items-center gap-2">
+                    <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                       <Icon
                         icon="mdi:password"
                         className="h-4 w-4 opacity-70"
                       />
 
                       <input
+                        {...register("password")}
                         type="password"
                         className="grow"
                         placeholder="Password"
@@ -56,7 +86,7 @@ const page = () => {
                     >
                       Confirm Password
                     </label>
-                    <div className="input  rounded mt-2 input-bordered flex items-center gap-2">
+                    <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                       <Icon
                         icon="mdi:password"
                         className="h-4 w-4 opacity-70"
@@ -64,6 +94,7 @@ const page = () => {
 
                       <input
                         type="password"
+                        {...register("confirmPassword")}
                         className="grow"
                         placeholder="  Confirm Password"
                       />
@@ -71,8 +102,12 @@ const page = () => {
                   </div>
 
                   <div>
-                    <Button className="inline-flex items-center justify-center w-full px-4 py-3 text-base font-semibold text-white">
-                      Reset password{" "}
+                    <Button className="inline-flex w-full items-center justify-center px-4 py-3 text-base font-semibold text-white">
+                      {loading ? (
+                        <Icon icon="line-md:loading-loop" className="h-7 w-7" />
+                      ) : (
+                        "continue"
+                      )}{" "}
                     </Button>
                   </div>
                 </div>
@@ -85,4 +120,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
