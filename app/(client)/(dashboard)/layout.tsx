@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Topnav from "../components/Topnav";
@@ -8,7 +8,6 @@ import { useAuthStore } from "@/app/stores/auth-store";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-
 
   useLayoutEffect(() => {
     const fetchUser = async () => {

@@ -1,15 +1,15 @@
+"use client";
 import Button from "@/app/components/Button";
 import { useAuthStore } from "@/app/stores/auth-store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useLayoutEffect } from "react";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
 
   useLayoutEffect(() => {
     const isAuthenticated = useAuthStore.getState().isAuthenticated;
-    
 
     if (isAuthenticated) {
       router.push("/");
@@ -81,4 +81,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
