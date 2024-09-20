@@ -49,19 +49,22 @@ const Page = () => {
     <div>
       <div className="flex justify-between">
         <h2 className="text-3xl font-semibold">{companyDetails?.name}</h2>
-        <Button>Edit Details</Button>
       </div>
 
       {/* details */}
       <div className="mt-20 space-y-6 text-sm">
-        {/* company details */}
-        <div className="">
+        {/* company details  form*/}
+        <form className="">
           {/* header */}
-          <div className="border-b border-base-300 pb-2">
-            <h3 className="text-xl font-semibold">Company details</h3>
-            <p className="mt-1 text-neutral-400">
-              Update company&apos;s details here
-            </p>
+          <div className="flex items-end justify-between border-b border-base-300 pb-2">
+            <div className="">
+              <h3 className="text-xl font-semibold">Company details</h3>
+              <p className="mt-1 text-neutral-400">
+                Update company&apos;s details here
+              </p>
+            </div>
+
+            <Button>Update Company Details</Button>
           </div>
 
           {/* forms */}
@@ -167,18 +170,22 @@ const Page = () => {
               </div>
             </div>
           </div>
-        </div>
+        </form>
 
         {/* Contact person details */}
-        <div className="">
+        <form className="">
           {/* header */}
-          <div className="border-b border-base-300 pb-2">
-            <h3 className="text-xl font-semibold">
-              Contact Person&apos;s details
-            </h3>
-            <p className="mt-1 text-neutral-400">
-              Update company&apos;s details here
-            </p>
+          <div className="flex items-end justify-between border-b border-base-300 pb-2">
+            <div className="">
+              <h3 className="text-xl font-semibold">
+                Contact Person&apos;s details
+              </h3>
+              <p className="mt-1 text-neutral-400">
+                Update company&apos;s details here
+              </p>
+            </div>
+
+            <Button>Update Contact Person</Button>
           </div>
 
           {/* forms */}
@@ -225,10 +232,10 @@ const Page = () => {
               </div>
             </div>
           </div>
-        </div>
+        </form>
 
         {/* Company documents */}
-        <div className="">
+        <form className="">
           {/* header */}
           <div className="flex items-end justify-between border-b border-base-300 pb-2">
             <div className="">
@@ -261,10 +268,10 @@ const Page = () => {
               </div>
             </div>
           </div>
-        </div>
+        </form>
 
         {/* Directors Id documents */}
-        <div className="">
+        <form className="">
           {/* header */}
           <div className="flex items-end justify-between border-b border-base-300 pb-2">
             <div className="">
@@ -298,7 +305,7 @@ const Page = () => {
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
