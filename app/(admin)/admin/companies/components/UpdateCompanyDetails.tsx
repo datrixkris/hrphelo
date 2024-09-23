@@ -1,5 +1,5 @@
 import Button from "@/app/components/Button";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Company } from "../types";
 import { CompanyDetails, CompanyDetailsSchema } from "../schema";
 import { SubmitHandler, useForm } from "react-hook-form";

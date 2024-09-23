@@ -3,7 +3,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useCompanyStore } from "../company-store";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 import { Company } from "../types";
 import Button from "@/app/components/Button";
 import UpdateCompanyDetails from "../components/UpdateCompanyDetails";
@@ -16,7 +16,6 @@ const Page = () => {
   const fetchCompanyById = useCompanyStore((state) => state.fetchCompanyById);
   const loading = useCompanyStore((state) => state.loading);
   const [companyDetails, setCompanyDetails] = useState<Company | null>(null);
-  const { register } = useForm<Company>();
 
   useLayoutEffect(() => {
     if (params.companyId) {
