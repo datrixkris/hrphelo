@@ -14,12 +14,12 @@ const OnboardCompanyForm = ({
   onClose: () => void;
 }) => {
   const { register, handleSubmit, reset } = useForm<Company>();
-  const { OnboardCompany, loading, error, fetchCompanies } = useCompanyStore(
+  const { OnboardCompany, loading, fetchCompanies } = useCompanyStore(
     (state) => state,
   );
 
   const onSubmit: SubmitHandler<Company> = async (data) => {
-    console.log(data, error);
+    console.log(data);
     await OnboardCompany(data);
     if (!useCompanyStore.getState().error) {
       console.log(useCompanyStore.getState().error, loading);

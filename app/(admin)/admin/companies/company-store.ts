@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { api } from "../../../axiosApi/api";
 import { Company } from "./types";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 interface CompanyStore {
   companies: Company[];
@@ -10,6 +11,7 @@ interface CompanyStore {
   fetchCompanies: () => Promise<void>;
   OnboardCompany: (data: Company) => Promise<void>;
   fetchCompanyById: (id: number) => Promise<Company>;
+  updateCompanyDetails: (data: Company, id: number) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -17,7 +19,7 @@ interface ApiErrorResponse {
   code?: number;
 }
 
-export const useCompanyStore = create<CompanyStore>((set) => ({
+export const useCompanyStore = create<CompanyStore>((set, get) => ({
   // State
   companies: [],
   loading: false,
@@ -32,8 +34,13 @@ export const useCompanyStore = create<CompanyStore>((set) => ({
       const response = (await api.get("/v1/companies")).data;
       set(() => ({ companies: response, loading: false }));
     } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
       console.error(err);
-      set({ error: "Failed to fetch data", loading: false });
     }
   },
 
@@ -46,8 +53,13 @@ export const useCompanyStore = create<CompanyStore>((set) => ({
       set(() => ({ loading: false }));
       return response;
     } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
       console.error(err);
-      set({ error: "Failed to fetch data", loading: false });
     }
   },
 
@@ -62,7 +74,26 @@ export const useCompanyStore = create<CompanyStore>((set) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message,
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+
+      console.error(err);
+    }
+  },
+
+  // update company details
+  updateCompanyDetails: async (data, id) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = await api.put(`/v1/companies/${id}`, data);
+      set(() => ({ loading: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
         loading: false,
       }));
 

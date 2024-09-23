@@ -19,8 +19,9 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      type={buttonType} disabled={disabled} 
-      className={`${className} button flex items-center justify-center gap-2`}
+      type={buttonType}
+      disabled={disabled}
+      className={`${className} button flex items-center justify-center gap-2 ${disabled ? "pointer-events-none" : ""}`}
       onClick={onClick}
     >
       {icon && <Icon icon={icon} />} <span>{children}</span>
