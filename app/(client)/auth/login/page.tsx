@@ -56,7 +56,7 @@ const Page = () => {
     <section className="bg-base-300">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left side */}
-        <div className="relative hidden h-screen items-end bg-gray-50 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:flex md:justify-center lg:px-8 lg:pb-24">
+        <div className="relative hidden h-screen items-end bg-base-100 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:flex md:justify-center lg:px-8 lg:pb-24">
           <div className="absolute inset-0">
             <img
               className="h-full w-full object-cover object-top"
@@ -106,10 +106,10 @@ const Page = () => {
                       className="grow"
                       placeholder="Email"
                     />
-                    {errors.email && (
-                      <p className="text-red-500">{errors.email.message}</p>
-                    )}
-                  </div>
+                  </div>{" "}
+                  {errors.email && (
+                    <p className="mt-1 text-red-500">{errors.email.message}</p>
+                  )}
                 </div>
 
                 <div>
@@ -128,7 +128,6 @@ const Page = () => {
                       Forgot password?
                     </Link>
                   </div>
-
                   <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                     <input
                       {...register("password")}
@@ -136,10 +135,10 @@ const Page = () => {
                       className="grow"
                       placeholder="Password"
                     />
-                    {errors.password && (
-                      <p className="text-red-500">{errors.password.message}</p>
-                    )}
-                  </div>
+                  </div>{" "}
+                  {errors.password && (
+                    <p className="text-red-500">{errors.password.message}</p>
+                  )}
                 </div>
 
                 <div>

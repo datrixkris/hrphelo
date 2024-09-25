@@ -23,7 +23,7 @@ export const submitLoginForm = async (formData: LoginData) => {
       // Check if it's a first-time user
       if (userResponse.data.isPasswordReset === false) {
         // Provide route to confirm OTP and reset password
-        return { route: '/auth/reset-password' };
+        return { route: '/auth/password-reset' };
       }
 
       // Redirect to dashboard
@@ -134,3 +134,22 @@ export const submitOtpForm = async (otp: string) => {
     return { error: "Error submitting OTP" };
   }
 };
+
+// Request password reset
+export const requestPasswordResetLink = async (formData: { email: string }) => {
+  try {
+    const response = await api.post("/v1/auth/request-password-reset", formData);
+
+    return {
+      message: response.data.message,
+      status: response.status
+    };
+  } catch (error) {
+    console.error("Error requesting password reset link:");
+
+    // return {
+    // //   message: error.response?.data?.message || "An error occurred. Please try again.",
+    // //   status: error.response?.status || 500
+    // };
+  }
+}
