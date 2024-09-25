@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-const Page = () => {
+const Page = ({ params }: { params: { slug: string } }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const {
@@ -78,6 +78,9 @@ const Page = () => {
                         placeholder="Password"
                       />
                     </div>
+                    {errors.password && (
+                      <p className="text-red-500">{errors.password.message}</p>
+                    )}
                   </div>
                   <div>
                     <label
@@ -99,6 +102,11 @@ const Page = () => {
                         placeholder="  Confirm Password"
                       />
                     </div>
+                    {errors.confirmPassword && (
+                      <p className="text-red-500">
+                        {errors.confirmPassword.message}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -107,7 +115,7 @@ const Page = () => {
                         <Icon icon="line-md:loading-loop" className="h-7 w-7" />
                       ) : (
                         "continue"
-                      )}{" "}
+                      )}
                     </Button>
                   </div>
                 </div>

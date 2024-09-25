@@ -2,6 +2,7 @@
 import { requestOtp, submitOtpForm } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
 import { useAuthStore } from "@/app/stores/auth-store";
+import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -46,7 +47,6 @@ const Page = () => {
       }
       if (response.message) {
         setMessage(response.message);
-
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
@@ -107,7 +107,11 @@ const Page = () => {
         <p className="mb-6 text-center text-gray-600 dark:text-gray-200">
           Code sent to your email
         </p>
-        {message && <p className="text-center text-sm text-red-700 p-2 bg-red-200">{message}</p>}
+        {message && (
+          <p className="bg-red-200 p-2 text-center text-sm text-red-700">
+            {message}
+          </p>
+        )}
 
         <div className="my-2 grid grid-cols-4 gap-x-4">
           {otp.map((digit, index) => (
@@ -140,7 +144,11 @@ const Page = () => {
           onClick={() => onSubmit()}
           disabled={loading}
         >
-          {loading ? "Verifying..." : "Verify"}
+          {loading ? (
+            <Icon icon="line-md:loading-loop" className="h-7 w-7" />
+          ) : (
+            "Verify"
+          )}
         </Button>
       </div>
     </section>

@@ -24,6 +24,14 @@ const Sidebar = () => {
               </div>
             </ActiveLink>
           </div>
+          <div className="">
+            <ActiveLink href="/departments">
+              <div className="flex gap-2 items-center">
+                <Icon icon="hugeicons:dashboard-square-03" />
+                <span>Departments</span>
+              </div>
+            </ActiveLink>
+          </div>
         </div>
       </div>
     </div>

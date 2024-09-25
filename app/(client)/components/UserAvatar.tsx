@@ -3,9 +3,9 @@ import React from "react";
 export const UserAvatar = () => {
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button">
+      <div tabIndex={0}>
         <div className="avatar">
-          <div className="w-16 rounded-xl">
+          <div className="w-8 rounded-xl">
             <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
           </div>
         </div>
