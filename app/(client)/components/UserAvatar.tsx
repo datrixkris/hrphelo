@@ -4,21 +4,33 @@ export const UserAvatar = () => {
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0}>
-        <div className="avatar">
-          <div className="w-8 rounded-xl">
-            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+        <div className="flex items-center gap-2">
+          {/* admin profile pic */}
+          <div className="avatar">
+            <div className="w-10 rounded-full">
+              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            </div>
+          </div>
+
+          {/* admin name and role */}
+          <div className="text-xs">
+            <p className="text-sm font-semibold">Company admin</p>
+            <p className="">Human resource</p>
           </div>
         </div>
       </div>
       <ul
         tabIndex={0}
-        className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow dark:text-white"
+        className="menu dropdown-content z-[1] w-52 rounded-box border border-base-300 bg-base-100 text-base-content shadow"
       >
         <li>
-          <a>Item 1</a>
+          <a>Profile</a>
         </li>
         <li>
-          <a>Item 2</a>
+          <a>Settings</a>
+        </li>
+        <li>
+          <a>Logout</a>
         </li>
       </ul>
     </div>
