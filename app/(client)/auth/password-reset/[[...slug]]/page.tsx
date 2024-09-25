@@ -15,6 +15,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
   const {
     register,
     handleSubmit,
+    formState: { errors },
   } = useForm<ResetFormData>({
     resolver: zodResolver(resetSchema),
   });
@@ -25,7 +26,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
       const respond = await submitSetForm(data);
       if (respond?.route) {
         router.push(respond.route);
-        console.log(params)
+        console.log(params);
       }
     } catch (error) {
       console.error(error);

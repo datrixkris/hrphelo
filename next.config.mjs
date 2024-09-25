@@ -8,6 +8,12 @@ const nextConfig = {
         destination: "/admin/dashboard",
         permanent: true,
       },
+      // client path redirect to dashboard
+      {
+        source: "/",
+        destination: "/dashboard",
+        permanent: true,
+      },
     ];
   },
   //   reactStrictMode: false,
