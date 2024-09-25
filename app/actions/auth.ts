@@ -144,12 +144,12 @@ export const requestPasswordResetLink = async (formData: { email: string }) => {
       message: response.data.message,
       status: response.status
     };
-  } catch (error: any) {
-    console.error("Error requesting password reset link:", error);
+  } catch (error) {
+    console.error("Error requesting password reset link:");
 
-    return {
-      message: error.response?.data?.message || "An error occurred. Please try again.",
-      status: error.response?.status || 500
-    };
+    // return {
+    // //   message: error.response?.data?.message || "An error occurred. Please try again.",
+    // //   status: error.response?.status || 500
+    // };
   }
-};
+}

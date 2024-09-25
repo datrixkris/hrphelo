@@ -25,6 +25,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
       const respond = await submitSetForm(data);
       if (respond?.route) {
         router.push(respond.route);
+        console.log(params)
       }
     } catch (error) {
       console.error(error);
