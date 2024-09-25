@@ -9,7 +9,7 @@ interface CompanyTableProps {
 const CompanyTable = ({ companies }: CompanyTableProps) => {
   return (
     <div className="overflow-x-auto">
-      <table className="table  table-lg bg-base-100 rounded border border-base-300 ">
+      <table className="table table-lg rounded border border-base-300 bg-base-100">
         {/* head */}
         <thead className="">
           <tr>
@@ -31,11 +31,15 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
               <td>{company.company_size}</td>
               <td>{company.createdAt}</td>
               <td>
-              <div className="">
-                
-                <Link href={`/admin/companies/${company.id}`}><Icon icon="heroicons:eye" className="inline-block text-xl" /><span className="relative top-0.5 ml-1">View</span></Link>
-               
-              </div>       
+                <div className="text-sm">
+                  <Link href={`/admin/companies/${company.id}`}>
+                    <Icon
+                      icon="heroicons:eye"
+                      className="inline-block text-lg"
+                    />
+                    <span className="relative top-0.5 ml-1">View</span>
+                  </Link>
+                </div>
               </td>
             </tr>
           ))}

@@ -1,5 +1,7 @@
 import Sidebar from "./components/Sidebar";
 import Topnav from "./components/Topnav";
+import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AdminLayout({
   children,
@@ -8,10 +10,23 @@ export default function AdminLayout({
 }) {
   return (
     <div>
-      <div className="fixed top-0 bottom-0 w-[250px]">
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Slide}
+      />
+      <div className="fixed bottom-0 top-0 w-[250px]">
         <Sidebar />
       </div>
-      <div className="ml-[250px] primary-bg min-h-screen">
+      <div className="primary-bg ml-[250px] min-h-screen">
         <div>
           <Topnav />
 

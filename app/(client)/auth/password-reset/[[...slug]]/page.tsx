@@ -15,7 +15,6 @@ const Page = ({ params }: { params: { slug: string } }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<ResetFormData>({
     resolver: zodResolver(resetSchema),
   });
