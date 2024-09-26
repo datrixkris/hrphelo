@@ -26,8 +26,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     fetchUser();
   }, [router]);
 
-  const collapseSidebar = () => {};
-
   return (
     <div>
       <div

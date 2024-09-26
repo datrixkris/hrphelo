@@ -58,7 +58,7 @@ const StaffTable = () => {
         </thead>
         <tbody>
           {/* row 1 */}
-          {staff.map((member, index) => (
+          {staff.map((member) => (
             <tr key={member.id} className="hover !text-sm">
               <th>{member.name}</th>
               <td>{member.staffId}</td>

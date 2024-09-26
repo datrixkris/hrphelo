@@ -1,10 +1,10 @@
 import Button from "@/app/components/Button";
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+// import { SubmitHandler, useForm } from "react-hook-form";
 // import { Company } from "../types";
 // import { useCompanyStore } from "../company-store";
 import Modal from "@/app/components/Modal";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import ImageUpload from "./ImageUpload";
 
 const AddStaffForm = ({
