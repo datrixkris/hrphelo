@@ -42,7 +42,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           {/* collapse button */}
           <div
             onClick={() => setCollapse(!collapse)}
-            className={`absolute flex size-8 cursor-pointer items-center justify-center rounded-full border bg-base-100 ${collapse ? "-left-2" : "-left-4"}`}
+            className={`-z-1 absolute top-[50vh] flex size-8 cursor-pointer items-center justify-center rounded-full bg-base-100 ${collapse ? "-left-3" : "-left-4"}`}
           >
             {collapse ? (
               <Icon icon="heroicons:chevron-double-right"></Icon>
