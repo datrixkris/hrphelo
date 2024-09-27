@@ -4,8 +4,25 @@ import ActiveLink from "../../components/ActiveLink";
 import { Icon } from "@iconify/react";
 
 const Sidebar = () => {
+  const links = [
+    {
+      name: "Dashboard",
+      icon: "hugeicons:dashboard-square-03",
+      link: "/dashboard",
+    },
+    {
+      name: "Departments",
+      icon: "hugeicons:dashboard-square-03",
+      link: "/departments",
+    },
+    {
+      name: "Staff",
+      icon: "hugeicons:user-group",
+      link: "/staff",
+    },
+  ];
   return (
-    <div className="h-full border-r border-base-300 bg-base-100 p-4">
+    <div className="relative h-full border-r border-base-300 bg-base-100 p-4">
       {/* logo  */}
       <div className="flex items-center justify-center gap-2">
         {/* logo */}
@@ -17,22 +34,18 @@ const Sidebar = () => {
       <div className="mt-4 border-t border-base-300">
         <div className="my-7 space-y-3">
           {/* dashboard */}
-          <div className="">
-            <ActiveLink href="/">
-              <div className="flex items-center gap-2">
-                <Icon icon="hugeicons:dashboard-square-03" />
-                <span>Dashboard</span>
+          {links.map((link, index) => {
+            return (
+              <div className="" key={index}>
+                <ActiveLink href={link.link}>
+                  <div className="flex items-center gap-2">
+                    <Icon icon={link.icon} />
+                    <span>{link.name}</span>
+                  </div>
+                </ActiveLink>
               </div>
-            </ActiveLink>
-          </div>
-          <div className="">
-            <ActiveLink href="/departments">
-              <div className="flex items-center gap-2">
-                <Icon icon="hugeicons:dashboard-square-03" />
-                <span>Departments</span>
-              </div>
-            </ActiveLink>
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
