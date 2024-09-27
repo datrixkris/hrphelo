@@ -29,12 +29,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <div
-        className={`fixed bottom-0 top-0 w-[250px] overflow-hidden opacity-100 transition ${collapse && "w-0 opacity-0"}`}
+        className={`fixed bottom-0 top-0 w-[250px] overflow-hidden opacity-100 transition ${collapse ? "!w-0 opacity-0" : ""}`}
       >
         <Sidebar />
       </div>
       <div
-        className={`primary-bg ml-auto min-h-screen w-[calc(100%-250px)] transition ${collapse && "w-[calc(100%-0px)]"}`}
+        className={`primary-bg ml-auto min-h-screen w-[calc(100%-250px)] transition ${collapse ? "!w-[calc(100%-0px)]" : ""}`}
       >
         <div className="relative">
           {/* collapse button */}
