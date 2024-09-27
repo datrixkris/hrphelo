@@ -1,48 +1,49 @@
 import Button from "@/app/components/Button";
 import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+// import { SubmitHandler, useForm } from "react-hook-form";
+// import { Company } from "../types";
+// import { useCompanyStore } from "../company-store";
 import Modal from "@/app/components/Modal";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import ImageUpload from "./ImageUpload";
-import { StaffData } from "../types";
-import { useStaffStore } from "../staff-store";
 
-const AddStaffForm = ({
+const EditStaffForm = ({
   isOpen,
   onClose,
 }: {
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { register, handleSubmit, reset } = useForm<StaffData>();
-  const { addStaff, loading, fetchStaff } = useStaffStore();
-  const fetchDepartments = "useDe";
+  //   const { register, handleSubmit, reset } = useForm<Company>();
+  //   const { OnboardCompany, loading, fetchCompanies } = useCompanyStore(
+  //     (state) => state,
+  //   );
 
-  const onSubmit: SubmitHandler<StaffData> = async (data) => {
-    console.log(data);
-    await addStaff(data);
-    if (!useStaffStore.getState().error) {
-      console.log(useStaffStore.getState().error, loading);
-      // onClose();
-      toast.success("Company Onboarded successfully");
-      fetchStaff();
-      reset();
-    } else {
-      toast.error(useStaffStore.getState().error);
-    }
-  };
+  //   const onSubmit: SubmitHandler<Company> = async (data) => {
+  //     console.log(data);
+  //     await OnboardCompany(data);
+  //     if (!useCompanyStore.getState().error) {
+  //       console.log(useCompanyStore.getState().error, loading);
+  //       // onClose();
+  //       toast.success("Company Onboarded successfully");
+  //       fetchCompanies();
+  //       reset();
+  //     } else {
+  //       toast.error(useCompanyStore.getState().error);
+  //     }
+  //   };
 
   return (
     <div className="">
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="w-[90vw] sm:w-[600px] lg:w-[650px]">
-          <h2 className="mb-5 text-center text-2xl font-bold">Add Staff</h2>
+          <h2 className="mb-5 text-center text-2xl font-bold">Staff Profile</h2>
 
           <div className="mb-4 flex items-center justify-center">
             <ImageUpload />
           </div>
 
-          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-4">
             <div className="grid gap-5 sm:grid-cols-2">
               {/*  name */}
               <label className="form-control w-full">
@@ -51,7 +52,6 @@ const AddStaffForm = ({
                 </div>
                 <input
                   required
-                  {...register("name")}
                   type="text"
                   placeholder="Staff name here"
                   className="input input-bordered w-full"
@@ -64,7 +64,6 @@ const AddStaffForm = ({
                   <span className="label-text">Staff ID</span>
                 </div>
                 <input
-                  {...register("staffId")}
                   required
                   type="text"
                   placeholder="Staff ID here"
@@ -78,7 +77,6 @@ const AddStaffForm = ({
                   <span className="label-text">Role</span>
                 </div>
                 <input
-                  {...register("role")}
                   required
                   type="text"
                   placeholder="Staff Role"
@@ -91,17 +89,12 @@ const AddStaffForm = ({
                 <div className="label">
                   <span className="label-text">Staff Department</span>
                 </div>
-                <select
-                  {...register("departmentId")}
+                <input
                   required
-                  className="select select-bordered w-full"
-                >
-                  <option disabled selected>
-                    Choose a department
-                  </option>
-                  <option>Han Solo</option>
-                  <option>Greedo</option>
-                </select>
+                  type="text"
+                  placeholder="Staff department"
+                  className="input input-bordered w-full"
+                />
               </label>
 
               {/* Contact number */}
@@ -110,7 +103,6 @@ const AddStaffForm = ({
                   <span className="label-text">Contact number</span>
                 </div>
                 <input
-                  {...register("contact")}
                   required
                   type="text"
                   placeholder="Contact"
@@ -124,7 +116,6 @@ const AddStaffForm = ({
                   <span className="label-text">Email</span>
                 </div>
                 <input
-                  {...register("email")}
                   required
                   type="email"
                   placeholder="Email here"
@@ -138,7 +129,6 @@ const AddStaffForm = ({
                   <span className="label-text">Date Hired</span>
                 </div>
                 <input
-                  {...register("hiring_date")}
                   required
                   type="date"
                   placeholder="Date hired here"
@@ -151,17 +141,12 @@ const AddStaffForm = ({
                 <div className="label">
                   <span className="label-text">Supervisor</span>
                 </div>
-                <select
-                  {...register("supervisorId")}
+                <input
                   required
-                  className="select select-bordered w-full"
-                >
-                  <option disabled selected>
-                    Choose a supervisor
-                  </option>
-                  <option>Han Solo</option>
-                  <option>Greedo</option>
-                </select>
+                  type="text"
+                  placeholder="Supervisor here"
+                  className="input input-bordered w-full"
+                />
               </label>
             </div>
 
@@ -176,4 +161,4 @@ const AddStaffForm = ({
   );
 };
 
-export default AddStaffForm;
+export default EditStaffForm;
