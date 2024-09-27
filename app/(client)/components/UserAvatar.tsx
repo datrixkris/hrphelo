@@ -1,6 +1,17 @@
+import { useAuthStore } from "@/app/stores/auth-store";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export const UserAvatar = () => {
+  const { logout } = useAuthStore();
+  const router = useRouter();
+
+
+  const handleLogout = () => {
+      logout();
+      router.push('/auth/login');
+  };
+
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0}>
@@ -30,7 +41,7 @@ export const UserAvatar = () => {
           <a>Settings</a>
         </li>
         <li>
-          <a>Logout</a>
+          <a  onClick={handleLogout}>Logout</a>
         </li>
       </ul>
     </div>
