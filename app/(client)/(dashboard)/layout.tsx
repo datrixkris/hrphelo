@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Topnav from "../components/Topnav";
 import { useAuthStore } from "@/app/stores/auth-store";
-import { Icon } from "@iconify/react";
 import { ToastContainer, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Icon } from "@iconify/react";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -16,9 +17,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const fetchUser = async () => {
       await useAuthStore.getState().fetchUserData();
       const isAuthenticated = useAuthStore.getState().isAuthenticated;
-      console.log("looo:", isAuthenticated);
-      const userData = useAuthStore.getState().user;
-      console.log("Current user data:", userData);
       if (!isAuthenticated) {
         router.push("/auth/login");
       }

@@ -13,8 +13,6 @@ const Topnav = () => {
 
         <div className="flex items-center gap-3">
           <Theme />
-
-          {/* <span>profile</span> */}
           <UserAvatar />
         </div>
       </div>
