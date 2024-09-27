@@ -1,47 +1,12 @@
 import Link from "next/link";
 import React from "react";
 import { Icon } from "@iconify/react";
+import { StaffData } from "../types";
 
-const StaffTable = () => {
-  const staff = [
-    {
-      id: 1,
-      companyId: 1001,
-      staffId: "S001",
-      name: "John Doe",
-      role: "Developer",
-      departmentId: 200,
-      email: "john.doe@example.com",
-      contact: "123-456-7890",
-      hiring_date: "2024-09-26",
-      supervisorId: 101,
-    },
-    {
-      id: 2,
-      companyId: 1002,
-      staffId: "S002",
-      name: "Jane Smith",
-      role: "Project Manager",
-      departmentId: 201,
-      email: "jane.smith@example.com",
-      contact: "098-765-4321",
-      hiring_date: "2024-09-26",
-      supervisorId: 102,
-    },
-    {
-      id: 3,
-      companyId: 1003,
-      staffId: "S003",
-      name: "Mike Johnson",
-      role: "Designer",
-      departmentId: 202,
-      email: "mike.johnson@example.com",
-      contact: "555-555-5555",
-      hiring_date: "2024-09-26",
-      supervisorId: 103,
-    },
-  ];
-
+interface StaffTableProps {
+  staff: StaffData[];
+}
+const StaffTable = ({ staff }: StaffTableProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="table table-lg rounded border border-base-300 bg-base-100">

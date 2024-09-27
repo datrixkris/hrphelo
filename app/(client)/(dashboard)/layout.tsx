@@ -8,8 +8,6 @@ import { useAuthStore } from "@/app/stores/auth-store";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
-  
-
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -29,7 +27,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div>
-       <ToastContainer
+      <ToastContainer
         position="top-center"
         autoClose={5000}
         hideProgressBar={false}
