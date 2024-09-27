@@ -29,7 +29,7 @@ const Page = () => {
 
       fetchData();
     }
-  }, []);
+  }, [params.companyId]);
 
   async function fetchAndSetData() {
     console.log(params.companyId);

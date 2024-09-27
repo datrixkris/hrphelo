@@ -32,7 +32,7 @@ const UpdateContactPersonDetails = ({
         contact_person_contact: data.contact_person_contact,
       });
     }
-  }, [data]);
+  }, [data, reset]);
 
   const onSubmit: SubmitHandler<ContactPerson> = async (formData) => {
     console.log(formData);

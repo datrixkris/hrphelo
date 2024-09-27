@@ -31,7 +31,7 @@ const UpdateCompanyDetails = ({ data, id, refreshData }: DetailsProps) => {
         contact: data.contact,
       });
     }
-  }, [data]);
+  }, [data, reset]);
 
   const onSubmit: SubmitHandler<CompanyDetails> = async (formData) => {
     console.log(formData);
