@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { CreateDepartment, Department, GetDepartment } from "../types";
+import { CreateDepartment, GetDepartment } from "../types";
 import { useDepartmentStore } from "../department-store";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
