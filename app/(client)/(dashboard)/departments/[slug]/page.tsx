@@ -3,17 +3,19 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect } from "react";
 import { useDepartmentStore } from "../department-store";
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = ({ params }: { params: { slug: string } }) => {
+  const id = params.slug;
   const { loading, fetchDepartmentById, department } = useDepartmentStore();
 
   useEffect(() => {
-    if (params.id) {
-      const dd = fetchDepartmentById(Number(params.id));
-      console.log("dd:",dd);
-      
-    }
-  }, [params.id, fetchDepartmentById]);
-  console.log("lknnkj",params.id);
+    const fetchDepartment = async () => {
+      if (id && !isNaN(Number(id))) {
+        await fetchDepartmentById(Number(id));
+      }
+    };
+
+    fetchDepartment();
+  }, [id, fetchDepartmentById]);
 
   if (loading) {
     return <div className="py-10 text-center">Loading department...</div>;
@@ -43,7 +45,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             </ul>
           </div>
           <div>
-            {/* <button>Action button</button> */}
+            {/* Action button can be added here */}
           </div>
         </div>
       </div>
@@ -56,7 +58,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           </p>
 
           {/* Employee table */}
-          <div className="overflow-x-auto  border-t mt-5">
+          <div className="overflow-x-auto border-t mt-5">
             <table className="table">
               <thead>
                 <tr>
@@ -71,7 +73,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   department.staff.map((employee) => (
                     <tr key={employee.id} className="hover">
                       <td>{employee.id}</td>
-                      <td>{employee.name} </td> 
+                      <td>{employee.name}</td> 
                       <td>{employee.email}</td>
                       <td>
                         <button>
