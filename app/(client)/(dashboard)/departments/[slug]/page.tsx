@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect } from "react";
 import { useDepartmentStore } from "../department-store";
@@ -14,6 +13,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       
     }
   }, [params.id, fetchDepartmentById]);
+  console.log("lknnkj",params.id);
 
   if (loading) {
     return <div className="py-10 text-center">Loading department...</div>;

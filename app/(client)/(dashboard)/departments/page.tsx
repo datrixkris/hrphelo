@@ -8,6 +8,7 @@ import { CreateDepartment } from "./types";
 import { toast } from "react-toastify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 
 const departmentSchema = z.object({
   dept_code: z.string().nonempty("Department code is required"),
@@ -35,7 +36,7 @@ const Page = () => {
   });
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [formLoading, setFormLoading] = useState(false); 
+  const [formLoading, setFormLoading] = useState(false);
 
   // Function to open the modal
   const openCreateModal = () => setIsCreateModalOpen(true);
@@ -81,22 +82,14 @@ const Page = () => {
       <div>
         <div className="page-header mb-[1.875rem]">
           <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-pageTitle dark:text-swapText text-lg font-medium leading-[1.2] sm:mb-[5px] sm:text-2xl md:text-[26px]">
-                Department
-              </h3>
-              <ul className="hidden flex-wrap text-[14px] font-medium sm:flex md:text-base">
-                <li>
-                  <a href="/" className="dark:text-swapText text-[#333333]">
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <span className="px-2 dark:text-[#6c757d]">/</span>
-                </li>
-                <li className="text-[#6c757d]">Departments</li>
-              </ul>
-            </div>
+            <PageTitleWithCrumbs
+              title="Departments"
+              crumbs={[
+                { name: "Dashboard", link: "/dashboard" },
+                { name: "Departments" },
+              ]}
+            />
+
             <div>
               <Button onClick={openCreateModal}>Add Department</Button>
             </div>
@@ -112,7 +105,9 @@ const Page = () => {
             updateDepartment={updateDepartment}
           />
         ) : (
-          <div className="rounded py-20 text-center">No departments available</div>
+          <div className="rounded py-20 text-center">
+            No departments available
+          </div>
         )}
       </div>
 
@@ -135,7 +130,7 @@ const Page = () => {
                   className="input input-bordered w-full"
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name.message}</p>
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
                 )}
               </div>
 
@@ -149,7 +144,9 @@ const Page = () => {
                   className="input input-bordered w-full"
                 />
                 {errors.dept_code && (
-                  <p className="text-red-500 text-sm">{errors.dept_code.message}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.dept_code.message}
+                  </p>
                 )}
               </div>
 
@@ -167,7 +164,7 @@ const Page = () => {
                 <button
                   type="button"
                   onClick={closeCreateModal}
-                  className="btn rounded mr-4"
+                  className="btn mr-4 rounded"
                 >
                   Cancel
                 </button>

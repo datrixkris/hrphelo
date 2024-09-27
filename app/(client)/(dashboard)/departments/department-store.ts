@@ -4,7 +4,7 @@ import { CreateDepartment, Department, GetDepartment } from "./types";
 
 interface DepartmentStore {
     departments: Department[];
-    department: GetDepartment | null; // Make this nullable
+    department: GetDepartment | null; 
     loading: boolean;
     error: string | null;
     fetchDepartments: () => Promise<void>;

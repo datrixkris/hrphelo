@@ -73,9 +73,9 @@ export const DepartmentTable = ({
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="table bg-base-100">
+        <table className="table table-lg rounded border border-base-300 bg-base-100">
           <thead>
-            <tr className="dark:text-white">
+            <tr className="">
               <th></th>
               <th>Department Name</th>
               <th>Employee</th>
