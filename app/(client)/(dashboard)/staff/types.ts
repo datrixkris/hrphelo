@@ -9,7 +9,7 @@ export interface StaffDetail {
   email?: string;
   contact?: string;
   hiring_date?: string; // Date in "YYYY-MM-DD" format
-  supervisorId?: number;
+  supervisorId?: boolean;
   department?: Department;
   company?: Company;
 }

@@ -43,7 +43,7 @@ const OnboardCompanyForm = ({
               {/* Company name */}
               <label className="form-control w-full">
                 <div className="label">
-                  <span className="label-text">Company Name</span>
+                  <span className="label-text">Company name</span>
                 </div>
                 <input
                   {...register("name")}
@@ -57,7 +57,7 @@ const OnboardCompanyForm = ({
               {/* Company Location */}
               <label className="form-control w-full">
                 <div className="label">
-                  <span className="label-text">Company Location</span>
+                  <span className="label-text">Company location</span>
                 </div>
                 <input
                   {...register("address")}
@@ -105,13 +105,13 @@ const OnboardCompanyForm = ({
               {/* Company&apos;s Telephone */}
               <label className="form-control w-full">
                 <div className="label">
-                  <span className="label-text">Company&apos;s Telephone</span>
+                  <span className="label-text">Company&apos;s telephone</span>
                 </div>
                 <input
                   {...register("contact")}
                   required
                   type="text"
-                  placeholder="Company's Telephone here"
+                  placeholder="Company's telephone here"
                   className="input input-bordered w-full"
                 />
               </label>

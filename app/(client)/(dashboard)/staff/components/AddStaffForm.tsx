@@ -1,11 +1,12 @@
 import Button from "@/app/components/Button";
-import React from "react";
+import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "@/app/components/Modal";
 import { toast } from "react-toastify";
 import ImageUpload from "./ImageUpload";
 import { StaffData } from "../types";
 import { useStaffStore } from "../staff-store";
+import { useDepartmentStore } from "../../departments/department-store";
 
 const AddStaffForm = ({
   isOpen,
@@ -15,20 +16,39 @@ const AddStaffForm = ({
   onClose: () => void;
 }) => {
   const { register, handleSubmit, reset } = useForm<StaffData>();
-  const { addStaff, loading, fetchStaff } = useStaffStore();
-  const fetchDepartments = "useDe";
+  const { addStaff, loading, fetchStaff, error } = useStaffStore();
+  const fetchDepartments = useDepartmentStore(
+    (state) => state.fetchDepartments,
+  );
+  const departments = useDepartmentStore((state) => state.departments);
+
+  useEffect(() => {
+    const fetchDepartmentsData = async () => {
+      // check if there are no data before you hit the api
+      if (!(departments.length > 0)) {
+        await fetchDepartments();
+        console.log(departments);
+      }
+    };
+    fetchDepartmentsData();
+  }, []);
 
   const onSubmit: SubmitHandler<StaffData> = async (data) => {
-    console.log(data);
-    await addStaff(data);
-    if (!useStaffStore.getState().error) {
-      console.log(useStaffStore.getState().error, loading);
+    const staffData = {
+      ...data,
+      departmentId: Number(data.departmentId),
+      supervisorId: Number(data.supervisorId),
+    };
+    console.log(staffData);
+    await addStaff(staffData);
+    if (!error) {
+      console.log(error, loading);
       // onClose();
       toast.success("Company Onboarded successfully");
       fetchStaff();
       reset();
     } else {
-      toast.error(useStaffStore.getState().error);
+      toast.error(error);
     }
   };
 
@@ -65,7 +85,6 @@ const AddStaffForm = ({
                 </div>
                 <input
                   {...register("staffId")}
-                  required
                   type="text"
                   placeholder="Staff ID here"
                   className="input input-bordered w-full"
@@ -92,15 +111,21 @@ const AddStaffForm = ({
                   <span className="label-text">Staff Department</span>
                 </div>
                 <select
+                  defaultValue=""
                   {...register("departmentId")}
                   required
                   className="select select-bordered w-full"
                 >
-                  <option disabled selected>
+                  <option disabled value="">
                     Choose a department
                   </option>
-                  <option>Han Solo</option>
-                  <option>Greedo</option>
+                  {departments.map((department) => {
+                    return (
+                      <option value={Number(department.id)} key={department.id}>
+                        {department.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </label>
 
@@ -152,22 +177,25 @@ const AddStaffForm = ({
                   <span className="label-text">Supervisor</span>
                 </div>
                 <select
+                  defaultValue=""
                   {...register("supervisorId")}
                   required
                   className="select select-bordered w-full"
                 >
-                  <option disabled selected>
+                  <option disabled value="">
                     Choose a supervisor
                   </option>
-                  <option>Han Solo</option>
-                  <option>Greedo</option>
+                  <option value={1}>Han Solo</option>
+                  <option value={2}>Greedo</option>
                 </select>
               </label>
             </div>
 
             {/* submit */}
             <div className="!mt-10">
-              <Button className="mx-auto w-1/2">Add Staff</Button>
+              <Button className="mx-auto w-1/2" disabled={loading}>
+                {loading ? "Adding Staff..." : "Add Staff"}
+              </Button>
             </div>
           </form>
         </div>
