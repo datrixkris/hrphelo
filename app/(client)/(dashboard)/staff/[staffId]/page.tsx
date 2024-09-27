@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import StaffDetailsCard from "../components/StaffDetailsCard";
 
 const Page = () => {
-  const params = useParams();
+  // const params = useParams();
   return (
     <div>
       {/* header plus breadcrumbs */}

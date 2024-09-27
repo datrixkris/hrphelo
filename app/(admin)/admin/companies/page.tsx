@@ -10,7 +10,7 @@ const Page = () => {
 
   useEffect(() => {
     fetchCompanies();
-  }, []);
+  }, [fetchCompanies]);
 
   if (loading && companies.length < 1) {
     return (
