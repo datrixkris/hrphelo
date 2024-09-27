@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import CompanyTable from "./components/CompanyTable";
-import OnboardCompanyButton from "./components/OnboardCompanyButton";
+import OnboardCompanyButton from "./components/OnboardCompany";
 import { useCompanyStore } from "./company-store";
 
 const Page = () => {

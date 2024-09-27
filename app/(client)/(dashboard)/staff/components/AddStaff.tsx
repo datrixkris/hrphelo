@@ -4,7 +4,7 @@ import Button from "@/app/components/Button";
 import React, { useState } from "react";
 import AddStaffForm from "./AddStaffForm";
 
-const AddStaffButton = () => {
+const AddStaff = () => {
   const [openModal, setOpenModal] = useState(false);
   return (
     // button to onboard
@@ -25,4 +25,4 @@ const AddStaffButton = () => {
   );
 };
 
-export default AddStaffButton;
+export default AddStaff;

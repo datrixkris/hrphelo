@@ -5,7 +5,7 @@ import Button from "@/app/components/Button";
 import React, { useState } from "react";
 import OnboardCompanyForm from "./OnboardCompanyForm";
 
-const OnboardCompanyButton = () => {
+const OnboardCompany = () => {
   const [openModal, setOpenModal] = useState(false);
   return (
     // button to onboard
@@ -30,4 +30,4 @@ const OnboardCompanyButton = () => {
   );
 };
 
-export default OnboardCompanyButton;
+export default OnboardCompany;
