@@ -7,6 +7,7 @@ interface AuthStore {
     user: User | null;
     isAuthenticated: boolean;
     fetchUserData: () => Promise<void>;
+    logout: () => void; 
     resetData: {
         password: string;
         confirmPassword: string;
@@ -25,7 +26,7 @@ const getLocalStorage = (key: string) => {
 export const useAuthStore = create<AuthStore>((set) => ({
     accessToken: getLocalStorage('accessToken'),
     user: null,
-    isAuthenticated: false, // Initialize to false
+    isAuthenticated: false, 
 
     fetchUserData: async () => {
         try {
@@ -33,14 +34,15 @@ export const useAuthStore = create<AuthStore>((set) => ({
             set({ user: response.data });
             // Update isAuthenticated based on user and access token
             const isAuthenticated = !!getLocalStorage('accessToken') && response.data.isPasswordReset === true;
-
             set({ isAuthenticated });
-
-          
-
         } catch (err) {
             console.error('Error fetching user data:', err);
         }
+    },
+
+    logout: () => {
+        localStorage.removeItem('accessToken'); 
+        set({ accessToken: null, user: null, isAuthenticated: false }); 
     },
 
     resetData: {

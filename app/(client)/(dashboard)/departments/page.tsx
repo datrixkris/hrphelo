@@ -1,23 +1,42 @@
-"use client"
+"use client";
 import Button from "@/app/components/Button";
-// import { Icon } from "@iconify/react";
-import React, { useState } from "react";
-import { DepartmertTable } from "./components/DepartmertTable";
+import React, { useLayoutEffect, useState } from "react";
+import { DepartmentTable } from "./components/DepartmentTable";
+import { useDepartmentStore } from "./department-store";
+import { useForm } from "react-hook-form";
+import { CreateDepartment } from "./types";
+import { toast } from "react-toastify";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
+
+const departmentSchema = z.object({
+  dept_code: z.string().nonempty("Department code is required"),
+  name: z.string().nonempty("Department name is required"),
+  description: z.string().optional(),
+});
 
 const Page = () => {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [newDepartment, setNewDepartment] = useState({
-    name: "",
-    head: "",
-    phone: "",
-    email: "",
+  const {
+    departments,
+    loading,
+    fetchDepartments,
+    addDepartment,
+    deleteDepartment,
+    updateDepartment,
+  } = useDepartmentStore();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<CreateDepartment>({
+    resolver: zodResolver(departmentSchema),
   });
 
-  // Function to handle input changes in the form
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewDepartment((prev) => ({ ...prev, [name]: value }));
-  };
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   // Function to open the modal
   const openCreateModal = () => setIsCreateModalOpen(true);
@@ -25,42 +44,52 @@ const Page = () => {
   // Function to close the modal
   const closeCreateModal = () => {
     setIsCreateModalOpen(false);
-    setNewDepartment({ name: "", head: "", phone: "", email: "" }); // Reset form
+    reset(); // Reset form after closing
   };
 
   // Function to handle form submission
-  const handleCreateDepartment = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you can handle the API call to create the department
-    console.log("Department Data:", newDepartment);
-
-    // For example, you could do something like:
-    // await api.post('/departments', newDepartment);
-
-    closeCreateModal(); // Close modal after creation
+  const handleCreateDepartment = async (data: CreateDepartment) => {
+    try {
+      setFormLoading(true); // Start form loading
+      const success = await addDepartment(data);
+      if (success) {
+        toast.success("Department created successfully");
+        closeCreateModal();
+      } else {
+        toast.error("Failed to create department");
+      }
+    } catch (error) {
+      toast.error("Failed to create department");
+    } finally {
+      setFormLoading(false); // End form loading
+    }
   };
+
+  useLayoutEffect(() => {
+    fetchDepartments();
+  }, []);
+
+  if (loading && departments.length < 1) {
+    return (
+      <div className="rounded py-20 text-center">
+        Getting departments data...
+      </div>
+    );
+  }
 
   return (
     <div>
       <div>
         <div className="page-header mb-[1.875rem]">
           <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-pageTitle dark:text-swapText text-lg font-medium leading-[1.2] sm:mb-[5px] sm:text-2xl md:text-[26px]">
-                Department
-              </h3>
-              <ul className="hidden flex-wrap text-[14px] font-medium sm:flex md:text-base">
-                <li>
-                  <a href="index.html" className="dark:text-swapText text-[#333333]">
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <span className="px-2 dark:text-[#6c757d]">/</span>
-                </li>
-                <li className="text-[#6c757d]">Departments</li>
-              </ul>
-            </div>
+            <PageTitleWithCrumbs
+              title="Departments"
+              crumbs={[
+                { name: "Dashboard", link: "/dashboard" },
+                { name: "Departments" },
+              ]}
+            />
+
             <div>
               <Button onClick={openCreateModal}>Add Department</Button>
             </div>
@@ -68,74 +97,90 @@ const Page = () => {
         </div>
       </div>
 
-     <DepartmertTable/>
+      <div>
+        {departments.length > 0 ? (
+          <DepartmentTable
+            departments={departments}
+            deleteDepartment={deleteDepartment}
+            updateDepartment={updateDepartment}
+          />
+        ) : (
+          <div className="rounded py-20 text-center">
+            No departments available
+          </div>
+        )}
+      </div>
 
       {/* Create Department Modal */}
       {isCreateModalOpen && (
-        <dialog id="create_department_modal" className="modal" open>
+        <div className={`modal ${isCreateModalOpen ? "modal-open" : ""}`}>
           <div className="modal-box">
             <h3 className="text-lg font-bold">Create New Department</h3>
-            <form onSubmit={handleCreateDepartment} className="space-y-4">
+            <form
+              onSubmit={handleSubmit(handleCreateDepartment)}
+              className="space-y-4"
+            >
               <div>
-                <label className="block font-medium text-gray-700">Department Name</label>
+                <label className="block font-medium text-gray-700">
+                  Department Name
+                </label>
                 <input
                   type="text"
-                  name="name"
-                  value={newDepartment.name}
-                  onChange={handleChange}
+                  {...register("name")}
                   className="input input-bordered w-full"
-                  required
                 />
+                {errors.name && (
+                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                )}
               </div>
 
               <div>
-                <label className="block font-medium text-gray-700">Head of Department</label>
+                <label className="block font-medium text-gray-700">
+                  Department Code
+                </label>
                 <input
                   type="text"
-                  name="head"
-                  value={newDepartment.head}
-                  onChange={handleChange}
+                  {...register("dept_code")}
                   className="input input-bordered w-full"
-                  required
                 />
+                {errors.dept_code && (
+                  <p className="text-sm text-red-500">
+                    {errors.dept_code.message}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label className="block font-medium text-gray-700">Phone Number</label>
-                <input
-                  type="text"
-                  name="phone"
-                  value={newDepartment.phone}
-                  onChange={handleChange}
+                <label className="block font-medium text-gray-700">
+                  Description
+                </label>
+                <textarea
+                  {...register("description")}
                   className="input input-bordered w-full"
-                  required
                 />
               </div>
 
-              <div>
-                <label className="block font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={newDepartment.email}
-                  onChange={handleChange}
-                  className="input input-bordered w-full"
-                  required
-                />
-              </div>
-
-              <div className="modal-action">
-                <button type="button" onClick={closeCreateModal} className="btn">
+              <div className="modal-action flex justify-end">
+                <button
+                  type="button"
+                  onClick={closeCreateModal}
+                  className="btn mr-4 rounded"
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary">
-                  Create Department
+                <button
+                  type="submit"
+                  className={`btn btn-primary rounded ${
+                    formLoading ? "loading" : ""
+                  }`}
+                >
+                  {formLoading ? "Creating..." : "Create Department"}
                 </button>
               </div>
             </form>
           </div>
           <div className="modal-backdrop" onClick={closeCreateModal}></div>
-        </dialog>
+        </div>
       )}
     </div>
   );
