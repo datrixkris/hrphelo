@@ -3,8 +3,15 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import EditStaffForm from "./EditStaffForm";
+import { StaffDetail } from "../types";
+import dayjs from "dayjs";
 
-const StaffDetailsCard = () => {
+interface StaffDetailsProps {
+  staffDetails: StaffDetail | null;
+  refreshData: () => Promise<void>;
+}
+
+const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
   const [openModal, setOpenModal] = useState(false);
   return (
     <div className="relative flex rounded border border-base-300 bg-base-100 p-5">
@@ -14,23 +21,26 @@ const StaffDetailsCard = () => {
           {/* image */}
           <div className="avatar">
             <div className="w-36 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+              <img src={staffDetails?.image} />
             </div>
           </div>
 
           {/* staff Details */}
           <div className="">
-            <p className="text-2xl font-bold">Jane Doe</p>
+            <p className="text-2xl font-bold">{staffDetails?.name}</p>
             <p className="cursor-pointer text-hr-yellow transition-colors hover:text-hr-yellow-dark">
-              Marketing Department
+              {staffDetails?.departments?.name}
             </p>
             <p className="mt-1 text-sm text-neutral-400">
-              Lead Marketing Researcher
+              {staffDetails?.role}
             </p>
 
-            <p className="mt-4 font-semibold">Staff ID: S0001 </p>
+            <p className="mt-4 font-semibold">
+              Staff ID: {staffDetails?.staffId}{" "}
+            </p>
             <p className="text-sm text-neutral-400">
-              Date Joined: 25th April, 2018
+              Date Joined:{" "}
+              {dayjs(staffDetails?.hiring_date).format("MMM D, YYYY")}
             </p>
           </div>
         </div>
@@ -42,22 +52,22 @@ const StaffDetailsCard = () => {
             {/* phone */}
             <tr>
               <td className="w-40 py-2 pr-3 font-semibold">Phone:</td>
-              <td className="text-neutral-400">0247838329</td>
+              <td className="text-neutral-400">{staffDetails?.contact}</td>
             </tr>
             {/* Email */}
             <tr>
               <td className="w-40 py-2 pr-3 font-semibold">Email:</td>
-              <td className="text-neutral-400">janedoe@hrphello.com</td>
+              <td className="text-neutral-400">{staffDetails?.email}</td>
             </tr>
             {/* Birthday */}
             <tr>
               <td className="w-40 py-2 pr-3 font-semibold">Birthday:</td>
-              <td className="text-neutral-400">5th June, 1990</td>
+              <td className="text-neutral-400">N/A</td>
             </tr>
             {/* Address */}
             <tr>
               <td className="w-40 py-2 pr-3 font-semibold">Address:</td>
-              <td className="text-neutral-400">Alajo ST. Alabama wisconsin</td>
+              <td className="text-neutral-400"> N/A </td>
             </tr>
             {/* Gender */}
             <tr>
@@ -74,7 +84,7 @@ const StaffDetailsCard = () => {
                       <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                     </div>
                   </div>
-                  <span>Mr. Akoto Amoah</span>
+                  <span>{staffDetails?.supervisorId}</span>
                 </div>
               </td>
             </tr>
@@ -90,7 +100,12 @@ const StaffDetailsCard = () => {
         <Icon icon="heroicons:pencil" className="text-xl" />
       </div>
 
-      <EditStaffForm isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <EditStaffForm
+        staffDetails={staffDetails}
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        refreshData={refreshData}
+      />
     </div>
   );
 };

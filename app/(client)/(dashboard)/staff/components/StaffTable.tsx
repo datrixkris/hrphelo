@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { Icon } from "@iconify/react";
 import { StaffData } from "../types";
+import dayjs from "dayjs";
 
 interface StaffTableProps {
   staff: StaffData[];
@@ -28,7 +29,7 @@ const StaffTable = ({ staff }: StaffTableProps) => {
               <th>{member.name}</th>
               <td>{member.staffId}</td>
               <td>{member.email}</td>
-              <td>{member.hiring_date}</td>
+              <td>{dayjs(member.hiring_date).format("MMM D, YYYY")}</td>
               <td>{member.role}</td>
               <td>
                 <div className="text-sm">
