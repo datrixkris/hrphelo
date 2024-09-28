@@ -16,7 +16,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = token;
     }
-    console.log("I am going hahahhahahahha ");
+    // console.log("I am going hahahhahahahha ");
     return config;
   },
   (error) => {
@@ -30,7 +30,7 @@ api.interceptors.response.use(
   (response) => {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    console.log("i am heere");
+    // console.log("i am heere");
     return response;
   },
   async (error) => {

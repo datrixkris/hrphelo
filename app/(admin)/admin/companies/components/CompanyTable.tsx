@@ -2,6 +2,7 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { Company } from "../types";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 interface CompanyTableProps {
   companies: Company[];
@@ -29,7 +30,7 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
               <td>{company.name}</td>
               <td>{company.address}</td>
               <td>{company.company_size}</td>
-              <td>{company.createdAt}</td>
+              <td>{dayjs(company.createdAt).format("MMM D, YYYY")}</td>
               <td>
                 <div className="text-sm">
                   <Link href={`/admin/companies/${company.id}`}>

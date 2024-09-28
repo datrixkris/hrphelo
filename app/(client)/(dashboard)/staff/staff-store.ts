@@ -7,6 +7,7 @@ import { StaffData, StaffDetail } from "./types";
 interface StaffStore {
   staff: StaffData[];
   loading?: boolean;
+  updatingData?: boolean;
   error?: string | null;
   fetchStaff: () => Promise<void>;
   addStaff: (data: StaffData) => Promise<void>;
@@ -22,6 +23,7 @@ interface ApiErrorResponse {
 export const useStaffStore = create<StaffStore>((set, get) => ({
   staff: [],
   loading: false,
+  updatingData: false,
   error: null,
 
   fetchStaff: async () => {
@@ -59,9 +61,39 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     }
   },
 
-  fetchStaffById: async () => {
-    return "ok";
+  fetchStaffById: async (id: number) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.get(`/v1/staff/${id}`)).data;
+      set(() => ({ loading: false }));
+      return response;
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
   },
 
-  updateStaffDetails: async () => {},
+  updateStaffDetails: async (data, id) => {
+    set({ updatingData: true, error: null });
+
+    try {
+      const response = await api.put(`/v1/staff/${id}`, data);
+      set(() => ({ updatingData: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        updatingData: false,
+      }));
+
+      console.error(err);
+    }
+  },
 }));

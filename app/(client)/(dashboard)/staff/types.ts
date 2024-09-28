@@ -9,9 +9,11 @@ export interface StaffDetail {
   email?: string;
   contact?: string;
   hiring_date?: string; // Date in "YYYY-MM-DD" format
-  supervisorId?: boolean;
-  department?: Department;
+  supervisorId?: number;
+  departments?: Department;
   company?: Company;
+  image?: string;
+  departmentId?: number;
 }
 
 export interface StaffData {

@@ -1,37 +1,87 @@
 import Button from "@/app/components/Button";
-import React from "react";
-// import { SubmitHandler, useForm } from "react-hook-form";
-// import { Company } from "../types";
-// import { useCompanyStore } from "../company-store";
+import React, { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "@/app/components/Modal";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ImageUpload from "./ImageUpload";
+import { StaffDetail } from "../types";
+import { useDepartmentStore } from "../../departments/department-store";
+import { useParams } from "next/navigation";
+import { useStaffStore } from "../staff-store";
+import dayjs from "dayjs";
+
+interface EditStaffProps {
+  isOpen: boolean;
+  onClose: () => void;
+  staffDetails: StaffDetail | null;
+  refreshData: () => Promise<void>;
+}
 
 const EditStaffForm = ({
   isOpen,
   onClose,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  //   const { register, handleSubmit, reset } = useForm<Company>();
-  //   const { OnboardCompany, loading, fetchCompanies } = useCompanyStore(
+  staffDetails,
+  refreshData,
+}: EditStaffProps) => {
+  const params = useParams();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useForm<StaffDetail>();
+  const departments = useDepartmentStore((state) => state.departments);
+  const { updatingData, error, updateStaffDetails } = useStaffStore();
+  const fetchDepartments = useDepartmentStore(
+    (state) => state.fetchDepartments,
+  );
+  //   const { OnboardCompany, updatingData, fetchCompanies } = useCompanyStore(
   //     (state) => state,
   //   );
 
-  //   const onSubmit: SubmitHandler<Company> = async (data) => {
-  //     console.log(data);
-  //     await OnboardCompany(data);
-  //     if (!useCompanyStore.getState().error) {
-  //       console.log(useCompanyStore.getState().error, loading);
-  //       // onClose();
-  //       toast.success("Company Onboarded successfully");
-  //       fetchCompanies();
-  //       reset();
-  //     } else {
-  //       toast.error(useCompanyStore.getState().error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchDepartmentsData = async () => {
+      // check if there are no data before you hit the api
+      if (!(departments.length > 0)) {
+        await fetchDepartments();
+        console.log(departments);
+      }
+    };
+
+    fetchDepartmentsData();
+
+    if (staffDetails) {
+      reset({
+        name: staffDetails.name,
+        staffId: staffDetails.staffId,
+        role: staffDetails.role,
+        email: staffDetails.email,
+        contact: staffDetails.contact,
+        departmentId: staffDetails.departmentId,
+        hiring_date: staffDetails.hiring_date?.slice(0, 10),
+        supervisorId: staffDetails.supervisorId,
+      });
+    }
+  }, [staffDetails, reset]);
+
+  const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
+    console.log(data);
+    const staffData = {
+      ...data,
+      departmentId: Number(data.departmentId),
+      supervisorId: Number(data.supervisorId),
+    };
+    await updateStaffDetails(staffData, Number(params.staffId));
+    if (!error) {
+      console.log(error, updatingData);
+      // onClose();
+      toast.success("Staff data updated");
+      reset();
+      await refreshData();
+    } else {
+      toast.error(error);
+    }
+  };
 
   return (
     <div className="">
@@ -43,7 +93,7 @@ const EditStaffForm = ({
             <ImageUpload />
           </div>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-5 sm:grid-cols-2">
               {/*  name */}
               <label className="form-control w-full">
@@ -52,6 +102,7 @@ const EditStaffForm = ({
                 </div>
                 <input
                   required
+                  {...register("name")}
                   type="text"
                   placeholder="Staff name here"
                   className="input input-bordered w-full"
@@ -64,7 +115,7 @@ const EditStaffForm = ({
                   <span className="label-text">Staff ID</span>
                 </div>
                 <input
-                  required
+                  {...register("staffId")}
                   type="text"
                   placeholder="Staff ID here"
                   className="input input-bordered w-full"
@@ -77,6 +128,7 @@ const EditStaffForm = ({
                   <span className="label-text">Role</span>
                 </div>
                 <input
+                  {...register("role")}
                   required
                   type="text"
                   placeholder="Staff Role"
@@ -89,12 +141,22 @@ const EditStaffForm = ({
                 <div className="label">
                   <span className="label-text">Staff Department</span>
                 </div>
-                <input
-                  required
-                  type="text"
-                  placeholder="Staff department"
-                  className="input input-bordered w-full"
-                />
+                <select
+                  defaultValue=""
+                  {...register("departmentId")}
+                  className="select select-bordered w-full"
+                >
+                  <option disabled value="">
+                    Choose a department
+                  </option>
+                  {departments.map((department) => {
+                    return (
+                      <option value={Number(department.id)} key={department.id}>
+                        {department.name}
+                      </option>
+                    );
+                  })}
+                </select>
               </label>
 
               {/* Contact number */}
@@ -103,6 +165,7 @@ const EditStaffForm = ({
                   <span className="label-text">Contact number</span>
                 </div>
                 <input
+                  {...register("contact")}
                   required
                   type="text"
                   placeholder="Contact"
@@ -116,6 +179,7 @@ const EditStaffForm = ({
                   <span className="label-text">Email</span>
                 </div>
                 <input
+                  {...register("email")}
                   required
                   type="email"
                   placeholder="Email here"
@@ -129,9 +193,9 @@ const EditStaffForm = ({
                   <span className="label-text">Date Hired</span>
                 </div>
                 <input
+                  {...register("hiring_date")}
                   required
                   type="date"
-                  placeholder="Date hired here"
                   className="input input-bordered w-full"
                 />
               </label>
@@ -141,18 +205,31 @@ const EditStaffForm = ({
                 <div className="label">
                   <span className="label-text">Supervisor</span>
                 </div>
-                <input
+                <select
+                  defaultValue=""
+                  {...register("supervisorId")}
                   required
-                  type="text"
-                  placeholder="Supervisor here"
-                  className="input input-bordered w-full"
-                />
+                  className="select select-bordered w-full"
+                >
+                  <option disabled value="">
+                    Choose a supervisor
+                  </option>
+                  <option value={1}>Han Solo</option>
+                  <option value={2}>Greedo</option>
+                </select>
               </label>
             </div>
 
             {/* submit */}
             <div className="!mt-10">
-              <Button className="mx-auto w-1/2">Add Staff</Button>
+              <Button
+                className="mx-auto w-1/2"
+                disabled={updatingData || !isDirty}
+              >
+                {updatingData
+                  ? "Updating Staff Details..."
+                  : "Update Staff Details"}
+              </Button>
             </div>
           </form>
         </div>
