@@ -8,7 +8,6 @@ import { StaffDetail } from "../types";
 import { useDepartmentStore } from "../../departments/department-store";
 import { useParams } from "next/navigation";
 import { useStaffStore } from "../staff-store";
-import dayjs from "dayjs";
 
 interface EditStaffProps {
   isOpen: boolean;
