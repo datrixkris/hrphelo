@@ -40,7 +40,15 @@ const Page = ({ params }: { params: { slug: string } }) => {
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-5 flex w-full justify-center text-center">
             <Image
+              className="dark:hidden"
               src="/images/hrphelo.png"
+              alt="logo"
+              width="200"
+              height="150"
+            />
+            <Image
+              className="hidden dark:block"
+              src="/images/hrphelo_white.png"
               alt="logo"
               width="200"
               height="150"

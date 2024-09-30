@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 
 const Page = () => {
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
   const router = useRouter();
 
   const {
@@ -30,7 +32,11 @@ const Page = () => {
       if (respond?.route) {
         router.push(respond.route);
       }
+      if (respond.error) {
+        setMessage("Email or Password Incorrect");
+      }
     } catch (error) {
+      setMessage("Email or Password Incorrect");
       console.error(error);
     } finally {
       setLoading(false);
@@ -81,7 +87,15 @@ const Page = () => {
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
             <div className="mb-5 flex w-full justify-center text-center">
               <Image
+                className="dark:hidden"
                 src="/images/hrphelo.png"
+                alt="logo"
+                width="200"
+                height="150"
+              />
+              <Image
+                className="hidden dark:block"
+                src="/images/hrphelo_white.png"
                 alt="logo"
                 width="200"
                 height="150"
@@ -90,7 +104,11 @@ const Page = () => {
             <h2 className="text-center text-3xl font-bold leading-tight text-black sm:text-4xl dark:text-white">
               Welcome to HR Phelo
             </h2>
-
+            {message && (
+              <p className="bg-red-200 p-2 text-center text-sm text-red-700">
+                {message}
+              </p>
+            )}
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
               <div className="space-y-5">
                 <div>

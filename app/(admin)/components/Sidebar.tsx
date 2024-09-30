@@ -10,11 +10,19 @@ const Sidebar = () => {
       <div className="">
         <h1 className="">
           <Image
+            className="mx-auto h-auto w-auto object-contain dark:hidden"
             src="/images/hrphelo.png"
             alt="logo"
             width={100}
             height={40}
-            className="mx-auto h-auto w-auto object-contain"
+            priority={true}
+          />
+          <Image
+            className="mx-auto hidden h-auto w-auto object-contain dark:block"
+            src="/images/hrphelo_white.png"
+            alt="logo"
+            width={100}
+            height={40}
             priority={true}
           />
         </h1>

@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 
 const departmentSchema = z.object({
-  dept_code: z.string().nonempty("Department code is required"),
+  dept_code: z.string().min(4, { message: "Department code is required and should be at least 4 characters." }),
   name: z.string().nonempty("Department name is required"),
   description: z.string().optional(),
 });

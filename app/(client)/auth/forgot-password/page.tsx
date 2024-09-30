@@ -8,25 +8,25 @@ import React, { useLayoutEffect, useState } from "react";
 
 const Page = () => {
   const router = useRouter();
-  const [email, setEmail] = useState(""); 
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await requestPasswordResetLink({email:email});
+      const response = await requestPasswordResetLink({ email: email });
 
       if (response?.message) {
-        setMessage(response.message); 
+        setMessage(response.message);
       }
     } catch (error) {
       console.error("Error:", error);
       setMessage("An error occurred. Please try again.");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -48,7 +48,15 @@ const Page = () => {
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-5 flex w-full justify-center text-center">
             <Image
+              className="dark:hidden"
               src="/images/hrphelo.png"
+              alt="logo"
+              width="200"
+              height="150"
+            />
+            <Image
+              className="hidden dark:block"
+              src="/images/hrphelo_white.png"
               alt="logo"
               width="200"
               height="150"
@@ -68,8 +76,12 @@ const Page = () => {
                   link to reset your password.
                 </p>
               </div>
-              
-              {message && <p className="mt-4 text-center text-sm text-red-800 p-2 bg-red-200">{message}</p>}
+
+              {message && (
+                <p className="mt-4 bg-red-200 p-2 text-center text-sm text-red-800">
+                  {message}
+                </p>
+              )}
               <form onSubmit={onSubmit}>
                 <div className="space-y-5">
                   <div>
@@ -94,7 +106,7 @@ const Page = () => {
                         className="grow"
                         placeholder="Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)} 
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                       />
                     </div>
@@ -103,14 +115,13 @@ const Page = () => {
                   <div>
                     <Button
                       className="inline-flex w-full items-center justify-center px-4 py-3 text-base font-semibold text-white"
-                      disabled={loading} 
+                      disabled={loading}
                     >
                       {loading ? "Requesting..." : "Request for password reset"}
                     </Button>
                   </div>
                 </div>
               </form>
-
             </div>
           </div>
         </div>
