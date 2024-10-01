@@ -23,7 +23,7 @@ const UpdateDirectorDetails = () => {
     <div>
       <form className="" onSubmit={handleSubmit(onSubmit)}>
         {/* header */}
-        <div className="flex items-end justify-between border-b border-base-300 pb-2">
+        <div className="flex max-w-[1000px] items-end justify-between border-b border-base-300 pb-2">
           <div className="">
             <h3 className="text-xl font-semibold">
               Company Director&apos;s Identification
@@ -63,7 +63,7 @@ const UpdateDirectorDetails = () => {
           })}
 
           {/* button */}
-          <div className="flex items-center justify-center">
+          <div className="flex max-w-[1000px] items-center justify-center">
             <button
               type="button"
               className="flex cursor-pointer items-center text-lg font-bold text-hr-yellow hover:text-hr-yellow-dark"
