@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { useCompanyStore } from "../company-store";
 // import { useForm } from "react-hook-form";
 import { Company } from "../types";
-import Button from "@/app/components/Button";
 import UpdateCompanyDetails from "../components/UpdateCompanyDetails";
 import UpdateContactPersonDetails from "../components/UpdateContactPersonDetails";
 import UpdateCompanyDocuments from "../components/UpdateCompanyDocuments";

@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 
-interface Field {
-  name: string;
-}
 const UpdateDirectorDetails = () => {
   const [fields, setFields] = useState([{ name: "director1" }]);
   const { register, handleSubmit } = useForm<FieldValues>();
@@ -40,7 +37,7 @@ const UpdateDirectorDetails = () => {
           {/* Contact person details */}
           {fields.map((field) => {
             return (
-              <div className="flex max-w-[1000px] gap-2">
+              <div className="flex max-w-[1000px] gap-2" key={field.name}>
                 {/* text */}
                 <div className="w-1/2">
                   <h3 className="font-semibold">Director ID</h3>
