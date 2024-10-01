@@ -3,15 +3,50 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { CompanyDocuments, CompanyDocumentsSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { api } from "@/app/axiosApi/api";
+import { useParams } from "next/navigation";
 
 const UpdateCompanyDocuments = () => {
-  const { register, handleSubmit } = useForm<CompanyDocuments>({
+  const params = useParams();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CompanyDocuments>({
     resolver: zodResolver(CompanyDocumentsSchema),
   });
 
-  const onSubmit: SubmitHandler<CompanyDocuments> = async (formData) => {
-    console.log("here please");
-    console.log(formData);
+  const onSubmit: SubmitHandler<CompanyDocuments> = async (data) => {
+    // Create a FormData object to send the files to the API
+    const formData = new FormData();
+
+    // Append each file in the FileList to the FormData object
+    Array.from(data.file).forEach((file) => {
+      formData.append("files", file); // "files" is the key for the API to handle multiple files
+    });
+
+    // loging files to console
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+
+    try {
+      const response = await api.post(
+        `/v1/companies/documents/${params.companyId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Required for file upload
+          },
+        },
+      );
+
+      if (response.status === 200) {
+        console.log("Files uploaded successfully");
+      }
+    } catch (error) {
+      console.error("Error during file upload:", error);
+    }
   };
 
   return (
@@ -42,11 +77,13 @@ const UpdateCompanyDocuments = () => {
             {/* form */}
             <div className="w-1/2">
               <input
-                type="text"
-                {...register("document")}
+                multiple
+                type="file"
+                {...register("file")}
                 placeholder="Type here"
-                className="input input-bordered w-full"
+                className="file-input input-bordered w-full"
               />
+              {errors.file && <p>{errors.file.message}</p>}
             </div>
           </div>
         </div>
