@@ -33,7 +33,7 @@ const StaffTable = ({ staff }: StaffTableProps) => {
               <td>{member.role}</td>
               <td>
                 <div className="text-sm">
-                  <Link href={`/staff/${member.id}`}>
+                  <Link href={`/staff/${member.id}`} className="text-nowrap">
                     <Icon
                       icon="heroicons:eye"
                       className="inline-block text-lg"

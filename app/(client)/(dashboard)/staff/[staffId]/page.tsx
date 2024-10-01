@@ -54,7 +54,7 @@ const Page = () => {
             staffDetails={staffDetails}
             refreshData={fetchAndSetData}
           />
-          <div className="border-b border-base-300 bg-base-100">
+          <div className="no-scrollbar w-full overflow-x-scroll border-b border-base-300 bg-base-100">
             <div className="px-5">
               <div className="flex">
                 <a
@@ -62,13 +62,22 @@ const Page = () => {
                 >
                   Profile
                 </a>
-                <a href="#" className="inline-block px-4 py-2.5 capitalize">
+                <a
+                  href="#"
+                  className="inline-block text-nowrap px-4 py-2.5 capitalize"
+                >
                   Projects
                 </a>
-                <a href="#" className="inline-block px-4 py-2.5 capitalize">
+                <a
+                  href="#"
+                  className="inline-block text-nowrap px-4 py-2.5 capitalize"
+                >
                   Bank and Statutory
                 </a>
-                <a href="#" className="inline-block px-4 py-2.5 capitalize">
+                <a
+                  href="#"
+                  className="inline-block text-nowrap px-4 py-2.5 capitalize"
+                >
                   Assets
                 </a>
               </div>
