@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import daisyui from "daisyui"
+import daisyui from "daisyui";
 
 const config: Config = {
   content: [
@@ -12,28 +12,27 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        'hr-yellow': "#ff980d",
-        'hr-yellow-light': "#feb210",
-        'hr-yellow-dark': "#fe7207",
-        'hr-dark': "#03294e",
+        "hr-yellow": "#ff980d",
+        "hr-yellow-light": "#feb210",
+        "hr-yellow-dark": "#fe7207",
+        "hr-dark": "#03294e",
       },
     },
   },
-  plugins: [daisyui,],
+  plugins: [daisyui],
 
- // daisyUI config (optional - here are the default values)
- daisyui: {
-  themes: ['lofi', 'black'], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
-  darkTheme: "black", // name of one of the included themes for dark mode
-  base: true, // applies background color and foreground color for root element by default
-  styled: true, // include daisyUI colors and design decisions for all components
-  utils: true, // adds responsive and modifier utility classes
-  prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
-  logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
-  themeRoot: ":root", // The element that receives theme color CSS variables
-},
+  // daisyUI config (optional - here are the default values)
+  daisyui: {
+    themes: ["lofi", "black"], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
+    darkTheme: "black", // name of one of the included themes for dark mode
+    base: true, // applies background color and foreground color for root element by default
+    styled: true, // include daisyUI colors and design decisions for all components
+    utils: true, // adds responsive and modifier utility classes
+    prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+    logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
+    themeRoot: ":root", // The element that receives theme color CSS variables
+  },
 
-// darkMode: ['class', '[data-theme="black"]']
-
+  // darkMode: ['class', '[data-theme="black"]']
 };
 export default config;

@@ -8,9 +8,10 @@ import MobileNav from "./MobileNav";
 const Topnav = () => {
   const user = useAuthStore((state) => state.user);
   const [showMobileNav, setShowMovileNav] = useState(false);
+
   return (
     <>
-      <nav className="bg-gradient-to-r from-hr-yellow-light via-hr-yellow to-hr-yellow-dark py-3 text-hr-dark">
+      <nav className="sticky top-0 z-40 bg-gradient-to-r from-hr-yellow-light via-hr-yellow to-hr-yellow-dark py-3 text-hr-dark">
         <div className="maximum-width flex items-center justify-between">
           {/* title */}
           <div className="flex items-center gap-4">
@@ -30,9 +31,11 @@ const Topnav = () => {
           </div>
         </div>
       </nav>
-      {showMobileNav && (
-        <MobileNav closeMobileNav={() => setShowMovileNav(false)} />
-      )}
+
+      <MobileNav
+        closeMobileNav={() => setShowMovileNav(false)}
+        isOpen={showMobileNav}
+      />
     </>
   );
 };
