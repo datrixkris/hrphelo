@@ -4,20 +4,10 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import ActiveLink from "./ActiveLink";
 import { motion } from "framer-motion";
-
-interface DropdownItem {
-  name: string;
-  link: string;
-}
-
-interface MenuItem {
-  name: string;
-  icon: string;
-  dropdown: DropdownItem[];
-}
+import { SidebarLink } from "../types/link-types";
 
 interface DropdownProps {
-  links: MenuItem;
+  links: SidebarLink;
 }
 
 const LinkWithDropdown = ({ links }: DropdownProps) => {
@@ -53,7 +43,7 @@ const LinkWithDropdown = ({ links }: DropdownProps) => {
         className="overflow-hidden"
       >
         <div className="mt-2 space-y-2 rounded-lg bg-base-300 p-3">
-          {links.dropdown.map((link, index) => {
+          {links?.dropdown?.map((link, index) => {
             return (
               <div className="" key={index}>
                 <ActiveLink href={link.link}>
