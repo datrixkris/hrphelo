@@ -3,6 +3,8 @@ import React from "react";
 import ActiveLink from "../../components/ActiveLink";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
+import { clientSidebarLinks as links } from "@/app/data/links";
+import LinkWithDropdown from "@/app/components/LinkWithDropdown";
 
 const MobileNav = ({
   closeMobileNav,
@@ -11,24 +13,6 @@ const MobileNav = ({
   closeMobileNav: () => void;
   isOpen: boolean;
 }) => {
-  const links = [
-    {
-      name: "Dashboard",
-      icon: "hugeicons:dashboard-square-03",
-      link: "/dashboard",
-    },
-    {
-      name: "Departments",
-      icon: "hugeicons:dashboard-square-03",
-      link: "/departments",
-    },
-    {
-      name: "Staff",
-      icon: "hugeicons:user-group",
-      link: "/staff",
-    },
-  ];
-
   // Sidebar animation variants
   const sidebarVariants = {
     open: {
@@ -99,16 +83,24 @@ const MobileNav = ({
             <div className="my-7 space-y-3">
               {/* dashboard */}
               {links.map((link, index) => {
-                return (
-                  <div className="" key={index}>
-                    <ActiveLink href={link.link}>
-                      <div className="flex items-center gap-2">
-                        <Icon icon={link.icon} />
-                        <span>{link.name}</span>
-                      </div>
-                    </ActiveLink>
-                  </div>
-                );
+                if (link.dropdown) {
+                  return (
+                    <div className="" key={index}>
+                      <LinkWithDropdown links={link} />
+                    </div>
+                  );
+                } else if (link.link) {
+                  return (
+                    <div className="" key={index}>
+                      <ActiveLink href={link.link}>
+                        <div className="flex items-center gap-2">
+                          <Icon icon={link.icon} />
+                          <span>{link.name}</span>
+                        </div>
+                      </ActiveLink>
+                    </div>
+                  );
+                }
               })}
             </div>
           </div>

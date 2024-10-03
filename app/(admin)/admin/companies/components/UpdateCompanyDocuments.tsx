@@ -22,7 +22,7 @@ const UpdateCompanyDocuments = () => {
 
     // Append each file in the FileList to the FormData object
     Array.from(data.file).forEach((file) => {
-      formData.append("files", file); // "files" is the key for the API to handle multiple files
+      formData.append("documents", file); // "files" is the key for the API to handle multiple files
     });
 
     // loging files to console
