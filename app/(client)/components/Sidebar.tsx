@@ -56,7 +56,7 @@ const Sidebar = () => {
           {links.map((link, index) => {
             if (link.dropdown) {
               return (
-                <div className="">
+                <div className="" key={index}>
                   <LinkWithDropdown links={link} />
                 </div>
               );
