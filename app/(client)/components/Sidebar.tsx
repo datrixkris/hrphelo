@@ -2,6 +2,7 @@
 import React from "react";
 import ActiveLink from "../../components/ActiveLink";
 import { Icon } from "@iconify/react";
+import LinkWithDropdown from "@/app/components/LinkWithDropdown";
 
 const Sidebar = () => {
   const links = [
@@ -12,13 +13,31 @@ const Sidebar = () => {
     },
     {
       name: "Departments",
-      icon: "hugeicons:dashboard-square-03",
+      icon: "hugeicons:departement",
       link: "/departments",
     },
     {
       name: "Staff",
       icon: "hugeicons:user-group",
       link: "/staff",
+    },
+    {
+      name: "Leaves",
+      icon: "hugeicons:calendar-remove-01",
+      dropdown: [
+        {
+          name: "Your leaves",
+          link: "/leaves",
+        },
+        {
+          name: "Manage leaves",
+          link: "/manage-leaves",
+        },
+        {
+          name: "Leave Settings",
+          link: "/leave-settings",
+        },
+      ],
     },
   ];
   return (
@@ -35,16 +54,24 @@ const Sidebar = () => {
         <div className="my-7 space-y-3">
           {/* dashboard */}
           {links.map((link, index) => {
-            return (
-              <div className="" key={index}>
-                <ActiveLink href={link.link}>
-                  <div className="flex items-center gap-2">
-                    <Icon icon={link.icon} />
-                    <span>{link.name}</span>
-                  </div>
-                </ActiveLink>
-              </div>
-            );
+            if (link.dropdown) {
+              return (
+                <div className="">
+                  <LinkWithDropdown links={link} />
+                </div>
+              );
+            } else {
+              return (
+                <div className="" key={index}>
+                  <ActiveLink href={link.link}>
+                    <div className="flex items-center gap-2">
+                      <Icon icon={link.icon} />
+                      <span>{link.name}</span>
+                    </div>
+                  </ActiveLink>
+                </div>
+              );
+            }
           })}
         </div>
       </div>
