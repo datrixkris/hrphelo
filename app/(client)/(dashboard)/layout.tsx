@@ -13,17 +13,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapse, setCollapse] = useState(false);
 
-  useLayoutEffect(() => {
-    const fetchUser = async () => {
-      await useAuthStore.getState().fetchUserData();
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
-      if (!isAuthenticated) {
-        router.push("/auth/login");
-      }
-    };
+  // useLayoutEffect(() => {
+  //   const fetchUser = async () => {
+  //     await useAuthStore.getState().fetchUserData();
+  //     const isAuthenticated = useAuthStore.getState().isAuthenticated;
+  //     if (!isAuthenticated) {
+  //       router.push("/auth/login");
+  //     }
+  //   };
 
-    fetchUser();
-  }, [router]);
+  //   fetchUser();
+  // }, [router]);
 
   return (
     <div>
