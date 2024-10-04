@@ -47,7 +47,7 @@ const UpdateContactPersonDetails = ({
     <div>
       <form className="" onSubmit={handleSubmit(onSubmit)}>
         {/* header */}
-        <div className="flex items-end justify-between border-b border-base-300 pb-2">
+        <div className="flex max-w-[1000px] items-end justify-between border-b border-base-300 pb-2">
           <div className="">
             <h3 className="text-xl font-semibold">
               Contact Person&apos;s details

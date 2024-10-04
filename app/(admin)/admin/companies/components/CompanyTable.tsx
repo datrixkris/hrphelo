@@ -33,7 +33,10 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
               <td>{dayjs(company.createdAt).format("MMM D, YYYY")}</td>
               <td>
                 <div className="text-sm">
-                  <Link href={`/admin/companies/${company.id}`}>
+                  <Link
+                    href={`/admin/companies/${company.id}`}
+                    className="text-nowrap"
+                  >
                     <Icon
                       icon="heroicons:eye"
                       className="inline-block text-lg"

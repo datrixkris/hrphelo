@@ -47,7 +47,7 @@ const UpdateCompanyDetails = ({ data, id, refreshData }: DetailsProps) => {
       {/* company details  form*/}
       <form className="" onSubmit={handleSubmit(onSubmit)}>
         {/* header */}
-        <div className="flex items-end justify-between border-b border-base-300 pb-2">
+        <div className="flex max-w-[1000px] items-end justify-between border-b border-base-300 pb-2">
           <div className="">
             <h3 className="text-xl font-semibold">Company details</h3>
             <p className="mt-1 text-neutral-400">

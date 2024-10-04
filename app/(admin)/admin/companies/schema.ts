@@ -15,7 +15,10 @@ export const ContactPersonSchema = z.object({
 });
 
 export const CompanyDocumentsSchema = z.object({
-  document: z.array(z.instanceof(File)),
+  file: z
+    .instanceof(FileList)
+    .refine((files) => files.length > 0, "You must upload at least one file")
+    .refine((files) => files[0]?.size <= 5000000, "Max file size is 5MB"), // max file size 5MB
 });
 
 // type inferences
