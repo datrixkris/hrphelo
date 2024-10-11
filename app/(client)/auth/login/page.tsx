@@ -79,6 +79,84 @@ const Page = () => {
                 One tool for all your <br className="hidden xl:block" />
                 key HR functions.
               </h3>
+              <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Streamlined HR Management
+                  </span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Real-Time Insights & Reporting
+                  </span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Employee Self-Service Portal
+                  </span>
+                </li>
+                <li className="flex items-center space-x-3">
+                  <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-orange-500">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-white">
+                    Secure & Compliant
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -89,7 +167,7 @@ const Page = () => {
             <div className="mb-5 flex w-full justify-center text-center">
               <Logo width={200} height={150} />
             </div>
-            <h2 className="text-center text-3xl font-bold leading-tight  sm:text-4xl ">
+            <h2 className="text-center text-3xl font-bold leading-tight sm:text-4xl">
               Welcome to HR Phelo
             </h2>
             {message && (
@@ -100,10 +178,7 @@ const Page = () => {
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
               <div className="space-y-5">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="text-base font-medium "
-                  >
+                  <label htmlFor="email" className="text-base font-medium">
                     Email
                   </label>
                   <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
@@ -120,10 +195,7 @@ const Page = () => {
 
                 <div>
                   <div className="flex items-center justify-between">
-                    <label
-                      htmlFor="password"
-                      className="text-base font-medium "
-                    >
+                    <label htmlFor="password" className="text-base font-medium">
                       Password
                     </label>
 
