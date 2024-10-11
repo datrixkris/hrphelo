@@ -80,7 +80,7 @@ const Page = () => {
   return (
     <div>
       <div>
-        <div className="page-header mb-[1.875rem]">
+        <div className=" mb-[1.875rem]">
           <div className="flex items-center justify-between">
             <PageTitleWithCrumbs
               title="Departments"

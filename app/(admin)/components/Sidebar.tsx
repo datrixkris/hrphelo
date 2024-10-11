@@ -2,31 +2,13 @@ import Image from "next/image";
 import React from "react";
 import ActiveLink from "../../components/ActiveLink";
 import { Icon } from "@iconify/react";
+import Logo from "@/app/components/Logo";
 
 const Sidebar = () => {
   return (
     <div className="h-full border-r border-base-300 bg-base-100 p-4">
       {/* logo  */}
-      <div className="">
-        <h1 className="">
-          <Image
-            className="mx-auto h-auto w-auto object-contain dark:hidden"
-            src="/images/hrphelo.png"
-            alt="logo"
-            width={100}
-            height={40}
-            priority={true}
-          />
-          <Image
-            className="mx-auto hidden h-auto w-auto object-contain dark:block"
-            src="/images/hrphelo_white.png"
-            alt="logo"
-            width={100}
-            height={40}
-            priority={true}
-          />
-        </h1>
-      </div>
+      <Logo />
       {/* title  */}
       <div className="mt-4 border-t border-base-300">
         <div className="my-7 space-y-3">

@@ -1,13 +1,17 @@
 import Theme from "@/app/components/Theme";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { UserAvatar } from "./UserAvatar";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { Icon } from "@iconify/react";
 import MobileNav from "./MobileNav";
+// import ThemeSwap from "@/app/components/ThemeBtn";
+// import { ThemeContext } from "@/app/context/ThemeContext";
+// import ThemeSwap from "@/app/components/Theme";
 
 const Topnav = () => {
   const user = useAuthStore((state) => state.user);
   const [showMobileNav, setShowMovileNav] = useState(false);
+  // const { changeTheme } = useContext(ThemeContext);
 
   return (
     <>
@@ -26,7 +30,9 @@ const Topnav = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Theme />
+            {/* <Theme /> */}
+            {/* <ThemeSwap handleOnClick={changeTheme} /> */}
+
             <UserAvatar />
           </div>
         </div>
