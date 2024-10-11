@@ -1,19 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useLogoStore } from "../stores/logo-store";
 
-const Logo = () => {
-  const isDark = useLogoStore((state) => state.isDark);
+interface LogoProps {
+  className?: string;
+  width?: number;
+  height?: number;
+}
+
+const Logo = ({ className, height = 100, width = 40 }: LogoProps) => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const theme = localStorage.getItem("theme") || "light";
+      // Check if the theme is dark or black
+      if (theme === "dark" || theme === "black") {
+        setIsDark(true);
+      } else {
+        setIsDark(false);
+      }
+    }
+  }, []);
+
   return (
-    <div className="">
+    <div>
       <Image
-        className="h-auto w-auto object-contain"
+        className={`${className} h-auto w-auto object-contain`}
         src={isDark ? "/images/hrphelo_white.png" : "/images/hrphelo.png"}
         alt="logo"
-        width={100}
-        height={40}
+        width={height}
+        height={width}
         priority={true}
       />
     </div>

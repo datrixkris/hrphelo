@@ -1,46 +1,53 @@
-"use client";
-
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Icon } from "@iconify/react";
-import { useLogoStore } from "../stores/logo-store";
-
-const Theme = () => {
-  const { setIsDark } = useLogoStore();
-
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check localStorage for theme preference
-    const storedTheme = localStorage.getItem("isDark");
-
-    if (storedTheme === null) {
-      // If no theme is stored, check system preference
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      ).matches;
-      setIsDarkMode(prefersDark);
-      localStorage.setItem("isDark", JSON.stringify(prefersDark));
-    } else {
-      setIsDarkMode(JSON.parse(storedTheme));
-    }
-  }, []);
+export default function ThemeSwap({
+  handleOnClick,
+}: {
+  handleOnClick?: (e?: any) => void;
+}) {
   return (
-    <label className="swap swap-rotate">
-      {/* this hidden checkbox controls the state */}
-      <input
-        // if  isDarkMode is true set pass trure to setIsDark
-        onChange={(e) => setIsDark()}
-        // onChange={setIsDark}
-        type="checkbox"
-        className="theme-controller"
-        value={isDarkMode ? "lofi" : "black"}
-      />
-
-      {/* sun and moon icons */}
-      <Icon className="swap-on text-2xl" icon="hugeicons:moon-02" />
-      <Icon className="swap-off text-2xl" icon="hugeicons:sun-03" />
-    </label>
+    <>
+      <div className="dropdown">
+        <div tabIndex={0} role="button" className="btn m-1">
+          Theme
+          <svg
+            width="12px"
+            height="12px"
+            className="inline-block h-2 w-2 fill-current opacity-60"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 2048 2048"
+          >
+            <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+          </svg>
+        </div>
+        <ul className="dropdown-content z-[1] w-52 rounded-box bg-base-300 p-2 shadow-2xl">
+          <li onClick={handleOnClick}>
+            <input
+              type="radio"
+              name="theme-dropdown"
+              className="theme-controller btn btn-ghost btn-sm btn-block justify-start"
+              aria-label="Black"
+              value="black"
+            />
+          </li>
+          <li onClick={handleOnClick}>
+            <input
+              type="radio"
+              name="theme-dropdown"
+              className="theme-controller btn btn-ghost btn-sm btn-block justify-start"
+              aria-label="Light"
+              value="lofi"
+            />
+          </li>
+          <li onClick={handleOnClick}>
+            <input
+              type="radio"
+              name="theme-dropdown"
+              className="theme-controller btn btn-ghost btn-sm btn-block justify-start"
+              aria-label="Dark"
+              value="dark"
+            />
+          </li>
+        </ul>
+      </div>
+    </>
   );
-};
-
-export default Theme;
+}

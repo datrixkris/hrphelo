@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./context/ThemeContext";
+import ClientThemeWrapper from "./context/ClientThemeWrapper";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -15,8 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${montserrat.className} bg-base-200`}>
-      <body className="">{children}</body>
+    <html lang="en">
+      <body className={`${montserrat.className} `}>
+        <ThemeProvider>
+          <ClientThemeWrapper>
+            <div className="">{children}</div>
+          </ClientThemeWrapper>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

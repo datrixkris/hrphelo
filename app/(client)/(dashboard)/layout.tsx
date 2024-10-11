@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Topnav from "../components/Topnav";
@@ -8,10 +8,14 @@ import { useAuthStore } from "@/app/stores/auth-store";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
+import Setting from "@/app/components/Setting";
+import { ThemeContext } from "@/app/context/ThemeContext";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapse, setCollapse] = useState(false);
+  const { changeTheme } = useContext(ThemeContext);
+
 
   useLayoutEffect(() => {
     const fetchUser = async () => {
@@ -63,7 +67,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <Topnav />
-          <div className="maximum-width py-5">{children}</div>
+          <div className="maximum-width py-5">
+            {children}
+            <Setting handleOnClick={changeTheme} />
+          </div>
         </div>
       </div>
     </div>
