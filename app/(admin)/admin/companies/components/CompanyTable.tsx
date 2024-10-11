@@ -2,14 +2,15 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { Company } from "../types";
 import Link from "next/link";
+import dayjs from "dayjs";
 
 interface CompanyTableProps {
   companies: Company[];
 }
 const CompanyTable = ({ companies }: CompanyTableProps) => {
   return (
-    <div className="overflow-x-auto overflow-y-visible">
-      <table className="table  table-lg bg-base-100 rounded border border-base-300 ">
+    <div className="overflow-x-auto">
+      <table className="table table-lg rounded border border-base-300 bg-base-100">
         {/* head */}
         <thead className="">
           <tr>
@@ -29,20 +30,20 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
               <td>{company.name}</td>
               <td>{company.address}</td>
               <td>{company.company_size}</td>
-              <td>{company.createdAt}</td>
+              <td>{dayjs(company.createdAt).format("MMM D, YYYY")}</td>
               <td>
-              <div className="dropdown dropdown-end">
-                <div tabIndex={0} role="button" className="">
-                  <Icon
-                  className="text-2xl cursor-pointer"
-                  icon="heroicons:ellipsis-vertical"
-                  />
+                <div className="text-sm">
+                  <Link
+                    href={`/admin/companies/${company.id}`}
+                    className="text-nowrap"
+                  >
+                    <Icon
+                      icon="heroicons:eye"
+                      className="inline-block text-lg"
+                    />
+                    <span className="relative top-0.5 ml-1">View</span>
+                  </Link>
                 </div>
-                <ul tabIndex={0} className="border border-base-300 dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                  <li><Link href={`/admin/companies/${company.id}`}><Icon icon="heroicons:eye" /><span>View Details</span></Link></li>
-                  <li><a><Icon icon="heroicons:trash" /><span>Delete</span></a></li>
-                </ul>
-              </div>       
               </td>
             </tr>
           ))}

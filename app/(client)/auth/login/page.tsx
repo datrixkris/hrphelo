@@ -1,16 +1,22 @@
 "use client";
 import { submitLoginForm } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
+import Logo from "@/app/components/Logo";
 import { LoginData, loginSchema } from "@/app/schemas";
+import { useAuthStore } from "@/app/stores/auth-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useLayoutEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Page = () => {
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const router = useRouter();
 
   const {
     register,
@@ -23,19 +29,41 @@ const Page = () => {
   const onSubmit = async (data: LoginData) => {
     setLoading(true);
     try {
-      await submitLoginForm(data);
+      const respond = await submitLoginForm(data);
+      if (respond?.route) {
+        router.push(respond.route);
+      }
+      if (respond.error) {
+        setMessage("Email or Password Incorrect");
+      }
     } catch (error) {
+      setMessage("Email or Password Incorrect");
       console.error(error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
+  useLayoutEffect(() => {
+    const fetchUser = async () => {
+      await useAuthStore.getState().fetchUserData();
+      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      console.log("looo:", isAuthenticated);
+      const userData = useAuthStore.getState().user;
+      console.log("Current user data:", userData);
+      if (isAuthenticated) {
+        router.push("/");
+      }
+    };
+
+    fetchUser();
+  }, [router]);
+
   return (
-    <section className="bg-base-300">
+    <section className="bg-base-100">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left side */}
-        <div className="relative flex h-screen items-end bg-gray-50 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:justify-center lg:px-8 lg:pb-24">
+        <div className="relative hidden h-screen items-end bg-base-100 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:flex md:justify-center lg:px-8 lg:pb-24">
           <div className="absolute inset-0">
             <img
               className="h-full w-full object-cover object-top"
@@ -59,23 +87,22 @@ const Page = () => {
         <div className="flex items-center justify-center bg-base-200 px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
             <div className="mb-5 flex w-full justify-center text-center">
-              <Image
-                src="/images/hrphelo.png"
-                alt="logo"
-                width="200"
-                height="150"
-              />
+              <Logo width={200} height={150} />
             </div>
-            <h2 className="text-center text-3xl font-bold leading-tight text-black sm:text-4xl dark:text-white">
+            <h2 className="text-center text-3xl font-bold leading-tight  sm:text-4xl ">
               Welcome to HR Phelo
             </h2>
-
+            {message && (
+              <p className="bg-red-200 p-2 text-center text-sm text-red-700">
+                {message}
+              </p>
+            )}
             <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
               <div className="space-y-5">
                 <div>
                   <label
                     htmlFor="email"
-                    className="text-base font-medium text-gray-900 dark:text-white"
+                    className="text-base font-medium "
                   >
                     Email
                   </label>
@@ -85,17 +112,17 @@ const Page = () => {
                       className="grow"
                       placeholder="Email"
                     />
-                    {errors.email && (
-                      <p className="text-red-500">{errors.email.message}</p>
-                    )}
-                  </div>
+                  </div>{" "}
+                  {errors.email && (
+                    <p className="mt-1 text-red-500">{errors.email.message}</p>
+                  )}
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="password"
-                      className="text-base font-medium text-gray-900 dark:text-white"
+                      className="text-base font-medium "
                     >
                       Password
                     </label>
@@ -107,7 +134,6 @@ const Page = () => {
                       Forgot password?
                     </Link>
                   </div>
-
                   <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                     <input
                       {...register("password")}
@@ -115,10 +141,10 @@ const Page = () => {
                       className="grow"
                       placeholder="Password"
                     />
-                    {errors.password && (
-                      <p className="text-red-500">{errors.password.message}</p>
-                    )}
-                  </div>
+                  </div>{" "}
+                  {errors.password && (
+                    <p className="text-red-500">{errors.password.message}</p>
+                  )}
                 </div>
 
                 <div>

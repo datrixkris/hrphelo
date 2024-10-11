@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
 import React, { useEffect } from "react";
 import CompanyTable from "./components/CompanyTable";
-import OnboardCompanyButton from "./components/OnboardCompanyButton";
-import { useCompanyStore } from "@/app/stores/company-store";
+import OnboardCompanyButton from "./components/OnboardCompany";
+import { useCompanyStore } from "./company-store";
 
 const Page = () => {
-  const { companies, loading, fetchCompanies } = useCompanyStore()
+  const { companies, loading, fetchCompanies } = useCompanyStore();
 
   useEffect(() => {
     fetchCompanies();
-  }, [])
+  }, [fetchCompanies]);
 
-  if(loading && companies.length < 1) {
-    return <div className="rounded py-20 text-center">
-    Getting companies data...
-  </div>
+  if (loading && companies.length < 1) {
+    return (
+      <div className="rounded py-20 text-center">Getting companies data...</div>
+    );
   }
 
   return (
