@@ -4,17 +4,16 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useState } from "react";
 import { useLeavePolicyStore } from "../leave-settings/leavePolicy-store";
-// import { useLeaveStore } from "../leave-store";
+import { useLeaveStore } from "../leave-store";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
-// s
 
 const Page = () => {
   const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
-  // const { fetchLeaves, leaves } = useLeaveStore();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const { fetchLeaves, leaves } = useLeaveStore();
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [employeeName, setEmployeeName] = useState("");
   const [leaveType, setLeaveType] = useState("");
   const [leaveStatus, setLeaveStatus] = useState("");
@@ -155,13 +154,14 @@ const Page = () => {
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">From</label>
           <div className="relative flex h-[50px] w-full items-center border">
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
-              placeholderText="From "
-              className="block!h-full w-full pl-3 focus:outline-none"
-            />
+          <DatePicker
+  selected={startDate}
+  onChange={(date) => setStartDate(date)} 
+  filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
+  placeholderText="From "
+  className="block h-full w-full pl-3 focus:outline-none"
+/>
+
             <button
               type="button"
               className="absolute right-3"
@@ -182,7 +182,7 @@ const Page = () => {
               onChange={(date) => setEndDate(date)}
               placeholderText="To"
               className="block !h-full w-full focus:outline-none"
-              minDate={startDate}
+              minDate={new Date()}
               filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
             />
             <button
@@ -244,7 +244,7 @@ const Page = () => {
                 </td>
                 <td>{leave.leavetype.name}</td>
                 <td>{dayjs(leave.start_date).format("MMM D, YYYY")}</td>
-                <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td>
+                {/* <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td> */}
                 <td>{leave.duration}</td>
                 <td>{leave.reason}</td>
                 <td className="text-center">
