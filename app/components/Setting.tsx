@@ -1,6 +1,16 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useEffect, useState } from "react";
 
 const Setting = ({ handleOnClick }: { handleOnClick?: (e?: any) => void }) => {
+  const [selectedTheme, setSelectedTheme] = useState<string>("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const theme = localStorage.getItem("theme") || "light";
+      setSelectedTheme(theme);
+
+    }
+  }, []);
   return (
     <div>
       <div className="drawer drawer-end">
@@ -25,52 +35,26 @@ const Setting = ({ handleOnClick }: { handleOnClick?: (e?: any) => void }) => {
               <h5>Sidebar Color</h5>
               <h6>Choose a color of Sidebar.</h6>
             </div>
-            <li>
-              <div className="form-control">
-                <label className="label cursor-pointer gap-4">
-                  <span className="label-text">Black</span>
-                  <input
-                    type="radio"
-                    name="theme-radios"
-                    className="theme-controller radio"
-                    value="black"
-                    onChange={handleOnClick}
-                  />
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-control">
-                <label className="label cursor-pointer gap-4">
-                  <span className="label-text">Dark</span>
-                  <input
-                    type="radio"
-                    name="theme-radios"
-                    className="theme-controller radio"
-                    value="dark"
-                    onChange={handleOnClick}
-                  />
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-control">
-                <label className="label cursor-pointer gap-4">
-                  <span className="label-text">Lofi</span>
-                  <input
-                    type="radio"
-                    name="theme-radios"
-                    className="theme-controller radio"
-                    value="lofi"
-                    onChange={handleOnClick}
-                  />
-                </label>
-              </div>
-            </li>
+            {["light", "dark", "retro", "black", "lofi"].map((theme) => (
+              <li key={theme}>
+                <div className="form-control">
+                  <label className="label cursor-pointer gap-4">
+                    <span className="label-text capitalize">{theme}</span>
+                    <input
+                      type="radio"
+                      name="theme-radios"
+                      className="theme-controller radio"
+                      value={theme}
+                      checked={selectedTheme === theme}
+                      onChange={handleOnClick}
+                    />
+                  </label>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
-  
     </div>
   );
 };

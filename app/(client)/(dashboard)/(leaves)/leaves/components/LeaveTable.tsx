@@ -129,7 +129,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                 </h2>
               </td>
               <td>
-                <details className="dropdown">
+                <details className="dropdown dropdown-end">
                   <summary className="btn m-1">
                     <Icon icon="mdi:dots-vertical" className="text-xl" />
                   </summary>
