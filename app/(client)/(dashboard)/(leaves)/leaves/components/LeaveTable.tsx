@@ -3,13 +3,25 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { useLeaveStore } from "../../leave-store";
+import { toast } from "react-toastify";
 
 interface LeaveTableProps {
   onEditLeave: (leaveId: number) => void;
 }
 
 const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
-  const { leaves, loading } = useLeaveStore();
+  const { leaves, loading, deleteLeave } = useLeaveStore();
+
+  async function handleDelete(leaveId: number) {
+    let success;
+
+    success = await deleteLeave(leaveId);
+    if (success) {
+      toast.success("Leave deleted successfully");
+    } else {
+      toast.error("Leave deletion  failed");
+    }
+  }
 
   if (loading || !leaves?.leaves || leaves.leaves.length < 1) {
     return (
@@ -93,8 +105,8 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                       leave.status === "pending"
                         ? "border-yellow-500 bg-yellow-100 text-yellow-500"
                         : leave.status === "approved"
-                        ? "border-green-600 bg-green-100 text-green-600"
-                        : "border-red-600 bg-red-100 text-red-600"
+                          ? "border-green-600 bg-green-100 text-green-600"
+                          : "border-red-600 bg-red-100 text-red-600"
                     }`}
                   >
                     <Icon
@@ -103,8 +115,8 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                         leave.status === "pending"
                           ? "text-yellow-500"
                           : leave.status === "approved"
-                          ? "text-green-600"
-                          : "text-red-600"
+                            ? "text-green-600"
+                            : "text-red-600"
                       }`}
                     />
                     {leave.status}
@@ -148,7 +160,17 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                       </a>
                     </li>
                     <li>
-                      <a>Delete</a>
+                      <a
+                        onClick={() => handleDelete(leave.id)}
+                        className={`${
+                          leave.status === "approved" ||
+                          leave.status === "rejected"
+                            ? "pointer-events-none cursor-not-allowed text-gray-400"
+                            : ""
+                        }`}
+                      >
+                        Delete
+                      </a>
                     </li>
                   </ul>
                 </details>

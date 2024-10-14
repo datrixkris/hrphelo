@@ -39,14 +39,10 @@ const Page = () => {
       matchesEmployeeName &&
       matchesLeaveType &&
       matchesLeaveStatus &&
-      matchesStartDate 
+      matchesStartDate
       // matchesEndDate
     );
   });
-
-  const handleSearch = () => {
-    // Additional logic if needed
-  };
 
   useEffect(() => {
     if (!leavePolicies.length) fetchLeavePolicies();
@@ -154,13 +150,13 @@ const Page = () => {
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">From</label>
           <div className="relative flex h-[50px] w-full items-center border">
-          <DatePicker
-  selected={startDate}
-  onChange={(date) => setStartDate(date)} 
-  filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
-  placeholderText="From "
-  className="block h-full w-full pl-3 focus:outline-none"
-/>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
+              placeholderText="From "
+              className="block h-full w-full pl-3 focus:outline-none"
+            />
 
             <button
               type="button"
@@ -175,7 +171,6 @@ const Page = () => {
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">To</label>
           <div className="relative flex h-[50px] w-full items-center rounded border">
-          <div className="relative flex h-[50px] w-full items-center rounded border">
             <DatePicker
               selected={endDate}
               showIcon
@@ -189,7 +184,6 @@ const Page = () => {
               type="button"
               className="absolute right-3"
               onClick={() => setEndDate(null)}
-              onClick={() => setEndDate(null)}
             >
               <Icon icon="uit:calender" />
             </button>
@@ -199,7 +193,7 @@ const Page = () => {
           <button
             type="button"
             className="btn btn-primary w-full uppercase"
-            onClick={handleSearch}
+            // onClick={handleSearch}
           >
             Search
           </button>
@@ -212,7 +206,7 @@ const Page = () => {
               <th>Employee</th>
               <th>Leave Type</th>
               <th>From</th>
-              <th>To</th>
+              {/* <th>To</th> */}
               <th>No of Days</th>
               <th>Reason</th>
               <th>Status</th>
