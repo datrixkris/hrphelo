@@ -12,17 +12,15 @@ interface LogoProps {
 const Logo = ({ className, height = 100, width = 40 }: LogoProps) => {
   const [isDark, setIsDark] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      const theme = localStorage.getItem("theme") || "light";
-      // Check if the theme is dark or black
-      if (theme === "dark" || theme === "black") {
-        setIsDark(true);
-      } else {
-        setIsDark(false);
-      }
+  if (typeof window !== "undefined" && window.localStorage) {
+    const theme = localStorage.getItem("theme") || "light";
+    // Check if the theme is dark or black
+    if (theme === "dark" || theme === "black") {
+      setIsDark(true);
+    } else {
+      setIsDark(false);
     }
-  }, []);
+  }
 
   return (
     <div>
