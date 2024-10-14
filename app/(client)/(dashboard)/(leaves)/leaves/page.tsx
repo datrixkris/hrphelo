@@ -10,7 +10,7 @@ import LeaveTable from "./components/LeaveTable";
 const Page = () => {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [editingLeaveId, setEditingLeaveId] = useState<number | null>(null);
-  const { fetchLeaves, leaves, loading } = useLeaveStore();
+  const { fetchLeaves, leaves } = useLeaveStore();
 
   const openApplyModal = () => {
     setEditingLeaveId(null);
@@ -50,7 +50,7 @@ const Page = () => {
         </div>
       </div>
       <div>
-        { !leaves?.leaves || leaves.leaves.length > 0 ? (
+        {!leaves?.leaves || leaves.leaves.length > 0 ? (
           <LeaveTable onEditLeave={handleEditLeave} />
         ) : (
           <div className="rounded py-20 text-center">No Leaves available</div>
