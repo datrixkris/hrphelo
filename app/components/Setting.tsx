@@ -1,16 +1,20 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 
-const Setting = ({ handleOnClick }: { handleOnClick?: (e?: any) => void }) => {
+interface SettingProps {
+  handleOnClick?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const Setting = ({ handleOnClick }: SettingProps) => {
   const [selectedTheme, setSelectedTheme] = useState<string>("");
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const theme = localStorage.getItem("theme") || "light";
       setSelectedTheme(theme);
-
     }
   }, []);
+
   return (
     <div>
       <div className="drawer drawer-end">
@@ -46,7 +50,10 @@ const Setting = ({ handleOnClick }: { handleOnClick?: (e?: any) => void }) => {
                       className="theme-controller radio"
                       value={theme}
                       checked={selectedTheme === theme}
-                      onChange={handleOnClick}
+                      onChange={(e) => {
+                        if (handleOnClick) handleOnClick(e);
+                        setSelectedTheme(e.target.value);
+                      }}
                     />
                   </label>
                 </div>
