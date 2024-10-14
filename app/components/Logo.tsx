@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-
+// s
 interface LogoProps {
   className?: string;
   width?: number;
