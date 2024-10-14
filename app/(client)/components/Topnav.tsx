@@ -1,5 +1,5 @@
-import Theme from "@/app/components/Theme";
-import React, { useContext, useState } from "react";
+// import Theme from "@/app/components/Theme";
+import React, { useState } from "react";
 import { UserAvatar } from "./UserAvatar";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { Icon } from "@iconify/react";

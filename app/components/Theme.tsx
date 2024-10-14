@@ -1,7 +1,7 @@
 export default function ThemeSwap({
   handleOnClick,
 }: {
-  handleOnClick?: (e?: any) => void;
+  handleOnClick?: (e: React.MouseEvent<HTMLLIElement>) => void;
 }) {
   return (
     <>

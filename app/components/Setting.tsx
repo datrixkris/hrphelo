@@ -1,6 +1,10 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-const Setting = ({ handleOnClick }: { handleOnClick?: (e?: any) => void }) => {
+const Setting = ({
+  handleOnClick,
+}: {
+  handleOnClick?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   return (
     <div>
       <div className="drawer drawer-end">
@@ -70,7 +74,6 @@ const Setting = ({ handleOnClick }: { handleOnClick?: (e?: any) => void }) => {
           </ul>
         </div>
       </div>
-  
     </div>
   );
 };

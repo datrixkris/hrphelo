@@ -3,11 +3,11 @@ import { createContext, useEffect, useState } from "react";
 
 interface ThemeContextType {
   theme?: string;
-  changeTheme?: (nextTheme?: string) => void;
+  changeTheme?: (event?: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export const ThemeContext = createContext<ThemeContextType>({});
 
-export const ThemeProvider = ({ children }: any) => {
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<string>(
     () => localStorage.getItem("theme") || "light",
   );
@@ -18,8 +18,8 @@ export const ThemeProvider = ({ children }: any) => {
     }
   }, [theme]);
 
-  const changeTheme = (event?: any) => {
-    const nextTheme: string | null = event.target.value || null;
+  const changeTheme = (event?: React.ChangeEvent<HTMLInputElement>) => {
+    const nextTheme: string | null = event?.target.value || null;
     if (nextTheme) {
       setTheme(nextTheme);
     } else {
@@ -29,7 +29,6 @@ export const ThemeProvider = ({ children }: any) => {
   return (
     <ThemeContext.Provider value={{ theme, changeTheme }}>
       {children}
-   
     </ThemeContext.Provider>
   );
 };

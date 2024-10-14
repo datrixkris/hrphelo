@@ -4,13 +4,13 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useState } from "react";
 import { useLeavePolicyStore } from "../leave-settings/leavePolicy-store";
-import { useLeaveStore } from "../leave-store";
+// import { useLeaveStore } from "../leave-store";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Page = () => {
-  const { fetchLeavePolicies, loading, leavePolicies } = useLeavePolicyStore();
-  const { fetchLeaves, leaves } = useLeaveStore();
+  const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
+  // const { fetchLeaves, leaves } = useLeaveStore();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
 
@@ -80,7 +80,7 @@ const Page = () => {
           <label className="absolute top-1 px-3 text-xs font-light">
             Leave Type
           </label>
-          <select className=" h-[50px] w-full appearance-none rounded border px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none">
+          <select className="h-[50px] w-full appearance-none rounded border px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none">
             <option value="" disabled selected>
               --Select--
             </option>
@@ -95,7 +95,7 @@ const Page = () => {
           <label className="absolute top-1 px-3 text-xs font-light">
             Leave Status
           </label>
-          <select className=" h-[50px] w-full appearance-none rounded border px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none">
+          <select className="h-[50px] w-full appearance-none rounded border px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none">
             <option value="" disabled selected>
               --Select--
             </option>
@@ -125,19 +125,19 @@ const Page = () => {
 
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">To</label>
-          <div className="relative flex h-[50px] rounded border  w-full items-center">
+          <div className="relative flex h-[50px] w-full items-center rounded border">
             <DatePicker
               selected={endDate}
               showIcon
               onChange={(date) => setEndDate(date)}
               placeholderText="To"
-              className="block !h-full w-full  focus:outline-none"
+              className="block !h-full w-full focus:outline-none"
               minDate={startDate} // Prevents selecting a date before the start date
             />
             <button
               type="button"
               className="absolute right-3"
-              onClick={() => setEndDate(null)} 
+              onClick={() => setEndDate(null)}
             >
               <Icon icon="uit:calender" />
             </button>

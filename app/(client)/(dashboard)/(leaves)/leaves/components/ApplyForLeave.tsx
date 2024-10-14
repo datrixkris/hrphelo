@@ -25,7 +25,7 @@ const ApplyForLeave = ({
   isOpen,
   editingLeave,
 }: ApplyForLeaveProps) => {
-  const { fetchLeavePolicies, loading, leavePolicies } = useLeavePolicyStore();
+  const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
   const [formLoading, setFormLoading] = useState(false);
   const [endDate, setEndDate] = useState<string>("");
 
@@ -57,7 +57,7 @@ const ApplyForLeave = ({
   }, [startDate, duration]);
 
   const calculateEndDate = (start: string, days: number) => {
-    let currentDate = new Date(start);
+    const currentDate = new Date(start);
     let addedDays = 0;
 
     while (addedDays < days) {
