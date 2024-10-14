@@ -11,7 +11,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 
 const departmentSchema = z.object({
-  dept_code: z.string().min(4, { message: "Department code is required and should be at least 4 characters." }),
+  dept_code: z
+    .string()
+    .min(4, {
+      message:
+        "Department code is required and should be at least 4 characters.",
+    }),
   name: z.string().nonempty("Department name is required"),
   description: z.string().optional(),
 });
@@ -80,7 +85,7 @@ const Page = () => {
   return (
     <div>
       <div>
-        <div className=" mb-[1.875rem]">
+        <div className="mb-[1.875rem]">
           <div className="flex items-center justify-between">
             <PageTitleWithCrumbs
               title="Departments"
@@ -156,7 +161,8 @@ const Page = () => {
                 </label>
                 <textarea
                   {...register("description")}
-                  className="input input-bordered w-full"
+                  rows={4}
+                  className="textarea textarea-bordered mt-1 w-full"
                 />
               </div>
 

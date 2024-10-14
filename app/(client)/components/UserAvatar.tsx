@@ -2,8 +2,13 @@ import { useAuthStore } from "@/app/stores/auth-store";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Icon } from "@iconify/react";
+import { Staff } from "@/app/types/user-types";
 
-export const UserAvatar = () => {
+interface UserAvatarProp {
+  profile: Staff;
+}
+
+export const UserAvatar = ({ profile }: UserAvatarProp) => {
   const { logout } = useAuthStore();
   const router = useRouter();
 
@@ -16,17 +21,20 @@ export const UserAvatar = () => {
     <div className="dropdown dropdown-end">
       <div tabIndex={0}>
         <div className="flex cursor-pointer items-center gap-2">
-          {/* admin profile pic */}
+          {/* User profile picture */}
           <div className="avatar">
             <div className="w-10 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+              <img
+                src={profile?.image || "/default-avatar.png"} 
+                alt="User Avatar"
+              />
             </div>
           </div>
 
-          {/* admin name and role */}
+          {/* User name and role */}
           <div className="hidden text-xs md:block">
-            <p className="text-sm font-semibold">Company admin</p>
-            <p className="">Human resource</p>
+            <p className="text-sm font-semibold">{profile?.name || "User Name"}</p>
+            <p className="">{profile?.role || "Role"}</p>
           </div>
         </div>
       </div>
@@ -46,11 +54,7 @@ export const UserAvatar = () => {
         </li>
         <li>
           <a onClick={handleLogout}>
-            <Icon
-              icon="heroicons:arrow-left-on-rectangle"
-              className="text-lg"
-            />{" "}
-            Logout
+            <Icon icon="heroicons:arrow-left-on-rectangle" className="text-lg" /> Logout
           </a>
         </li>
       </ul>

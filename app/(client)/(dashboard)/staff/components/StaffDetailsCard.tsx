@@ -63,7 +63,9 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
               {/* Birthday */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Birthday:</td>
-                <td className="text-neutral-400">N/A</td>
+                <td className="text-neutral-400">
+                  {dayjs(staffDetails?.date_of_birth).format("MMM D, YYYY")}
+                </td>
               </tr>
               {/* Address */}
               <tr>
@@ -73,7 +75,7 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
               {/* Gender */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Gender:</td>
-                <td className="text-neutral-400">Female</td>
+                <td className="text-neutral-400">{staffDetails?.gender}</td>
               </tr>
               {/* Supervisor */}
               <tr>

@@ -10,7 +10,7 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { useStaffStore } from "./staff-store";
 
 const Page = () => {
-  const { staff, loading, fetchStaff } = useStaffStore();
+  const { staffs, loading, fetchStaff } = useStaffStore();
 
   useEffect(() => {
     fetchStaff();
@@ -39,10 +39,10 @@ const Page = () => {
 
       {/* table */}
       <div className="">
-        {staff.length < 1 && loading ? (
+        {staffs.length < 1 && loading ? (
           <div className="rounded py-20 text-center">Getting staff data...</div>
-        ) : staff.length > 0 ? (
-          <StaffTable staff={staff} />
+        ) : staffs.length > 0 ? (
+          <StaffTable staff={staffs} />
         ) : (
           <div className="rounded py-20 text-center">No data available</div>
         )}

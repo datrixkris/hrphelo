@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { StaffData, StaffDetail } from "./types";
 
 interface StaffStore {
-  staff: StaffData[];
+  staffs: StaffData[];
   loading?: boolean;
   updatingData?: boolean;
   error?: string | null;
@@ -21,7 +21,7 @@ interface ApiErrorResponse {
 }
 
 export const useStaffStore = create<StaffStore>((set, get) => ({
-  staff: [],
+  staffs: [],
   loading: false,
   updatingData: false,
   error: null,
@@ -31,7 +31,7 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
 
     try {
       const response = (await api.get("/v1/staff")).data;
-      set(() => ({ staff: response, loading: false }));
+      set(() => ({ staffs: response, loading: false }));
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({

@@ -1,17 +1,14 @@
-// import Theme from "@/app/components/Theme";
 import React, { useState } from "react";
 import { UserAvatar } from "./UserAvatar";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { Icon } from "@iconify/react";
 import MobileNav from "./MobileNav";
-// import ThemeSwap from "@/app/components/ThemeBtn";
-// import { ThemeContext } from "@/app/context/ThemeContext";
-// import ThemeSwap from "@/app/components/Theme";
 
 const Topnav = () => {
   const user = useAuthStore((state) => state.user);
-  const [showMobileNav, setShowMovileNav] = useState(false);
-  // const { changeTheme } = useContext(ThemeContext);
+  const staffMember = user?.staff; 
+
+  const [showMobileNav, setShowMobileNav] = useState(false);
 
   return (
     <>
@@ -20,7 +17,7 @@ const Topnav = () => {
           {/* title */}
           <div className="flex items-center gap-4">
             <Icon
-              onClick={() => setShowMovileNav(true)}
+              onClick={() => setShowMobileNav(true)}
               icon="quill:hamburger-sidebar"
               className="cursor-pointer text-3xl lg:hidden"
             />
@@ -30,16 +27,13 @@ const Topnav = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* <Theme /> */}
-            {/* <ThemeSwap handleOnClick={changeTheme} /> */}
-
-            <UserAvatar />
+            {staffMember && <UserAvatar profile={user?.staff} />}
           </div>
         </div>
       </nav>
 
       <MobileNav
-        closeMobileNav={() => setShowMovileNav(false)}
+        closeMobileNav={() => setShowMobileNav(false)}
         isOpen={showMobileNav}
       />
     </>

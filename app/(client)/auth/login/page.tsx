@@ -63,7 +63,7 @@ const Page = () => {
     <section className="bg-base-100">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left side */}
-        <div className="relative hidden h-screen items-end bg-base-100 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 md:flex md:justify-center lg:px-8 lg:pb-24">
+        <div className="relative hidden h-screen items-end bg-base-100 px-4 pb-10 pt-60 sm:px-6 sm:pb-16 lg:flex lg:justify-center lg:px-8 lg:pb-24">
           <div className="absolute inset-0">
             <img
               className="h-full w-full object-cover object-top"

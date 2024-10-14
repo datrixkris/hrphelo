@@ -1,5 +1,6 @@
+"use client";
 import Button from "@/app/components/Button";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "@/app/components/Modal";
 import { toast } from "react-toastify";
@@ -30,10 +31,13 @@ const EditStaffForm = ({
     formState: { isDirty },
   } = useForm<StaffDetail>();
   const departments = useDepartmentStore((state) => state.departments);
-  const { updatingData, error, updateStaffDetails } = useStaffStore();
+  const { updatingData, staffs, fetchStaff, error, updateStaffDetails } =
+    useStaffStore();
   const fetchDepartments = useDepartmentStore(
     (state) => state.fetchDepartments,
   );
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
   //   const { OnboardCompany, updatingData, fetchCompanies } = useCompanyStore(
   //     (state) => state,
   //   );
@@ -43,7 +47,7 @@ const EditStaffForm = ({
       // check if there are no data before you hit the api
       if (!(departments.length > 0)) {
         await fetchDepartments();
-        console.log(departments);
+        await fetchStaff();
       }
     };
 
@@ -53,6 +57,9 @@ const EditStaffForm = ({
       reset({
         name: staffDetails.name,
         staffId: staffDetails.staffId,
+        gender: staffDetails.gender,
+        image: staffDetails.image,
+        date_of_birth: staffDetails.date_of_birth?.slice(0, 10),
         role: staffDetails.role,
         email: staffDetails.email,
         contact: staffDetails.contact,
@@ -63,12 +70,34 @@ const EditStaffForm = ({
     }
   }, [staffDetails, reset]);
 
+  const uploadImageToCloudinary = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "hrphelo");
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await response.json();
+    return data.secure_url;
+  };
+
   const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
-    console.log(data);
+    let imageUrl = staffDetails?.image || "";
+    if (selectedImage) {
+      imageUrl = await uploadImageToCloudinary(selectedImage);
+    }
+
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
       supervisorId: Number(data.supervisorId),
+      image: imageUrl,
     };
     await updateStaffDetails(staffData, Number(params.staffId));
     if (!error) {
@@ -76,6 +105,7 @@ const EditStaffForm = ({
       // onClose();
       toast.success("Staff data updated");
       reset();
+      onClose();
       await refreshData();
     } else {
       toast.error(error);
@@ -89,7 +119,7 @@ const EditStaffForm = ({
           <h2 className="mb-5 text-center text-2xl font-bold">Staff Profile</h2>
 
           <div className="mb-4 flex items-center justify-center">
-            <ImageUpload />
+            <ImageUpload onImageSelect={(file) => setSelectedImage(file)} />
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -117,6 +147,39 @@ const EditStaffForm = ({
                   {...register("staffId")}
                   type="text"
                   placeholder="Staff ID here"
+                  className="input input-bordered w-full"
+                />
+              </label>
+
+              {/*  gender */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Gender</span>
+                </div>
+                <select
+                  defaultValue=""
+                  {...register("gender")}
+                  required
+                  className="select select-bordered w-full"
+                >
+                  <option disabled value="">
+                    Gender{" "}
+                  </option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </label>
+
+              {/* Date of birth */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Date of birth</span>
+                </div>
+                <input
+                  {...register("date_of_birth")}
+                  required
+                  type="date"
+                  placeholder="Date of birth here"
                   className="input input-bordered w-full"
                 />
               </label>
@@ -205,7 +268,6 @@ const EditStaffForm = ({
                   <span className="label-text">Supervisor</span>
                 </div>
                 <select
-                  defaultValue=""
                   {...register("supervisorId")}
                   required
                   className="select select-bordered w-full"
@@ -213,8 +275,11 @@ const EditStaffForm = ({
                   <option disabled value="">
                     Choose a supervisor
                   </option>
-                  <option value={1}>Han Solo</option>
-                  <option value={2}>Greedo</option>
+                  {staffs.map((staff) => (
+                    <option key={staff.id} value={Number(staff.id)}>
+                      {staff.name}
+                    </option>
+                  ))}
                 </select>
               </label>
             </div>

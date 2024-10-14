@@ -107,8 +107,8 @@ const EditDepartment: React.FC<EditDepartmentProps> = ({
             </label>
             <textarea
               {...register("description")}
-              className="input input-bordered w-full"
-            />
+              rows={4}
+              className="textarea textarea-bordered mt-1 w-full"            />
           </div>
 
           <div className="modal-action">

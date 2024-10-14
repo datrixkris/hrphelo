@@ -7,11 +7,9 @@ import { z } from "zod";
 import { useLeavePolicyStore } from "../leavePolicy-store";
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react/dist/iconify.js";
-// import { div } from "framer-motion/client";
 
 const leavePolicySchema = z.object({
   name: z.string().min(1, "Name is required"),
-  duration: z.number().min(1, "Duration must be a positive number"),
   description: z.string().optional(),
   useStaffLeaveDays: z.boolean(),
 });
@@ -122,20 +120,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
                     </p>
                   )}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium">Duration</label>
-                  <input
-                    type="number"
-                    placeholder="Duration"
-                    className="input input-bordered mt-1 w-full"
-                    {...register("duration", { valueAsNumber: true })}
-                  />
-                  {errors.duration && (
-                    <p className="text-sm text-red-500">
-                      {errors.duration.message}
-                    </p>
-                  )}
-                </div>
+
                 <div>
                   <label className="block text-sm font-medium">
                     Description
@@ -163,9 +148,6 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
             </form>
           ) : (
             <div className="w-full space-y-2">
-              <p className="">
-                <strong>Duration:</strong> {policy.duration} days
-              </p>
               <p className="">
                 <strong>Description:</strong>{" "}
                 {policy.description || "No description provided"}

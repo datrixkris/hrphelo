@@ -8,6 +8,8 @@ export interface StaffDetail {
   role?: string;
   email?: string;
   contact?: string;
+  gender: string;
+  date_of_birth?: string;
   hiring_date?: string; // Date in "YYYY-MM-DD" format
   supervisorId?: number;
   departments?: Department;
@@ -19,12 +21,15 @@ export interface StaffDetail {
 export interface StaffData {
   id?: number;
   companyId?: number;
+  gender: string;
+  date_of_birth: string;
   staffId?: string;
   name?: string;
   role?: string;
   departmentId?: number;
   email?: string;
   contact?: string;
-  hiring_date?: string; // Date in "YYYY-MM-DD" format
+  image?: string;
+  hiring_date?: string; 
   supervisorId?: number;
 }
