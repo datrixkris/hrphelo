@@ -13,9 +13,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
   const { leaves, loading, deleteLeave } = useLeaveStore();
 
   async function handleDelete(leaveId: number) {
-    let success;
-
-    success = await deleteLeave(leaveId);
+    const success = await deleteLeave(leaveId);
     if (success) {
       toast.success("Leave deleted successfully");
     } else {
