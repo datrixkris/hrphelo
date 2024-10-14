@@ -8,6 +8,7 @@ import { useLeaveStore } from "../leave-store";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
+import { ManageLeaveTable } from "./components/ManageLeaveTable";
 
 const Page = () => {
   const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
@@ -31,16 +32,16 @@ const Page = () => {
     const matchesStartDate = startDate
       ? dayjs(leave.start_date).isAfter(dayjs(startDate).subtract(1, "day"))
       : true;
-    // const matchesEndDate = endDate
-    //   ? dayjs(leave.end_date).isBefore(dayjs(endDate).add(1, "day"))
-    //   : true;
+    const matchesEndDate = endDate
+      ? dayjs(leave.end_date).isBefore(dayjs(endDate).add(1, "day"))
+      : true;
 
     return (
       matchesEmployeeName &&
       matchesLeaveType &&
       matchesLeaveStatus &&
-      matchesStartDate
-      // matchesEndDate
+      matchesStartDate &&
+      matchesEndDate
     );
   });
 
@@ -199,96 +200,11 @@ const Page = () => {
           </button>
         </div>
       </div>
-      <div className="w-full overflow-x-auto">
-        <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
-          <thead>
-            <tr className="text-left">
-              <th>Employee</th>
-              <th>Leave Type</th>
-              <th>From</th>
-              {/* <th>To</th> */}
-              <th>No of Days</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredLeaves?.map((leave) => (
-              <tr key={leave.id}>
-                <td>
-                  <h2 className="inline-flex items-center whitespace-nowrap align-middle text-[15px] font-normal">
-                    <a
-                      href="profile.html"
-                      className="relative mr-[10px] inline-block h-[38px] w-[38px] rounded-full"
-                    >
-                      <img
-                        alt={leave.staff.name}
-                        src={leave.staff.image}
-                        className="w-full rounded-full"
-                      />
-                    </a>
-                    <a>
-                      {leave.staff.name}
-                      <span className="mt-[3px] block text-xs">
-                        {leave.staff.role}
-                      </span>
-                    </a>
-                  </h2>
-                </td>
-                <td>{leave.leavetype.name}</td>
-                <td>{dayjs(leave.start_date).format("MMM D, YYYY")}</td>
-                {/* <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td> */}
-                <td>{leave.duration}</td>
-                <td>{leave.reason}</td>
-                <td className="text-center">
-                  <div>
-                    <a
-                      className={`inline-flex min-w-[103px] items-center justify-center rounded-[50px] border p-1 text-center ${
-                        leave.status === "pending"
-                          ? "border-yellow-500 bg-yellow-100 text-yellow-500"
-                          : leave.status === "approved"
-                            ? "border-green-600 bg-green-100 text-green-600"
-                            : "border-red-600 bg-red-100 text-red-600"
-                      }`}
-                    >
-                      <Icon
-                        icon="fa6-regular:circle-dot"
-                        className={`pr-1 ${
-                          leave.status === "pending"
-                            ? "text-yellow-500"
-                            : leave.status === "approved"
-                              ? "text-green-600"
-                              : "text-red-600"
-                        }`}
-                      />
-                      {leave.status}
-                    </a>
-                  </div>
-                </td>
-                <td>
-                  <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="btn m-1">
-                      <Icon icon="mdi:dots-vertical" className="text-xl" />
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
-                    >
-                      <li>
-                        <a>edit</a>
-                      </li>
-                      <li>
-                        <a>delete</a>
-                      </li>
-                    </ul>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {filteredLeaves && filteredLeaves.length > 0 ? (
+        <ManageLeaveTable filteredLeaves={filteredLeaves} />
+      ) : (
+        <div className="rounded py-20 text-center">No leaves available</div>
+      )}
     </div>
   );
 };

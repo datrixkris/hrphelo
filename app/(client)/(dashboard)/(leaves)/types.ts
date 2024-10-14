@@ -15,6 +15,7 @@ export type LeaveData1 = {
     companyId: number;
     leaveTypeId: number;
     start_date: string;
+    end_date: string;
     duration: number;
     reason: string;
     status: string;
@@ -117,6 +118,7 @@ export type LeaveRecord = {
   companyId: number;
   leaveTypeId: number;
   start_date: string;
+  end_date: string;
   duration: number;
   reason: string;
   status: string;

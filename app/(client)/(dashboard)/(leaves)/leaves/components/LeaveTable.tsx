@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { useLeaveStore } from "../../leave-store";
 import { toast } from "react-toastify";
+import { Status } from "@/app/(client)/components/Status";
 
 interface LeaveTableProps {
   onEditLeave: (leaveId: number) => void;
@@ -23,7 +24,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
 
   if (loading || !leaves?.leaves || leaves.leaves.length < 1) {
     return (
-      <div className="overflow-x-auto">
+      <div className="">
         <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
           <thead>
             <tr className="text-left">
@@ -40,7 +41,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
           <tbody>
             {/* Display multiple skeleton rows to indicate loading state */}
             {[...Array(3)].map((_, index) => (
-              <tr key={index}>
+              <tr key={index} className="overflow-x-auto">
                 <td>
                   <div className="skeleton h-4 w-24"></div>
                 </td>
@@ -93,33 +94,11 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
             <tr key={leave.id}>
               <td>{leave.leavetype.name}</td>
               <td>{dayjs(leave.start_date).format("MMM D, YYYY")}</td>
-              <td>{/* Assuming you calculate the end date */}</td>
+              <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td>
               <td>{leave.duration} days</td>
               <td>{leave.reason}</td>
               <td className="text-center">
-                <div>
-                  <a
-                    className={`inline-flex min-w-[103px] items-center justify-center rounded-[50px] border p-1 text-center ${
-                      leave.status === "pending"
-                        ? "border-yellow-500 bg-yellow-100 text-yellow-500"
-                        : leave.status === "approved"
-                          ? "border-green-600 bg-green-100 text-green-600"
-                          : "border-red-600 bg-red-100 text-red-600"
-                    }`}
-                  >
-                    <Icon
-                      icon="fa6-regular:circle-dot"
-                      className={`pr-1 ${
-                        leave.status === "pending"
-                          ? "text-yellow-500"
-                          : leave.status === "approved"
-                            ? "text-green-600"
-                            : "text-red-600"
-                      }`}
-                    />
-                    {leave.status}
-                  </a>
-                </div>
+                <Status leave={leave} />
               </td>
               <td>
                 <h2 className="inline-flex items-center whitespace-nowrap align-middle text-[15px] font-normal">

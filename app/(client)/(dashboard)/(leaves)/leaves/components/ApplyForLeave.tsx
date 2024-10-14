@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const leaveSchema = z.object({
   leaveTypeId: z.number().min(1, "Leave type is required"),
   duration: z.number().min(1, "Duration must be a positive number"),
-  reason: z.string().optional(),
+  reason: z.string().min(1, "Reason for leave is required"),
   start_date: z.string().min(1, "Start date is required"),
 });
 
@@ -75,27 +75,34 @@ const ApplyForLeave = ({
     try {
       setFormLoading(true);
       let success;
+
       if (editingLeave) {
         // Update existing leave
         const leaveId = editingLeave.id;
         if (leaveId) {
           success = await updateLeave(leaveId, data);
+          if (success) {
+            toast.success("Leave updated successfully");
+          } else {
+            toast.error("Leave update failed");
+          }
         }
-        toast.success("Leave updated successfully");
       } else {
-        // Add new leave
+        // Create a new leave
         success = await addLeave(data);
-        toast.success("Leave created successfully");
+        if (success) {
+          toast.success("Leave created successfully");
+        } else {
+          toast.error("Leave creation failed");
+        }
       }
 
       if (success) {
         onClose();
         reset(); // Reset the form after a successful submission
-      } else {
-        toast.error("Leave application failed");
       }
     } catch (error) {
-      toast.error("Leave application failed");
+      toast.error("Leave application failed due to an error");
     } finally {
       setFormLoading(false);
     }
@@ -173,6 +180,9 @@ const ApplyForLeave = ({
               className="textarea textarea-bordered mt-1 w-full"
               {...register("reason")}
             />
+             {errors.reason && (
+              <p className="text-sm text-red-500">{errors.reason.message}</p>
+            )}
           </div>
 
           <div className="modal-action flex justify-end">
