@@ -6,7 +6,7 @@ import { LoginData, loginSchema } from "@/app/schemas";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useLayoutEffect, useState } from "react";

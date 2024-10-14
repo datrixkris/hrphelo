@@ -4,14 +4,15 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useState } from "react";
 import { useLeavePolicyStore } from "../leave-settings/leavePolicy-store";
-import { useLeaveStore } from "../leave-store";
+// import { useLeaveStore } from "../leave-store";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
+// s
 
 const Page = () => {
-  const { fetchLeavePolicies, loading, leavePolicies } = useLeavePolicyStore();
-  const { fetchLeaves, leaves } = useLeaveStore();
+  const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
+  // const { fetchLeaves, leaves } = useLeaveStore();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [employeeName, setEmployeeName] = useState("");
@@ -174,6 +175,7 @@ const Page = () => {
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">To</label>
           <div className="relative flex h-[50px] w-full items-center rounded border">
+          <div className="relative flex h-[50px] w-full items-center rounded border">
             <DatePicker
               selected={endDate}
               showIcon
@@ -186,6 +188,7 @@ const Page = () => {
             <button
               type="button"
               className="absolute right-3"
+              onClick={() => setEndDate(null)}
               onClick={() => setEndDate(null)}
             >
               <Icon icon="uit:calender" />

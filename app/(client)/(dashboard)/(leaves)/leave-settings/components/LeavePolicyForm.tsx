@@ -7,7 +7,7 @@ import { z } from "zod";
 import { useLeavePolicyStore } from "../leavePolicy-store";
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { div } from "framer-motion/client";
+// import { div } from "framer-motion/client";
 
 const leavePolicySchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -73,12 +73,9 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
   return (
     <div className="w-full space-y-4 p-4">
       {leavePolicies.map((policy, index) => (
-        <div
-          key={index}
-          className="relative rounded-lg border  p-6 shadow-md"
-        >
+        <div key={index} className="relative rounded-lg border p-6 shadow-md">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-xl font-semibold ">
+            <h3 className="text-xl font-semibold">
               {policy.name || "Leave Policy"}
             </h3>
             <div className="flex gap-2">
@@ -110,7 +107,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
             >
               <div className="space-y-4">
                 <div>
-                  <label className="block divide-y-2 text-sm font-medium ">
+                  <label className="block divide-y-2 text-sm font-medium">
                     Name
                   </label>
                   <input
@@ -126,9 +123,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium ">
-                    Duration
-                  </label>
+                  <label className="block text-sm font-medium">Duration</label>
                   <input
                     type="number"
                     placeholder="Duration"
@@ -142,7 +137,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
                   )}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium ">
+                  <label className="block text-sm font-medium">
                     Description
                   </label>
                   <textarea
@@ -157,7 +152,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
                     className="toggle toggle-success"
                     {...register("useStaffLeaveDays")}
                   />
-                  <label className="ml-2 text-sm font-medium ">
+                  <label className="ml-2 text-sm font-medium">
                     Use Staff Leave Days
                   </label>
                 </div>
