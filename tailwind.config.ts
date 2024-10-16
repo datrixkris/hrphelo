@@ -23,7 +23,16 @@ const config: Config = {
 
   // daisyUI config (optional - here are the default values)
   daisyui: {
-    themes: ["light", "dark", "retro", "black", "lofi"],
+    themes: ["light",
+      "dark",
+      "retro",
+      "black",
+      "lofi",
+      "coffee",
+      "lemonade",
+      "luxury",
+      "valentine",
+      "synthwave",],
 
   },
 

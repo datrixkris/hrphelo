@@ -39,7 +39,18 @@ const Setting = ({ handleOnClick }: SettingProps) => {
               <h5>Sidebar Color</h5>
               <h6>Choose a color of Sidebar.</h6>
             </div>
-            {["light", "dark", "retro", "black", "lofi"].map((theme) => (
+            {[
+              "light",
+              "dark",
+              "retro",
+              "black",
+              "lofi",
+              "coffee",
+              "lemonade",
+              "luxury",
+              "valentine",
+              "synthwave",
+            ].map((theme) => (
               <li key={theme}>
                 <div className="form-control">
                   <label className="label cursor-pointer gap-4">

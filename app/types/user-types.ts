@@ -42,6 +42,7 @@ export interface User {
   updatedAt: string; // Could also use Date type depending on how it's handled
   company: Company;
   staff: Staff;
+  leaveYear:number
 }
 
 

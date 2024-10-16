@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import { ManageLeaveTable } from "./components/ManageLeaveTable";
+// import { useAuthStore } from "@/app/stores/auth-store";
 
 const Page = () => {
   const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
@@ -18,6 +19,28 @@ const Page = () => {
   const [employeeName, setEmployeeName] = useState("");
   const [leaveType, setLeaveType] = useState("");
   const [leaveStatus, setLeaveStatus] = useState("");
+  // const { user } = useAuthStore();
+
+  // total number of staff in the company
+  const totalNumberOfStaff = 60;
+
+
+  // calculate the pending leaves
+  const numberOfPendingLeave = leaves?.leaves.filter(
+    (leave) => leave.status === "pending"
+  ).length || 0;
+
+  // calculate the number of staff currently on leave by summing the leaves with status 'approved' and checking if the end date has not passed.
+  const staffOnLeave =
+    leaves?.leaves.filter(
+      (leave) =>
+        leave.staffId &&
+        leave.status === "approved" &&
+        dayjs(leave.end_date).isAfter(dayjs()),
+    ).length || 0;
+
+  // Calculate the number of staff present today
+  const staffPresent = totalNumberOfStaff - staffOnLeave;
 
   const filteredLeaves = leaves?.leaves.filter((leave) => {
     const matchesEmployeeName = leave.staff.name
@@ -71,37 +94,28 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className="mb-4 grid grid-cols-1 gap-5 md:grid-cols-4">
+      <div className="mb-4 grid grid-cols-1 gap-5 md:grid-cols-2">
         <div className="rounded-[4px] border p-5 text-center">
           <h6 className="mb-[5px] text-lg font-normal">Today Presents</h6>
-          <h4 className="text-2xl">21/60</h4>
-        </div>
-        <div className="rounded-[4px] border p-5 text-center">
-          <h6 className="mb-[5px] text-lg font-normal">Planned Leaves </h6>
           <h4 className="text-2xl">
-            8 <span className="text-xs">Today</span>
+            {staffPresent}/{totalNumberOfStaff}
           </h4>
         </div>
-        <div className="rounded-[4px] border p-5 text-center">
-          <h6 className="mb-[5px] text-lg font-normal">Unplanned Leaves</h6>
-          <h4 className="text-2xl">
-            0 <span className="text-xs">Today</span>
-          </h4>
-        </div>
+
         <div className="rounded-[4px] border p-5 text-center">
           <h6 className="mb-[5px] text-lg font-normal">Pending Requests</h6>
-          <h4 className="text-2xl">5</h4>
+          <h4 className="text-2xl">{numberOfPendingLeave}</h4>
         </div>
       </div>
       <div className="mb-4 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
-        <div className="relative h-[50px]">
+        <div className="relative h-16">
           <input
             id="empName"
             name="empName"
             type="text"
             value={employeeName}
             onChange={(e) => setEmployeeName(e.target.value)}
-            className="peer h-[50px] w-full rounded border px-3 pb-[6px] pt-[21px] placeholder-transparent focus:outline-none focus:dark:border-primary"
+            className="peer h-[50px] w-full rounded border bg-transparent px-3 pb-[6px] pt-[21px] placeholder-transparent focus:outline-none focus:dark:border-primary"
             placeholder="Employee Name"
           />
 
@@ -119,7 +133,7 @@ const Page = () => {
           <select
             value={leaveType}
             onChange={(e) => setLeaveType(e.target.value)}
-            className="h-[50px] w-full appearance-none rounded border px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
+            className="h-[50px] w-full appearance-none rounded border bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
           >
             <option value="" disabled>
               --Select--
@@ -138,7 +152,7 @@ const Page = () => {
           <select
             value={leaveStatus}
             onChange={(e) => setLeaveStatus(e.target.value)}
-            className="h-[50px] w-full appearance-none rounded border px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
+            className="h-[50px] w-full appearance-none rounded border bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
           >
             <option value="" disabled>
               --Select--
@@ -150,22 +164,14 @@ const Page = () => {
         </div>
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">From</label>
-          <div className="relative flex h-[50px] w-full items-center border">
+          <div className="relative flex h-[50px] w-full items-center rounded border">
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
               filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
               placeholderText="From "
-              className="block h-full w-full pl-3 focus:outline-none"
+              className="block h-full w-full bg-transparent pl-3 focus:outline-none"
             />
-
-            <button
-              type="button"
-              className="absolute right-3"
-              onClick={() => setStartDate(null)}
-            >
-              <Icon icon="uit:calender" />
-            </button>
           </div>
         </div>
 
@@ -174,20 +180,12 @@ const Page = () => {
           <div className="relative flex h-[50px] w-full items-center rounded border">
             <DatePicker
               selected={endDate}
-              showIcon
               onChange={(date) => setEndDate(date)}
               placeholderText="To"
-              className="block !h-full w-full focus:outline-none"
+              className="block !h-full w-full bg-transparent pl-3 focus:outline-none"
               minDate={new Date()}
               filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
             />
-            <button
-              type="button"
-              className="absolute right-3"
-              onClick={() => setEndDate(null)}
-            >
-              <Icon icon="uit:calender" />
-            </button>
           </div>
         </div>
         <div>

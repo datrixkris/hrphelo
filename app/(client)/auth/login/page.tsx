@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 const Page = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false); 
+
 
   const router = useRouter();
 
@@ -209,11 +211,17 @@ const Page = () => {
                   <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                     <input
                       {...register("password")}
-                      type="password"
+                      type={passwordVisible ? "text" : "password"} 
                       className="grow"
                       placeholder="Password"
                     />
-                  </div>{" "}
+                    <Icon
+                      icon={passwordVisible ? "mdi:eye-off" : "mdi:eye"} 
+                      className="cursor-pointer"
+                      onClick={() => setPasswordVisible(!passwordVisible)} 
+                      
+                    />
+                  </div>
                   {errors.password && (
                     <p className="text-red-500">{errors.password.message}</p>
                   )}

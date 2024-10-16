@@ -48,7 +48,7 @@ export const ManageLeaveTable = ({ filteredLeaves }: ManageLeaveProp) => {
                     </a>
                   </h2>
                 </td>
-                <td>{leave.leavetype.name}</td>
+                <td>{leave.leavetype?.name}</td>
                 <td>{dayjs(leave.start_date).format("MMM D, YYYY")}</td>
                 <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td>
                 <td>{leave.duration}</td>

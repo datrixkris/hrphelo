@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { useLeaveStore } from "../../leave-store";
 import { toast } from "react-toastify";
 import { Status } from "@/app/(client)/components/Status";
+import ConfirmationModal from "@/app/components/ConfirmationModal";
 
 interface LeaveTableProps {
   onEditLeave: (leaveId: number) => void;
@@ -12,15 +13,32 @@ interface LeaveTableProps {
 
 const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
   const { leaves, loading, deleteLeave } = useLeaveStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [leaveToDelete, setLeaveToDelete] = useState<number | null>(null);
 
-  async function handleDelete(leaveId: number) {
-    const success = await deleteLeave(leaveId);
-    if (success) {
-      toast.success("Leave deleted successfully");
-    } else {
-      toast.error("Leave deletion  failed");
+  const handleDelete = async () => {
+    if (leaveToDelete !== null) {
+      const success = await deleteLeave(leaveToDelete);
+      setIsModalOpen(false);
+      setLeaveToDelete(null);
+
+      if (success) {
+        toast.success("Leave deleted successfully");
+      } else {
+        toast.error("Leave deletion failed");
+      }
     }
-  }
+  };
+
+  const openConfirmationModal = (leaveId: number) => {
+    setLeaveToDelete(leaveId);
+    setIsModalOpen(true);
+  };
+
+  const closeConfirmationModal = () => {
+    setIsModalOpen(false);
+    setLeaveToDelete(null);
+  };
 
   if (loading || !leaves?.leaves || leaves.leaves.length < 1) {
     return (
@@ -75,7 +93,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div>
       <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
         <thead>
           <tr className="text-left">
@@ -89,10 +107,10 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="overflow-x-auto">
           {leaves.leaves.map((leave) => (
             <tr key={leave.id}>
-              <td>{leave.leavetype.name}</td>
+              <td>{leave.leavetype?.name}</td>
               <td>{dayjs(leave.start_date).format("MMM D, YYYY")}</td>
               <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td>
               <td>{leave.duration} days</td>
@@ -138,7 +156,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                     </li>
                     <li>
                       <a
-                        onClick={() => handleDelete(leave.id)}
+                        onClick={() => openConfirmationModal(leave.id)}
                         className={`${
                           leave.status === "approved" ||
                           leave.status === "rejected"
@@ -156,6 +174,15 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
           ))}
         </tbody>
       </table>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this leave? This action cannot be undone."
+        onConfirm={handleDelete}
+        onCancel={closeConfirmationModal}
+      />
     </div>
   );
 };
