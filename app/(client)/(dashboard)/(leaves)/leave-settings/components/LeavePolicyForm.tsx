@@ -7,7 +7,7 @@ import { z } from "zod";
 import { useLeavePolicyStore } from "../leavePolicy-store";
 import { toast } from "react-toastify";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { div } from "framer-motion/client";
+// import { div } from "framer-motion/client";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
 
 const leavePolicySchema = z.object({
