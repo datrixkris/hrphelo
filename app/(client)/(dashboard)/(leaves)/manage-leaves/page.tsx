@@ -1,7 +1,7 @@
 "use client";
 // import Button from "@/app/components/Button";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
-import { Icon } from "@iconify/react/dist/iconify.js";
+// import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useState } from "react";
 import { useLeavePolicyStore } from "../leave-settings/leavePolicy-store";
 import { useLeaveStore } from "../leave-store";
@@ -24,11 +24,9 @@ const Page = () => {
   // total number of staff in the company
   const totalNumberOfStaff = 60;
 
-
   // calculate the pending leaves
-  const numberOfPendingLeave = leaves?.leaves.filter(
-    (leave) => leave.status === "pending"
-  ).length || 0;
+  const numberOfPendingLeave =
+    leaves?.leaves.filter((leave) => leave.status === "pending").length || 0;
 
   // calculate the number of staff currently on leave by summing the leaves with status 'approved' and checking if the end date has not passed.
   const staffOnLeave =
