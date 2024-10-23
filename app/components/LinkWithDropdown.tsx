@@ -42,7 +42,7 @@ const LinkWithDropdown = ({ links }: DropdownProps) => {
         transition={{ duration: 0.3 }}
         className="overflow-hidden"
       >
-        <div className="mt-2 space-y-2 rounded-lg bg-base-300 p-3">
+        <div className="mt-2 space-y-2 rounded-lg bg-base-200 p-3">
           {links?.dropdown?.map((link, index) => {
             return (
               <div className="" key={index}>
