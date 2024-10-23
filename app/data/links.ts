@@ -33,4 +33,9 @@ export const clientSidebarLinks: SidebarLink[] = [
       },
     ],
   },
+  {
+    name: "Projects",
+    icon: "hugeicons:analytics-up",
+    link: "/projects",
+  },
 ];

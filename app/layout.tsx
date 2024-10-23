@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`${montserrat.className} `}>
         <ThemeProvider>
           <ClientThemeWrapper>
-            <div className="">{children}</div>
+            <div className="bg-base-200">{children}</div>
           </ClientThemeWrapper>
         </ThemeProvider>
       </body>
