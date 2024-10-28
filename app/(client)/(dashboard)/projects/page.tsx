@@ -1,9 +1,9 @@
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import React from "react";
-// import AddStaff from "../staff/components/AddStaff";
 import Button from "@/app/components/Button";
+import FilterAndSearch from "../staff/components/StaffFilterAndSearch";
 import ProjectCard from "./components/ProjectCard";
-import FilterAndSearch from "../staff/components/FilterAndSearch";
+import ProjectFilterAndSearch from "./components/ProjectFilterAndSearch";
 
 const ProjectsPage = () => {
   return (
@@ -24,11 +24,11 @@ const ProjectsPage = () => {
 
       {/* project filters ui */}
       <div className="my-5">
-        <FilterAndSearch />
+        <ProjectFilterAndSearch />
       </div>
 
       {/* project list */}
-      <div className="">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         <ProjectCard />
       </div>
     </div>

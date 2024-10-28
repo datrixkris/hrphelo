@@ -1,7 +1,7 @@
 export default function Loading() {
-    return (
-        <div className="flex items-center justify-center h-screen">
-            <span className="loading loading-spinner text-error"></span>
-        </div>
-    );
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <span className="loading loading-spinner text-error"></span>
+    </div>
+  );
 }
