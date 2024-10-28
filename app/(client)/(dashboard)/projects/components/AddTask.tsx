@@ -29,7 +29,6 @@ interface AddTaskProps {
 }
 
 export const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
-  const { addStaff, loading, fetchStaff, error, staffs } = useStaffStore();
   const [selectedStaff, setSelectedStaff] = useState<StaffData[]>([]);
 
   // useForm with Zod validation schema
