@@ -1,0 +1,157 @@
+import React, { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { SelectorStaff } from "@/app/components/SelectorStaff";
+import { useStaffStore } from "../../staff/staff-store";
+import { StaffData } from "../../staff/types";
+
+// Zod schema for form validation
+const taskSchema = z.object({
+  taskName: z
+    .string()
+    .min(1, "Task Name is required")
+    .max(50, "Task Name must be less than 50 characters"),
+  taskPriority: z.enum(["High", "Normal", "Low"], {
+    errorMap: () => ({ message: "Task Priority is required" }),
+  }),
+  dueDate: z.string().refine((date) => !!Date.parse(date), {
+    message: "Valid Due Date is required",
+  }),
+});
+
+// Infer the TypeScript types from the Zod schema
+type TaskFormValues = z.infer<typeof taskSchema>;
+
+interface AddTaskProps {
+  onClose: () => void;
+}
+
+export const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
+  const { addStaff, loading, fetchStaff, error, staffs } = useStaffStore();
+  const [selectedStaff, setSelectedStaff] = useState<StaffData[]>([]);
+
+  // useForm with Zod validation schema
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TaskFormValues>({
+    resolver: zodResolver(taskSchema),
+  });
+
+  // const handleStaffSelection = (staff: string[]) => {
+  //   setSelectedStaff(staff);
+  //   console.log("Selected staff:", staff); // This logs the selected staff members
+  // };
+  const onSubmit: SubmitHandler<TaskFormValues> = (data) => {
+    console.log(data, selectedStaff); // You can handle the form data here
+  };
+
+  return (
+    <div className="h-full w-full">
+      {/* Backdrop to close the modal */}
+      <div
+        className="fixed inset-0 right-0 bg-black opacity-50"
+        onClick={onClose}
+      ></div>
+      <dialog
+        open
+        className="modal z-10"
+        id="my_modal_2"
+        aria-labelledby="modal-title"
+      >
+        <div className="modal-box">
+          <div className="mb-4 flex items-center justify-between">
+            <h4 id="modal-title" className="modal-title">
+              Add Task
+            </h4>
+            <button type="button" className="btn-close" onClick={onClose}>
+              <Icon icon="material-symbols:close" className="text-lg" />
+            </button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Task Name</span>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Task Name"
+                  className="input input-bordered w-full"
+                  {...register("taskName")}
+                />
+                {errors.taskName && (
+                  <div className="label-text-alt text-red-500">
+                    {errors.taskName.message}
+                  </div>
+                )}
+              </label>
+
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Task Priority</span>
+                </div>
+                <select
+                  className="select select-bordered"
+                  {...register("taskPriority")}
+                >
+                  <option disabled value="">
+                    Select
+                  </option>
+                  <option>High</option>
+                  <option>Normal</option>
+                  <option>Low</option>
+                </select>
+                {errors.taskPriority && (
+                  <div className="label-text-alt text-red-500">
+                    {errors.taskPriority.message}
+                  </div>
+                )}
+              </label>
+
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Due Date</span>
+                </div>
+                <input
+                  type="date"
+                  className="input input-bordered w-full"
+                  {...register("dueDate")}
+                />
+                {errors.dueDate && (
+                  <div className="label-text-alt text-red-500">
+                    {errors.dueDate.message}
+                  </div>
+                )}
+              </label>
+
+              <SelectorStaff onSelect={(staff) => setSelectedStaff(staff)} />
+
+              {/* Selected staff */}
+              <div className="mt-4">
+                <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+                  {selectedStaff.map((staff, index) => (
+                    <div key={index} className="avatar">
+                      <div className="w-12">
+                        <img src={staff.image} alt={staff.name} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="submit-section mt-4 text-center">
+                <button type="submit" className="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </dialog>
+    </div>
+  );
+};
