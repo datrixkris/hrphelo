@@ -3,7 +3,7 @@
 
 import React, { useEffect } from "react";
 
-import FilterAndSearch from "./components/FilterAndSearch";
+import FilterAndSearch from "./components/StaffFilterAndSearch";
 import StaffTable from "./components/StaffTable";
 import AddStaff from "./components/AddStaff";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";

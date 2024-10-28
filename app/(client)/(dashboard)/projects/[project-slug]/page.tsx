@@ -3,8 +3,8 @@
 import Button from "@/app/components/Button";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import React, { useState } from "react";
-import Taskboard from "../components/taskboard/Taskboard";
 import ProjectDetails from "../components/project-details/ProjectDetails";
+import Taskboard from "../components/taskboard/Taskboard";
 
 const Project = () => {
   const [toggleTaskboard, setToggleTaskboard] = useState(true);

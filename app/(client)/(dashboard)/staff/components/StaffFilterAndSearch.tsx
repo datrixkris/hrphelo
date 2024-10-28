@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 
-const FilterAndSearch = () => {
+const StaffFilterAndSearch = () => {
   return (
     <div className="flex flex-wrap gap-2 sm:flex-nowrap">
       {/* Search */}
@@ -33,4 +33,4 @@ const FilterAndSearch = () => {
   );
 };
 
-export default FilterAndSearch;
+export default StaffFilterAndSearch;
