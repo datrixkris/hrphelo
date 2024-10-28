@@ -8,7 +8,7 @@ const ProjectCard = () => {
       <div className="">
         <Link href={`/projects/project-slug/`}>
           <h2 className="mb-2 text-lg font-semibold capitalize text-base-content transition-colors hover:text-hr-yellow">
-            Office Management
+            Office Managements
           </h2>
         </Link>
         <p className="text-xs">

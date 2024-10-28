@@ -1,8 +1,12 @@
 // import Button from "@/app/components/Button";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
+import React, { useState } from "react";
+import KanbanBoard from "../Board";
+import { AddTaskBoard } from "../AddTaskBoard";
 
 const Taskboard = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
   return (
     <div>
       {/* lead and team with create column button */}
@@ -64,7 +68,10 @@ const Taskboard = () => {
 
         {/* create column button */}
         <div className="">
-          <button className="btn btn-outline">
+          <button
+            className="btn btn-outline"
+            onClick={() => setModalOpen(true)}
+          >
             <div className="flex items-center gap-1">
               <Icon icon="heroicons:plus" /> Create column
             </div>
@@ -84,7 +91,12 @@ const Taskboard = () => {
       </div>
 
       {/* taskboard */}
-      <div className="mt-5 text-center">task board is here</div>
+      <div className="mt-5 h-[65vh] text-center">
+        <KanbanBoard />
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && <AddTaskBoard onClose={() => setModalOpen(false)} />}
     </div>
   );
 };
