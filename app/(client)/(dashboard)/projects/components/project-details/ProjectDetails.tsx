@@ -1,7 +1,17 @@
 import React from "react";
 
 const ProjectDetails = () => {
-  return <div>This is the project details</div>;
+  return (
+    <div>
+      <div className="flex gap-5">
+        {/* main details */}
+        <div className=""></div>
+
+        {/* side */}
+        <div className=""></div>
+      </div>
+    </div>
+  );
 };
 
 export default ProjectDetails;
