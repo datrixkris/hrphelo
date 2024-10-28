@@ -3,9 +3,18 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useState } from "react";
 import KanbanBoard from "../Board";
 import { AddTaskBoard } from "../AddTaskBoard";
+import { Column } from "../../types";
+
+
 
 const Taskboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedColumn, setSelectedColumn] = useState<Column | undefined>();
+
+  const handleEditColumn = (column: Column) => {
+    setSelectedColumn(column);
+    setModalOpen(true);
+  };
 
   return (
     <div>
@@ -92,11 +101,16 @@ const Taskboard = () => {
 
       {/* taskboard */}
       <div className="mt-5 h-[65vh] text-center">
-        <KanbanBoard />
+        <KanbanBoard onEditColumn={handleEditColumn} />
       </div>
 
       {/* Modal */}
-      {isModalOpen && <AddTaskBoard onClose={() => setModalOpen(false)} />}
+      {isModalOpen && (
+        <AddTaskBoard
+          column={selectedColumn}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

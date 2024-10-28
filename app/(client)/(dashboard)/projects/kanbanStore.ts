@@ -1,9 +1,7 @@
 import { create } from 'zustand';
+import { Task } from './types';
 
-interface Task {
-    id: string;
-    content: string;
-}
+
 
 interface Column {
     id: string;
@@ -17,7 +15,11 @@ interface KanbanState {
     columns: { [key: string]: Column };
     columnOrder: string[];
     createColumn: (title: string, color: string) => void; // Action to create column
+    editColumn: (columnId: string, title: string, color: string) => void; // Action to edit column
     deleteColumn: (columnId: string) => void; // Action to delete column
+    addTask: (columnId: string, task: Task) => void; // Action to add task
+    editTask: (taskId: string, updatedTask: Partial<Task>) => void; // Action to edit task
+    deleteTask: (columnId: string, taskId: string) => void;
     moveTask: (
         sourceColumnId: string,
         destinationColumnId: string,
@@ -29,9 +31,9 @@ interface KanbanState {
 
 export const useKanbanStore = create<KanbanState>((set) => ({
     tasks: {
-        'task-1': { id: 'task-1', content: 'Task One' },
-        'task-2': { id: 'task-2', content: 'Task Two' },
-        'task-3': { id: 'task-3', content: 'Task Three' },
+        'task-1': { id: 'task-1', name: 'Task One', priority: 'High', dueDate: '', assignedTo: [], content: 'Description' },
+        'task-2': { id: 'task-2', name: 'Task Two', priority: 'Medium', dueDate: '', assignedTo: [], content: 'Description' },
+        'task-3': { id: 'task-3', name: 'Task Three', priority: 'Low', dueDate: '', assignedTo: [], content: 'Description' },
     },
     columns: {
         'column-1': { id: 'column-1', title: 'To Do', taskIds: ['task-1', 'task-2', 'task-3'], color: 'red' },
@@ -69,9 +71,6 @@ export const useKanbanStore = create<KanbanState>((set) => ({
 
     createColumn: (title, color) => set((state) => {
         const newColumnId = `column-${Date.now()}`;
-
-
-
         return {
             columns: {
                 ...state.columns,
@@ -86,6 +85,17 @@ export const useKanbanStore = create<KanbanState>((set) => ({
         };
     }),
 
+    editColumn: (columnId, title, color) => set((state) => ({
+        columns: {
+            ...state.columns,
+            [columnId]: {
+                ...state.columns[columnId],
+                title,
+                color,
+            },
+        },
+    })),
+
     deleteColumn: (columnId) => set((state) => {
         const newColumns = { ...state.columns };
         delete newColumns[columnId];
@@ -95,6 +105,50 @@ export const useKanbanStore = create<KanbanState>((set) => ({
         return {
             columns: newColumns,
             columnOrder: newColumnOrder,
+        };
+    }),
+
+
+    addTask: (columnId, task) => set((state) => {
+        const newTaskId = `task-${Date.now()}`;
+        const newTask = { ...task, id: newTaskId };
+        
+        return {
+            tasks: { ...state.tasks, [newTaskId]: newTask },
+            columns: {
+                ...state.columns,
+                [columnId]: {
+                    ...state.columns[columnId],
+                    taskIds: [...state.columns[columnId].taskIds, newTaskId],
+                },
+            },
+        };
+    }),
+
+    editTask: (taskId, updatedTask) => set((state) => ({
+        tasks: {
+            ...state.tasks,
+            [taskId]: {
+                ...state.tasks[taskId],
+                ...updatedTask,
+            },
+        },
+    })),
+
+    deleteTask: (columnId, taskId) => set((state) => {
+        const updatedTaskIds = state.columns[columnId].taskIds.filter(id => id !== taskId);
+        const newTasks = { ...state.tasks };
+        delete newTasks[taskId];
+
+        return {
+            tasks: newTasks,
+            columns: {
+                ...state.columns,
+                [columnId]: {
+                    ...state.columns[columnId],
+                    taskIds: updatedTaskIds,
+                },
+            },
         };
     }),
 }));

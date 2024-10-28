@@ -5,6 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { SelectorStaff } from "@/app/components/SelectorStaff";
 import { StaffData } from "../../staff/types";
+import { div } from "framer-motion/client";
+import { useKanbanStore } from "../kanbanStore";
+
 
 // Zod schema for form validation
 const taskSchema = z.object({
@@ -39,12 +42,24 @@ export const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
     resolver: zodResolver(taskSchema),
   });
 
-  // const handleStaffSelection = (staff: string[]) => {
-  //   setSelectedStaff(staff);
-  //   console.log("Selected staff:", staff); // This logs the selected staff members
-  // };
+
+  const { addTask } = useKanbanStore();
+
+
+ 
   const onSubmit: SubmitHandler<TaskFormValues> = (data) => {
-    console.log(data, selectedStaff); // You can handle the form data here
+    // Create a new task object based on form data
+    const newTask = {
+      name: data.taskName,
+      priority: data.taskPriority,
+      dueDate: data.dueDate,
+      assignedTo: selectedStaff,  // Pass selected staff list
+      content: "New task content", // Optional: add a default or editable content field
+    };
+  
+    addTask("column-1", newTask); // Assume "column-1" for example, replace with the actual column ID
+    console.log(data, selectedStaff);
+    onClose(); // Close the modal after submission
   };
 
   return (
@@ -99,9 +114,9 @@ export const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
                   <option disabled value="">
                     Select
                   </option>
-                  <option>High</option>
-                  <option>Normal</option>
-                  <option>Low</option>
+                  <option value="High">High</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Low">Low</option>
                 </select>
                 {errors.taskPriority && (
                   <div className="label-text-alt text-red-500">
@@ -130,12 +145,18 @@ export const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
 
               {/* Selected staff */}
               <div className="mt-4">
-                <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+                <div className="avatar-group">
                   {selectedStaff.map((staff, index) => (
-                    <div key={index} className="avatar">
-                      <div className="w-12">
-                        <img src={staff.image} alt={staff.name} />
+                    <div className="relative">
+                      <div key={index} className="avatar">
+                        <div className="w-12 rounded-full">
+                          <img src={staff.image} alt={staff.name} />
+                        </div>
                       </div>
+                      <Icon
+                        icon="material-symbols:close"
+                        className="absolute right-0 top-0 text-xl text-red-700 cursor-pointer"
+                      />
                     </div>
                   ))}
                 </div>

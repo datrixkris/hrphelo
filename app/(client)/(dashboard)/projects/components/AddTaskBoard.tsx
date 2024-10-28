@@ -1,25 +1,13 @@
 import { cn } from "@/utils/cn";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useKanbanStore } from "../kanbanStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { AddTaskBoardProps, Color, colorKeys } from "../types";
 
-interface AddTaskBoardProps {
-  onClose: () => void;
-}
-
-const colorKeys = [
-  "red",
-  "blue",
-  "green",
-  "yellow",
-  "indigo",
-  "purple",
-  "pink",
-  "orange",
-] as const;
-type Color = (typeof colorKeys)[number];
-
-export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({ onClose }) => {
+export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({
+  onClose,
+  column,
+}) => {
   const [taskBoardName, setTaskBoardName] = useState("");
   const [selectedColor, setSelectedColor] = useState<Color>("orange");
 
@@ -34,23 +22,40 @@ export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({ onClose }) => {
     orange: "bg-orange-500",
   };
 
-  const { createColumn } = useKanbanStore();
+  const { createColumn, editColumn } = useKanbanStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createColumn(taskBoardName, selectedColor);
+    if (column) {
+      // Assuming you have an updateColumn function in your store
+      editColumn(column.id, taskBoardName, selectedColor);
+    } else {
+      createColumn(taskBoardName, selectedColor);
+    }
     console.log({ taskBoardName, selectedColor });
+    // Clear the input fields after submission
     setTaskBoardName("");
-    setSelectedColor("red");
+    setSelectedColor("orange"); // Reset to the default color
     onClose();
   };
+
+  useEffect(() => {
+    if (column) {
+      setTaskBoardName(column.title);
+      setSelectedColor(column.color);
+    } else {
+      // Reset to defaults when no column is passed
+      setTaskBoardName("");
+      setSelectedColor("orange");
+    }
+  }, [column]); // Added column to dependency array
 
   return (
     <div className="h-full w-full">
       {/* Backdrop to close the modal */}
       <div
         className="fixed inset-0 right-0 bg-black opacity-50"
-        onClick={onClose} // Ensure this is defined
+        onClick={onClose}
       ></div>
       <dialog open className="modal z-10" aria-labelledby="modal-title">
         <div className="modal-box">
@@ -96,7 +101,6 @@ export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({ onClose }) => {
                           colorClassMap[color],
                         )}
                       >
-                        {/* Check mark indicating selected color */}
                         {selectedColor === color && (
                           <span className="absolute inset-0 flex items-center justify-center font-bold text-white">
                             <Icon
