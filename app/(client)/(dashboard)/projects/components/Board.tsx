@@ -24,7 +24,7 @@ const KanbanBoard = () => {
 
   // Handle the result when a drag ends
   const onDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId, type } = result;
+    const { destination, source,  type } = result;
 
     // If no destination, do nothing
     if (!destination) return;
