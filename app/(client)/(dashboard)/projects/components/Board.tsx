@@ -1,4 +1,4 @@
-import  { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -102,7 +102,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="w-64 bg-blue-100"
+                        className="relative w-64 bg-blue-100"
                       >
                         <div
                           className={cn(
@@ -130,7 +130,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                             </ul>
                           </details>
                         </div>
-                        <div className="p-4">
+                        <div className="mb-5 p-4">
                           <Droppable droppableId={column.id} type="task">
                             {(provided) => (
                               <div
@@ -151,6 +151,10 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                                         {...provided.dragHandleProps}
                                         className="mb-2 rounded-lg bg-white p-2 shadow-md"
                                       >
+                                        <div className="flex justify-between font-semibold text-black">
+                                          <p>{task.name}</p>{" "}
+                                          <Icon icon="mingcute:down-fill" />
+                                        </div>
                                         {task.content}
                                       </div>
                                     )}
@@ -160,14 +164,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                               </div>
                             )}
                           </Droppable>
-                          <div className="mt-4">
-                            <button
-                              className=""
-                              onClick={() => setModalOpen(true)}
-                            >
-                              Add New Task
-                            </button>
-                          </div>
+                        </div>
+                        <div className="absolute bottom-3 mt-4">
+                          <button
+                            className=""
+                            onClick={() => setModalOpen(true)}
+                          >
+                            Add New Task
+                          </button>
                         </div>
                       </div>
                     )}

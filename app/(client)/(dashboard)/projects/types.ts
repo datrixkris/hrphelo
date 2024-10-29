@@ -1,8 +1,14 @@
 // kanban Types
 export type Task = {
     id: string;
+    name:string;
     content: string;
+    priority:string;
+    dueDate:string
+    assignedTo:[]
 }
+
+
 
 export type Column = {
     id: string;
