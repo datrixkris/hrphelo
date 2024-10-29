@@ -254,7 +254,7 @@ const AddStaffForm = ({
             {/* submit */}
             <div className="!mt-10">
               <Button className="mx-auto w-1/2" disabled={loading}>
-                {loading ? "Adding Staff..." : "Add Staff"}
+                {loading ? "Adding staff..." : "Add staff"}
               </Button>
             </div>
           </form>
