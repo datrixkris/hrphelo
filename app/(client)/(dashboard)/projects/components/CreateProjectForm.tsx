@@ -14,7 +14,7 @@ const CreateProjectForm = ({
   onClose: () => void;
 }) => {
   const { register, handleSubmit, reset } = useForm<ProjectData>();
-  const { createProject, updatingData, fetchProjects, error, projects } =
+  const { createProject, updatingData, fetchProjects, error } =
     useProjectStore();
 
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {

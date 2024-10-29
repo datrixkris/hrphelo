@@ -1,21 +1,13 @@
-// import Button from "@/app/components/Button";
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 
 import FilterAndSearch from "./components/StaffFilterAndSearch";
-import StaffTable from "./components/StaffTable";
 import AddStaff from "./components/AddStaff";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
-import { useStaffStore } from "./staff-store";
+import StaffList from "./components/StaffList";
 
 const Page = () => {
-  const { staffs, loading, fetchStaff } = useStaffStore();
-
-  useEffect(() => {
-    fetchStaff();
-  }, [fetchStaff]);
-
   return (
     <div>
       {/* header plus breadcrumbs */}
@@ -38,15 +30,7 @@ const Page = () => {
       </div>
 
       {/* table */}
-      <div className="">
-        {staffs.length < 1 && loading ? (
-          <div className="rounded py-20 text-center">Getting staff data...</div>
-        ) : staffs.length > 0 ? (
-          <StaffTable staff={staffs} />
-        ) : (
-          <div className="rounded py-20 text-center">No data available</div>
-        )}
-      </div>
+      <StaffList />
     </div>
   );
 };
