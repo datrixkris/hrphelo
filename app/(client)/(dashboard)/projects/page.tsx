@@ -2,8 +2,10 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import React from "react";
 import Button from "@/app/components/Button";
 // import FilterAndSearch from "../staff/components/StaffFilterAndSearch";
-import ProjectCard from "./components/ProjectCard";
+// import ProjectCard from "./components/ProjectCard";
 import ProjectFilterAndSearch from "./components/ProjectFilterAndSearch";
+import CreateProject from "./components/CreateProject";
+import ProjectList from "./components/ProjectList";
 
 const ProjectsPage = () => {
   return (
@@ -18,7 +20,7 @@ const ProjectsPage = () => {
           ]}
         />
         <div>
-          <Button>Create Project</Button>
+          <CreateProject />
         </div>
       </div>
 
@@ -28,9 +30,7 @@ const ProjectsPage = () => {
       </div>
 
       {/* project list */}
-      <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        <ProjectCard />
-      </div>
+      <ProjectList />
     </div>
   );
 };
