@@ -1,14 +1,17 @@
 import Link from "next/link";
 import React from "react";
+import { ProjectData } from "../types/project-types";
 
-const ProjectCard = () => {
+const ProjectCard = ({ project }: { project: ProjectData }) => {
   return (
     <div className="space-y-5 rounded bg-base-100 p-5 text-sm font-medium text-neutral-500 shadow">
       {/* title and stats */}
       <div className="">
-        <Link href={`/projects/project-slug/`}>
+        <Link
+          href={`/projects/${project.name.toLowerCase().split(" ").join("-")}/`}
+        >
           <h2 className="mb-2 text-lg font-semibold capitalize text-base-content transition-colors hover:text-hr-yellow">
-            Office Managements
+            {project.name}
           </h2>
         </Link>
         <p className="text-xs">
@@ -18,10 +21,7 @@ const ProjectCard = () => {
       </div>
       {/* descriptoin */}
       <div className="h-20">
-        <p className="line-clamp-4">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry
-        </p>
+        <p className="line-clamp-4">{project.description}</p>
       </div>
       {/* deadline */}
       <div className="">
