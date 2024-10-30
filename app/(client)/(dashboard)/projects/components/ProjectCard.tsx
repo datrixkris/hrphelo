@@ -7,9 +7,7 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
     <div className="space-y-5 rounded bg-base-100 p-5 text-sm font-medium text-neutral-500 shadow">
       {/* title and stats */}
       <div className="">
-        <Link
-          href={`/projects/${project.name.toLowerCase().split(" ").join("-")}/`}
-        >
+        <Link href={`/projects/${project?.slug}/`}>
           <h2 className="mb-2 text-lg font-semibold capitalize text-base-content transition-colors hover:text-hr-yellow">
             {project.name}
           </h2>
