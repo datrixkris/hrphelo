@@ -4,4 +4,5 @@ export interface ProjectData {
   description: string;
   companyId?: number;
   staffId?: number;
+  slug?: string;
 }
