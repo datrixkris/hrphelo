@@ -102,7 +102,7 @@ const Taskboard = () => {
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
+      {isModalOpen && ( 
         <AddTaskBoard
           column={selectedColumn}
           onClose={() => setModalOpen(false)}
