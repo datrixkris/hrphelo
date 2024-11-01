@@ -181,22 +181,10 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
             set({ loading: true, error: null });
             try {
                 await api.delete(`/v1/projects/${projectId}/tasks/${taskId}`);
-                set((state) => {
-                    const columnId = findColumnId(taskId);
-                    if (!columnId) return state;
-
-                    const updatedTasks = state.columns[columnId].taskIds.filter((id) => id !== taskId);
-                    const { [taskId]: _, ...remainingTasks } = state.tasks; // Remove task from tasks
-
-                    return {
-                        tasks: remainingTasks,
-                        columns: {
-                            ...state.columns,
-                            [columnId]: { ...state.columns[columnId], tasks: updatedTasks },
-                        },
-                    };
-                });
                 toast.success("Task deleted successfully!");
+                await fetchColumn(get().projectId as number);
+
+              
             } catch (err) {
                 set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
             } finally {
@@ -222,15 +210,15 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                 // Get source and destination columns
                 const sourceColumn = state.columns[sourceColumnId];
                 const destinationColumn = state.columns[destinationColumnId];
-        
+
                 // Create copies of the task lists for immutability
                 const sourceTasks = [...sourceColumn.taskIds];
                 const destinationTasks = [...destinationColumn.taskIds];
-        
+
                 // Remove the task from the source and add it to the destination
                 const [movedTaskId] = sourceTasks.splice(sourceIndex, 1);
                 destinationTasks.splice(destinationIndex, 0, movedTaskId);
-        
+
                 return {
                     columns: {
                         ...state.columns,
@@ -239,7 +227,7 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                     },
                 };
             }),
-        
+
         reorderColumns: (startIndex, endIndex) =>
             set((state) => {
                 const updatedColumnOrder = Array.from(state.columnOrder);
