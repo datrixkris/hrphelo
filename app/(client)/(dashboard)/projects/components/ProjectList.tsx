@@ -21,9 +21,9 @@ const ProjectList = () => {
           <ProjectCardSkeleton />
         </div>
       ) : projects.length > 0 ? (
-        <div className="grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {projects.map((project) => (
-            <div key={project.id}>
+            <div key={project.id} className="h-full">
               <ProjectCard project={project} />
             </div>
           ))}

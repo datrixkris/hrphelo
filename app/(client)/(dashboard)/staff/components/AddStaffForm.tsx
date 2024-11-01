@@ -28,6 +28,7 @@ const AddStaffForm = ({
     const fetchDepartmentsData = async () => {
       if (isOpen && departments.length === 0) {
         await fetchDepartments();
+        console.log(departments);
       }
     };
 

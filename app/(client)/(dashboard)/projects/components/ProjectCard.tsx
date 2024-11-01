@@ -4,7 +4,7 @@ import { ProjectData } from "../types/project-types";
 
 const ProjectCard = ({ project }: { project: ProjectData }) => {
   return (
-    <div className="space-y-5 rounded bg-base-100 p-5 text-sm font-medium text-neutral-500 shadow">
+    <div className="h-full space-y-5 rounded bg-base-100 p-5 text-sm font-medium text-neutral-500 shadow">
       {/* title and stats */}
       <div className="">
         <Link href={`/projects/${project?.slug}/`}>
@@ -24,7 +24,7 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
       {/* deadline */}
       <div className="">
         <p className="mb-1 font-semibold text-base-content">Deadline:</p>
-        <p className="">25th April, 2024</p>
+        <p className="">{project.end_date}</p>
       </div>
       {/* Project lead */}
       <div className="">
@@ -39,31 +39,15 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
       <div className="">
         <p className="mb-1 font-semibold text-base-content">Team:</p>
         <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-          <div className="avatar">
-            <div className="w-10">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-          </div>
-          <div className="avatar">
-            <div className="w-10">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-          </div>
-          <div className="avatar">
-            <div className="w-10">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-          </div>
-          <div className="avatar">
-            <div className="w-10">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-          </div>
-          <div className="avatar placeholder">
-            <div className="w-10 bg-neutral text-neutral-content">
-              <span>+99</span>
-            </div>
-          </div>
+          {project.members?.map((member) => {
+            return (
+              <div className="avatar">
+                <div className="w-10">
+                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

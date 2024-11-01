@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ProjectData } from "../types/project-types";
 import { useProjectStore } from "../stores/project-store";
 import { toast } from "react-toastify";
+import AddMembersField from "./AddMembersField";
 
 const CreateProjectForm = ({
   isOpen,
@@ -16,12 +17,33 @@ const CreateProjectForm = ({
   const { register, handleSubmit, reset } = useForm<ProjectData>();
   const { createProject, updatingData, fetchProjects, error } =
     useProjectStore();
+  const [memberIds, setMemberIds] = useState<(number | undefined)[]>([]);
+  const [leaderId, setLeaderId] = useState<number | undefined>();
+  const [leaderError, setLeaderError] = useState("");
+  const [memberError, setMemberError] = useState("");
 
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {
+    if (leaderId == undefined) {
+      setLeaderError("Select project lead");
+      return;
+    } else {
+      setLeaderError("");
+    }
+    if (memberIds == undefined || memberIds.length == 0) {
+      setMemberError("Select at least one team member");
+      return;
+    } else {
+      setMemberError("");
+    }
+
     const projectData = {
       name: data.name,
       description: data.description,
+      leaderId,
+      memberIds,
     };
+
+    console.log(projectData);
 
     await createProject(projectData);
 
@@ -97,41 +119,29 @@ const CreateProjectForm = ({
                   <option>Low</option>
                 </select>
               </label>
-
-              {/* Project Leader */}
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text">Select project lead</span>
-                </div>
-                <select
-                  defaultValue=""
-                  className="select select-bordered w-full"
-                >
-                  <option>Kojo</option>
-                  <option>Kwesi</option>
-                  <option>Adjoa</option>
-                </select>
-              </label>
-
-              <div className=""></div>
-
-              {/* Team Members */}
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text">Select team members</span>
-                </div>
-                <select
-                  defaultValue=""
-                  className="select select-bordered w-full"
-                >
-                  <option>Kojo</option>
-                  <option>Kwesi</option>
-                  <option>Adjoa</option>
-                </select>
-              </label>
-
-              <div className=""></div>
             </div>
+            {/* Project Leader */}
+            <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text">Select project lead</span>
+              </div>
+              <AddMembersField getIds={(ids) => setLeaderId(ids[0])} />
+              {leaderError && (
+                <span className="label-text text-error">{leaderError}</span>
+              )}
+            </label>
+
+            {/* Team Members */}
+            <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text">Select team members</span>
+              </div>
+              <AddMembersField
+                getIds={(ids) => setMemberIds(ids)}
+                multiple={true}
+              />
+              <span className="label-text text-error">{memberError}</span>
+            </label>
 
             {/* Description */}
             <div className="mt-5">
@@ -140,7 +150,7 @@ const CreateProjectForm = ({
               </label>
               <textarea
                 required
-                {...register("name")}
+                {...register("description")}
                 rows={5}
                 className="textarea textarea-bordered mt-1 w-full"
                 placeholder="Detailed project description here"
