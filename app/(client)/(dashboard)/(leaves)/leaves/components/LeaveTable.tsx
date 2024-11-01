@@ -16,6 +16,8 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [leaveToDelete, setLeaveToDelete] = useState<number | null>(null);
 
+  console.log(leaves);
+  
   const handleDelete = async () => {
     if (leaveToDelete !== null) {
       const success = await deleteLeave(leaveToDelete);
@@ -146,7 +148,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                         onClick={() => onEditLeave(leave.id)}
                         className={`${
                           leave.status === "approved" ||
-                          leave.status === "rejected"
+                          leave.status === "declined"
                             ? "pointer-events-none cursor-not-allowed text-gray-400"
                             : ""
                         }`}
@@ -159,7 +161,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                         onClick={() => openConfirmationModal(leave.id)}
                         className={`${
                           leave.status === "approved" ||
-                          leave.status === "rejected"
+                          leave.status === "declined"
                             ? "pointer-events-none cursor-not-allowed text-gray-400"
                             : ""
                         }`}

@@ -9,10 +9,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import { ManageLeaveTable } from "./components/ManageLeaveTable";
+import { LeaveRecord } from "../types";
 // import { useAuthStore } from "@/app/stores/auth-store";
 
 const Page = () => {
-  const { fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
+  const { loading, fetchLeavePolicies, leavePolicies } = useLeavePolicyStore();
   const { fetchLeaves, leaves } = useLeaveStore();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -24,11 +25,10 @@ const Page = () => {
   // total number of staff in the company
   const totalNumberOfStaff = 60;
 
-  // calculate the pending leaves
+  const [filteredLeaves, setFilteredLeaves] = useState<LeaveRecord[]>(); // Add state for filtered leaves
+
   const numberOfPendingLeave =
     leaves?.leaves.filter((leave) => leave.status === "pending").length || 0;
-
-  // calculate the number of staff currently on leave by summing the leaves with status 'approved' and checking if the end date has not passed.
   const staffOnLeave =
     leaves?.leaves.filter(
       (leave) =>
@@ -36,39 +36,41 @@ const Page = () => {
         leave.status === "approved" &&
         dayjs(leave.end_date).isAfter(dayjs()),
     ).length || 0;
-
-  // Calculate the number of staff present today
   const staffPresent = totalNumberOfStaff - staffOnLeave;
 
-  const filteredLeaves = leaves?.leaves.filter((leave) => {
-    const matchesEmployeeName = leave.staff.name
-      .toLowerCase()
-      .includes(employeeName.toLowerCase());
-    const matchesLeaveType = leaveType
-      ? leave.leavetype.id === Number(leaveType)
-      : true;
-    const matchesLeaveStatus = leaveStatus
-      ? leave.status === leaveStatus
-      : true;
-    const matchesStartDate = startDate
-      ? dayjs(leave.start_date).isAfter(dayjs(startDate).subtract(1, "day"))
-      : true;
-    const matchesEndDate = endDate
-      ? dayjs(leave.end_date).isBefore(dayjs(endDate).add(1, "day"))
-      : true;
+  function filterLeaves() {
+    const result = leaves?.leaves.filter((leave) => {
+      const matchesEmployeeName = leave.staff.name
+        .toLowerCase()
+        .includes(employeeName.toLowerCase());
+      const matchesLeaveType = leaveType
+        ? leave.leavetype.id === Number(leaveType)
+        : true;
+      const matchesLeaveStatus = leaveStatus
+        ? leave.status === leaveStatus
+        : true;
+      const matchesStartDate = startDate
+        ? dayjs(leave.start_date).isAfter(dayjs(startDate).subtract(1, "day"))
+        : true;
+      const matchesEndDate = endDate
+        ? dayjs(leave.end_date).isBefore(dayjs(endDate).add(1, "day"))
+        : true;
 
-    return (
-      matchesEmployeeName &&
-      matchesLeaveType &&
-      matchesLeaveStatus &&
-      matchesStartDate &&
-      matchesEndDate
-    );
-  });
+      return (
+        matchesEmployeeName &&
+        matchesLeaveType &&
+        matchesLeaveStatus &&
+        matchesStartDate &&
+        matchesEndDate
+      );
+    });
+    setFilteredLeaves(result); // Update filteredLeaves state
+  }
 
   useEffect(() => {
     if (!leavePolicies.length) fetchLeavePolicies();
     if (!leaves?.leaves.length) fetchLeaves();
+    filterLeaves();
   }, [fetchLeavePolicies, fetchLeaves, leavePolicies, leaves]);
 
   return (
@@ -157,7 +159,7 @@ const Page = () => {
             </option>
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
+            <option value="declined">Declined</option>
           </select>
         </div>
         <div>
@@ -190,16 +192,68 @@ const Page = () => {
           <button
             type="button"
             className="btn btn-primary w-full uppercase"
-            // onClick={handleSearch}
+            onClick={filterLeaves}
           >
             Search
           </button>
         </div>
       </div>
-      {filteredLeaves && filteredLeaves.length > 0 ? (
-        <ManageLeaveTable filteredLeaves={filteredLeaves} />
+      {loading ? (
+        <div className="">
+          <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
+            <thead>
+              <tr className="text-left">
+                <th>Leave Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>No of Days</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Approved by</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Display multiple skeleton rows to indicate loading state */}
+              {[...Array(3)].map((_, index) => (
+                <tr key={index} className="overflow-x-auto">
+                  <td>
+                    <div className="skeleton h-4 w-24"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-20"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-20"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-16"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-32"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-24"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-20"></div>
+                  </td>
+                  <td>
+                    <div className="skeleton h-4 w-20"></div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <div className="rounded py-20 text-center">No leaves available</div>
+        <div>
+          {filteredLeaves && filteredLeaves.length > 0 ? (
+            <ManageLeaveTable filteredLeaves={filteredLeaves} />
+          ) : (
+            <div className="rounded py-20 text-center">No leaves available</div>
+          )}
+        </div>
       )}
     </div>
   );

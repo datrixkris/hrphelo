@@ -132,6 +132,14 @@ export type LeaveRecord = {
 
 }
 
+export type ChangeStatus = {
+  leaveTypeId: number,
+  duration: number,
+  start_date: string,
+  reason: string,
+  status: string,
+}
+
 export type LeaveData = {
   status: boolean;
   leaveDaysLeft: number;
