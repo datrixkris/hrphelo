@@ -41,7 +41,7 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
         <div className="avatar-group -space-x-6 rtl:space-x-reverse">
           {project.members?.map((member) => {
             return (
-              <div className="avatar">
+              <div className="avatar" key={member.id}>
                 <div className="w-10">
                   <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                 </div>

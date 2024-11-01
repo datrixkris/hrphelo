@@ -47,7 +47,7 @@ const SearchAndResultsInputComponent = ({
   }, [data]);
 
   function selectItem(item: Data) {
-    let data = { ...item, selected: !item.selected };
+    const data = { ...item, selected: !item.selected };
 
     onSelected(data);
     // console.log(data);
@@ -107,7 +107,7 @@ const SearchAndResultsInputComponent = ({
               {newData.map((item) => {
                 return (
                   <li
-                    onClick={(e) => selectItem(item)}
+                    onClick={() => selectItem(item)}
                     className={`flex cursor-pointer items-center justify-between p-2 hover:bg-base-200 ${item.selected && "bg-success hover:bg-success"}`}
                     key={item.id}
                   >
