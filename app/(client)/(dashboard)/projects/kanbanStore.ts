@@ -1,3 +1,4 @@
+// path: /app/store/kanbanStore.ts
 import { create } from 'zustand';
 import { api } from '@/app/axiosApi/api';
 import { AxiosError } from 'axios';
@@ -8,16 +9,15 @@ export type Task = {
     id: string;
     name: string;
     description: string;
-    boardId?: number
+    boardId?: number;
 };
 
-
 export type Column = {
-    id: string; // Changed to string for consistency
+    id: string;
     name: string;
     color: string;
     description: string;
-    tasks: Task[];
+    taskIds: string[]; // Only task IDs
 };
 
 interface ApiErrorResponse {
@@ -26,9 +26,10 @@ interface ApiErrorResponse {
 }
 
 interface KanbanState {
-    columns: { [key: string]: Column }; // Changed key type to string
-    projectId: number | null; // Consistent type
-    columnOrder: number[];
+    tasks: { [key: string]: Task }; // Dictionary of tasks
+    columns: { [key: string]: Column };
+    projectId: number | null;
+    columnOrder: string[];
     loading: boolean;
     error: string | null;
 
@@ -38,51 +39,67 @@ interface KanbanState {
     addTask: (data: AddTask) => Promise<void>;
     editTask: (projectId: number, taskId: string, updatedTask: Partial<Task>) => Promise<void>;
     deleteTask: (projectId: number, taskId: string) => Promise<void>;
-    deleteColumn: (columnId: number) => void;
-    moveTask: (sourceColumnId: number, destinationColumnId: number, sourceIndex: number, destinationIndex: number) => void;
+    deleteColumn: (columnId: string) => Promise<void>;
+    moveTask: (sourceColumnId: string, destinationColumnId: string, sourceIndex: number, destinationIndex: number) => void;
     reorderColumns: (startIndex: number, endIndex: number) => void;
 }
 
 export const useKanbanStore = create<KanbanState>((set, get) => {
     const handleError = (error: AxiosError<ApiErrorResponse>) => {
-        const errorMessage = error?.response?.data?.message ?? error.message;
+        const errorMessage = error?.response?.data?.message || error.message;
         toast.error(errorMessage);
-        console.error(error); // Log for debugging
+        console.error(error);
         return errorMessage;
     };
 
     const findColumnId = (taskId: string) => {
-        const columnId = Object.keys(get().columns).find((key) =>
-            get().columns[+key].tasks.some((task) => task.id === taskId)
+        return Object.keys(get().columns).find(
+            (key) => get().columns[key].taskIds.includes(taskId)
         );
-        return columnId;
     };
 
     const fetchColumn = async (projectId: number) => {
         set({ projectId, loading: true, error: null });
         try {
             const response = (await api.get(`/v1/projects/${projectId}/boards`)).data;
-            const columnOrder = Object.keys(response).map(Number);
+            const columnOrder = Object.keys(response);
 
-            const columnsById = columnOrder.reduce((acc: { [key: string]: Column }, columnId: number) => {
-                const columnData = response[columnId];
-                acc[columnId] = {
-                    id: columnData.id.toString(), // Ensure id is a string
+            const columnsById: { [key: string]: Column } = {};
+            const tasksById: { [key: string]: Task } = {};
+
+            columnOrder.forEach((columnKey) => {
+                const columnData = response[columnKey];
+                const taskIds = Object.keys(columnData.tasks);
+
+                // Populate columnsById
+                columnsById[columnKey] = {
+                    id: columnData.id.toString(),
                     name: columnData.name,
                     color: columnData.color,
                     description: columnData.description,
-                    tasks: columnData.tasks || [],
+                    taskIds: taskIds, // Only store task IDs here
                 };
-                return acc;
-            }, {});
 
-            set({ columns: columnsById, columnOrder, loading: false });
+                // Populate tasksById with full task data
+                taskIds.forEach((taskKey) => {
+                    const taskData = columnData.tasks[taskKey];
+                    tasksById[taskKey] = {
+                        id: taskData.id.toString(),
+                        name: taskData.slug,
+                        description: taskData.description,
+                        boardId: taskData.boardId,
+                    };
+                });
+            });
+
+            set({ columns: columnsById, columnOrder, tasks: tasksById, loading: false });
         } catch (err) {
             set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
         }
     };
 
     return {
+        tasks: {}, // Initialize tasks as an empty dictionary
         projectId: null,
         columns: {},
         columnOrder: [],
@@ -96,21 +113,20 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
             try {
                 await api.post(`/v1/projects/${get().projectId}/boards`, data);
                 toast.success("Column added successfully!");
-
-                await fetchColumn(get().projectId as number); // Type assertion
+                await fetchColumn(get().projectId as number);
             } catch (err) {
                 set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
             } finally {
                 set({ loading: false });
             }
         },
+
         editColumn: async (data) => {
             set({ loading: true, error: null });
             try {
-                await api.post(`/v1/projects/${get().projectId}/boards`, data);
-                toast.success("Column added successfully!");
-
-                // await fetchColumn();
+                await api.put(`/v1/projects/${get().projectId}/boards`, data);
+                toast.success("Column updated successfully!");
+                await fetchColumn(get().projectId as number);
             } catch (err) {
                 set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
             } finally {
@@ -121,10 +137,18 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
         addTask: async (data) => {
             set({ loading: true, error: null });
             try {
-                await api.post(`/v1/projects/${get().projectId}/tasks`, data);
-                await fetchColumn(get().projectId as number);
-
-
+                const response = await api.post(`/v1/projects/${get().projectId}/tasks`, data);
+                const newTask = response.data;
+                set((state) => ({
+                    tasks: { ...state.tasks, [newTask.id]: newTask },
+                    columns: {
+                        ...state.columns,
+                        [newTask.boardId]: {
+                            ...state.columns[newTask.boardId],
+                            tasks: [...state.columns[newTask.boardId].taskIds, newTask.id],
+                        },
+                    },
+                }));
                 toast.success("Task added successfully!");
             } catch (err) {
                 set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
@@ -139,21 +163,12 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                 const response = await api.put(`/v1/projects/${projectId}/tasks/${taskId}`, updatedTask);
                 const updatedTaskData = response.data;
 
-                set((state) => {
-                    const columnId = findColumnId(taskId);
-                    if (!columnId) return state;
-
-                    const updatedTasks = state.columns[columnId].tasks.map((task) =>
-                        task.id === taskId ? { ...task, ...updatedTaskData } : task
-                    );
-
-                    return {
-                        columns: {
-                            ...state.columns,
-                            [columnId]: { ...state.columns[columnId], tasks: updatedTasks },
-                        },
-                    };
-                });
+                set((state) => ({
+                    tasks: {
+                        ...state.tasks,
+                        [taskId]: updatedTaskData,
+                    },
+                }));
                 toast.success("Task updated successfully!");
             } catch (err) {
                 set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
@@ -166,14 +181,15 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
             set({ loading: true, error: null });
             try {
                 await api.delete(`/v1/projects/${projectId}/tasks/${taskId}`);
-
                 set((state) => {
                     const columnId = findColumnId(taskId);
                     if (!columnId) return state;
 
-                    const updatedTasks = state.columns[columnId].tasks.filter((task) => task.id !== taskId);
+                    const updatedTasks = state.columns[columnId].taskIds.filter((id) => id !== taskId);
+                    const { [taskId]: _, ...remainingTasks } = state.tasks; // Remove task from tasks
 
                     return {
+                        tasks: remainingTasks,
                         columns: {
                             ...state.columns,
                             [columnId]: { ...state.columns[columnId], tasks: updatedTasks },
@@ -188,14 +204,12 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
             }
         },
 
-        deleteColumn: async (columnId) => {
+        deleteColumn: async (columnId: string) => {
             set({ loading: true, error: null });
             try {
                 await api.delete(`/v1/boards/${columnId}`);
-
                 await fetchColumn(get().projectId as number);
-
-                toast.success("Task deleted successfully!");
+                toast.success("Column deleted successfully!");
             } catch (err) {
                 set({ error: handleError(err as AxiosError<ApiErrorResponse>), loading: false });
             } finally {
@@ -205,15 +219,18 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
 
         moveTask: (sourceColumnId, destinationColumnId, sourceIndex, destinationIndex) =>
             set((state) => {
+                // Get source and destination columns
                 const sourceColumn = state.columns[sourceColumnId];
                 const destinationColumn = state.columns[destinationColumnId];
-
-                const sourceTasks = Array.from(sourceColumn.tasks);
-                const [removedTask] = sourceTasks.splice(sourceIndex, 1);
-
-                const destinationTasks = Array.from(destinationColumn.tasks);
-                destinationTasks.splice(destinationIndex, 0, removedTask);
-
+        
+                // Create copies of the task lists for immutability
+                const sourceTasks = [...sourceColumn.taskIds];
+                const destinationTasks = [...destinationColumn.taskIds];
+        
+                // Remove the task from the source and add it to the destination
+                const [movedTaskId] = sourceTasks.splice(sourceIndex, 1);
+                destinationTasks.splice(destinationIndex, 0, movedTaskId);
+        
                 return {
                     columns: {
                         ...state.columns,
@@ -222,7 +239,7 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                     },
                 };
             }),
-
+        
         reorderColumns: (startIndex, endIndex) =>
             set((state) => {
                 const updatedColumnOrder = Array.from(state.columnOrder);
