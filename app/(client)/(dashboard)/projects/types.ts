@@ -11,6 +11,8 @@
 //     color?: Color;
 // };
 
+import { Column } from "./kanbanStore";
+
 
 export type Task = {
     id: number;
@@ -55,5 +57,5 @@ export type Color = (typeof colorKeys)[number];
 
 export interface AddTaskBoardProps {
     onClose: () => void;
-    column?: AddColumn;
+    column?: Column;
 }

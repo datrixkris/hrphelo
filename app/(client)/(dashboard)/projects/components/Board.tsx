@@ -9,7 +9,6 @@ import { Column, useKanbanStore } from "../kanbanStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { cn } from "@/utils/cn";
 import { AddTasks } from "./AddTasks";
-import { Color } from "../types";
 
 type KanbanBoardProps = {
   onEditColumn: (column: Column) => void;
@@ -19,17 +18,6 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [columnId, setColumnId] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDetailsElement | null>(null);
-
-  const colorClassMap: Record<Color, string> = {
-    red: "bg-red-500",
-    blue: "bg-blue-500",
-    green: "bg-green-500",
-    yellow: "bg-yellow-500",
-    indigo: "bg-indigo-500",
-    purple: "bg-purple-500",
-    pink: "bg-pink-500",
-    orange: "bg-orange-500",
-  };
 
   const {
     columns,
@@ -113,7 +101,6 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                         <div
                           className={cn(
                             "mb-4 flex items-center justify-between px-2",
-                            colorClassMap[column.color] || "bg-gray-500",
                           )}
                         >
                           <h2 className="text-lg font-semibold text-white">
@@ -130,11 +117,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                                 </button>
                               </li>
                               <li>
-                                <button
-                                  onClick={() =>
-                                    deleteColumn(column.id)
-                                  }
-                                >
+                                <button onClick={() => deleteColumn(column.id)}>
                                   Delete
                                 </button>
                               </li>
