@@ -3,10 +3,10 @@
 import Button from "@/app/components/Button";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { useEffect, useState } from "react";
-import ProjectDetails from "../components/project-details/ProjectDetails";
-import Taskboard from "../components/taskboard/Taskboard";
-import { useProjectStore } from "../stores/project-store";
-import { useKanbanStore } from "../kanbanStore";
+import ProjectDetails from "../../components/project-details/ProjectDetails";
+import Taskboard from "../../components/taskboard/Taskboard";
+import { useProjectStore } from "../../stores/project-store";
+import { useKanbanStore } from "../../kanbanStore";
 import { useParams } from "next/navigation";
 
 const Project = () => {
