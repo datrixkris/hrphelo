@@ -17,7 +17,7 @@ const ProjectFilterAndSearch = () => {
       {/* filter by designation */}
       <div className="flex w-full gap-2">
         <select className="select select-bordered w-1/2 md:max-w-[200px]">
-          <option selected>Select designation</option>
+          <option defaultValue="">Select designation</option>
           <option>Web Developer</option>
           <option>Infrastructure Developer</option>
         </select>
