@@ -1,22 +1,43 @@
-import React, { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { useKanbanStore } from "../kanbanStore";
+import { Column, useKanbanStore } from "../kanbanStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { cn } from "@/utils/cn";
-import { AddTask } from "./AddTask";
+import { useParams } from "next/navigation";
+import { useProjectStore } from "../stores/project-store";
+import { AddTasks } from "./AddTasks";
+import { Color } from "../types";
+type KanbanBoardProps = {
+  onEditColumn: (column: Column) => void;
+};
 
-const KanbanBoard = () => {
+const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
+  const params = useParams<{ projectSlug: string }>();
+  const { projects, fetchProjects } = useProjectStore();
   const [isModalOpen, setModalOpen] = useState(false);
+  const [columnId, setColumnId] = useState<number>(0);
+  const dropdownRef = useRef<HTMLDetailsElement | null>(null);
+
+  const colorClassMap: Record<Color, string> = {
+    red: "bg-red-500",
+    blue: "bg-blue-500",
+    green: "bg-green-500",
+    yellow: "bg-yellow-500",
+    indigo: "bg-indigo-500",
+    purple: "bg-purple-500",
+    pink: "bg-pink-500",
+    orange: "bg-orange-500",
+  };
 
   const {
-    tasks,
     columns,
     columnOrder,
+    fetchColumn,
     moveTask,
     deleteColumn,
     reorderColumns,
@@ -24,35 +45,58 @@ const KanbanBoard = () => {
 
   // Handle the result when a drag ends
   const onDragEnd = (result: DropResult) => {
-    const { destination, source,  type } = result;
-
-    // If no destination, do nothing
+    const { destination, source, type } = result;
     if (!destination) return;
 
-    // Handle column reordering
     if (type === "column") {
       reorderColumns(source.index, destination.index);
       return;
     }
 
-    // Handle task reordering (within or between columns)
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
-      return; // If the task is dropped in the same position
+      return;
     }
-
     moveTask(
-      source.droppableId,
-      destination.droppableId,
+      Number(source.droppableId),
+      Number(destination.droppableId),
       source.index,
       destination.index,
     );
   };
 
+  // Close dropdown if clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        dropdownRef.current.open = false; // Close dropdown
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    fetchProjects();
+    const project = projects.find(
+      (project) => project.slug === params.projectSlug,
+    );
+
+    if (project) {
+      fetchColumn(project.id);
+    } else {
+      console.log("Project not found");
+    }
+  }, [params.projectSlug, fetchProjects, fetchColumn]);
+
   return (
-    <div className="card h-full bg-base-100 p-5">
+    <div className="card h-full w-full bg-base-100 p-5">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -61,19 +105,16 @@ const KanbanBoard = () => {
         >
           {(provided) => (
             <div
-              className="flex space-x-4"
+              className="flex h-full w-full space-x-4 overflow-x-scroll border"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
               {columnOrder.map((columnId, index) => {
                 const column = columns[columnId];
-                const tasksInColumn = column.taskIds.map(
-                  (taskId) => tasks[taskId],
-                );
 
                 return (
                   <Draggable
-                    draggableId={column.id}
+                    draggableId={String(column.id)}
                     index={index}
                     key={column.id}
                   >
@@ -82,50 +123,59 @@ const KanbanBoard = () => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className={`w-64 bg-blue-100`}
+                        className="relative h-72 w-60 shrink-0 bg-blue-100"
                       >
                         <div
                           className={cn(
-                            "mb-4 flex items-center justify-between bg-blue-600 px-2",
-                            {},
+                            "mb-4 flex items-center justify-between px-2",
+                            colorClassMap[column.color] || "bg-gray-500",
                           )}
                         >
                           <h2 className="text-lg font-semibold text-white">
-                            {column.title}
+                            {column.name}
                           </h2>
-
-                          <details className="dropdown">
-                            <summary className="btn btn-ghost">
-                              {" "}
+                          <details ref={dropdownRef} className="dropdown">
+                            <summary className="b btn btn-ghost text-white">
                               <Icon icon="charm:menu-kebab" />
                             </summary>
                             <ul className="menu dropdown-content z-[1] w-32 rounded-box bg-base-100 p-2 shadow">
                               <li>
-                                <a>Edit</a>
+                                <button onClick={() => onEditColumn(column)}>
+                                  Edit
+                                </button>
                               </li>
                               <li>
-                                <a onClick={() => deleteColumn(column.id)}>
+                                <button
+                                  onClick={() =>
+                                    deleteColumn(Number(column.id))
+                                  }
+                                >
                                   Delete
-                                </a>
+                                </button>
                               </li>
                             </ul>
                           </details>
                         </div>
-                        <div className="p-4">
-                          {" "}
-                          <Droppable droppableId={column.id} type="task">
+                        <div className="mb-5 p-4">
+                          <Droppable
+                            droppableId={String(column.id)}
+                            type="task"
+                          >
                             {(provided) => (
                               <div
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                                 className="min-h-[100px]"
                               >
-                                {tasksInColumn.map((task, index) => (
+                                {column.tasks.map((task, index) => (
+                                  
                                   <Draggable
                                     key={task.id}
-                                    draggableId={task.id}
+                                    draggableId={String(task.id)}
                                     index={index}
+                                     
                                   >
+                                    
                                     {(provided) => (
                                       <div
                                         ref={provided.innerRef}
@@ -133,7 +183,16 @@ const KanbanBoard = () => {
                                         {...provided.dragHandleProps}
                                         className="mb-2 rounded-lg bg-white p-2 shadow-md"
                                       >
-                                        {task.content}
+                                        <div className="flex justify-between font-semibold text-black">
+                                          <p>{task.description}</p>{" "}
+                                          <Icon icon="mingcute:down-fill" />
+                                        </div>
+                                        {task.description && (
+                                          <p className="text-sm text-gray-600">
+                                           
+                                            {task.description}
+                                          </p>
+                                        )}
                                       </div>
                                     )}
                                   </Draggable>
@@ -142,14 +201,16 @@ const KanbanBoard = () => {
                               </div>
                             )}
                           </Droppable>
-                          <div className="mt-4">
-                            <button
-                              className="mt-4"
-                              onClick={() => setModalOpen(true)}
-                            >
-                              Add New Task
-                            </button>
-                          </div>
+                        </div>
+                        <div className="absolute bottom-3 left-1/2 mt-4 -translate-x-1/2 transform">
+                          <button
+                            onClick={() => {
+                              setModalOpen(true);
+                              setColumnId(Number(column.id));
+                            }}
+                          >
+                            Add New Task
+                          </button>
                         </div>
                       </div>
                     )}
@@ -163,7 +224,12 @@ const KanbanBoard = () => {
       </DragDropContext>
 
       {/* Modal */}
-      {isModalOpen && <AddTask onClose={() => setModalOpen(false)} />}
+      {isModalOpen && (
+        <AddTasks
+          onClose={() => setModalOpen(false)}
+          columnId={columnId} // Pass the current columnId
+        />
+      )}
     </div>
   );
 };

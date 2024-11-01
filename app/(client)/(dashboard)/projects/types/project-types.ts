@@ -55,4 +55,10 @@ export interface Staff {
 
 export interface Task {
   // Define Task export interface here based on your structure if needed
+  id: number;
+  name: string;
+  description: string;
+  companyId?: number;
+  staffId?: number;
+  slug: string;
 }

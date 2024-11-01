@@ -180,7 +180,7 @@ const ApplyForLeave = ({
               className="textarea textarea-bordered mt-1 w-full"
               {...register("reason")}
             />
-             {errors.reason && (
+            {errors.reason && (
               <p className="text-sm text-red-500">{errors.reason.message}</p>
             )}
           </div>
