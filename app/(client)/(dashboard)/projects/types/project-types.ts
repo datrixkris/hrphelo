@@ -36,6 +36,7 @@ export interface Board {
 export interface ProjectLead {
   id: number;
   name: string;
+  image: string;
 }
 
 export interface Member {
@@ -51,6 +52,7 @@ export interface Member {
 export interface Staff {
   id: number;
   name: string;
+  image: string;
 }
 
 export interface Task {

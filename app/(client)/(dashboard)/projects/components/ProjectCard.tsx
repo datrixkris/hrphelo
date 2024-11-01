@@ -3,6 +3,16 @@ import React from "react";
 import { ProjectData } from "../types/project-types";
 
 const ProjectCard = ({ project }: { project: ProjectData }) => {
+  const progressColor = (progress: number | undefined) => {
+    if (progress !== undefined) {
+      return progress <= 40
+        ? "error"
+        : progress > 40 && progress <= 70
+          ? "warning"
+          : "success";
+    }
+  };
+
   return (
     <div className="h-full space-y-5 rounded bg-base-100 p-5 text-sm font-medium text-neutral-500 shadow">
       {/* title and stats */}
@@ -31,7 +41,10 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
         <p className="mb-1 font-semibold text-base-content">Project Lead:</p>
         <div className="avatar">
           <div className="w-10 rounded-full">
-            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            <img
+              src={project.projectLead?.image}
+              alt={project.projectLead?.name}
+            />
           </div>
         </div>
       </div>
@@ -43,7 +56,7 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
             return (
               <div className="avatar" key={member.id}>
                 <div className="w-10">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                  <img src={member.staff.image} alt={member.staff.name} />
                 </div>
               </div>
             );
@@ -55,11 +68,15 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
       <div className="">
         <div className="mb-3 flex justify-between">
           <p className="font-semibold text-base-content">Progress:</p>
-          <p className="text-success">40%</p>
+          <p
+            className={`font-bold ${"text-" + progressColor(project.progress)}`}
+          >
+            {project.progress}%
+          </p>
         </div>
         <progress
-          className="progress progress-success w-full"
-          value="40"
+          className={`progress w-full ${"progress-" + progressColor(project.progress)}`}
+          value={project.progress}
           max="100"
         ></progress>
       </div>
