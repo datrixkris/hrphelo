@@ -8,19 +8,16 @@ import {
 import { Column, useKanbanStore } from "../kanbanStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { cn } from "@/utils/cn";
-import { useParams } from "next/navigation";
-import { useProjectStore } from "../stores/project-store";
 import { AddTasks } from "./AddTasks";
 import { Color } from "../types";
+
 type KanbanBoardProps = {
   onEditColumn: (column: Column) => void;
 };
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
-  const params = useParams<{ projectSlug: string }>();
-  const { projects, fetchProjects } = useProjectStore();
   const [isModalOpen, setModalOpen] = useState(false);
-  const [columnId, setColumnId] = useState<number>(0);
+  const [columnId, setColumnId] = useState<number | null>(null);
   const dropdownRef = useRef<HTMLDetailsElement | null>(null);
 
   const colorClassMap: Record<Color, string> = {
@@ -37,7 +34,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
   const {
     columns,
     columnOrder,
-    fetchColumn,
+    tasks,
     moveTask,
     deleteColumn,
     reorderColumns,
@@ -59,9 +56,10 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
     ) {
       return;
     }
+
     moveTask(
-      Number(source.droppableId),
-      Number(destination.droppableId),
+      source.droppableId,
+      destination.droppableId,
       source.index,
       destination.index,
     );
@@ -81,19 +79,6 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    fetchProjects();
-    const project = projects.find(
-      (project) => project.slug === params.projectSlug,
-    );
-
-    if (project) {
-      fetchColumn(project.id);
-    } else {
-      console.log("Project not found");
-    }
-  }, [params.projectSlug, fetchProjects, fetchColumn]);
 
   return (
     <div className="card h-full w-full bg-base-100 p-5">
@@ -147,7 +132,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                               <li>
                                 <button
                                   onClick={() =>
-                                    deleteColumn(Number(column.id))
+                                    deleteColumn(column.id)
                                   }
                                 >
                                   Delete
@@ -167,36 +152,28 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                                 ref={provided.innerRef}
                                 className="min-h-[100px]"
                               >
-                                {column.tasks.map((task, index) => (
-                                  
-                                  <Draggable
-                                    key={task.id}
-                                    draggableId={String(task.id)}
-                                    index={index}
-                                     
-                                  >
-                                    
-                                    {(provided) => (
-                                      <div
-                                        ref={provided.innerRef}
-                                        {...provided.draggableProps}
-                                        {...provided.dragHandleProps}
-                                        className="mb-2 rounded-lg bg-white p-2 shadow-md"
-                                      >
-                                        <div className="flex justify-between font-semibold text-black">
-                                          <p>{task.description}</p>{" "}
-                                          <Icon icon="mingcute:down-fill" />
+                                {column.taskIds.map((taskId, index) => {
+                                  const task = tasks[taskId]; // Fetch full task details
+                                  if (!task) return null; // Skip if task details not found
+                                  return (
+                                    <Draggable
+                                      key={task.id}
+                                      draggableId={String(task.id)}
+                                      index={index}
+                                    >
+                                      {(provided) => (
+                                        <div
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                          className="mb-2 rounded-lg bg-white p-2 shadow-md"
+                                        >
+                                          {task.description}
                                         </div>
-                                        {task.description && (
-                                          <p className="text-sm text-gray-600">
-                                           
-                                            {task.description}
-                                          </p>
-                                        )}
-                                      </div>
-                                    )}
-                                  </Draggable>
-                                ))}
+                                      )}
+                                    </Draggable>
+                                  );
+                                })}
                                 {provided.placeholder}
                               </div>
                             )}
@@ -224,7 +201,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
       </DragDropContext>
 
       {/* Modal */}
-      {isModalOpen && (
+      {isModalOpen && columnId !== null && (
         <AddTasks
           onClose={() => setModalOpen(false)}
           columnId={columnId} // Pass the current columnId
