@@ -3,11 +3,37 @@ import { LeaveRecord } from "../../types";
 import dayjs from "dayjs";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Status } from "../../../../components/Status";
+import { useLeaveStore } from "../../leave-store";
 
 interface ManageLeaveProp {
   filteredLeaves: LeaveRecord[];
 }
 export const ManageLeaveTable = ({ filteredLeaves }: ManageLeaveProp) => {
+  const { approveLeave } = useLeaveStore();
+  function approve(data: LeaveRecord) {
+    const leaveData = {
+      leaveTypeId: data.leaveTypeId,
+      duration: data.duration,
+      start_date: data.start_date,
+      reason: data.reason,
+      status: "approved",
+    };
+
+    approveLeave(data.id, leaveData);
+  }
+  function decline(data: LeaveRecord) {
+    const leaveData = {
+      leaveTypeId: data.leaveTypeId,
+      duration: data.duration,
+      start_date: data.start_date,
+      reason: data.reason,
+      status: "declined",
+    };
+
+    approveLeave(data.id, leaveData);
+  }
+  
+
   return (
     <div>
       {" "}
@@ -66,10 +92,10 @@ export const ManageLeaveTable = ({ filteredLeaves }: ManageLeaveProp) => {
                       className="menu dropdown-content z-[90] w-52 rounded-box bg-base-100 p-2 shadow"
                     >
                       <li>
-                        <a>Approve</a>
+                        <a onClick={() => approve(leave)}>Approve</a>
                       </li>
                       <li>
-                        <a>Reject</a>
+                        <a onClick={() => decline(leave)}>Reject</a>
                       </li>
                     </ul>
                   </div>

@@ -1,17 +1,14 @@
-// import Button from "@/app/components/Button";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useState } from "react";
+import { useState } from "react";
 import KanbanBoard from "../Board";
 import { AddTaskBoard } from "../AddTaskBoard";
-import { Column } from "../../types";
-
-
+import { AddColumn } from "../../types";
 
 const Taskboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedColumn, setSelectedColumn] = useState<Column | undefined>();
+  const [selectedColumn, setSelectedColumn] = useState<AddColumn | undefined>();
 
-  const handleEditColumn = (column: Column) => {
+  const handleEditColumn = (column: AddColumn) => {
     setSelectedColumn(column);
     setModalOpen(true);
   };

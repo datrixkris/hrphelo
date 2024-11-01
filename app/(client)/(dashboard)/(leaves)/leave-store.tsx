@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { api } from "../../../axiosApi/api";
-import { LeaveData, LeaveType } from "./types";
+import { ChangeStatus, LeaveData, LeaveType } from "./types";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 interface LeaveStore {
   leaves: LeaveData | null;
@@ -12,7 +14,14 @@ interface LeaveStore {
   updateLeave: (id: number, data: Partial<LeaveType>) => Promise<boolean>;
   fetchLeaveById: (id: number) => Promise<LeaveType | null>;
   deleteLeave: (id: number) => Promise<boolean>;
+  approveLeave: (id: number, data: ChangeStatus) => Promise<void>;
+  declineLeave: (id: number, data: ChangeStatus) => Promise<void>;
   clearLeave: () => void;
+}
+
+interface ApiErrorResponse {
+  message?: string;
+  code?: number;
 }
 
 export const useLeaveStore = create<LeaveStore>((set, get) => ({
@@ -100,6 +109,37 @@ export const useLeaveStore = create<LeaveStore>((set, get) => ({
       console.error(err);
       set({ error: "Failed to delete leave", loading: false });
       return false;
+    }
+  },
+
+  approveLeave: async (id, data) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await api.put(`/v1/leaves/${id}/requests`, data);
+      await get().fetchLeaves();
+      toast.success(response.data.message);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+    }
+  },
+  declineLeave: async (id, data) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await api.put(`/v1/leaves/${id}/requests`, data);
+      await get().fetchLeaves();
+      toast.success(response.data.message);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
     }
   },
 
