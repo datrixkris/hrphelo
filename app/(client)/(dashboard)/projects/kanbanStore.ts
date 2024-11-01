@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { api } from '@/app/axiosApi/api';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { AddColumn, AddTask } from './types';
+import { AddColumn, AddTask, Color } from './types';
 
 export type Task = {
     id: string;
@@ -15,7 +15,7 @@ export type Task = {
 export type Column = {
     id: string;
     name: string;
-    color: string;
+    color: Color;
     description: string;
     taskIds: string[]; // Only task IDs
 };
@@ -52,11 +52,11 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
         return errorMessage;
     };
 
-    const findColumnId = (taskId: string) => {
-        return Object.keys(get().columns).find(
-            (key) => get().columns[key].taskIds.includes(taskId)
-        );
-    };
+    // const findColumnId = (taskId: string) => {
+    //     return Object.keys(get().columns).find(
+    //         (key) => get().columns[key].taskIds.includes(taskId)
+    //     );
+    // };
 
     const fetchColumn = async (projectId: number) => {
         set({ projectId, loading: true, error: null });
