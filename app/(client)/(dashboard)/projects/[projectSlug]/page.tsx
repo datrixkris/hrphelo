@@ -31,7 +31,7 @@ const Project = () => {
 
     const project = projects.find((proj) => proj.slug === params.projectSlug);
 
-    if (project) {
+    if (project?.id) {
       fetchColumn(project.id);
     } else {
       console.log("Project not found");
