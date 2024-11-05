@@ -237,7 +237,6 @@ const AddStaffForm = ({
                 <select
                   defaultValue=""
                   {...register("supervisorId")}
-                  required
                   className="select select-bordered w-full"
                 >
                   <option disabled value="">
