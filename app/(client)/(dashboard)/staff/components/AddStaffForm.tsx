@@ -16,7 +16,7 @@ const AddStaffForm = ({
   onClose: () => void;
 }) => {
   const { register, handleSubmit, reset } = useForm<StaffData>();
-  const { addStaff, loading, fetchStaff, error, staffs } = useStaffStore();
+  const { addStaff, loading, fetchStaff, staffs } = useStaffStore();
   const fetchDepartments = useDepartmentStore(
     (state) => state.fetchDepartments,
   );
@@ -67,14 +67,14 @@ const AddStaffForm = ({
 
     await addStaff(staffData);
 
-    if (!error) {
+    if (!useStaffStore.getState().error) {
       toast.success("Staff added successfully!");
       fetchStaff();
       reset();
       setSelectedImage(null); // Reset the selected image
       onClose();
     } else {
-      toast.error(`Failed to add staff: ${error}`);
+      toast.error(`Failed to add staff: ${!useStaffStore.getState().error}`);
     }
   };
 
