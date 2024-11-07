@@ -10,7 +10,7 @@ export interface StaffDetail {
   contact?: string;
   gender: string;
   date_of_birth?: string;
-  hiring_date?: string; 
+  hiring_date?: string;
   supervisorId?: number;
   departments?: Department;
   company?: Company;
@@ -30,6 +30,6 @@ export interface StaffData {
   email?: string;
   contact?: string;
   image: string;
-  hiring_date?: string; 
-  supervisorId?: number;
+  hiring_date?: string;
+  supervisorId?: number | null;
 }
