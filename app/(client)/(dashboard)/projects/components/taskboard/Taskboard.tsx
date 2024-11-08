@@ -3,8 +3,14 @@ import { useState } from "react";
 import KanbanBoard from "../Board";
 import { AddTaskBoard } from "../AddTaskBoard";
 import { Column } from "../../kanbanStore";
+import ProgressBar from "../ProgressBar";
+import { ProjectData } from "../../types/project-types";
 
-const Taskboard = () => {
+interface TaskboardProps {
+  project: ProjectData | null;
+}
+
+const Taskboard = ({ project }: TaskboardProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<Column | undefined>();
 
@@ -16,7 +22,7 @@ const Taskboard = () => {
   return (
     <div>
       {/* lead and team with create column button */}
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between gap-5">
         {/* teams and lead tin */}
         <div className="">
           <div className="flex gap-4">
@@ -24,49 +30,43 @@ const Taskboard = () => {
             <div className="flex items-center gap-2">
               <p className="font-semibold">Lead</p>
 
-              <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+              <div className="tooltip" data-tip={project?.project_lead?.name}>
                 <div className="avatar">
-                  <div className="w-10">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div className="avatar placeholder">
-                  <div className="w-10 bg-neutral text-neutral-content">
-                    <span>
-                      <Icon icon="heroicons:plus" className="text-2xl" />
-                    </span>
+                  <div className="w-10 rounded-full">
+                    <img
+                      src={project?.project_lead?.image}
+                      alt={project?.project_lead?.name}
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
+            <div className="">{project?.createdAt}</div>
+
             {/* Team */}
             <div className="flex items-center gap-2">
               <p className="font-semibold">Team</p>
 
-              <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-                <div className="avatar">
-                  <div className="w-10">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div className="avatar">
-                  <div className="w-10">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div className="avatar">
-                  <div className="w-10">
-                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                  </div>
-                </div>
-                <div className="avatar placeholder">
-                  <div className="w-10 bg-neutral text-neutral-content">
-                    <span>
-                      <Icon icon="heroicons:plus" className="text-2xl" />
-                    </span>
-                  </div>
-                </div>
+              <div className="-space-x-4 rtl:space-x-reverse">
+                {project?.members?.map((member) => {
+                  return (
+                    <div
+                      className="tooltip"
+                      data-tip={member.staff.name}
+                      key={member.id}
+                    >
+                      <div className="avatar">
+                        <div className="w-10 rounded-full border">
+                          <img
+                            src={member.staff.image}
+                            alt={member.staff.name}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -88,12 +88,8 @@ const Taskboard = () => {
       {/* progress bar */}
       <div className="mt-4 flex items-center gap-2">
         <div className="shrink-0">PROGRESS</div>
-        <progress
-          className="progress progress-success w-full"
-          value="40"
-          max="100"
-        ></progress>
-        <div className="shrink-0">40%</div>
+        <ProgressBar progress={project?.progress} />
+        <div className="shrink-0">{project?.progress}%</div>
       </div>
 
       {/* taskboard */}
@@ -102,7 +98,7 @@ const Taskboard = () => {
       </div>
 
       {/* Modal */}
-      {isModalOpen && ( 
+      {isModalOpen && (
         <AddTaskBoard
           column={selectedColumn}
           onClose={() => setModalOpen(false)}

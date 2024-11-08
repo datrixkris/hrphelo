@@ -1,18 +1,9 @@
 import Link from "next/link";
 import React from "react";
 import { ProjectData } from "../types/project-types";
+import ProgressBar, { progressColor } from "./ProgressBar";
 
 const ProjectCard = ({ project }: { project: ProjectData }) => {
-  const progressColor = (progress: number | undefined) => {
-    if (progress !== undefined) {
-      return progress <= 40
-        ? "error"
-        : progress > 40 && progress <= 70
-          ? "warning"
-          : "success";
-    }
-  };
-
   return (
     <div className="h-full space-y-5 rounded bg-base-100 p-5 text-sm font-medium text-neutral-500 shadow">
       {/* title and stats */}
@@ -74,11 +65,7 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
             {project.progress}%
           </p>
         </div>
-        <progress
-          className={`progress w-full ${"progress-" + progressColor(project.progress)}`}
-          value={project.progress}
-          max="100"
-        ></progress>
+        <ProgressBar progress={project.progress} />
       </div>
     </div>
   );
