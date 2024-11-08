@@ -65,6 +65,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    console.log("tasks:",tasks);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
@@ -124,7 +126,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({ onEditColumn }) => {
                             </ul>
                           </details>
                         </div>
-                        <div className="mb-5 p-4">
+                        <div className="mb-10 p-4">
                           <Droppable
                             droppableId={String(column.id)}
                             type="task"
