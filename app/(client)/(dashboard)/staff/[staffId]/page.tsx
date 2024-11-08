@@ -15,11 +15,12 @@ const Page = () => {
 
   useLayoutEffect(() => {
     if (params.staffId) {
-      console.log("running the useeffect");
-      console.log(loading);
+      // console.log("running the useeffect");
+      // console.log(loading);
       const fetchData = async () => {
         try {
-          await fetchAndSetData();
+          const data = await fetchStaffById(Number(params.staffId));
+          setStaffDetails(data);
         } catch (err) {
           console.log(err);
         }
@@ -27,12 +28,13 @@ const Page = () => {
 
       fetchData();
     }
-  }, [params.staffId]);
+  }, [params.staffId, fetchStaffById]);
 
   async function fetchAndSetData() {
     const data = await fetchStaffById(Number(params.staffId));
     setStaffDetails(data);
   }
+
   return (
     <div>
       {/* header plus breadcrumbs */}

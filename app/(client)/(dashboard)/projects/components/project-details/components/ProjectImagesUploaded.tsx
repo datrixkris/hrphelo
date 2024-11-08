@@ -7,24 +7,28 @@ const ProjectImagesUploaded = () => {
         Uploaded Image Files
       </h2>
 
-      <div className="flex flex-wrap gap-4">
-        <div className="">
-          <div className="aspect-video w-56 bg-neutral-300"></div>
-          <p>demo.png</p>
+      {true ? (
+        <div className="text-neutral-400">No images uploaded</div>
+      ) : (
+        <div className="flex flex-wrap gap-4">
+          <div className="">
+            <div className="aspect-video w-56 bg-neutral-300"></div>
+            <p>demo.png</p>
+          </div>
+          <div className="">
+            <div className="aspect-video w-56 bg-neutral-300"></div>
+            <p>demo.png</p>
+          </div>
+          <div className="">
+            <div className="aspect-video w-56 bg-neutral-300"></div>
+            <p>demo.png</p>
+          </div>
+          <div className="">
+            <div className="aspect-video w-56 bg-neutral-300"></div>
+            <p>demo.png</p>
+          </div>
         </div>
-        <div className="">
-          <div className="aspect-video w-56 bg-neutral-300"></div>
-          <p>demo.png</p>
-        </div>
-        <div className="">
-          <div className="aspect-video w-56 bg-neutral-300"></div>
-          <p>demo.png</p>
-        </div>
-        <div className="">
-          <div className="aspect-video w-56 bg-neutral-300"></div>
-          <p>demo.png</p>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

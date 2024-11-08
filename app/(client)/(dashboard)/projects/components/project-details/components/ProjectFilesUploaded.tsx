@@ -9,12 +9,16 @@ const ProjectFilesUploaded = () => {
       </h2>
 
       {/* files */}
-      <div className="">
-        {/* file uploaded */}
-        <ProjectFileComponent />
-        <ProjectFileComponent />
-        <ProjectFileComponent />
-      </div>
+      {true ? (
+        <div className="text-neutral-400">No files uploaded</div>
+      ) : (
+        <div className="">
+          {/* file uploaded */}
+          <ProjectFileComponent />
+          <ProjectFileComponent />
+          <ProjectFileComponent />
+        </div>
+      )}
     </div>
   );
 };
