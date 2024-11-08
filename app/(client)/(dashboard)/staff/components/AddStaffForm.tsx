@@ -65,7 +65,9 @@ const AddStaffForm = ({
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
-      supervisorId: Number(data.supervisorId),
+      supervisorId: data.supervisorId
+        ? Number(data.supervisorId)
+        : data.supervisorId,
       image: imageUrl,
     };
 
