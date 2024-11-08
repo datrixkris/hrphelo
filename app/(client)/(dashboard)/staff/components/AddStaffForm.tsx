@@ -15,8 +15,12 @@ const AddStaffForm = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { register, handleSubmit, reset } = useForm<StaffData>();
-  const { addStaff, loading, fetchStaff, error, staffs } = useStaffStore();
+  const { register, handleSubmit, reset } = useForm<StaffData>({
+    defaultValues: {
+      supervisorId: null,
+    },
+  });
+  const { addStaff, loading, fetchStaff, staffs } = useStaffStore();
   const fetchDepartments = useDepartmentStore(
     (state) => state.fetchDepartments,
   );
@@ -61,20 +65,22 @@ const AddStaffForm = ({
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
-      supervisorId: Number(data.supervisorId),
+      supervisorId: data.supervisorId
+        ? Number(data.supervisorId)
+        : data.supervisorId,
       image: imageUrl,
     };
 
     await addStaff(staffData);
 
-    if (!error) {
+    if (!useStaffStore.getState().error) {
       toast.success("Staff added successfully!");
       fetchStaff();
       reset();
       setSelectedImage(null); // Reset the selected image
       onClose();
     } else {
-      toast.error(`Failed to add staff: ${error}`);
+      toast.error(`Failed to add staff: ${!useStaffStore.getState().error}`);
     }
   };
 
@@ -237,7 +243,6 @@ const AddStaffForm = ({
                 <select
                   defaultValue=""
                   {...register("supervisorId")}
-                  required
                   className="select select-bordered w-full"
                 >
                   <option disabled value="">
