@@ -15,11 +15,7 @@ const AddStaffForm = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { register, handleSubmit, reset } = useForm<StaffData>({
-    defaultValues: {
-      supervisorId: null,
-    },
-  });
+  const { register, handleSubmit, reset } = useForm<StaffData>();
   const { addStaff, loading, fetchStaff, staffs } = useStaffStore();
   const fetchDepartments = useDepartmentStore(
     (state) => state.fetchDepartments,
@@ -65,9 +61,7 @@ const AddStaffForm = ({
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
-      supervisorId: data.supervisorId
-        ? Number(data.supervisorId)
-        : data.supervisorId,
+      supervisorId: data.supervisorId ? Number(data.supervisorId) : null,
       image: imageUrl,
     };
 
