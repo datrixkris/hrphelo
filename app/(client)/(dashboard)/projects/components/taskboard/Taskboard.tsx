@@ -2,7 +2,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import KanbanBoard from "../Board";
 import { AddTaskBoard } from "../AddTaskBoard";
-import { Column } from "../../kanbanStore";
+import { Column } from "../../stores/kanbanStore";
+
+
 
 const Taskboard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -102,7 +104,7 @@ const Taskboard = () => {
       </div>
 
       {/* Modal */}
-      {isModalOpen && ( 
+      {isModalOpen && (
         <AddTaskBoard
           column={selectedColumn}
           onClose={() => setModalOpen(false)}

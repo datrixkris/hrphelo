@@ -5,7 +5,7 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { useEffect, useState } from "react";
 import ProjectDetails from "../../components/project-details/ProjectDetails";
 import Taskboard from "../../components/taskboard/Taskboard";
-import { useKanbanStore } from "../../kanbanStore";
+import { useKanbanStore } from "../../stores/kanbanStore";
 import { useParams } from "next/navigation";
 
 const Project = () => {
