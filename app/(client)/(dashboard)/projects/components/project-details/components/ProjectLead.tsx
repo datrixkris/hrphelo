@@ -1,7 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
+import React, { useContext } from "react";
+import { ProjectDetailsContext } from "../ProjectDetailsContext";
 
 const ProjectLead = () => {
+  const project = useContext(ProjectDetailsContext);
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       <div className="flex justify-between">
@@ -20,13 +22,16 @@ const ProjectLead = () => {
           {/* image */}
           <div className="avatar shrink-0">
             <div className="w-12 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+              <img
+                src={project?.project_lead?.image}
+                alt={project?.project_lead?.name}
+              />
             </div>
           </div>
 
           {/* details */}
           <div className="">
-            <p className="font-semibold">John Doe</p>
+            <p className="font-semibold">{project?.project_lead?.name}</p>
             <p className="text-xs">Team Leader</p>
           </div>
         </div>

@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ProjectDetailsContext } from "../ProjectDetailsContext";
+import dayjs from "dayjs";
+import ProgressBar, { progressColor } from "../../ProgressBar";
 
 const ProjectMeta = () => {
+  const project = useContext(ProjectDetailsContext);
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       <h2 className="mb-2 text-lg font-semibold capitalize text-base-content transition-colors">
@@ -17,20 +21,28 @@ const ProjectMeta = () => {
         {/* date created */}
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Date created:</div>
-          <div className="">21st March, 2024</div>
+          <div className="">
+            {dayjs(project?.createdAt).format("MMM D, YYYY")}
+          </div>
         </div>
 
         {/* deadline  */}
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Deadline:</div>
-          <div className="">2nd May, 2024</div>
+          <div className="">
+            {project?.end_date
+              ? dayjs(project?.end_date).format("MMM D, YYYY")
+              : "Open"}
+          </div>
         </div>
 
         {/* priority  */}
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Priority:</div>
           <div className="">
-            <span className="rounded-md bg-error px-2 py-1 text-xs">high</span>
+            <span className="rounded-md bg-error px-2 py-1 text-xs">
+              {project?.priority}
+            </span>
           </div>
         </div>
 
@@ -43,7 +55,7 @@ const ProjectMeta = () => {
         {/* status */}
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Status:</div>
-          <div className="">On going</div>
+          <div className="">{project?.status}</div>
         </div>
       </div>
 
@@ -51,13 +63,11 @@ const ProjectMeta = () => {
       <div className="">
         <div className="mb-3 flex justify-between">
           <p className="font-semibold text-base-content">Progress:</p>
-          <p className="text-success">40%</p>
+          <p className={`${"text-" + progressColor(project?.progress)}`}>
+            {project?.progress}%
+          </p>
         </div>
-        <progress
-          className="progress progress-success w-full"
-          value="40"
-          max="100"
-        ></progress>
+        <ProgressBar progress={project?.progress} />
       </div>
     </div>
   );

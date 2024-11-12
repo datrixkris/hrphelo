@@ -8,7 +8,7 @@ const ProjectsPage = () => {
   return (
     <div>
       {/* header plus breadcrumbs */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-5">
         <PageTitleWithCrumbs
           title="projects"
           crumbs={[

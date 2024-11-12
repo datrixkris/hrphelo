@@ -15,6 +15,7 @@ export interface ProjectData {
   deletedAt?: string | null; // Nullable if the value can be null
   boards?: Board[]; // Array of boards associated with the project
   projectLead?: ProjectLead; // Project lead information
+  project_lead?: ProjectLead; // Project lead information
   members?: Member[]; // Array of members associated with the project
   progress?: number; // Percentage or value representing progress
   memberIds: (number | undefined)[];

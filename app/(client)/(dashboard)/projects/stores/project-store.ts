@@ -11,7 +11,7 @@ interface ProjectStore {
   error?: string | null;
   fetchProjects: () => Promise<void>;
   createProject: (data: ProjectData) => Promise<void>;
-  //   fetchProjectById: (id: number) => Promise<StaffDetail>;
+  fetchProjectById: (slug: string) => Promise<ProjectData[]>;
   //   updateStaffDetails: (data: StaffDetail, id: number) => Promise<void>;
 }
 
@@ -57,6 +57,24 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         updatingData: false,
       }));
 
+      console.error(err);
+    }
+  },
+
+  fetchProjectById: async (slug) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.get(`/v1/projects/${slug}/tasks`)).data;
+      set(() => ({ loading: false }));
+      return response;
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
       console.error(err);
     }
   },

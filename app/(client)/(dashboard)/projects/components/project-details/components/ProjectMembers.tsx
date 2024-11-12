@@ -1,7 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
+import React, { useContext } from "react";
+import { ProjectDetailsContext } from "../ProjectDetailsContext";
 
 const ProjectMembers = () => {
+  const project = useContext(ProjectDetailsContext);
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       <div className="flex justify-between">
@@ -16,35 +18,26 @@ const ProjectMembers = () => {
       {/* members */}
       <div className="space-y-2">
         {/* member */}
-        <div className="flex items-center gap-2">
-          {/* image */}
-          <div className="avatar shrink-0">
-            <div className="w-12 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-          </div>
+        {project?.members?.map((member) => {
+          return (
+            <div key={member.id}>
+              <div className="flex items-center gap-2">
+                {/* image */}
+                <div className="avatar shrink-0">
+                  <div className="w-12 rounded-full">
+                    <img src={member.staff.image} alt={member.staff.name} />
+                  </div>
+                </div>
 
-          {/* details */}
-          <div className="">
-            <p className="font-semibold">John Doe</p>
-            <p className="text-xs">Web developer</p>
-          </div>
-        </div>
-        {/* member */}
-        <div className="flex items-center gap-2">
-          {/* image */}
-          <div className="avatar shrink-0">
-            <div className="w-12 rounded-full">
-              <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                {/* details */}
+                <div className="">
+                  <p className="font-semibold">{member.staff.name}</p>
+                  <p className="text-xs">Web developer</p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* details */}
-          <div className="">
-            <p className="font-semibold">John Doe</p>
-            <p className="text-xs">Web developer</p>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );

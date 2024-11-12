@@ -9,9 +9,9 @@ import ProjectLead from "./components/ProjectLead";
 const ProjectDetails = () => {
   return (
     <div>
-      <div className="flex gap-5">
+      <div className="flex flex-col-reverse gap-5 md:flex-row">
         {/* main details */}
-        <div className="w-[70%] space-y-5">
+        <div className="w-full space-y-5 md:w-[60%] xl:w-[70%]">
           {/* Project description */}
           <ProjectDescription />
 
@@ -23,7 +23,7 @@ const ProjectDetails = () => {
         </div>
 
         {/* side */}
-        <div className="w-[30%] space-y-5">
+        <div className="w-full space-y-5 md:w-[40%] xl:w-[30%]">
           {/* project details */}
           <ProjectMeta />
 
