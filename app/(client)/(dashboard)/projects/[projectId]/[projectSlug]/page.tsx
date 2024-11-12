@@ -5,7 +5,7 @@ import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { useEffect, useLayoutEffect, useState } from "react";
 import ProjectDetails from "../../components/project-details/ProjectDetails";
 import Taskboard from "../../components/taskboard/Taskboard";
-import { useKanbanStore } from "../../kanbanStore";
+import { useKanbanStore } from "../../stores/kanbanStore";
 import { useParams } from "next/navigation";
 import { ProjectData } from "../../types/project-types";
 import { useProjectStore } from "../../stores/project-store";

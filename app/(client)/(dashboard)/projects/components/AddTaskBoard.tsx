@@ -1,11 +1,11 @@
 import { cn } from "@/utils/cn";
 import React, { useEffect, useState } from "react";
-import { useKanbanStore } from "../kanbanStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { AddTaskBoardProps, Color, colorKeys, AddColumn } from "../types";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useKanbanStore } from "../stores/kanbanStore";
 
 const boardSchema = z.object({
   name: z
@@ -83,10 +83,7 @@ export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({
 
   return (
     <div className="h-full w-full">
-      <div
-        className="fixed inset-0 right-0 bg-black opacity-50"
-        onClick={onClose}
-      ></div>
+      <div className="fixed inset-0 right-0 opacity-50" onClick={onClose}></div>
       <dialog open className="modal z-10" aria-labelledby="modal-title">
         <div className="modal-box">
           <div className="mb-4 flex items-center justify-between">

@@ -2,12 +2,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useKanbanStore } from "../kanbanStore";
+import { useKanbanStore } from "../stores/kanbanStore";
 
 // Zod schema for form validation
 const taskSchema = z.object({
-  name: z.string().min(1, "Task Name is required"),
-  description: z.string(),
+  description: z.string().min(1, "Description is required"),
 });
 
 // Infer the TypeScript types from the Zod schema
@@ -31,9 +30,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
   const { addTask } = useKanbanStore();
 
   const onSubmit: SubmitHandler<TaskFormValues> = (data) => {
-    // Create a new task object based on form data
     const newTask = {
-      name: data.name,
       description: data.description,
       boardId: columnId,
     };
@@ -43,63 +40,45 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
   };
 
   return (
-    <div className="h-full w-full">
+    <div className="fixed inset-0 flex items-center justify-center z-10">
+      {/* Overlay */}
       <div
-        className="fixed right-0 bg-black opacity-50"
+        className="fixed inset-0 bg-black opacity-50"
         onClick={onClose}
       ></div>
-      <dialog
-        open
-        className="modal z-10"
-        id="my_modal_2"
-        aria-labelledby="modal-title"
-      >
-        <div className="modal-box">
-          <div className="mb-4 flex items-center justify-between">
-            <h4 id="modal-title" className="modal-title">
-              Add Task
-            </h4>
-            <button type="button" className="btn-close" onClick={onClose}>
-              <Icon icon="material-symbols:close" className="text-lg" />
+
+      {/* Modal */}
+      <div className="modal-box relative z-20 p-6 bg-white rounded-md shadow-lg max-w-md w-full">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-lg font-semibold">Add Task</h4>
+          <button
+            type="button"
+            className="text-lg"
+            aria-label="Close modal"
+            onClick={onClose}
+          >
+            <Icon icon="material-symbols:close" />
+          </button>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label className="form-control w-full">
+            <span className="label">Task Description</span>
+            <textarea
+              {...register("description")}
+              rows={4}
+              className="textarea textarea-bordered mt-1 w-full"
+            />
+            {errors.description && (
+              <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+            )}
+          </label>
+          <div className="submit-section mt-4 text-center">
+            <button type="submit" className="btn btn-primary">
+              Submit
             </button>
           </div>
-          <div className="modal-body">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text">Task Name</span>
-                </div>
-                <input
-                  type="text"
-                  placeholder="Task Name"
-                  className="input input-bordered w-full"
-                  {...register("name")}
-                />
-                {errors.name && (
-                  <div className="label-text-alt text-red-500">
-                    {errors.name.message}
-                  </div>
-                )}
-              </label>
-
-              <label className="form-control w-full">
-                <div className="label">Task Description</div>
-                <textarea
-                  {...register("description")}
-                  rows={4}
-                  className="textarea textarea-bordered mt-1 w-full"
-                />
-              </label>
-
-              <div className="submit-section mt-4 text-center">
-                <button type="submit" className="btn btn-primary">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </dialog>
+        </form>
+      </div>
     </div>
   );
 };
