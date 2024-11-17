@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { ProjectDetailsContext } from "../ProjectDetailsContext";
+import React from "react";
+import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import dayjs from "dayjs";
 import ProgressBar, { progressColor } from "../../ProgressBar";
 
 const ProjectMeta = () => {
-  const project = useContext(ProjectDetailsContext);
+  const { projectDetails: project } = useProjectDetailsContext()!;
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       <h2 className="mb-2 text-lg font-semibold capitalize text-base-content transition-colors">

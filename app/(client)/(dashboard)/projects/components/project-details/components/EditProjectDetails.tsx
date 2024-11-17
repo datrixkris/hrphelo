@@ -1,58 +1,57 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { ProjectData } from "../types/project-types";
-import { useProjectStore } from "../stores/project-store";
+import { ProjectData } from "../../../types/project-types";
+import { useProjectStore } from "../../../stores/project-store";
 import { toast } from "react-toastify";
-import AddMembersField from "./AddMembersField";
+import { useProjectDetailsContext } from "../ProjectDetailsContext";
 
-const CreateProjectForm = ({
+const EditProjectDetails = ({
   isOpen,
   onClose,
 }: {
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const { projectDetails: project, refreshData } = useProjectDetailsContext()!;
   const { register, handleSubmit, reset } = useForm<ProjectData>();
-  const { createProject, updatingData, fetchProjects } = useProjectStore();
-  const [memberIds, setMemberIds] = useState<(number | undefined)[]>([]);
-  const [leaderId, setLeaderId] = useState<number | undefined>();
-  const [leaderError, setLeaderError] = useState("");
-  const [memberError, setMemberError] = useState("");
+  const { updatingData, fetchProjectById } = useProjectStore();
+  const updateProjectDetails = useProjectStore(
+    (state) => state.updateProjectDetails,
+  );
+  //   const error = useProjectStore.getState().error;
+
+  useEffect(() => {
+    reset({
+      name: project?.name,
+      description: project?.description,
+    });
+  }, [project, reset]);
 
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {
-    if (leaderId == undefined) {
-      setLeaderError("Select project lead");
-      return;
-    } else {
-      setLeaderError("");
-    }
-    if (memberIds == undefined || memberIds.length == 0) {
-      setMemberError("Select at least one team member");
-      return;
-    } else {
-      setMemberError("");
-    }
-
     const projectData = {
       name: data.name,
       description: data.description,
-      leaderId,
-      memberIds,
     };
 
     console.log(projectData);
 
-    await createProject(projectData);
+    if (project?.id) {
+      await updateProjectDetails(projectData, project.id);
 
-    if (!useProjectStore.getState().error) {
-      toast.success("Project added successfully!");
-      fetchProjects();
-      reset();
-      onClose();
+      if (!useProjectStore.getState().error) {
+        toast.success("Project added successfully!");
+        refreshData();
+        reset();
+        onClose();
+      } else {
+        toast.error(
+          `Failed to add project: ${useProjectStore.getState().error}`,
+        );
+      }
     } else {
-      toast.error(`Failed to add project: ${useProjectStore.getState().error}`);
+      console.log("no project slug that's why");
     }
   };
 
@@ -61,9 +60,7 @@ const CreateProjectForm = ({
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="w-[90vw] sm:w-[600px] lg:w-[650px]">
           {/* title */}
-          <h2 className="mb-5 text-center text-2xl font-bold">
-            Create project
-          </h2>
+          <h2 className="mb-5 text-center text-2xl font-bold">Edit project</h2>
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-5 sm:grid-cols-2">
@@ -119,28 +116,6 @@ const CreateProjectForm = ({
                 </select>
               </label>
             </div>
-            {/* Project Leader */}
-            <label className="form-control w-full">
-              <div className="label">
-                <span className="label-text">Select project lead</span>
-              </div>
-              <AddMembersField getIds={(ids) => setLeaderId(ids[0])} />
-              {leaderError && (
-                <span className="label-text text-error">{leaderError}</span>
-              )}
-            </label>
-
-            {/* Team Members */}
-            <label className="form-control w-full">
-              <div className="label">
-                <span className="label-text">Select team members</span>
-              </div>
-              <AddMembersField
-                getIds={(ids) => setMemberIds(ids)}
-                multiple={true}
-              />
-              <span className="label-text text-error">{memberError}</span>
-            </label>
 
             {/* Description */}
             <div className="mt-5">
@@ -156,17 +131,6 @@ const CreateProjectForm = ({
               ></textarea>
             </div>
 
-            {/* Upload files */}
-            <label className="form-control w-full">
-              <div className="label">
-                <span className="label-text">Upload files</span>
-              </div>
-              <input
-                type="file"
-                className="file-input file-input-bordered w-full"
-              />
-            </label>
-
             {/* submit */}
             <div className="!mt-10">
               <Button className="mx-auto w-1/2" disabled={updatingData}>
@@ -180,4 +144,4 @@ const CreateProjectForm = ({
   );
 };
 
-export default CreateProjectForm;
+export default EditProjectDetails;

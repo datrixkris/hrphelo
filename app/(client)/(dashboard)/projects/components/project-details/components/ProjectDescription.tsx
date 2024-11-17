@@ -1,11 +1,9 @@
-// import DropdownComponent from "@/app/components/DropdownComponent";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
-import { useContext } from "react";
-import { ProjectDetailsContext } from "../ProjectDetailsContext";
+import { useProjectDetailsContext } from "../ProjectDetailsContext";
+import EditProjectButton from "./EditProjectButton";
 
 const ProjectDescription = () => {
-  const project = useContext(ProjectDetailsContext);
+  const { projectDetails: project } = useProjectDetailsContext()!;
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       {/* title and stats */}
@@ -15,7 +13,7 @@ const ProjectDescription = () => {
             {project?.name}
           </h2>
 
-          <Icon icon="heroicons:pencil" className="text-2xl"></Icon>
+          <EditProjectButton />
         </div>
 
         <p className="text-xs">

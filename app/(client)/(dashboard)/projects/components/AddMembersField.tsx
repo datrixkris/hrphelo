@@ -11,9 +11,11 @@ interface Data {
 const AddMembersField = ({
   getIds,
   multiple = false,
+  showAvatars = true,
 }: {
   getIds: (ids: (number | undefined)[]) => void;
   multiple?: boolean;
+  showAvatars?: boolean;
 }) => {
   const loading = useStaffStore((state) => state.loading);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
@@ -47,14 +49,9 @@ const AddMembersField = ({
 
   //   this effect sends array of id's to the parent component
   useEffect(() => {
-    getIds(
-      data.map((item) => {
-        console.log([item.selected, item.id]);
-        if (item.selected) {
-          return item.id;
-        }
-      }),
-    );
+    getIds(data.filter((item) => item.selected).map((item) => item.id));
+    console.log(data);
+    // console.log(data.filter((item) => item.selected).map((item) => item.id));
   }, [data]);
 
   function changeDataState(newItem: Data) {
@@ -88,30 +85,34 @@ const AddMembersField = ({
   }
 
   return (
-    <div className="grid grid-cols-2 place-content-center gap-5">
+    <div
+      className={`grid gap-5 ${showAvatars ? "grid-cols-2 place-content-center" : ""}`}
+    >
       <SearchAndResultsInputComponent
         loading={loading}
         data={data}
         onSelected={(newItem) => changeDataState(newItem)}
       />
 
-      <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-        {staffs.map((staff) => {
-          if (
-            data.some((item) => {
-              return item.selected ? item.id === staff.id : false;
-            })
-          ) {
-            return (
-              <div key={staff.id} className="avatar">
-                <div className="w-10 rounded-full">
-                  <img src={staff.image} />
+      {showAvatars && (
+        <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+          {staffs.map((staff) => {
+            if (
+              data.some((item) => {
+                return item.selected ? item.id === staff.id : false;
+              })
+            ) {
+              return (
+                <div key={staff.id} className="avatar">
+                  <div className="w-10 rounded-full">
+                    <img src={staff.image} />
+                  </div>
                 </div>
-              </div>
-            );
-          }
-        })}
-      </div>
+              );
+            }
+          })}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,18 +1,17 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useContext } from "react";
-import { ProjectDetailsContext } from "../ProjectDetailsContext";
+import { useProjectDetailsContext } from "../ProjectDetailsContext";
+import EditLeadButton from "./EditLeadButton";
 
 const ProjectLead = () => {
-  const project = useContext(ProjectDetailsContext);
+  const { projectDetails: project } = useProjectDetailsContext()!;
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       <div className="flex justify-between">
         <h2 className="mb-2 text-lg font-semibold capitalize text-base-content transition-colors">
           Team lead
         </h2>
-        <button className="btn btn-xs">
-          <Icon icon="mage:exchange-b" /> Change
-        </button>
+        <EditLeadButton />
       </div>
 
       {/* members */}

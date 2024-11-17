@@ -12,7 +12,7 @@ interface ProjectStore {
   fetchProjects: () => Promise<void>;
   createProject: (data: ProjectData) => Promise<void>;
   fetchProjectById: (slug: string) => Promise<ProjectData[]>;
-  //   updateStaffDetails: (data: StaffDetail, id: number) => Promise<void>;
+  updateProjectDetails: (data: ProjectData, id: number) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -75,6 +75,24 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         loading: false,
       }));
       toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  updateProjectDetails: async (data, id) => {
+    set({ updatingData: true, error: null });
+
+    try {
+      const response = await api.put(`/v1/projects/${id}`, data);
+      set(() => ({ updatingData: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        updatingData: false,
+      }));
+
       console.error(err);
     }
   },
