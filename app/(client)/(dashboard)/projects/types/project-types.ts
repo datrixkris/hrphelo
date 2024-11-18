@@ -43,7 +43,7 @@ export interface ProjectLead {
 export interface Member {
   id: number;
   projectId: number;
-  staffId: number;
+  staffId: number | string;
   createdAt?: string; // ISO date string
   updatedAt?: string; // ISO date string
   deletedAt?: string | null; // Nullable if the value can be null

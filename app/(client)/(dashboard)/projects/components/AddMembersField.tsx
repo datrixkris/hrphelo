@@ -12,10 +12,12 @@ const AddMembersField = ({
   getIds,
   multiple = false,
   showAvatars = true,
+  selectedIds,
 }: {
   getIds: (ids: (number | undefined)[]) => void;
   multiple?: boolean;
   showAvatars?: boolean;
+  selectedIds?: number[];
 }) => {
   const loading = useStaffStore((state) => state.loading);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
@@ -24,26 +26,66 @@ const AddMembersField = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(selectedIds);
       if (staffs.length === 0) {
         await fetchStaff();
         setData(() =>
-          useStaffStore.getState().staffs.map((item) => ({
-            name: item.name,
-            id: item.id,
-            selected: false,
-          })),
+          useStaffStore.getState().staffs.map((item) => {
+            // first check if some id's have already been selected
+            if (selectedIds) {
+              // make all selected ids true
+              if (selectedIds.includes(item.id)) {
+                return {
+                  name: item.name,
+                  id: item.id,
+                  selected: true,
+                };
+              }
+              return {
+                name: item.name,
+                id: item.id,
+                selected: false,
+              };
+            }
+            // if there are no selected ids
+            return {
+              name: item.name,
+              id: item.id,
+              selected: false,
+            };
+          }),
         );
       } else {
         setData(() =>
-          useStaffStore.getState().staffs.map((item) => ({
-            name: item.name,
-            id: item.id,
-            selected: false,
-          })),
+          useStaffStore.getState().staffs.map((item) => {
+            // first check if some id's have already been selected
+            if (selectedIds) {
+              // make all selected ids true
+              if (selectedIds.includes(item.id)) {
+                return {
+                  name: item.name,
+                  id: item.id,
+                  selected: true,
+                };
+              }
+              return {
+                name: item.name,
+                id: item.id,
+                selected: false,
+              };
+            }
+            // if there are no selected ids
+            return {
+              name: item.name,
+              id: item.id,
+              selected: false,
+            };
+          }),
         );
       }
+      // pass all selected ids in an array to the parent component
+      getIds(data.filter((item) => item.selected).map((item) => item.id));
     };
-
     fetchData();
   }, [fetchStaff, staffs.length]);
 

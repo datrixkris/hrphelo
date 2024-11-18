@@ -35,8 +35,8 @@ const EditMembersForm = ({
       .map((item) => {
         return {
           id: item.id,
-          projectId: project?.id,
-          staffId: item.staffId,
+          projectId: project?.id ?? 0,
+          staffId: item.staffId ?? 0,
           staff: {
             id: item.id,
             name: item.name,
@@ -45,7 +45,7 @@ const EditMembersForm = ({
         };
       });
     console.log(chosen);
-    setSelectedMembers();
+    setSelectedMembers(chosen);
   }, [memberIds]);
 
   return (
@@ -60,7 +60,9 @@ const EditMembersForm = ({
               getIds={(ids) => setMemberIds(ids)}
               showAvatars={false}
               multiple={true}
+              selectedIds={project?.members?.map((item) => item.staff.id)}
             />
+            <span className="label-text text-error">{memberError}</span>
           </div>
 
           {/* members */}
@@ -88,7 +90,7 @@ const EditMembersForm = ({
                     </div>
 
                     {/* remove button */}
-                    <div className="ml-auto w-fit">
+                    {/* <div className="ml-auto w-fit">
                       <div
                         className="tooltip hover:cursor-pointer"
                         data-tip="Remove"
@@ -98,7 +100,7 @@ const EditMembersForm = ({
                           className="text-2xl"
                         />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               );
