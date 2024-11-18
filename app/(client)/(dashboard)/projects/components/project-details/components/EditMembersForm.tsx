@@ -1,12 +1,12 @@
 import Modal from "@/app/components/Modal";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddMembersField from "../../AddMembersField";
 import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import Button from "@/app/components/Button";
-import { Icon } from "@iconify/react/dist/iconify.js";
+// import { Icon } from "@iconify/react/dist/iconify.js";
 import { Member } from "../../../types/project-types";
 import { useStaffStore } from "@/app/(client)/(dashboard)/staff/staff-store";
-import { StaffData } from "@/app/(client)/(dashboard)/staff/types";
+// import { StaffData } from "@/app/(client)/(dashboard)/staff/types";
 
 const EditMembersForm = ({
   isOpen,
@@ -17,7 +17,7 @@ const EditMembersForm = ({
 }) => {
   const { projectDetails: project } = useProjectDetailsContext()!;
   const [memberIds, setMemberIds] = useState<(number | undefined)[]>([]);
-  const [memberError, setMemberError] = useState("");
+  const [memberError] = useState("");
   const [selectedMembers, setSelectedMembers] = useState<Member[]>();
   const staff = useStaffStore((state) => state.staffs);
 
@@ -26,7 +26,7 @@ const EditMembersForm = ({
   }, [project]);
 
   useEffect(() => {
-    let chosen = staff
+    const chosen = staff
       .filter((item) => {
         if (memberIds.includes(item.id)) {
           return item;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -16,7 +16,7 @@ const EditProjectDetails = ({
 }) => {
   const { projectDetails: project, refreshData } = useProjectDetailsContext()!;
   const { register, handleSubmit, reset } = useForm<ProjectData>();
-  const { updatingData, fetchProjectById } = useProjectStore();
+  const { updatingData } = useProjectStore();
   const updateProjectDetails = useProjectStore(
     (state) => state.updateProjectDetails,
   );

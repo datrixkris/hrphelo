@@ -1,5 +1,5 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useContext } from "react";
+// import { Icon } from "@iconify/react/dist/iconify.js";
+import React from "react";
 import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import EditLeadButton from "./EditLeadButton";
 
