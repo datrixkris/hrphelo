@@ -33,10 +33,19 @@ const EditMembersForm = ({
         }
       })
       .map((item) => {
-        return {};
+        return {
+          id: item.id,
+          projectId: project?.id,
+          staffId: item.staffId,
+          staff: {
+            id: item.id,
+            name: item.name,
+            image: item.image,
+          },
+        };
       });
     console.log(chosen);
-    setSelectedMembers([...project?.members!]);
+    setSelectedMembers();
   }, [memberIds]);
 
   return (

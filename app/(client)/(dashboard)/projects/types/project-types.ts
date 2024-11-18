@@ -44,9 +44,9 @@ export interface Member {
   id: number;
   projectId: number;
   staffId: number;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  deletedAt: string | null; // Nullable if the value can be null
+  createdAt?: string; // ISO date string
+  updatedAt?: string; // ISO date string
+  deletedAt?: string | null; // Nullable if the value can be null
   staff: Staff; // Information about the staff member
 }
 
