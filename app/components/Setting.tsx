@@ -19,7 +19,7 @@ const Setting = ({ handleOnClick }: SettingProps) => {
     <div>
       <div className="drawer drawer-end">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content">
+        <div className="drawer-content z-50">
           <label
             htmlFor="my-drawer-4"
             className="btn btn-primary drawer-button fixed bottom-4 right-4 rounded-full text-2xl"

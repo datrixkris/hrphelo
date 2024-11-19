@@ -32,7 +32,6 @@ const Project = () => {
       const fetchData = async () => {
         const data = (await fetchProjectById(params.projectSlug))[0];
         setProjectDetails(data);
-        console.log(data);
       };
 
       fetchData();

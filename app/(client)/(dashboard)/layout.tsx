@@ -67,7 +67,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <Topnav />
-          <div className="maximum-width py-5">
+          <div className=" py-5">
             {children}
             <Setting handleOnClick={changeTheme} />
           </div>
