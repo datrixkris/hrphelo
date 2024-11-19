@@ -1,13 +1,13 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
-import { useKanbanStore } from "../stores/kanbanStore";
-import { AddTasks } from "./AddTasks";
+import { Column, useKanbanStore } from "../stores/kanbanStore";
 import ColumnComponent from "./ColumnComponent";
 
-const KanbanBoard: React.FC = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
+export interface IKanbanBoard {
+  onEditColumn: (column: Column) => void;
+}
 
+const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
   const {
     columns,
     columnOrder,
@@ -16,13 +16,6 @@ const KanbanBoard: React.FC = () => {
     reorderTasks,
     reorderColumns,
   } = useKanbanStore();
-
-  const openModal = (id: number) => {
-    setActiveColumnId(id);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => setModalOpen(false);
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
@@ -59,24 +52,6 @@ const KanbanBoard: React.FC = () => {
     [columns, reorderTasks, reorderColumns],
   );
 
-  // Custom hook for handling outside click
-  const useOutsideClick = (callback: () => void) => {
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        const openDropdowns = document.querySelectorAll(".dropdown[open]");
-        openDropdowns.forEach((dropdown) => {
-          if (!dropdown.contains(event.target as Node)) {
-            dropdown.removeAttribute("open");
-          }
-        });
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [callback]);
-  };
-
-  useOutsideClick(closeModal);
-
   return (
     <div className="card h-full w-full bg-base-100 p-5">
       <DragDropContext onDragEnd={onDragEnd}>
@@ -87,7 +62,7 @@ const KanbanBoard: React.FC = () => {
         >
           {(provided) => (
             <div
-              className="flex h-full w-full space-x-8 overflow-x-scroll border"
+              className="flex h-full w-full space-x-4 overflow-x-scroll border"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -98,7 +73,7 @@ const KanbanBoard: React.FC = () => {
                   index={index}
                   column={columns[columnId]}
                   tasks={tasks}
-                  onEditColumn={(column) => openModal(Number(column.id))}
+                  onEditColumn={onEditColumn}
                   deleteColumn={deleteColumn}
                 />
               ))}
@@ -107,11 +82,6 @@ const KanbanBoard: React.FC = () => {
           )}
         </Droppable>
       </DragDropContext>
-
-      {/* Modal */}
-      {isModalOpen && activeColumnId && (
-        <AddTasks onClose={closeModal} columnId={activeColumnId} />
-      )}
     </div>
   );
 };
