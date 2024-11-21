@@ -8,7 +8,7 @@ const ImageUpload = ({ onImageSelect }: { onImageSelect: (file: File | null) => 
     const file = event.target.files?.[0];
     if (file) {
       setPreview(URL.createObjectURL(file));
-      onImageSelect(file); // Pass the selected file to the parent component
+      onImageSelect(file); 
     }
   };
 
