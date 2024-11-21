@@ -2,7 +2,6 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useState } from "react";
 import KanbanBoard from "../Board";
 import { AddTaskBoard } from "../AddTaskBoard";
-// import { Column } from "../../kanbanStore";
 import { Column } from "../../stores/kanbanStore";
 import ProgressBar from "../ProgressBar";
 import { ProjectData } from "../../types/project-types";
