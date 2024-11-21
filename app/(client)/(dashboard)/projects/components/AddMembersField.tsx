@@ -11,9 +11,13 @@ interface Data {
 const AddMembersField = ({
   getIds,
   multiple = false,
+  showAvatars = true,
+  selectedIds,
 }: {
   getIds: (ids: (number | undefined)[]) => void;
   multiple?: boolean;
+  showAvatars?: boolean;
+  selectedIds?: number[];
 }) => {
   const loading = useStaffStore((state) => state.loading);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
@@ -22,39 +26,74 @@ const AddMembersField = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(selectedIds);
       if (staffs.length === 0) {
         await fetchStaff();
         setData(() =>
-          useStaffStore.getState().staffs.map((item) => ({
-            name: item.name,
-            id: item.id,
-            selected: false,
-          })),
+          useStaffStore.getState().staffs.map((item) => {
+            // first check if some id's have already been selected
+            if (selectedIds) {
+              // make all selected ids true
+              if (selectedIds.includes(item.id)) {
+                return {
+                  name: item.name,
+                  id: item.id,
+                  selected: true,
+                };
+              }
+              return {
+                name: item.name,
+                id: item.id,
+                selected: false,
+              };
+            }
+            // if there are no selected ids
+            return {
+              name: item.name,
+              id: item.id,
+              selected: false,
+            };
+          }),
         );
       } else {
         setData(() =>
-          useStaffStore.getState().staffs.map((item) => ({
-            name: item.name,
-            id: item.id,
-            selected: false,
-          })),
+          useStaffStore.getState().staffs.map((item) => {
+            // first check if some id's have already been selected
+            if (selectedIds) {
+              // make all selected ids true
+              if (selectedIds.includes(item.id)) {
+                return {
+                  name: item.name,
+                  id: item.id,
+                  selected: true,
+                };
+              }
+              return {
+                name: item.name,
+                id: item.id,
+                selected: false,
+              };
+            }
+            // if there are no selected ids
+            return {
+              name: item.name,
+              id: item.id,
+              selected: false,
+            };
+          }),
         );
       }
+      // pass all selected ids in an array to the parent component
+      getIds(data.filter((item) => item.selected).map((item) => item.id));
     };
-
     fetchData();
   }, [fetchStaff, staffs.length]);
 
   //   this effect sends array of id's to the parent component
   useEffect(() => {
-    getIds(
-      data.map((item) => {
-        console.log([item.selected, item.id]);
-        if (item.selected) {
-          return item.id;
-        }
-      }),
-    );
+    getIds(data.filter((item) => item.selected).map((item) => item.id));
+    console.log(data);
+    // console.log(data.filter((item) => item.selected).map((item) => item.id));
   }, [data]);
 
   function changeDataState(newItem: Data) {
@@ -88,30 +127,34 @@ const AddMembersField = ({
   }
 
   return (
-    <div className="grid grid-cols-2 place-content-center gap-5">
+    <div
+      className={`grid gap-5 ${showAvatars ? "grid-cols-2 place-content-center" : ""}`}
+    >
       <SearchAndResultsInputComponent
         loading={loading}
         data={data}
         onSelected={(newItem) => changeDataState(newItem)}
       />
 
-      <div className="avatar-group -space-x-6 rtl:space-x-reverse">
-        {staffs.map((staff) => {
-          if (
-            data.some((item) => {
-              return item.selected ? item.id === staff.id : false;
-            })
-          ) {
-            return (
-              <div key={staff.id} className="avatar">
-                <div className="w-10 rounded-full">
-                  <img src={staff.image} />
+      {showAvatars && (
+        <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+          {staffs.map((staff) => {
+            if (
+              data.some((item) => {
+                return item.selected ? item.id === staff.id : false;
+              })
+            ) {
+              return (
+                <div key={staff.id} className="avatar">
+                  <div className="w-10 rounded-full">
+                    <img src={staff.image} />
+                  </div>
                 </div>
-              </div>
-            );
-          }
-        })}
-      </div>
+              );
+            }
+          })}
+        </div>
+      )}
     </div>
   );
 };
