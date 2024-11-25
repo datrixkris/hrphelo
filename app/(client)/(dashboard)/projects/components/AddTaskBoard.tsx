@@ -84,7 +84,7 @@ export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({
   return (
     <div className="h-full w-full">
       <div className="fixed inset-0 right-0 opacity-50" onClick={onClose}></div>
-      <dialog open className="modal z-10" aria-labelledby="modal-title">
+      <dialog open className="modal z-50" aria-labelledby="modal-title">
         <div className="modal-box">
           <div className="mb-4 flex items-center justify-between">
             <h4 id="modal-title" className="modal-title">
