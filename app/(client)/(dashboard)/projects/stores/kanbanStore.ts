@@ -24,6 +24,9 @@ interface ApiErrorResponse {
     code?: number;
 }
 
+type ColumnOrder = { slug: string }[];
+
+
 interface KanbanState {
     tasks: { [key: string]: Task };
     columns: { [key: string]: Column };
@@ -39,7 +42,7 @@ interface KanbanState {
     editTask: (projectId: number, taskId: string, updatedTask: Partial<Task>) => Promise<void>;
     deleteTask: (projectId: number, taskId: string) => Promise<void>;
     deleteColumn: (columnId: string) => Promise<void>;
-    reorderColumns: (startIndex: number, endIndex: number) => void;
+    reorderColumns: (startIndex: number, newColumnOrder: ColumnOrder) => void;
 
     reorderTasks: (
         startColumnId: string,
@@ -65,11 +68,11 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
         const columnsById: { [key: string]: Column } = {};
         const tasksById: { [key: string]: Task } = {};
         const columnOrder = Object.keys(data); // Retrieve the keys as column order
-    
+
         columnOrder.forEach((columnKey) => {
             const columnData = data[columnKey];
             const taskIds = Object.keys(columnData.tasks);
-    
+
             // Map column data
             columnsById[columnKey] = {
                 id: columnData.id.toString(),
@@ -78,7 +81,7 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                 description: columnData.description,
                 taskIds, // List of task IDs for ordering
             };
-    
+
             // Map each task in the column
             Object.entries(columnData.tasks).forEach(([taskKey, taskData]) => {
                 const task = taskData as ApiTask;
@@ -90,15 +93,15 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                 };
             });
         });
-    
+
         set({
             columns: columnsById,
-            columnOrder, 
+            columnOrder,
             tasks: tasksById,
             loading: false
         });
     };
-    
+
 
     const fetchColumn = async (projectId: number) => {
         setLoading(true);
@@ -186,13 +189,16 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
             );
         },
 
-        reorderColumns: (startIndex, endIndex) =>
-            set((state) => {
-                const newOrder = Array.from(state.columnOrder);
-                const [movedColumnId] = newOrder.splice(startIndex, 1);
-                newOrder.splice(endIndex, 0, movedColumnId);
-                return { columnOrder: newOrder };
-            }),
+        reorderColumns: async (projectId, newColumnOrder:ColumnOrder) => {
+            console.log("oder:",newColumnOrder);
+            
+            await performApiUpdate(
+                () => api.patch(`/v1/projects/${projectId}/boards`, newColumnOrder),
+                "Column updated successfully!"
+            );
+        },
+
+
 
         reorderTasks: (startColumnId, finishColumnId, taskId, sourceIndex, destinationIndex) => {
             set((state) => {
@@ -213,7 +219,7 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
                             },
                         },
                     };
-                } 
+                }
                 // Reorder across different columns
                 else {
                     const finishColumn = state.columns[finishColumnId];

@@ -2,7 +2,7 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Column, Task } from "../stores/kanbanStore";
 import TaskComponent from "./TaskComponent";
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { AddTasks } from "./AddTasks";
 
 type ColumnComponentProps = {
@@ -22,7 +22,6 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
   deleteColumn,
 }) => {
   const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -30,19 +29,9 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
   const openModal = (id: number) => setActiveColumnId(id);
   const closeModal = () => setActiveColumnId(null);
 
-  // Handle Outside Click
-  const useOutsideClick = (ref: React.RefObject<HTMLElement>, callback: () => void) => {
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (ref.current && !ref.current.contains(event.target as Node)) {
-          callback();
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [ref, callback]);
-  };
-  useOutsideClick(modalRef, closeModal);
+
+  
+
 
   return (
     <Draggable draggableId={String(column.id)} index={index}>
@@ -51,39 +40,39 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="w-60 shrink-0 bg-blue-100 px-2"
+          className="max-h-[35rem] w-60 shrink-0 overflow-y-scroll bg-base-100 "
         >
-          <div className="mb-2 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-white">{column.name}</h2>
-            <details
-              className="dropdown"
-              open={isDropdownOpen}
-              onClick={() => setDropdownOpen((prev) => !prev)}
-            >
-              <summary
-                className="btn btn-ghost text-white"
-                aria-expanded={isDropdownOpen}
+          <div className="group sticky top-0 z-20 mb-2 flex items-center shadow-[rgba(0,0,15,0.5)_0px_0px_10px_0] justify-between bg-base-100 py-3  px-2">
+            <h2 className="font-semibold text-primary">{column.name}</h2>
+            <div className="dropdown hidden group-hover:inline">
+              <div
+                className=" px-2 py-1 text-primary"
+                tabIndex={0}
+                role="button"
               >
-                <Icon icon="charm:menu-kebab" />
-              </summary>
-              {isDropdownOpen && (
-                <ul className="menu dropdown-content z-[1] w-32 rounded-box bg-base-100 p-2 shadow">
-                  <li>
-                    <button onClick={() => onEditColumn(column)}>Edit</button>
-                  </li>
-                  <li>
-                    <button onClick={() => deleteColumn(column.id)}>Delete</button>
-                  </li>
-                </ul>
-              )}
-            </details>
+                <Icon icon="octicon:kebab-horizontal-24" />{" "}
+              </div>
+              <ul
+                tabIndex={0}
+                className="menu dropdown-content z-10 w-32 rounded-box bg-base-100 p-2 shadow"
+              >
+                <li>
+                  <button onClick={() => onEditColumn(column)}>Edit</button>
+                </li>
+                <li>
+                  <button onClick={() => deleteColumn(column.id)}>
+                    Delete
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
           <Droppable droppableId={String(column.id)} type="task">
             {(provided) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="min-h-[100px]"
+                className="min-h-[100px] px-2"
               >
                 {column.taskIds.map((taskId, index) => (
                   <TaskComponent
@@ -99,8 +88,9 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
           </Droppable>
           <button
             onClick={() => openModal(Number(column.id))}
-            className="btn btn-primary btn-sm mt-2 w-full"
+            className="btn btn-ghost btn-sm mt-2 w-full"
           >
+            <Icon icon="heroicons:plus" />
             Add Task
           </button>
           {/* Modal */}

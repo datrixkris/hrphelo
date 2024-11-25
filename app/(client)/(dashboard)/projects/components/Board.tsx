@@ -1,59 +1,55 @@
-import { useCallback } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Column, useKanbanStore } from "../stores/kanbanStore";
 import ColumnComponent from "./ColumnComponent";
+import { useParams } from "next/navigation";
 
 export interface IKanbanBoard {
   onEditColumn: (column: Column) => void;
 }
 
 const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
+  const params = useParams<{ projectId: string; projectSlug: string }>();
+
+  let projectId = Number(params.projectId);
+
   const {
     columns,
     columnOrder,
     tasks,
     deleteColumn,
-    reorderTasks,
-    reorderColumns,
+    reorderColumns, // Updates columnOrder in the store
+    reorderTasks, // Updates task order in a column
   } = useKanbanStore();
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      const { destination, source, draggableId, type } = result;
-      if (!destination) return;
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination, type } = result;
 
-      if (type === "column") {
-        reorderColumns(source.index, destination.index);
-      } else {
-        const startColumn = columns[source.droppableId];
-        const finishColumn = columns[destination.droppableId];
+    // If dropped outside a valid destination, do nothing
+    if (!destination) return;
 
-        if (!startColumn || !finishColumn) return;
+    // Handle column reordering
+    if (type === "column") {
+      const newColumnOrder = Array.from(columnOrder);
+      const [movedColumnId] = newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, movedColumnId);
 
-        if (startColumn === finishColumn) {
-          reorderTasks(
-            startColumn.id,
-            undefined,
-            undefined,
-            source.index,
-            destination.index,
-          );
-        } else {
-          reorderTasks(
-            startColumn.id,
-            finishColumn.id,
-            draggableId,
-            source.index,
-            destination.index,
-          );
-        }
-      }
-    },
-    [columns, reorderTasks, reorderColumns],
-  );
+      // Update column order in the store
+
+      // Extract slugs (column IDs) and log them
+      const formattedSlugs = newColumnOrder.map((slug) => ({ slug }));
+      reorderColumns(projectId, formattedSlugs);
+
+      console.log("Formatted Column Slugs:", formattedSlugs);
+    }
+
+    // Handle task reordering within a column or across columns
+    // if (type === "task") {
+    //   reorderTasks(result);
+    // }
+  };
 
   return (
-    <div className="card h-full w-full bg-base-100 p-5">
+    <div className="h-full w-full">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -62,7 +58,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
         >
           {(provided) => (
             <div
-              className="flex h-full w-full space-x-4 overflow-x-scroll border"
+              className="flex h-full w-full space-x-4 overflow-x-scroll"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
