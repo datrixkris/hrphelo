@@ -6,7 +6,6 @@ import { Column } from "../../stores/kanbanStore";
 import ProgressBar from "../ProgressBar";
 import { ProjectData } from "../../types/project-types";
 
-
 interface TaskboardProps {
   project: ProjectData | null;
 }
@@ -15,7 +14,7 @@ const Taskboard = ({ project }: TaskboardProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<Column | undefined>();
 
-  const handleEditColumn = (column: Column) => {    
+  const handleEditColumn = (column: Column) => {
     setSelectedColumn(column);
     setModalOpen(true);
   };

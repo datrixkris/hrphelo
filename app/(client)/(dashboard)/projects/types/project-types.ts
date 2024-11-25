@@ -9,7 +9,7 @@ export interface ProjectData {
   end_date?: string | null; // Nullable if the value can be null
   status?: "not_started" | "in_progress" | "completed"; // You can define other statuses if necessary
   priority?: string | null; // Nullable if the value can be null
-  leaderId: number;
+  leaderId?: number;
   createdAt?: string; // ISO date string
   updatedAt?: string; // ISO date string
   deletedAt?: string | null; // Nullable if the value can be null
@@ -18,7 +18,7 @@ export interface ProjectData {
   project_lead?: ProjectLead; // Project lead information
   members?: Member[]; // Array of members associated with the project
   progress?: number; // Percentage or value representing progress
-  memberIds: (number | undefined)[];
+  memberIds?: (number | undefined)[];
 }
 
 export interface Board {
@@ -43,10 +43,10 @@ export interface ProjectLead {
 export interface Member {
   id: number;
   projectId: number;
-  staffId: number;
-  createdAt: string; // ISO date string
-  updatedAt: string; // ISO date string
-  deletedAt: string | null; // Nullable if the value can be null
+  staffId: number | string;
+  createdAt?: string; // ISO date string
+  updatedAt?: string; // ISO date string
+  deletedAt?: string | null; // Nullable if the value can be null
   staff: Staff; // Information about the staff member
 }
 

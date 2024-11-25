@@ -16,7 +16,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [collapse, setCollapse] = useState(false);
   const { changeTheme } = useContext(ThemeContext);
 
-
   useLayoutEffect(() => {
     const fetchUser = async () => {
       await useAuthStore.getState().fetchUserData();
@@ -67,7 +66,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             )}
           </div>
           <Topnav />
-          <div className=" py-5">
+          <div className="maximum-width py-5">
             {children}
             <Setting handleOnClick={changeTheme} />
           </div>

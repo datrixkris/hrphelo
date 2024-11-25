@@ -29,14 +29,15 @@ const Project = () => {
 
   useLayoutEffect(() => {
     if (params.projectSlug) {
-      const fetchData = async () => {
-        const data = (await fetchProjectById(params.projectSlug))[0];
-        setProjectDetails(data);
-      };
-
-      fetchData();
+      fetchProjectData();
     }
   }, [params.projectSlug, fetchProjectById]);
+
+  const fetchProjectData = async () => {
+    const data = (await fetchProjectById(params.projectSlug))[0];
+    setProjectDetails(data);
+    console.log(data);
+  };
 
   return (
     <>
@@ -66,7 +67,9 @@ const Project = () => {
             {toggleTaskboard ? (
               <Taskboard project={projectDetails} />
             ) : (
-              <ProjectDetailsContext.Provider value={projectDetails}>
+              <ProjectDetailsContext.Provider
+                value={{ projectDetails, refreshData: fetchProjectData }}
+              >
                 <ProjectDetails />
               </ProjectDetailsContext.Provider>
             )}

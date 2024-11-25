@@ -1,123 +1,19 @@
-"use client";
-import Button from "@/app/components/Button";
-import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "@/app/components/Modal";
-import { toast } from "react-toastify";
-import ImageUpload from "./ImageUpload";
-import { StaffDetail } from "../types";
-import { useDepartmentStore } from "../../departments/department-store";
-import { useParams } from "next/navigation";
-import { useStaffStore } from "../staff-store";
+import React from "react";
 
-interface EditStaffProps {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   staffDetails: StaffDetail | null;
   refreshData: () => Promise<void>;
-}
+};
 
-const EditStaffForm = ({
-  isOpen,
-  onClose,
-  staffDetails,
-  refreshData,
-}: EditStaffProps) => {
-  const params = useParams();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isDirty },
-  } = useForm<StaffDetail>();
-  const departments = useDepartmentStore((state) => state.departments);
-  const { updatingData, staffs, fetchStaff, error, updateStaffDetails } =
-    useStaffStore();
-  const fetchDepartments = useDepartmentStore(
-    (state) => state.fetchDepartments,
-  );
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
-
-  useEffect(() => {
-    const fetchDepartmentsData = async () => {
-      // check if there are no data before you hit the api
-      if (!(departments.length > 0)) {
-        await fetchDepartments();
-        await fetchStaff();
-      }
-    };
-
-    fetchDepartmentsData();
-
-    if (staffDetails) {
-      reset({
-        name: staffDetails.name,
-        staffId: staffDetails.staffId,
-        gender: staffDetails.gender,
-        image: staffDetails.image,
-        date_of_birth: staffDetails.date_of_birth?.slice(0, 10),
-        role: staffDetails.role,
-        email: staffDetails.email,
-        contact: staffDetails.contact,
-        departmentId: staffDetails.departmentId,
-        hiring_date: staffDetails.hiring_date?.slice(0, 10),
-        supervisorId: staffDetails.supervisorId,
-      });
-    }
-  }, [staffDetails, reset]);
-
-  const uploadImageToCloudinary = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "hrphelo");
-
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
-
-    const data = await response.json();
-    return data.secure_url;
-  };
-
-  const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
-    let imageUrl = staffDetails?.image || "";
-    if (selectedImage) {
-      imageUrl = await uploadImageToCloudinary(selectedImage);
-    }
-
-    const staffData = {
-      ...data,
-      departmentId: Number(data.departmentId),
-      supervisorId: Number(data.supervisorId),
-      image: imageUrl,
-    };
-    await updateStaffDetails(staffData, Number(params.staffId));
-    if (!error) {
-      console.log(error, updatingData);
-      // onClose();
-      toast.success("Staff data updated");
-      reset();
-      onClose();
-      await refreshData();
-    } else {
-      toast.error(error);
-    }
-  };
-
+const EditPersonalInformation = ({ isOpen, onClose }: Props) => {
   return (
     <div className="">
       <Modal isOpen={isOpen} onClose={onClose}>
         <div className="w-[90vw] sm:w-[600px] lg:w-[650px]">
-          <h2 className="mb-5 text-center text-2xl font-bold">Staff Profile</h2>
-
-          <div className="mb-4 flex items-center justify-center">
-            <ImageUpload onImageSelect={(file) => setSelectedImage(file)} />
-          </div>
+          <h2 className="mb-5 text-center text-2xl font-bold">Add Staff</h2>
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid gap-5 sm:grid-cols-2">
@@ -166,7 +62,6 @@ const EditStaffForm = ({
                   <option value="female">Female</option>
                 </select>
               </label>
-
               {/* Date of birth */}
               <label className="form-control w-full">
                 <div className="label">
@@ -203,6 +98,7 @@ const EditStaffForm = ({
                 <select
                   defaultValue=""
                   {...register("departmentId")}
+                  required
                   className="select select-bordered w-full"
                 >
                   <option disabled value="">
@@ -255,6 +151,7 @@ const EditStaffForm = ({
                   {...register("hiring_date")}
                   required
                   type="date"
+                  placeholder="Date hired here"
                   className="input input-bordered w-full"
                 />
               </label>
@@ -265,8 +162,8 @@ const EditStaffForm = ({
                   <span className="label-text">Supervisor</span>
                 </div>
                 <select
+                  defaultValue=""
                   {...register("supervisorId")}
-                  required
                   className="select select-bordered w-full"
                 >
                   <option disabled value="">
@@ -283,13 +180,8 @@ const EditStaffForm = ({
 
             {/* submit */}
             <div className="!mt-10">
-              <Button
-                className="mx-auto w-1/2"
-                disabled={updatingData || !isDirty}
-              >
-                {updatingData
-                  ? "Updating Staff Details..."
-                  : "Update Staff Details"}
+              <Button className="mx-auto w-1/2" disabled={loading}>
+                {loading ? "Adding staff..." : "Add staff"}
               </Button>
             </div>
           </form>
@@ -299,4 +191,4 @@ const EditStaffForm = ({
   );
 };
 
-export default EditStaffForm;
+export default EditPersonalInformation;
