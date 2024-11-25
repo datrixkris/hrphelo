@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useKanbanStore } from "../stores/kanbanStore";
+import AddMembersField from "./AddMembersField";
 
 // Zod schema for form validation
 const taskSchema = z.object({
@@ -40,7 +41,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Overlay */}
       <div
         className="fixed inset-0 bg-black opacity-50"
@@ -48,8 +49,8 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
       ></div>
 
       {/* Modal */}
-      <div className="modal-box relative z-20 p-6 bg-white rounded-md shadow-lg max-w-md w-full">
-        <div className="flex items-center justify-between mb-4">
+      <div className="modal-box relative z-20 w-full max-w-md rounded-md bg-white p-6 shadow-lg">
+        <div className="mb-4 flex items-center justify-between">
           <h4 className="text-lg font-semibold">Add Task</h4>
           <button
             type="button"
@@ -65,12 +66,70 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
             <span className="label">Task Description</span>
             <textarea
               {...register("description")}
-              rows={4}
+              rows={2}
               className="textarea textarea-bordered mt-1 w-full"
             />
             {errors.description && (
-              <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.description.message}
+              </p>
             )}
+          </label>
+
+          {/* Task priority */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Task priority</span>
+            </div>
+            <select
+              className="select select-bordered"
+              // {...register("priority")}
+            >
+              <option disabled selected>
+                Pick one
+              </option>
+              <option>Low</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
+            <div className="label">
+              {errors.description && (
+                <span className="label-text-alt">
+                  {/* {errors.priority?.message} */}
+                </span>
+              )}
+            </div>
+          </label>
+
+          {/* due date */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Due date</span>
+            </div>
+            <input
+              type="date"
+              placeholder="Type here"
+              className="input input-bordered w-full"
+              // {...register("dueDate")}
+            />
+            <div className="label">
+              {errors.description && (
+                <span className="label-text-alt">
+                  {/* {errors.dueDate?.message} */}
+                </span>
+              )}
+            </div>
+          </label>
+
+          {/* Assign member */}
+          <label className="form-control w-full">
+            <div className="label">
+              <span className="label-text">Assign task to</span>
+            </div>
+            <AddMembersField getIds={(ids) => ids[0]} />
+            {/* {leaderError && (
+                <span className="label-text text-error">{leaderError}</span>
+              )} */}
           </label>
           <div className="submit-section mt-4 text-center">
             <button type="submit" className="btn btn-primary">

@@ -1,7 +1,10 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { Task } from "../stores/kanbanStore";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import DropdownComponent from "@/app/components/DropdownComponent";
+// import DropdownComponent from "@/app/components/DropdownComponent";
+import EditTask from "./EditTask";
+import DeleteTask from "./DeleteTask";
+import { useEffect, useRef, useState } from "react";
 
 type TaskComponentProps = {
   taskId: string;
@@ -15,8 +18,36 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
   tasks,
 }) => {
   const task = tasks[taskId];
-  if (!task) return null;
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
+  // Toggle dropdown visibility
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  // Close dropdown when clicking outside
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener for clicks
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Cleanup event listener
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  if (!task) return null;
   return (
     <Draggable key={task.id} draggableId={task.id} index={index}>
       {(provided) => (
@@ -24,20 +55,44 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps} // Ensure this is applied to the container
           {...provided.dragHandleProps} // Ensure this is applied to the drag handle
-          className="mb-2 rounded border bg-white p-2 py-3 text-left text-sm"
+          className="relative mb-2 rounded border bg-white p-2 py-3 text-left text-sm"
         >
           {/* heading */}
           <div className="flex items-start justify-between">
             <p className="l leading-4">{task.description}</p>
             <div className="w-fit shrink-0">
-              <DropdownComponent
+              {/* <DropdownComponent
                 dropdownContent={[{ item: "Edit" }, { item: "Delete" }]}
-              >
-                <Icon
-                  icon="charm:menu-kebab"
-                  className="!text-xs hover:cursor-pointer"
-                />
-              </DropdownComponent>
+              > */}
+              <Icon
+                onClick={toggleDropdown}
+                icon="charm:menu-kebab"
+                className="!text-xs hover:cursor-pointer"
+              />
+              {isDropdownOpen && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute right-1 top-7 z-10 w-28 border bg-white shadow-sm"
+                >
+                  <div
+                    onClick={() => {
+                      setShowEdit(true), toggleDropdown();
+                    }}
+                    className="cursor-pointer px-3 py-1 hover:bg-neutral-200"
+                  >
+                    Edit
+                  </div>
+                  <div
+                    onClick={() => {
+                      setShowDelete(true), toggleDropdown();
+                    }}
+                    className="cursor-pointer px-3 py-1 hover:bg-neutral-200"
+                  >
+                    Delete
+                  </div>
+                </div>
+              )}
+              {/* </DropdownComponent> */}
             </div>
           </div>
 
@@ -63,6 +118,16 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Edit task modal */}
+          {showEdit && (
+            <EditTask onClose={() => setShowEdit(false)} task={task} />
+          )}
+
+          {/* delete task modal */}
+          {showDelete && (
+            <DeleteTask onClose={() => setShowDelete(false)} task={task} />
+          )}
         </div>
       )}
     </Draggable>

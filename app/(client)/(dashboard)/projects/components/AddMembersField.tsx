@@ -127,9 +127,7 @@ const AddMembersField = ({
   }
 
   return (
-    <div
-      className={`grid gap-5 ${showAvatars ? "grid-cols-2 place-content-center" : ""}`}
-    >
+    <div className={`grid gap-5`}>
       <SearchAndResultsInputComponent
         loading={loading}
         data={data}
@@ -137,7 +135,7 @@ const AddMembersField = ({
       />
 
       {showAvatars && (
-        <div className="avatar-group -space-x-6 rtl:space-x-reverse">
+        <div className="-space-x-4 rtl:space-x-reverse">
           {staffs.map((staff) => {
             if (
               data.some((item) => {
@@ -145,9 +143,11 @@ const AddMembersField = ({
               })
             ) {
               return (
-                <div key={staff.id} className="avatar">
-                  <div className="w-10 rounded-full">
-                    <img src={staff.image} />
+                <div className="tooltip" data-tip={staff.name} key={staff.id}>
+                  <div className="avatar">
+                    <div className="w-11 rounded-full border">
+                      <img src={staff.image} alt={staff.name} />
+                    </div>
                   </div>
                 </div>
               );

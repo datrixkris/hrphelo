@@ -118,29 +118,30 @@ const CreateProjectForm = ({
                   <option>Low</option>
                 </select>
               </label>
-            </div>
-            {/* Project Leader */}
-            <label className="form-control w-full">
-              <div className="label">
-                <span className="label-text">Select project lead</span>
-              </div>
-              <AddMembersField getIds={(ids) => setLeaderId(ids[0])} />
-              {leaderError && (
-                <span className="label-text text-error">{leaderError}</span>
-              )}
-            </label>
 
-            {/* Team Members */}
-            <label className="form-control w-full">
-              <div className="label">
-                <span className="label-text">Select team members</span>
-              </div>
-              <AddMembersField
-                getIds={(ids) => setMemberIds(ids)}
-                multiple={true}
-              />
-              <span className="label-text text-error">{memberError}</span>
-            </label>
+              {/* Project Leader */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Select project lead</span>
+                </div>
+                <AddMembersField getIds={(ids) => setLeaderId(ids[0])} />
+                {leaderError && (
+                  <span className="label-text text-error">{leaderError}</span>
+                )}
+              </label>
+
+              {/* Team Members */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Select team members</span>
+                </div>
+                <AddMembersField
+                  getIds={(ids) => setMemberIds(ids)}
+                  multiple={true}
+                />
+                <span className="label-text text-error">{memberError}</span>
+              </label>
+            </div>
 
             {/* Description */}
             <div className="mt-5">
