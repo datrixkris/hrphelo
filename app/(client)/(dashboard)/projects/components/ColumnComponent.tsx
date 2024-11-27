@@ -1,8 +1,8 @@
-import { Draggable, Droppable } from "@hello-pangea/dnd";
+import { Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Column, Task } from "../stores/kanbanStore";
 import TaskComponent from "./TaskComponent";
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AddTasks } from "./AddTasks";
 
 type ColumnComponentProps = {
@@ -22,15 +22,18 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
   deleteColumn,
 }) => {
   const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+
+  // Toggle dropdown visibility
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
 
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Toggle Modal
   const openModal = (id: number) => setActiveColumnId(id);
   const closeModal = () => setActiveColumnId(null);
-
-
-  
 
 
   return (
@@ -40,31 +43,47 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="max-h-[35rem] w-60 shrink-0 overflow-y-scroll bg-base-100 "
+          className="max-h-[35rem] w-60 shrink-0 overflow-y-scroll bg-base-100"
         >
-          <div className="group sticky top-0 z-20 mb-2 flex items-center shadow-[rgba(0,0,15,0.5)_0px_0px_10px_0] justify-between bg-base-100 py-3  px-2">
+          <div className="group sticky top-0 z-20 mb-2 flex items-center justify-between bg-base-100 px-2 py-3 shadow-[rgba(0,0,15,0.2)_0px_0px_10px_0]">
             <h2 className="font-semibold text-primary">{column.name}</h2>
-            <div className="dropdown hidden group-hover:inline">
-              <div
-                className=" px-2 py-1 text-primary"
-                tabIndex={0}
-                role="button"
-              >
-                <Icon icon="octicon:kebab-horizontal-24" />{" "}
+            <div className="dropdown hidden group-hover:inline-block">
+              <div className="px-2 py-1 text-primary">
+                <Icon
+                  icon="octicon:kebab-horizontal-24"
+                  onClick={toggleDropdown}
+                />{" "}
               </div>
-              <ul
-                tabIndex={0}
-                className="menu dropdown-content z-10 w-32 rounded-box bg-base-100 p-2 shadow"
-              >
-                <li>
-                  <button onClick={() => onEditColumn(column)}>Edit</button>
-                </li>
-                <li>
-                  <button onClick={() => deleteColumn(column.id)}>
-                    Delete
-                  </button>
-                </li>
-              </ul>
+              {isDropdownOpen && (
+                <ul
+                  tabIndex={0}
+                  className="absolute right-1 top-7 z-10 w-32 rounded bg-base-100 p-2 shadow"
+                >
+                  <li className="hover:bg-base-200">
+                    <button
+                      onClick={() => onEditColumn(column)}
+                      className="h-full w-full"
+                    >
+                      Edit
+                    </button>
+                  </li>
+
+                  {!(
+                    column.name === "To Do" ||
+                    column.name === "Completed" ||
+                    column.name === "In Progress"
+                  ) && (
+                    <li className="hover:bg-base-200">
+                      <button
+                        onClick={() => deleteColumn(column.id)}
+                        className="h-full w-full"
+                      >
+                        Delete
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              )}
             </div>
           </div>
           <Droppable droppableId={String(column.id)} type="task">
@@ -86,13 +105,17 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
               </div>
             )}
           </Droppable>
-          <button
-            onClick={() => openModal(Number(column.id))}
-            className="btn btn-ghost btn-sm mt-2 w-full"
-          >
-            <Icon icon="heroicons:plus" />
-            Add Task
-          </button>
+
+          {column.name === "To Do" && (
+            <button
+              onClick={() => openModal(Number(column.id))}
+              className="btn btn-ghost btn-sm mt-2 w-full"
+            >
+              <Icon icon="heroicons:plus" />
+              Add Task
+            </button>
+          )}
+
           {/* Modal */}
           {activeColumnId !== null && (
             <div ref={modalRef}>

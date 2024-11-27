@@ -43,13 +43,14 @@ interface KanbanState {
     deleteTask: (projectId: number, taskId: string) => Promise<void>;
     deleteColumn: (columnId: string) => Promise<void>;
     reorderColumns: (startIndex: number, newColumnOrder: ColumnOrder) => void;
-
     reorderTasks: (
-        startColumnId: string,
-        finishColumnId?: string,
-        taskId?: string,
-        sourceIndex?: number,
-        destinationIndex?: number
+        projectId: number,
+        taskId: string,
+        updateTask: {
+            name: string;
+            description: string;
+            newBoardId: number;
+        }
     ) => void;
 }
 
@@ -117,7 +118,7 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
         }
     };
 
-    const performApiUpdate = async (action: () => Promise<void>, successMessage: string) => {
+    const performApiUpdate = async (action: () => Promise<void>, successMessage?: string) => {
         setLoading(true);
         setError(null);
         const projectId = get().projectId;
@@ -189,63 +190,69 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
             );
         },
 
-        reorderColumns: async (projectId, newColumnOrder:ColumnOrder) => {
-            console.log("oder:",newColumnOrder);
-            
-            await performApiUpdate(
-                () => api.patch(`/v1/projects/${projectId}/boards`, newColumnOrder),
-                "Column updated successfully!"
-            );
+        reorderColumns: (projectId, newColumnOrder: ColumnOrder) => {
+            // Optimistically update the store
+            const prevColumnOrder = get().columnOrder;
+
+            set({ columnOrder: newColumnOrder.map((col) => col.slug) });
+
+            // Make the API request
+            performApiUpdate(
+                async () => {
+                    await api.patch(`/v1/projects/${projectId}/boards`, newColumnOrder);
+                },
+                // "Column order updated successfully!"
+            ).catch(() => {
+                // Revert the store if the API call fails
+                set({ columnOrder: prevColumnOrder });
+                toast.error("Failed to update column order. Reverting changes.");
+            });
         },
 
 
 
-        reorderTasks: (startColumnId, finishColumnId, taskId, sourceIndex, destinationIndex) => {
+        reorderTasks: async (projectId: number, taskId: string, updateTask: {
+            name: string;
+            description: string;
+            newBoardId: number;
+        }) => {
+            // Update the store first for an instant UI response
             set((state) => {
-                const startColumn = state.columns[startColumnId];
-                if (!startColumn || sourceIndex == null || destinationIndex == null) return {};
+                const columns = { ...state.columns };
+                const tasks = { ...state.tasks };
 
-                // Reorder within the same column
-                if (!finishColumnId || finishColumnId === startColumnId) {
-                    const updatedTaskIds = Array.from(startColumn.taskIds);
-                    const [movedTaskId] = updatedTaskIds.splice(sourceIndex, 1);
-                    updatedTaskIds.splice(destinationIndex, 0, movedTaskId);
-                    return {
-                        columns: {
-                            ...state.columns,
-                            [startColumnId]: {
-                                ...startColumn,
-                                taskIds: updatedTaskIds,
-                            },
-                        },
-                    };
+                // Remove task from the source column
+                Object.keys(columns).forEach((columnId) => {
+                    const taskIndex = columns[columnId].taskIds.indexOf(taskId);
+                    if (taskIndex !== -1) {
+                        columns[columnId].taskIds.splice(taskIndex, 1);
+                    }
+                });
+
+                // Add task to the destination column (newBoardId corresponds to columnId)
+                const destinationColumn = columns[updateTask.newBoardId.toString()];
+                if (destinationColumn) {
+                    destinationColumn.taskIds.push(taskId);
                 }
-                // Reorder across different columns
-                else {
-                    const finishColumn = state.columns[finishColumnId];
-                    if (!finishColumn || !taskId) return {};
 
-                    const startTaskIds = Array.from(startColumn.taskIds);
-                    const finishTaskIds = Array.from(finishColumn.taskIds);
+                // Update the task details in the store
+                tasks[taskId] = {
+                    ...tasks[taskId],
+                    name: updateTask.name,
+                    description: updateTask.description,
+                    boardId: updateTask.newBoardId,
+                };
 
-                    startTaskIds.splice(sourceIndex, 1);
-                    finishTaskIds.splice(destinationIndex, 0, taskId);
-
-                    return {
-                        columns: {
-                            ...state.columns,
-                            [startColumnId]: {
-                                ...startColumn,
-                                taskIds: startTaskIds,
-                            },
-                            [finishColumnId]: {
-                                ...finishColumn,
-                                taskIds: finishTaskIds,
-                            },
-                        },
-                    };
-                }
+                return { columns, tasks };
             });
+
+            // Send the changes to the backend
+            await performApiUpdate(
+                () =>
+                    api.put(`/v1/projects/${projectId}/tasks/${taskId}`, updateTask),
+                "Task updated successfully!"
+            );
         }
+
     };
 });

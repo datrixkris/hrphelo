@@ -10,15 +10,15 @@ export interface IKanbanBoard {
 const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
   const params = useParams<{ projectId: string; projectSlug: string }>();
 
-  let projectId = Number(params.projectId);
+  const projectId = Number(params.projectId);
 
   const {
     columns,
     columnOrder,
     tasks,
     deleteColumn,
-    reorderColumns, // Updates columnOrder in the store
-    reorderTasks, // Updates task order in a column
+    reorderColumns, 
+    // reorderTasks
   } = useKanbanStore();
 
   const onDragEnd = (result: DropResult) => {
@@ -44,8 +44,28 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
 
     // Handle task reordering within a column or across columns
     // if (type === "task") {
-    //   reorderTasks(result);
+    //   console.log("task");
+      
+    //   const { draggableId: taskId } = result;
+    //   const sourceColumnId = source.droppableId;
+    //   const destinationColumnId = destination.droppableId;
+    
+    //   // Skip if the task wasn't moved
+    //   if (sourceColumnId === destinationColumnId && source.index === destination.index) return;
+    
+    //   const task = tasks[taskId];
+    
+    //   // Prepare the update payload
+    //   const updateTask = {
+    //     name: task.name,
+    //     description: task.description,
+    //     newBoardId: Number(destinationColumnId),
+    //   };
+    
+    //   // Call the store's reorderTasks function
+    //   reorderTasks(projectId, taskId, updateTask);
     // }
+    
   };
 
   return (

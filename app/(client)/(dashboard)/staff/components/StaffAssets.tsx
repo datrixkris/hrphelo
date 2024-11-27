@@ -1,9 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
 
-type Props = {};
 
-const StaffAssets = (props: Props) => {
+const StaffAssets = () => {
   return (
     <div>
       <div className="overflow-x-auto py-5">

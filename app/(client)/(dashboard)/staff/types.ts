@@ -33,3 +33,27 @@ export interface StaffData {
   hiring_date?: string;
   supervisorId?: number | null;
 }
+
+export interface StaffProfile {
+  id: number;
+  name: string;
+  email: string;
+  personalInfo: {
+    alt_contact: string,
+    nationality: string,
+    marital_status: string,
+    no_of_children: 0
+  },
+  bankInfo: {
+    bank_name: string,
+    account_number: string,
+    bank_branch: string
+  },
+  iceContacts: [
+    {
+      name: string,
+      relationship: string,
+      contact: string
+    }
+  ]
+}
