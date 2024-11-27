@@ -1,4 +1,4 @@
-import { Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
+import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Column, Task } from "../stores/kanbanStore";
 import TaskComponent from "./TaskComponent";
@@ -34,7 +34,6 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
   // Toggle Modal
   const openModal = (id: number) => setActiveColumnId(id);
   const closeModal = () => setActiveColumnId(null);
-
 
   return (
     <Draggable draggableId={String(column.id)} index={index}>
