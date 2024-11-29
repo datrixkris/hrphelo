@@ -1,8 +1,20 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React from "react";
-import { Task } from "../stores/kanbanStore";
+import { Task, useKanbanStore } from "../stores/kanbanStore";
 
 const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
+  const deleteTask = useKanbanStore((state) => state.deleteTask);
+  const loading = useKanbanStore((state) => state.loading);
+
+  const handleDeleteTask = async () => {
+    await deleteTask(task.id);
+
+    // If no errors encounted, close the delete modal
+    if (!useKanbanStore.getState().error) {
+      onClose();
+    }
+  };
+
   return (
     <div>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -27,15 +39,19 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
           </div>
 
           <div className="">
-            <p className="text-lg font-semibold">Get groceries</p>
+            <p className="text-lg font-semibold">{task.description}</p>
             <p className="text-base">
               Are you sure you want to delete this task? {task.id}
             </p>
           </div>
 
           <div className="submit-section mt-4 text-center">
-            <button type="submit" className="btn btn-error">
-              Delete
+            <button
+              type="button"
+              onClick={handleDeleteTask}
+              className="btn btn-error"
+            >
+              {loading ? "Deleting..." : "Delete"}
             </button>
           </div>
         </div>

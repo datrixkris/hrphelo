@@ -98,6 +98,7 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
                     taskId={taskId}
                     index={index}
                     tasks={tasks}
+                    columnId={Number(column.id)}
                   />
                 ))}
                 {provided.placeholder}

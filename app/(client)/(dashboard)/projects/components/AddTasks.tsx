@@ -4,10 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useKanbanStore } from "../stores/kanbanStore";
 import AddMembersField from "./AddMembersField";
+import { useState } from "react";
 
 // Zod schema for form validation
 const taskSchema = z.object({
   description: z.string().min(1, "Description is required"),
+  dueDate: z.string().nullable(),
+  priority: z.enum(["high", "medium", "low", "highest"]),
 });
 
 // Infer the TypeScript types from the Zod schema
@@ -28,16 +31,27 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
     resolver: zodResolver(taskSchema),
   });
 
-  const { addTask } = useKanbanStore();
+  const [memberId, setMemberId] = useState<number | undefined>();
+  const [memberError] = useState("");
+  const { addTask, loading } = useKanbanStore();
 
-  const onSubmit: SubmitHandler<TaskFormValues> = (data) => {
+  const onSubmit: SubmitHandler<TaskFormValues> = async (data) => {
     const newTask = {
       description: data.description,
+      due_date: data.dueDate ? data.dueDate : null,
+      priority: data.priority,
       boardId: columnId,
+      staffId: memberId,
     };
 
-    addTask(newTask);
-    onClose();
+    console.log("data", newTask);
+
+    await addTask(newTask);
+
+    // If no errors encounted, close the edit modal
+    if (!useKanbanStore.getState().error) {
+      onClose();
+    }
   };
 
   return (
@@ -82,20 +96,22 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
               <span className="label-text">Task priority</span>
             </div>
             <select
+              defaultValue=""
               className="select select-bordered"
-              // {...register("priority")}
+              {...register("priority")}
             >
-              <option disabled selected>
+              <option disabled value="">
                 Pick one
               </option>
-              <option>Low</option>
-              <option>Medium</option>
-              <option>High</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="highest">Highest</option>
             </select>
             <div className="label">
-              {errors.description && (
-                <span className="label-text-alt">
-                  {/* {errors.priority?.message} */}
+              {errors.priority && (
+                <span className="label-text-alt text-error">
+                  {errors.priority?.message}
                 </span>
               )}
             </div>
@@ -110,12 +126,12 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
               type="date"
               placeholder="Type here"
               className="input input-bordered w-full"
-              // {...register("dueDate")}
+              {...register("dueDate")}
             />
             <div className="label">
-              {errors.description && (
-                <span className="label-text-alt">
-                  {/* {errors.dueDate?.message} */}
+              {errors.dueDate && (
+                <span className="label-text-alt text-error">
+                  {errors.dueDate?.message}
                 </span>
               )}
             </div>
@@ -126,14 +142,17 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
             <div className="label">
               <span className="label-text">Assign task to</span>
             </div>
-            <AddMembersField getIds={(ids) => ids[0]} />
-            {/* {leaderError && (
-                <span className="label-text text-error">{leaderError}</span>
-              )} */}
+            <AddMembersField getIds={(ids) => setMemberId(ids[0])} />
+            <div className="label">
+              {memberError && (
+                <span className="label-text-alt text-error">{memberError}</span>
+              )}
+            </div>
           </label>
+
           <div className="submit-section mt-4 text-center">
             <button type="submit" className="btn btn-primary">
-              Submit
+              {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

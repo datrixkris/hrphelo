@@ -5,17 +5,21 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import EditTask from "./EditTask";
 import DeleteTask from "./DeleteTask";
 import { useEffect, useRef, useState } from "react";
+import PriorityComponent from "./PriorityComponent";
+import dayjs from "dayjs";
 
 type TaskComponentProps = {
   taskId: string;
   index: number;
   tasks: { [key: string]: Task };
+  columnId: number;
 };
 
 const TaskComponent: React.FC<TaskComponentProps> = ({
   taskId,
   index,
   tasks,
+  columnId,
 }) => {
   const task = tasks[taskId];
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -101,19 +105,39 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
             {/* due date and priority */}
             <div className="text-xs">
               <div className="flex items-center gap-1">
-                <Icon icon="heroicons:clock" className="inline-block" />{" "}
-                <span>Sept 26</span>
+                <Icon
+                  icon="heroicons:clock"
+                  className="inline-block shrink-0"
+                />{" "}
+                <span>
+                  {task.due_date
+                    ? dayjs(task.due_date).format("MMM D")
+                    : "Not set"}
+                </span>
               </div>
-              <div className="mt-1 w-fit rounded-lg bg-error/20 px-2 py-0.5">
-                <span className="font-bold text-error">High</span>
-              </div>
+              {task.priority ? (
+                <PriorityComponent priority={task.priority} />
+              ) : (
+                ""
+              )}
             </div>
 
             {/* members */}
             <div className="">
-              <div className="avatar">
-                <div className="w-8 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+              <div
+                className="tooltip tooltip-left"
+                data-tip={
+                  task.assignee?.name ? task.assignee?.name : "Not assigned"
+                }
+              >
+                <div className="avatar">
+                  <div className="w-8 rounded-full">
+                    {task.assignee ? (
+                      <img src={task.assignee.image} />
+                    ) : (
+                      <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -121,7 +145,11 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
 
           {/* Edit task modal */}
           {showEdit && (
-            <EditTask onClose={() => setShowEdit(false)} task={task} />
+            <EditTask
+              onClose={() => setShowEdit(false)}
+              task={task}
+              columnId={columnId}
+            />
           )}
 
           {/* delete task modal */}

@@ -15,7 +15,14 @@ export interface ApiTask {
   slug: string;
   description: string;
   start_date: string | null;
-  end_date: string | null;
+  due_date: string | null;
+  priority: "high" | "highest" | "medium" | "low";
+  assignee?: {
+    id: number;
+    name: string;
+    email: string;
+    image: string;
+  };
 }
 
 export interface ApiColumn {
