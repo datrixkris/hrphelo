@@ -2,7 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useState } from "react";
+// import { useState } from "react";
 
 // Zod schema for form validation
 const profileSchema = z.object({

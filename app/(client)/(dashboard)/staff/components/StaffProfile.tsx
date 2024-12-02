@@ -1,8 +1,8 @@
 "use client";
-import { Icon } from "@iconify/react/dist/iconify.js";
+// import { Icon } from "@iconify/react/dist/iconify.js";
 import { useStaffStore } from "../staff-store";
 import { StaffProfile as ProflieType } from "../types";
-import { PersonalInformationForm } from "./PersonalInformationForm";
+// import { PersonalInformationForm } from "./PersonalInformationForm";
 import Section from "./StaffProfileSection";
 
 type TStaffProfil = {
