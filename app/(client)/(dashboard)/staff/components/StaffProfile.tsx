@@ -2,6 +2,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useStaffStore } from "../staff-store";
 import { StaffProfile as ProflieType } from "../types";
+import { PersonalInformationForm } from "./PersonalInformationForm";
+import Section from "./StaffProfileSection";
 
 type TStaffProfil = {
   profile: ProflieType[];
@@ -10,7 +12,7 @@ type TStaffProfil = {
 const StaffProfile = ({ profile }: TStaffProfil) => {
   const loading = useStaffStore((state) => state.loading);
 
-  console.log("pro", profile[0].name);
+  // console.log("pro", profile[0].name);
 
   if (loading || !profile) {
     return (
@@ -26,11 +28,11 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
     <div className="grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
       {/* Personal Information */}
       <Section
-        title="Personal Informatio"
+        infoType="personal"
+        title="Personal Information"
         content={
           <table className="w-full text-[15px]">
             <tbody>
-          
               <TableRow
                 label="Alternative Contact"
                 value={profile[0]?.personalInfo?.alt_contact}
@@ -55,6 +57,7 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
       {/* Emergency Contacts */}
       <Section
         title="Emergency Contacts"
+        infoType="emergency"
         content={
           profile[0]?.iceContacts?.length ? (
             profile[0].iceContacts.map((contact, index) => (
@@ -77,6 +80,7 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
 
       {/* Bank Information */}
       <Section
+        infoType="bank"
         title="Bank Information"
         content={
           <table className="w-full text-[15px]">
@@ -103,25 +107,6 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
 
 export default StaffProfile;
 
-// Reusable Section Component
-const Section = ({
-  title,
-  content,
-}: {
-  title: string;
-  content: React.ReactNode;
-}) => (
-  <div className="rounded-lg bg-base-100 px-5 py-5">
-    <div className="flex justify-between py-3">
-      <p className="text-2xl">{title}</p>
-      <button className="rounded-full border bg-primary p-2 text-white">
-        <Icon icon="mdi:pencil-outline" />
-      </button>
-    </div>
-    {content}
-  </div>
-);
-
 // Reusable TableRow Component
 const TableRow = ({
   label,
@@ -131,7 +116,7 @@ const TableRow = ({
   value: string | number | null | undefined;
 }) => (
   <tr>
-    <td className="py-2 pr-3 font-semibold lg:w-2/6">{label}</td>
+    <td className="py-2 pr-3 font-semibold">{label}</td>
     <td className="text-neutral-400">{value || "N/A"}</td>
   </tr>
 );

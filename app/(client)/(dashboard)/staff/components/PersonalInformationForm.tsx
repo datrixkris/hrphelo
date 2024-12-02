@@ -2,56 +2,37 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useKanbanStore } from "../stores/kanbanStore";
-import AddMembersField from "./AddMembersField";
 import { useState } from "react";
 
 // Zod schema for form validation
-const taskSchema = z.object({
-  description: z.string().min(1, "Description is required"),
-  dueDate: z.string().nullable(),
-  priority: z.enum(["high", "medium", "low", "highest"]),
+const profileSchema = z.object({
+  altContact: z.string(),
+  nationality: z.string(),
+  noOfChildren: z.string(),
+  maritalStatus: z.enum(["single", "married"]),
 });
 
 // Infer the TypeScript types from the Zod schema
-type TaskFormValues = z.infer<typeof taskSchema>;
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
-type AddTaskProps = {
+type ProfileProps = {
   onClose: () => void;
-  columnId: number;
 };
 
-export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
+export const PersonalInformationForm: React.FC<ProfileProps> = ({
+  onClose,
+}) => {
   // useForm with Zod validation schema
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TaskFormValues>({
-    resolver: zodResolver(taskSchema),
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
   });
 
-  const [memberId, setMemberId] = useState<number | undefined>();
-  const [memberError] = useState("");
-  const { addTask, loading } = useKanbanStore();
-
-  const onSubmit: SubmitHandler<TaskFormValues> = async (data) => {
-    const newTask = {
-      description: data.description,
-      due_date: data.dueDate ? data.dueDate : null,
-      priority: data.priority,
-      boardId: columnId,
-      staffId: memberId ? memberId : null,
-    };
-
-    console.log("data", newTask);
-
-    await addTask(newTask);
-
-    // If no errors encounted, close the edit modal
-    if (!useKanbanStore.getState().error) {
-      onClose();
-    }
+  const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
+    console.log(data);
   };
 
   return (
@@ -65,7 +46,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
       {/* Modal */}
       <div className="modal-box relative z-20 w-full max-w-md rounded-md bg-white p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
-          <h4 className="text-lg font-semibold">Add Task</h4>
+          <h4 className="text-lg font-semibold">Personal Information</h4>
           <button
             type="button"
             className="text-lg"
@@ -77,75 +58,80 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <label className="form-control w-full">
-            <span className="label">Task Description</span>
-            <textarea
-              {...register("description")}
-              rows={2}
+            <span className="label">Alternative contact</span>
+            <input
+              {...register("altContact")}
               className="textarea textarea-bordered mt-1 w-full"
+              type="text"
             />
-            {errors.description && (
+            {errors.altContact && (
               <p className="mt-1 text-sm text-red-500">
-                {errors.description.message}
+                {errors.altContact.message}
               </p>
             )}
           </label>
 
-          {/* Task priority */}
+          {/* Marital status */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Task priority</span>
+              <span className="label-text">Marital status</span>
             </div>
             <select
               defaultValue=""
               className="select select-bordered"
-              {...register("priority")}
+              {...register("maritalStatus")}
             >
               <option disabled value="">
                 Pick one
               </option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="highest">Highest</option>
+              <option value="single">Single</option>
+              <option value="married">Married</option>
             </select>
             <div className="label">
-              {errors.priority && (
+              {errors.maritalStatus && (
                 <span className="label-text-alt text-error">
-                  {errors.priority?.message}
+                  {errors.maritalStatus?.message}
                 </span>
               )}
             </div>
           </label>
 
-          {/* due date */}
+          {/* nationality */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Due date</span>
+              <span className="label-text">Nationality</span>
             </div>
             <input
-              type="date"
+              type="text"
               placeholder="Type here"
               className="input input-bordered w-full"
-              {...register("dueDate")}
+              {...register("nationality")}
             />
             <div className="label">
-              {errors.dueDate && (
+              {errors.nationality && (
                 <span className="label-text-alt text-error">
-                  {errors.dueDate?.message}
+                  {errors.nationality?.message}
                 </span>
               )}
             </div>
           </label>
 
-          {/* Assign member */}
+          {/* noOfChildren */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Assign task to</span>
+              <span className="label-text">Number of children</span>
             </div>
-            <AddMembersField getIds={(ids) => setMemberId(ids[0])} />
+            <input
+              type="text"
+              placeholder="Type here"
+              className="input input-bordered w-full"
+              {...register("noOfChildren")}
+            />
             <div className="label">
-              {memberError && (
-                <span className="label-text-alt text-error">{memberError}</span>
+              {errors.noOfChildren && (
+                <span className="label-text-alt text-error">
+                  {errors.noOfChildren?.message}
+                </span>
               )}
             </div>
           </label>
@@ -154,9 +140,9 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={loading}
+              // disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
+              {false ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

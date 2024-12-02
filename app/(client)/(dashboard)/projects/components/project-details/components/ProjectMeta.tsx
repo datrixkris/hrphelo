@@ -2,6 +2,7 @@ import React from "react";
 import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import dayjs from "dayjs";
 import ProgressBar, { progressColor } from "../../ProgressBar";
+import PriorityComponent from "../../PriorityComponent";
 
 const ProjectMeta = () => {
   const { projectDetails: project } = useProjectDetailsContext()!;
@@ -13,10 +14,10 @@ const ProjectMeta = () => {
 
       <div className="">
         {/* Total hours  */}
-        <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
+        {/* <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Total hours:</div>
           <div className="">100 hours</div>
-        </div>
+        </div> */}
 
         {/* date created */}
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
@@ -40,9 +41,11 @@ const ProjectMeta = () => {
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Priority:</div>
           <div className="">
-            <span className="rounded-md bg-error px-2 py-1 text-xs">
-              {project?.priority}
-            </span>
+            {project?.priority ? (
+              <PriorityComponent priority={project?.priority} />
+            ) : (
+              "Not set"
+            )}
           </div>
         </div>
 

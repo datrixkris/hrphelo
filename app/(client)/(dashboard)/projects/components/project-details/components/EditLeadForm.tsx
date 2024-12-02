@@ -5,6 +5,8 @@ import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import Button from "@/app/components/Button";
 import { useStaffStore } from "@/app/(client)/(dashboard)/staff/staff-store";
 import { StaffData } from "@/app/(client)/(dashboard)/staff/types";
+import { useProjectStore } from "../../../stores/project-store";
+import { toast } from "react-toastify";
 
 const EditLeadForm = ({
   isOpen,
@@ -13,15 +15,46 @@ const EditLeadForm = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { projectDetails: project } = useProjectDetailsContext()!;
+  const { projectDetails: project, refreshData } = useProjectDetailsContext()!;
   const [leaderId, setLeaderId] = useState<number | undefined>();
   const [replacement, setReplacement] = useState<StaffData>();
   const staff = useStaffStore((state) => state.staffs);
+  const updateProjectDetails = useProjectStore(
+    (state) => state.updateProjectDetails,
+  );
+  const updatingData = useProjectStore((state) => state.updatingData);
 
   useEffect(() => {
     setReplacement(staff.find((item) => item.id === leaderId));
     console.log(leaderId);
   }, [leaderId]);
+
+  const assignLead = async () => {
+    console.log("shitttt");
+    if (project) {
+      const projectData = {
+        leaderId: leaderId,
+        name: project.name,
+        description: project.description,
+      };
+
+      if (project?.id) {
+        await updateProjectDetails(projectData, project.id);
+
+        if (!useProjectStore.getState().error) {
+          toast.success("Project added successfully!");
+          refreshData();
+          onClose();
+        } else {
+          toast.error(
+            `Failed to add project: ${useProjectStore.getState().error}`,
+          );
+        }
+      } else {
+        console.log("no project slug that's why");
+      }
+    }
+  };
 
   return (
     <div>
@@ -95,8 +128,10 @@ const EditLeadForm = ({
 
           {/* submit */}
           <div className="mt-3 flex justify-center">
-            <Button>
-              <p className="text-base">Submit</p>
+            <Button onClick={assignLead} disabled={updatingData}>
+              <p className="text-base">
+                {updatingData ? "Submitting..." : "Submit"}
+              </p>
             </Button>
           </div>
         </div>

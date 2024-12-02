@@ -6,6 +6,7 @@ import { ProjectData } from "../../../types/project-types";
 import { useProjectStore } from "../../../stores/project-store";
 import { toast } from "react-toastify";
 import { useProjectDetailsContext } from "../ProjectDetailsContext";
+import dayjs from "dayjs";
 
 const EditProjectDetails = ({
   isOpen,
@@ -26,6 +27,10 @@ const EditProjectDetails = ({
     reset({
       name: project?.name,
       description: project?.description,
+      end_date: project?.end_date
+        ? dayjs(project.end_date).format("YYYY-MM-DD")
+        : project?.end_date,
+      priority: project?.priority,
     });
   }, [project, reset]);
 
@@ -33,6 +38,8 @@ const EditProjectDetails = ({
     const projectData = {
       name: data.name,
       description: data.description,
+      end_date: data.end_date,
+      priority: data.priority,
     };
 
     console.log(projectData);
@@ -83,11 +90,13 @@ const EditProjectDetails = ({
               {/* Start date */}
               <label className="form-control w-full">
                 <div className="label">
-                  <span className="label-text">
-                    Start date <span className="text-error">*</span>
-                  </span>
+                  <span className="label-text">Start date</span>
                 </div>
-                <input type="date" className="input input-bordered w-full" />
+                <input
+                  type="date"
+                  readOnly
+                  className="input input-bordered w-full"
+                />
               </label>
 
               {/* End date */}
@@ -95,7 +104,11 @@ const EditProjectDetails = ({
                 <div className="label">
                   <span className="label-text">End date</span>
                 </div>
-                <input type="date" className="input input-bordered w-full" />
+                <input
+                  type="date"
+                  {...register("end_date")}
+                  className="input input-bordered w-full"
+                />
               </label>
 
               {/* Priority */}
@@ -107,12 +120,16 @@ const EditProjectDetails = ({
                 </div>
                 <select
                   defaultValue=""
+                  {...register("priority")}
                   required
                   className="select select-bordered w-full"
                 >
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
+                  <option disabled value="">
+                    Select priority
+                  </option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
                 </select>
               </label>
             </div>

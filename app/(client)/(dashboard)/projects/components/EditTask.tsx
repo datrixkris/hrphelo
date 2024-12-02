@@ -196,7 +196,7 @@ const EditTask = ({
             </label>
 
             <div className="submit-section mt-4 text-center">
-              <button className="btn btn-primary">
+              <button className="btn btn-primary" disabled={loading}>
                 {loading ? "Submitting..." : "Submit"}
               </button>
             </div>

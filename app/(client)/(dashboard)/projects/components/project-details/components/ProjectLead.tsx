@@ -5,6 +5,7 @@ import EditLeadButton from "./EditLeadButton";
 
 const ProjectLead = () => {
   const { projectDetails: project } = useProjectDetailsContext()!;
+
   return (
     <div className="space-y-5 rounded-lg bg-base-100 p-5 py-8 text-sm font-medium shadow">
       <div className="flex justify-between">
