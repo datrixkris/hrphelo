@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import ImageUpload from "./ImageUpload";
 import { StaffDetail } from "../types";
 import { useDepartmentStore } from "../../departments/department-store";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import { useStaffStore } from "../staff-store";
 
 interface EditStaffProps {
@@ -23,7 +23,7 @@ const EditStaffForm = ({
   staffDetails,
   refreshData,
 }: EditStaffProps) => {
-  const params = useParams();
+  // const params = useParams();
   const {
     register,
     handleSubmit,

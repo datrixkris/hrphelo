@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import { Staff } from "@/app/types/user-types";
 import Link from "next/link";
 import { useStaffStore } from "../(dashboard)/staff/staff-store";
+import { StaffProfile } from "../(dashboard)/staff/types";
 
 interface UserAvatarProp {
   profile: Staff;
@@ -13,15 +14,16 @@ interface UserAvatarProp {
 export const UserAvatar = ({ profile }: UserAvatarProp) => {
   const { logout, user } = useAuthStore();
   const fetchStaffProfile = useStaffStore((state) => state.fetchStaffProfile);
-  const [profileData, setProfileData] = useState<any>(null);
+  const [profileData, setProfileData] = useState<StaffProfile | null>(null);
   const router = useRouter();
   const profileIncomplete = true;
 
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user?.id) {
-        let data = await fetchStaffProfile(user.id);
+        const data = await fetchStaffProfile(user.id);
         setProfileData(data);
+        console.log(profileData);
       }
     };
 

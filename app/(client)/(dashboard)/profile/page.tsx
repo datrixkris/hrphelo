@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
-import { StaffDetail } from "../staff/types";
+import { StaffDetail, StaffProfile } from "../staff/types";
 import TabNavigation from "@/app/components/TabNavigation";
 import ProfileComponent from "./components/ProfileComponent";
-import UserProfileDetailsCard from "./components/UserProfileDetailsCard";
+// import UserProfileDetailsCard from "./components/UserProfileDetailsCard";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { useStaffStore } from "../staff/staff-store";
 import StaffDetailsCard from "../staff/components/StaffDetailsCard";
@@ -14,10 +14,11 @@ const TABS = ["Profile", "Projects", "Bank and Statutory", "Assets"];
 
 const Page = () => {
   const user = useAuthStore((state) => state.user);
-  const { fetchStaffProfile, profile, loading, fetchStaffById } =
-    useStaffStore();
+  const { fetchStaffProfile, loading, fetchStaffById } = useStaffStore();
   const [staffDetails, setStaffDetails] = useState<StaffDetail | null>(null);
-  const [profileDetails, setProfileDetails] = useState<any>(null);
+  const [profileDetails, setProfileDetails] = useState<StaffProfile | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("Profile");
 

@@ -1,11 +1,12 @@
 "use client";
-import { Icon } from "@iconify/react/dist/iconify.js";
+// import { Icon } from "@iconify/react/dist/iconify.js";
 // import { useStaffStore } from "../staff-store";
 // import { StaffProfile as ProfileType } from "../types";
 import Section from "./ProfileSection";
+import { StaffProfile } from "../../staff/types";
 
 type TStaffProfil = {
-  profile: any[];
+  profile: StaffProfile | null;
 };
 
 const ProfileComponent = ({ profile }: TStaffProfil) => {
@@ -34,19 +35,19 @@ const ProfileComponent = ({ profile }: TStaffProfil) => {
             <tbody>
               <TableRow
                 label="Alternative Contact"
-                value={profile[0]?.personalInfo?.alt_contact}
+                value={profile?.personalInfo?.alt_contact}
               />
               <TableRow
                 label="Nationality"
-                value={profile[0]?.personalInfo?.nationality}
+                value={profile?.personalInfo?.nationality}
               />
               <TableRow
                 label="Marital Status"
-                value={profile[0]?.personalInfo?.marital_status}
+                value={profile?.personalInfo?.marital_status}
               />
               <TableRow
                 label="No. of Children"
-                value={profile[0]?.personalInfo?.no_of_children}
+                value={profile?.personalInfo?.no_of_children}
               />
             </tbody>
           </table>
@@ -58,8 +59,8 @@ const ProfileComponent = ({ profile }: TStaffProfil) => {
         infoType="emergency"
         title="Emergency Contacts"
         content={
-          profile[0]?.iceContacts?.length ? (
-            profile[0].iceContacts.map((contact, index) => (
+          profile?.iceContacts?.length ? (
+            profile.iceContacts.map((contact, index) => (
               <div key={index} className="mb-5">
                 <h4 className="font-bold">{contact.relationship}</h4>
                 <table className="w-full text-[15px]">
@@ -86,15 +87,15 @@ const ProfileComponent = ({ profile }: TStaffProfil) => {
             <tbody>
               <TableRow
                 label="Bank Name"
-                value={profile[0]?.bankInfo?.bank_name}
+                value={profile?.bankInfo?.bank_name}
               />
               <TableRow
                 label="Account Number"
-                value={profile[0]?.bankInfo?.account_number}
+                value={profile?.bankInfo?.account_number}
               />
               <TableRow
                 label="Bank Branch"
-                value={profile[0]?.bankInfo?.bank_branch}
+                value={profile?.bankInfo?.bank_branch}
               />
             </tbody>
           </table>
