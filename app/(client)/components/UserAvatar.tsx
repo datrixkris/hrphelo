@@ -1,16 +1,32 @@
 import { useAuthStore } from "@/app/stores/auth-store";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Staff } from "@/app/types/user-types";
+import Link from "next/link";
+import { useStaffStore } from "../(dashboard)/staff/staff-store";
 
 interface UserAvatarProp {
   profile: Staff;
 }
 
 export const UserAvatar = ({ profile }: UserAvatarProp) => {
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
+  const fetchStaffProfile = useStaffStore((state) => state.fetchStaffProfile);
+  const [profileData, setProfileData] = useState<any>(null);
   const router = useRouter();
+  const profileIncomplete = true;
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      if (user?.id) {
+        let data = await fetchStaffProfile(user.id);
+        setProfileData(data);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -22,18 +38,48 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
       <div tabIndex={0}>
         <div className="flex cursor-pointer items-center gap-2">
           {/* User profile picture */}
-          <div className="avatar">
-            <div className="w-10 rounded-full">
-              <img
-                src={profile?.image || "/default-avatar.png"} 
-                alt="User Avatar"
-              />
+          {profileIncomplete ? (
+            <div
+              className="tooltip tooltip-bottom tooltip-error"
+              data-tip="Complete your profile"
+            >
+              <div
+                className={`avatar rounded-full ${profileIncomplete && "relative p-0.5 ring-2 ring-red-800"}`}
+              >
+                <div className="w-10 rounded-full">
+                  <img
+                    src={profile?.image || "/default-avatar.png"}
+                    alt="User Avatar"
+                  />
+                </div>
+                {profileIncomplete && (
+                  <Icon
+                    icon="uis:exclamation-circle"
+                    className="absolute -left-1 -top-1 text-lg text-red-800"
+                  />
+                )}
+              </div>
             </div>
-          </div>
-
+          ) : (
+            <div
+              className="tooltip tooltip-bottom tooltip-error"
+              data-tip="Complete your profile"
+            >
+              <div className="avatar">
+                <div className="w-10 rounded-full">
+                  <img
+                    src={profile?.image || "/default-avatar.png"}
+                    alt="User Avatar"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           {/* User name and role */}
           <div className="hidden text-xs md:block">
-            <p className="text-sm font-semibold">{profile?.name || "User Name"}</p>
+            <p className="text-sm font-semibold">
+              {profile?.name || "User Name"}
+            </p>
             <p className="">{profile?.role || "Role"}</p>
           </div>
         </div>
@@ -43,9 +89,23 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
         className="menu dropdown-content z-[1] w-52 rounded-box border border-base-300 bg-base-100 text-base-content shadow"
       >
         <li>
-          <a>
-            <Icon icon="heroicons:user" className="text-lg" /> Profile
-          </a>
+          <Link href="/profile" className="flex justify-between">
+            <span>
+              <Icon
+                icon="heroicons:user"
+                className="mr-2 inline-block text-lg"
+              />
+              <span>Profile</span>
+            </span>
+            <span>
+              {profileIncomplete && (
+                <Icon
+                  icon="uis:exclamation-circle"
+                  className="text-lg text-red-800"
+                />
+              )}
+            </span>
+          </Link>
         </li>
         <li>
           <a>
@@ -54,7 +114,11 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
         </li>
         <li>
           <a onClick={handleLogout}>
-            <Icon icon="heroicons:arrow-left-on-rectangle" className="text-lg" /> Logout
+            <Icon
+              icon="heroicons:arrow-left-on-rectangle"
+              className="text-lg"
+            />{" "}
+            Logout
           </a>
         </li>
       </ul>

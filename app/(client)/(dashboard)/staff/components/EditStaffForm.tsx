@@ -38,7 +38,6 @@ const EditStaffForm = ({
   );
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-
   useEffect(() => {
     const fetchDepartmentsData = async () => {
       // check if there are no data before you hit the api
@@ -96,16 +95,20 @@ const EditStaffForm = ({
       supervisorId: Number(data.supervisorId),
       image: imageUrl,
     };
-    await updateStaffDetails(staffData, Number(params.staffId));
-    if (!error) {
+    if (staffDetails?.id) {
+      await updateStaffDetails(staffData, staffDetails.id);
+    } else {
+      alert("cannot find staff id to fetch data");
+    }
+    if (!useStaffStore.getState().error) {
       console.log(error, updatingData);
       // onClose();
+      await refreshData();
       toast.success("Staff data updated");
       reset();
       onClose();
-      await refreshData();
     } else {
-      toast.error(error);
+      toast.error(useStaffStore.getState().error);
     }
   };
 

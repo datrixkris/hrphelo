@@ -2,17 +2,19 @@
 
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import EditStaffForm from "./EditStaffForm";
-import { StaffDetail } from "../types";
+// import EditStaffForm from "./EditStaffForm";
+// import { StaffDetail } from "../types";
 import dayjs from "dayjs";
-import Link from "next/link";
 
 interface StaffDetailsProps {
-  staffDetails: StaffDetail | null;
-  refreshData: () => Promise<void>;
+  staffDetails?: any | null;
+  refreshData?: () => Promise<void>;
 }
 
-const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
+const UserProfileDetailsCard = ({
+  staffDetails,
+  refreshData,
+}: StaffDetailsProps) => {
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
@@ -42,9 +44,7 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
               </p>
               <p className="text-sm text-neutral-400">
                 Date Joined:{" "}
-                {staffDetails?.hiring_date
-                  ? dayjs(staffDetails?.hiring_date).format("MMM D, YYYY")
-                  : "N/A"}
+                {dayjs(staffDetails?.hiring_date).format("MMM D, YYYY")}
               </p>
             </div>
           </div>
@@ -56,24 +56,18 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
               {/* phone */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Phone:</td>
-                <td className="text-neutral-400">
-                  {staffDetails?.contact ? staffDetails?.contact : "N/A"}
-                </td>
+                <td className="text-neutral-400">{staffDetails?.contact}</td>
               </tr>
               {/* Email */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Email:</td>
-                <td className="text-neutral-400">
-                  {staffDetails?.email ? staffDetails?.email : "N/A"}
-                </td>
+                <td className="text-neutral-400">{staffDetails?.email}</td>
               </tr>
               {/* Birthday */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Birthday:</td>
                 <td className="text-neutral-400">
-                  {staffDetails?.date_of_birth
-                    ? dayjs(staffDetails?.date_of_birth).format("MMM D, YYYY")
-                    : "N/A"}
+                  {dayjs(staffDetails?.date_of_birth).format("MMM D, YYYY")}
                 </td>
               </tr>
               {/* Address */}
@@ -84,28 +78,20 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
               {/* Gender */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Gender:</td>
-                <td className="text-neutral-400">
-                  {staffDetails?.gender ? staffDetails?.gender : "N/A"}
-                </td>
+                <td className="text-neutral-400">{staffDetails?.gender}</td>
               </tr>
               {/* Supervisor */}
               <tr>
                 <td className="py-2 pr-3 font-semibold lg:w-32">Supervisor:</td>
-                <td className="">
-                  {staffDetails?.supervisorId ? (
-                    <div className="flex cursor-pointer items-center gap-2 text-hr-yellow transition-colors hover:text-hr-yellow-dark">
-                      {/* <div className="avatar">
+                <td className="cursor-pointer text-hr-yellow transition-colors hover:text-hr-yellow-dark">
+                  <div className="flex items-center gap-2">
+                    <div className="avatar">
                       <div className="w-8 rounded-full">
                         <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                       </div>
-                    </div> */}
-                      <Link href={`/staff/${staffDetails.supervisorId}`}>
-                        {staffDetails?.supervisorId}
-                      </Link>
                     </div>
-                  ) : (
-                    <p className="text-sm text-neutral-400">Not assigned</p>
-                  )}
+                    <span>{staffDetails?.supervisorId}</span>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -120,14 +106,14 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
           <Icon icon="heroicons:pencil" className="text-xl" />
         </div>
       </div>
-      <EditStaffForm
+      {/* <EditStaffForm
         staffDetails={staffDetails}
         isOpen={openModal}
         onClose={() => setOpenModal(false)}
         refreshData={refreshData}
-      />
+      /> */}
     </>
   );
 };
 
-export default StaffDetailsCard;
+export default UserProfileDetailsCard;

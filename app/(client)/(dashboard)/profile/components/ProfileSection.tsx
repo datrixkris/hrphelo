@@ -4,7 +4,7 @@ import { useState } from "react";
 import { EmergencyContactsForm } from "./EmergencyContactsForm";
 import { BankInformationForm } from "./BankInformationForm";
 
-const Section = ({
+const ProfileSection = ({
   title,
   content,
   infoType,
@@ -41,4 +41,4 @@ const Section = ({
   );
 };
 
-export default Section;
+export default ProfileSection;

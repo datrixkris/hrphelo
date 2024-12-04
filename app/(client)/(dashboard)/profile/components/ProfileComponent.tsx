@@ -1,18 +1,19 @@
 "use client";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useStaffStore } from "../staff-store";
-import { StaffProfile as ProflieType } from "../types";
+// import { useStaffStore } from "../staff-store";
+// import { StaffProfile as ProfileType } from "../types";
+import Section from "./ProfileSection";
 
 type TStaffProfil = {
-  profile: ProflieType[];
+  profile: any[];
 };
 
-const StaffProfile = ({ profile }: TStaffProfil) => {
-  const loading = useStaffStore((state) => state.loading);
+const ProfileComponent = ({ profile }: TStaffProfil) => {
+  //   const loading = useStaffStore((state) => state.loading);
 
   // console.log("pro", profile[0].name);
 
-  if (loading || !profile) {
+  if (false || !profile) {
     return (
       <div className="my-5 grid grid-cols-1 gap-4 md:grid-cols-2">
         {[...Array(4)].map((_, index) => (
@@ -26,6 +27,7 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
     <div className="grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
       {/* Personal Information */}
       <Section
+        infoType="personal"
         title="Personal Information"
         content={
           <table className="w-full text-[15px]">
@@ -53,6 +55,7 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
 
       {/* Emergency Contacts */}
       <Section
+        infoType="emergency"
         title="Emergency Contacts"
         content={
           profile[0]?.iceContacts?.length ? (
@@ -76,6 +79,7 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
 
       {/* Bank Information */}
       <Section
+        infoType="bank"
         title="Bank Information"
         content={
           <table className="w-full text-[15px]">
@@ -100,26 +104,7 @@ const StaffProfile = ({ profile }: TStaffProfil) => {
   );
 };
 
-export default StaffProfile;
-
-// Reusable Section Component
-const Section = ({
-  title,
-  content,
-}: {
-  title: string;
-  content: React.ReactNode;
-}) => (
-  <div className="rounded-lg bg-base-100 px-5 py-5">
-    <div className="flex justify-between py-3">
-      <p className="text-2xl">{title}</p>
-      <button className="rounded-full border bg-primary p-2 text-white">
-        <Icon icon="mdi:pencil-outline" />
-      </button>
-    </div>
-    {content}
-  </div>
-);
+export default ProfileComponent;
 
 // Reusable TableRow Component
 const TableRow = ({
@@ -130,7 +115,7 @@ const TableRow = ({
   value: string | number | null | undefined;
 }) => (
   <tr>
-    <td className="py-2 pr-3 font-semibold lg:w-2/6">{label}</td>
+    <td className="py-2 pr-3 font-semibold">{label}</td>
     <td className="text-neutral-400">{value || "N/A"}</td>
   </tr>
 );

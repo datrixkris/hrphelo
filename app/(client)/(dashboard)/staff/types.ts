@@ -38,22 +38,38 @@ export interface StaffProfile {
   id: number;
   name: string;
   email: string;
+  departmentId?: number | null;
+  supervisorId?: number | null;
+  companyId?: number;
+  staffId?: string;
+  gender?: string | null;
+  date_of_birth?: string | null;
+  contact?: string;
+  hiring_date?: string;
+  designation?: string | null;
+  isDefault?: boolean;
+  image?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string | null;
+  personalInfoStatus?: "Not Complete" | "Complete"; // Limited to specific statuses
+  iceContactsStatus?: "Not Complete" | "Complete"; // Limited to specific statuses
   personalInfo: {
-    alt_contact: string,
-    nationality: string,
-    marital_status: string,
-    no_of_children: 0
-  },
+    alt_contact: string;
+    nationality: string;
+    marital_status: string;
+    no_of_children: 0;
+  };
   bankInfo: {
-    bank_name: string,
-    account_number: string,
-    bank_branch: string
-  },
+    bank_name: string;
+    account_number: string;
+    bank_branch: string;
+  };
   iceContacts: [
     {
-      name: string,
-      relationship: string,
-      contact: string
-    }
-  ]
+      name: string;
+      relationship: string;
+      contact: string;
+    },
+  ];
 }
