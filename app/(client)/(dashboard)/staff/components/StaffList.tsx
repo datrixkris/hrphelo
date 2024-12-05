@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useStaffStore } from "../staff-store";
 import StaffTable from "./StaffTable";
+import TableSkeleton from "@/app/components/TableSkeleton";
 
 const StaffList = () => {
   const { staffs, loading, fetchStaff } = useStaffStore();
@@ -13,7 +14,9 @@ const StaffList = () => {
     <div>
       <div className="">
         {staffs.length < 1 && loading ? (
-          <div className="rounded py-20 text-center">Getting staff data...</div>
+          <div className="rounded text-center">
+            <TableSkeleton />
+          </div>
         ) : staffs.length > 0 ? (
           <StaffTable staff={staffs} />
         ) : (

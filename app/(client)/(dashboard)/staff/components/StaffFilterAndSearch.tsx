@@ -22,9 +22,9 @@ const StaffFilterAndSearch = () => {
           <option>HR department</option>
         </select>
 
-        {/* filter by role */}
+        {/* filter by designation */}
         <select className="select select-bordered w-1/2 md:max-w-[200px]">
-          <option selected>All Roles</option>
+          <option selected>All Designations</option>
           <option>Head of Department</option>
           <option>Web Developer</option>
         </select>

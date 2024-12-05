@@ -9,14 +9,12 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
+import TableSkeleton from "@/app/components/TableSkeleton";
 
 const departmentSchema = z.object({
-  dept_code: z
-    .string()
-    .min(4, {
-      message:
-        "Department code is required and should be at least 4 characters.",
-    }),
+  dept_code: z.string().min(4, {
+    message: "Department code is required and should be at least 4 characters.",
+  }),
   name: z.string().nonempty("Department name is required"),
   description: z.string().optional(),
 });
@@ -74,14 +72,6 @@ const Page = () => {
     fetchDepartments();
   }, []);
 
-  if (loading && departments.length < 1) {
-    return (
-      <div className="rounded py-20 text-center">
-        Getting departments data...
-      </div>
-    );
-  }
-
   return (
     <div>
       <div>
@@ -103,7 +93,11 @@ const Page = () => {
       </div>
 
       <div>
-        {departments.length > 0 ? (
+        {loading && departments.length < 1 ? (
+          <div className="rounded text-center">
+            <TableSkeleton />
+          </div>
+        ) : departments.length > 0 ? (
           <DepartmentTable
             departments={departments}
             deleteDepartment={deleteDepartment}

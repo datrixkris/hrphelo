@@ -18,14 +18,14 @@ const StaffTable = ({ staff }: StaffTableProps) => {
             <th>Staff ID</th>
             <th>Email</th>
             <th>Hiring Date</th>
-            <th>Role</th>
+            <th>Designation</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {/* row 1 */}
           {staff.map((member) => (
-            <tr key={member.id} className="hover !text-sm">
+            <tr key={member.id} className="!text-sm">
               <th>{member.name}</th>
               <td>{member.staffId}</td>
               <td>{member.email}</td>

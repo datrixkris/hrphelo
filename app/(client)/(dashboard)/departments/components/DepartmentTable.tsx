@@ -84,7 +84,7 @@ export const DepartmentTable = ({
           </thead>
           <tbody>
             {departments.map((department, index) => (
-              <tr key={department.id || index} className="hover">
+              <tr key={department.id || index} className="">
                 <th>{index + 1}</th>
                 <td>{department.name}</td>
                 <td>{department.staff?.length || 0}</td>
