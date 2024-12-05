@@ -15,8 +15,7 @@ const TABS = ["Profile", "Projects", "Bank and Statutory", "Assets"];
 
 const Page = () => {
   const user = useAuthStore((state) => state.user);
-  const { fetchStaffProfile, loading, fetchStaffById, profile } =
-    useStaffStore();
+  const { fetchStaffProfile, loading, fetchStaffById } = useStaffStore();
   const [staffDetails, setStaffDetails] = useState<StaffDetail | null>(null);
   const [profileDetails, setProfileDetails] = useState<StaffProfile | null>(
     null,
