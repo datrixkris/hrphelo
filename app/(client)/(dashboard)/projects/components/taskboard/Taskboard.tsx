@@ -79,7 +79,7 @@ const Taskboard = ({ project }: TaskboardProps) => {
             onClick={() => setModalOpen(true)}
           >
             <div className="flex items-center gap-1">
-              <Icon icon="heroicons:plus" /> Create column
+              <Icon icon="heroicons:plus" /> Create board
             </div>
           </button>
         </div>
