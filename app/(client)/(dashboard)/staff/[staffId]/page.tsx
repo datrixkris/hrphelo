@@ -33,7 +33,11 @@ const Page = () => {
       setError("Failed to load staff details. Please try again.");
     }
   }, [staffId, fetchStaffById]);
-  
+
+  const refreshStaffData = async () => {
+    const data = await fetchStaffById(Number(staffId), false);
+    setStaffDetails(data);
+  };
 
   useEffect(() => {
     fetchData();
@@ -60,7 +64,7 @@ const Page = () => {
         <div className="my-5">
           <StaffDetailsCard
             staffDetails={staffDetails}
-            refreshData={fetchData}
+            refreshData={refreshStaffData}
           />
 
           {/* Tab Navigation */}

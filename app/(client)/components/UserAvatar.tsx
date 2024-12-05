@@ -16,19 +16,29 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
   const fetchStaffProfile = useStaffStore((state) => state.fetchStaffProfile);
   const [profileData, setProfileData] = useState<StaffProfile | null>(null);
   const router = useRouter();
-  const profileIncomplete = true;
+  const [profileComplete, setProfileComplete] = useState(true);
 
   useEffect(() => {
     const fetchProfileData = async () => {
       if (user?.id) {
-        const data = await fetchStaffProfile(user.id);
-        setProfileData(data);
+        await fetchStaffProfile(user.id);
+        setProfileData(useStaffStore.getState().profile);
         console.log(profileData);
       }
     };
 
     fetchProfileData();
   }, []);
+
+  useEffect(() => {
+    if (profileData) {
+      setProfileComplete(
+        profileData.bankInfoStatus &&
+          profileData.personalInfoStatus &&
+          profileData.iceContactsStatus,
+      );
+    }
+  }, [profileData]);
 
   const handleLogout = () => {
     logout();
@@ -40,13 +50,13 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
       <div tabIndex={0}>
         <div className="flex cursor-pointer items-center gap-2">
           {/* User profile picture */}
-          {profileIncomplete ? (
+          {!profileComplete ? (
             <div
               className="tooltip tooltip-bottom tooltip-error"
               data-tip="Complete your profile"
             >
               <div
-                className={`avatar rounded-full ${profileIncomplete && "relative p-0.5 ring-2 ring-red-800"}`}
+                className={`avatar rounded-full ${!profileComplete && "relative p-0.5 ring-2 ring-red-800"}`}
               >
                 <div className="w-10 rounded-full">
                   <img
@@ -54,7 +64,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
                     alt="User Avatar"
                   />
                 </div>
-                {profileIncomplete && (
+                {!profileComplete && (
                   <Icon
                     icon="uis:exclamation-circle"
                     className="absolute -left-1 -top-1 text-lg text-red-800"
@@ -69,10 +79,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
             >
               <div className="avatar">
                 <div className="w-10 rounded-full">
-                  <img
-                    src={profile?.image || "/default-avatar.png"}
-                    alt="User Avatar"
-                  />
+                  <img src={profile?.image} alt="User Avatar" />
                 </div>
               </div>
             </div>
@@ -100,7 +107,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
               <span>Profile</span>
             </span>
             <span>
-              {profileIncomplete && (
+              {!profileComplete && (
                 <Icon
                   icon="uis:exclamation-circle"
                   className="text-lg text-red-800"

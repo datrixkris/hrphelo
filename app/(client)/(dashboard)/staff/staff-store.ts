@@ -2,19 +2,23 @@ import { create } from "zustand";
 import { api } from "../../../axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { StaffData, StaffDetail, StaffProfile } from "./types";
+import { StaffData, StaffDetail, StaffProfile, EditProfile } from "./types";
 
 interface StaffStore {
   staffs: StaffData[];
-  profile: StaffProfile[] | null;
-  loading?: boolean;
-  updatingData?: boolean;
+  profile: StaffProfile | null;
+  loading?: boolean; //for fetching
+  updatingData?: boolean; //for updating data
   error?: string | null;
   fetchStaff: () => Promise<void>;
-  fetchStaffProfile: (id: number) => Promise<StaffProfile>;
   addStaff: (data: StaffData) => Promise<void>;
-  fetchStaffById: (id: number) => Promise<StaffDetail>;
+  fetchStaffById: (
+    id: number,
+    optionalLoading?: boolean,
+  ) => Promise<StaffDetail>;
   updateStaffDetails: (data: StaffDetail, id: number) => Promise<void>;
+  fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>; //optional loading help us not show loading state when we are just updating data instead of fetching
+  updateStaffProfileDetails: (data: EditProfile, id: number) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -24,7 +28,7 @@ interface ApiErrorResponse {
 
 export const useStaffStore = create<StaffStore>((set, get) => ({
   staffs: [],
-  profile: [],
+  profile: null,
   loading: false,
   updatingData: false,
   error: null,
@@ -45,14 +49,16 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
       console.error(err);
     }
   },
-  fetchStaffProfile: async (id: number) => {
-    set({ loading: true, error: null, });
+
+  //optional loading help us not show loading state when we are just updating data instead of fetching
+  fetchStaffProfile: async (id: number, optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
 
     try {
-      const response = (await api.get(`/v1/profile/${id}`)).data; 
+      const response = (await api.get(`/v1/profile/${id}`)).data;
 
-      set(() => ({ loading: false, profile: response }));
-      return response;
+      set(() => ({ loading: false, profile: response[0] }));
+      // return response;
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
@@ -63,7 +69,6 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
       console.error(err);
     }
   },
-
 
   addStaff: async (data) => {
     set({ loading: true, error: null });
@@ -83,8 +88,8 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     }
   },
 
-  fetchStaffById: async (id: number) => {
-    set({ loading: true, error: null });
+  fetchStaffById: async (id: number, optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
 
     try {
       const response = (await api.get(`/v1/staff/${id}`)).data;
@@ -107,6 +112,26 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     try {
       const response = await api.put(`/v1/staff/${id}`, data);
       set(() => ({ updatingData: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        updatingData: false,
+      }));
+
+      console.error(err);
+    }
+  },
+
+  updateStaffProfileDetails: async (data, id) => {
+    // set updating and error states to true and null
+    set({ updatingData: true, error: null });
+
+    try {
+      const response = await api.put(`/v1/profile/${id}`, data); //update data
+      await get().fetchStaffProfile(id, false); //fetch profile data when update is successful
+      set(() => ({ updatingData: false })); //change updating state to false
       console.log(response.data);
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;

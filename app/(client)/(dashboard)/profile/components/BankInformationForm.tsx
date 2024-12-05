@@ -2,6 +2,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useStaffStore } from "../../staff/staff-store";
+import { useEffect } from "react";
+import { useProfileDataContext } from "../profileDataContext";
+import { toast } from "react-toastify";
 // import { useState } from "react";
 
 // Zod schema for form validation
@@ -19,17 +23,54 @@ type ProfileProps = {
 };
 
 export const BankInformationForm: React.FC<ProfileProps> = ({ onClose }) => {
+  // get loading state and function to update from store
+  const updateStaffProfileDetails = useStaffStore(
+    (state) => state.updateStaffProfileDetails,
+  );
+  const updatingData = useStaffStore((state) => state.updatingData);
   // useForm with Zod validation schema
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
   });
+  // get context data from useProfileDataContext
+  const { profileData: profile, refreshData } = useProfileDataContext()!;
+
+  useEffect(() => {
+    console.log(profile);
+    reset({
+      bankName: profile?.bankInfo?.bank_name,
+      accountNumber: profile?.bankInfo?.account_number,
+      bankBranch: profile?.bankInfo?.bank_branch,
+    });
+  }, [profile]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
     console.log(data);
+    const PersonalInfo = {
+      bank_name: data.bankName,
+      bank_branch: data.bankBranch,
+      account_number: data.accountNumber,
+    };
+
+    // update data with function from store
+    if (profile?.id) {
+      await updateStaffProfileDetails(PersonalInfo, profile.id);
+
+      if (!useStaffStore.getState().error) {
+        // await fetchStaffProfile(profile.id);
+        refreshData();
+        toast.success("Bank info updated successfully");
+        // console.log(useStaffStore.getState().profile);
+        onClose();
+      } else {
+        toast.error(useStaffStore.getState().error);
+      }
+    }
   };
 
   return (
@@ -60,6 +101,7 @@ export const BankInformationForm: React.FC<ProfileProps> = ({ onClose }) => {
               {...register("bankName")}
               className="textarea textarea-bordered mt-1 w-full"
               type="text"
+              placeholder="Type here"
             />
             {errors.bankName && (
               <p className="mt-1 text-sm text-red-500">
@@ -112,9 +154,9 @@ export const BankInformationForm: React.FC<ProfileProps> = ({ onClose }) => {
             <button
               type="submit"
               className="btn btn-primary"
-              // disabled={loading}
+              disabled={updatingData}
             >
-              {false ? "Submitting..." : "Submit"}
+              {updatingData ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

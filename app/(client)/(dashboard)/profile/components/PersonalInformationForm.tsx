@@ -2,6 +2,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useStaffStore } from "../../staff/staff-store";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { useProfileDataContext } from "../profileDataContext";
 // import { useState } from "react";
 
 // Zod schema for form validation
@@ -22,17 +26,56 @@ type ProfileProps = {
 export const PersonalInformationForm: React.FC<ProfileProps> = ({
   onClose,
 }) => {
+  const updateStaffProfileDetails = useStaffStore(
+    (state) => state.updateStaffProfileDetails,
+  );
+  const updatingData = useStaffStore((state) => state.updatingData);
   // useForm with Zod validation schema
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
   });
+  const { profileData: profile, refreshData } = useProfileDataContext()!;
+
+  useEffect(() => {
+    console.log(profile);
+    reset({
+      altContact: profile?.personalInfo?.alt_contact,
+      nationality: profile?.personalInfo?.nationality,
+      maritalStatus: profile?.personalInfo?.marital_status,
+      noOfChildren: profile?.personalInfo?.no_of_children
+        ? String(profile?.personalInfo?.no_of_children)
+        : "",
+    });
+  }, [profile]);
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
     console.log(data);
+    const PersonalInfo = {
+      alt_contact: data.altContact,
+      nationality: data.nationality,
+      marital_status: data.maritalStatus,
+      no_of_children: Number(data.noOfChildren),
+    };
+
+    // update data with function from store
+    if (profile?.id) {
+      await updateStaffProfileDetails(PersonalInfo, profile.id);
+
+      if (!useStaffStore.getState().error) {
+        // await fetchStaffProfile(profile.id);
+        refreshData();
+        toast.success("Personal info updated successfully");
+        // console.log(useStaffStore.getState().profile);
+        onClose();
+      } else {
+        toast.error(useStaffStore.getState().error);
+      }
+    }
   };
 
   return (
@@ -63,6 +106,7 @@ export const PersonalInformationForm: React.FC<ProfileProps> = ({
               {...register("altContact")}
               className="textarea textarea-bordered mt-1 w-full"
               type="text"
+              placeholder="Type here"
             />
             {errors.altContact && (
               <p className="mt-1 text-sm text-red-500">
@@ -140,9 +184,9 @@ export const PersonalInformationForm: React.FC<ProfileProps> = ({
             <button
               type="submit"
               className="btn btn-primary"
-              // disabled={loading}
+              disabled={updatingData}
             >
-              {false ? "Submitting..." : "Submit"}
+              {updatingData ? "Submitting..." : "Submit"}
             </button>
           </div>
         </form>

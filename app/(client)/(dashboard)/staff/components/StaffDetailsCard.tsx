@@ -34,7 +34,7 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
                 {staffDetails?.departments?.name}
               </p>
               <p className="mt-1 text-sm text-neutral-400">
-                {staffDetails?.role}
+                {staffDetails?.designation}
               </p>
 
               <p className="mt-4 font-semibold">

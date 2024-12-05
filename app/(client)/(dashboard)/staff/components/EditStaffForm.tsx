@@ -56,7 +56,7 @@ const EditStaffForm = ({
         gender: staffDetails.gender,
         image: staffDetails.image,
         date_of_birth: staffDetails.date_of_birth?.slice(0, 10),
-        role: staffDetails.role,
+        designation: staffDetails.designation,
         email: staffDetails.email,
         contact: staffDetails.contact,
         departmentId: staffDetails.departmentId,
@@ -187,13 +187,13 @@ const EditStaffForm = ({
               {/* Role */}
               <label className="form-control w-full">
                 <div className="label">
-                  <span className="label-text">Role</span>
+                  <span className="label-text">Designation</span>
                 </div>
                 <input
-                  {...register("role")}
+                  {...register("designation")}
                   required
                   type="text"
-                  placeholder="Staff Role"
+                  placeholder="Staff designation"
                   className="input input-bordered w-full"
                 />
               </label>

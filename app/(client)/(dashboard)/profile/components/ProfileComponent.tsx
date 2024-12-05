@@ -30,6 +30,7 @@ const ProfileComponent = ({ profile }: TStaffProfil) => {
       <Section
         infoType="personal"
         title="Personal Information"
+        profileComplete={profile.personalInfoStatus}
         content={
           <table className="w-full text-[15px]">
             <tbody>
@@ -58,6 +59,7 @@ const ProfileComponent = ({ profile }: TStaffProfil) => {
       <Section
         infoType="emergency"
         title="Emergency Contacts"
+        profileComplete={profile.iceContactsStatus}
         content={
           profile?.iceContacts?.length ? (
             profile.iceContacts.map((contact, index) => (
@@ -82,6 +84,7 @@ const ProfileComponent = ({ profile }: TStaffProfil) => {
       <Section
         infoType="bank"
         title="Bank Information"
+        profileComplete={profile.bankInfoStatus}
         content={
           <table className="w-full text-[15px]">
             <tbody>

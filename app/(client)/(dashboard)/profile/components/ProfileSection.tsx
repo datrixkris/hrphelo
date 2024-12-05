@@ -8,19 +8,28 @@ const ProfileSection = ({
   title,
   content,
   infoType,
+  profileComplete,
 }: {
   title: string;
   content: React.ReactNode;
   infoType: "personal" | "emergency" | "bank";
+  profileComplete: boolean;
 }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="rounded-lg bg-base-100 px-5 py-5">
+    <div
+      className={`relative rounded-lg bg-base-100 px-5 py-5 ${!profileComplete && "border border-error"}`}
+    >
+      {!profileComplete && (
+        <div className="absolute -top-[10px] rounded-md border border-error bg-error px-0.5 text-xs text-white">
+          Complete your profile
+        </div>
+      )}
       <div className="flex justify-between py-3">
         <p className="text-2xl">{title}</p>
         <button
-          className="rounded-full border bg-primary p-2 text-white"
+          className="rounded-full border bg-primary p-2"
           onClick={() => setShowModal(true)}
         >
           <Icon icon="mdi:pencil-outline" />
