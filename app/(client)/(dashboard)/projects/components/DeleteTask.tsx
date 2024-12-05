@@ -45,13 +45,16 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
             </p>
           </div>
 
-          <div className="submit-section mt-4 text-center">
+          <div className="submit-section mt-6 flex justify-end gap-2">
             <button
               type="button"
               onClick={handleDeleteTask}
               className="btn btn-error"
             >
-              {loading ? "Deleting..." : "Delete"}
+              {loading ? "Deleting..." : "Yes, delete"}
+            </button>
+            <button type="button" onClick={onClose} className="btn px-8">
+              No
             </button>
           </div>
         </div>
