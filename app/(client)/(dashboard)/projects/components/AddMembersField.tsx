@@ -9,79 +9,32 @@ interface Data {
 }
 
 const AddMembersField = ({
-  getIds,
-  multiple = false,
-  showAvatars = true,
-  selectedIds,
+  getIds, //function to get selected members ids in parent component
+  multiple = false, //allows for selecting multiple members, defaults at false
+  showAvatars = true, //allows component to show selected members avatars
+  selectedIds, //all member id's that are already selected.
+  excludedIds, // ids that shouldn't be part of the data list
 }: {
-  getIds: (ids: (number | undefined)[]) => void;
+  getIds: (ids: number[]) => void;
   multiple?: boolean;
   showAvatars?: boolean;
   selectedIds?: number[];
+  excludedIds?: number[];
 }) => {
   const loading = useStaffStore((state) => state.loading);
   const fetchStaff = useStaffStore((state) => state.fetchStaff);
   const staffs = useStaffStore((state) => state.staffs);
-  const [data, setData] = useState<Data[] | []>([]);
+  const [data, setData] = useState<Data[] | []>([]); //data to be used for this component
 
   useEffect(() => {
     const fetchData = async () => {
       console.log(selectedIds);
+      // fetch staff data if staff lenght is empty and transform and set data
       if (staffs.length === 0) {
         await fetchStaff();
-        setData(() =>
-          useStaffStore.getState().staffs.map((item) => {
-            // first check if some id's have already been selected
-            if (selectedIds) {
-              // make all selected ids true
-              if (selectedIds.includes(item.id)) {
-                return {
-                  name: item.name,
-                  id: item.id,
-                  selected: true,
-                };
-              }
-              return {
-                name: item.name,
-                id: item.id,
-                selected: false,
-              };
-            }
-            // if there are no selected ids
-            return {
-              name: item.name,
-              id: item.id,
-              selected: false,
-            };
-          }),
-        );
+        setData(transformData());
       } else {
-        setData(() =>
-          useStaffStore.getState().staffs.map((item) => {
-            // first check if some id's have already been selected
-            if (selectedIds) {
-              // make all selected ids true
-              if (selectedIds.includes(item.id)) {
-                return {
-                  name: item.name,
-                  id: item.id,
-                  selected: true,
-                };
-              }
-              return {
-                name: item.name,
-                id: item.id,
-                selected: false,
-              };
-            }
-            // if there are no selected ids
-            return {
-              name: item.name,
-              id: item.id,
-              selected: false,
-            };
-          }),
-        );
+        setData(transformData());
       }
       // pass all selected ids in an array to the parent component
       getIds(data.filter((item) => item.selected).map((item) => item.id));
@@ -89,19 +42,61 @@ const AddMembersField = ({
     fetchData();
   }, [fetchStaff, staffs.length]);
 
-  //   this effect sends array of id's to the parent component
+  const transformData = () => {
+    return useStaffStore.getState().staffs.map((item) => {
+      // first check if some id's have already been selected
+      if (selectedIds) {
+        // make all selected ids true
+        if (selectedIds.includes(item.id)) {
+          return {
+            name: item.name,
+            id: item.id,
+            selected: true,
+          };
+        }
+        return {
+          name: item.name,
+          id: item.id,
+          selected: false,
+        };
+      }
+      // if there are no selected ids
+      return {
+        name: item.name,
+        id: item.id,
+        selected: false,
+      };
+    });
+  };
+
+  //   this effect sends array of id's to the parent component whenever data changes
   useEffect(() => {
     getIds(data.filter((item) => item.selected).map((item) => item.id));
     console.log(data);
     // console.log(data.filter((item) => item.selected).map((item) => item.id));
   }, [data]);
 
+  // useEffect(() => {
+  //   setData((prevData) =>
+  //     prevData.filter((item) => {
+  //       //filter the returned data array and take out all items in the excluded array
+  //       if (excludedIds) {
+  //         if (!excludedIds.includes(item.id)) {
+  //           return item;
+  //         }
+  //       }
+  //     }),
+  //   );
+  // }, []);
+
   function changeDataState(newItem: Data) {
+    // replace item with new item...
     if (multiple) {
       setData((prevData) =>
         prevData.map((item) => (item.id === newItem.id ? newItem : item)),
       );
     } else {
+      // replace item with new item but set selected to false first
       setData((prevData) =>
         prevData.map((item) => {
           // Set all selected to false
@@ -149,6 +144,7 @@ const AddMembersField = ({
                       <img src={staff.image} alt={staff.name} />
                     </div>
                   </div>
+                  {!multiple && <p className="text-xs">{staff.name}</p>}
                 </div>
               );
             }

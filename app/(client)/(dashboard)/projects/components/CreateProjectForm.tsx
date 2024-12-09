@@ -16,8 +16,8 @@ const CreateProjectForm = ({
 }) => {
   const { register, handleSubmit, reset } = useForm<ProjectData>();
   const { createProject, updatingData, fetchProjects } = useProjectStore();
-  const [memberIds, setMemberIds] = useState<(number | undefined)[]>([]);
-  const [leaderId, setLeaderId] = useState<number | undefined>();
+  const [memberIds, setMemberIds] = useState<number[]>([]);
+  const [leaderId, setLeaderId] = useState<number>();
   const [leaderError, setLeaderError] = useState("");
   const [memberError, setMemberError] = useState("");
 
@@ -124,7 +124,10 @@ const CreateProjectForm = ({
                 <div className="label">
                   <span className="label-text">Select project lead</span>
                 </div>
-                <AddMembersField getIds={(ids) => setLeaderId(ids[0])} />
+                <AddMembersField
+                  getIds={(ids) => setLeaderId(ids[0])}
+                  excludedIds={memberIds ? memberIds : []}
+                />
                 {leaderError && (
                   <span className="label-text text-error">{leaderError}</span>
                 )}
@@ -138,6 +141,7 @@ const CreateProjectForm = ({
                 <AddMembersField
                   getIds={(ids) => setMemberIds(ids)}
                   multiple={true}
+                  excludedIds={leaderId ? [leaderId] : []}
                 />
                 <span className="label-text text-error">{memberError}</span>
               </label>

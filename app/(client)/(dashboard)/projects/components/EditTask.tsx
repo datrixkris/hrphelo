@@ -44,7 +44,7 @@ const EditTask = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
   });
@@ -185,7 +185,10 @@ const EditTask = ({
               <div className="label">
                 <span className="label-text">Assign task to</span>
               </div>
-              <AddMembersField getIds={(ids) => setMemberId(ids[0])} />
+              <AddMembersField
+                getIds={(ids) => setMemberId(ids[0])}
+                selectedIds={task.assignee?.id ? [task.assignee.id] : []}
+              />
               <div className="label">
                 {memberError && (
                   <span className="label-text-alt text-error">
@@ -196,7 +199,10 @@ const EditTask = ({
             </label>
 
             <div className="submit-section mt-4 text-center">
-              <button className="btn btn-primary" disabled={loading}>
+              <button
+                className="btn btn-primary"
+                disabled={loading || !isDirty}
+              >
                 {loading ? "Submitting..." : "Submit"}
               </button>
             </div>
