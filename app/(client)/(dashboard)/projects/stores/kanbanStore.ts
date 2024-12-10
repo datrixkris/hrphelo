@@ -55,15 +55,7 @@ interface KanbanState {
   deleteTask: (taskId: string) => Promise<void>;
   deleteColumn: (columnId: string) => Promise<void>;
   reorderColumns: (startIndex: number, newColumnOrder: ColumnOrder) => void;
-  reorderTasks: (
-    projectId: number,
-    taskId: string,
-    updateTask: {
-      name: string;
-      description: string;
-      newBoardId: number;
-    },
-  ) => void;
+  reorderTasks: (projectId: number, taskId: string, updateTask: Task) => void;
 }
 
 export const useKanbanStore = create<KanbanState>((set, get) => {
@@ -234,45 +226,45 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
     reorderTasks: async (
       projectId: number,
       taskId: string,
-      updateTask: {
-        name: string;
-        description: string;
-        newBoardId: number;
-      },
+      updateTask: Task,
     ) => {
       // Update the store first for an instant UI response
-      set((state) => {
-        const columns = { ...state.columns };
-        const tasks = { ...state.tasks };
+      // set((state) => {
+      //   const columns = { ...state.columns };
+      //   const tasks = { ...state.tasks };
 
-        // Remove task from the source column
-        Object.keys(columns).forEach((columnId) => {
-          const taskIndex = columns[columnId].taskIds.indexOf(taskId);
-          if (taskIndex !== -1) {
-            columns[columnId].taskIds.splice(taskIndex, 1);
-          }
-        });
+      //   // Remove task from the source column
+      //   Object.keys(columns).forEach((columnId) => {
+      //     const taskIndex = columns[columnId].taskIds.indexOf(taskId);
+      //     if (taskIndex !== -1) {
+      //       columns[columnId].taskIds.splice(taskIndex, 1);
+      //     }
+      //   });
 
-        // Add task to the destination column (newBoardId corresponds to columnId)
-        const destinationColumn = columns[updateTask.newBoardId.toString()];
-        if (destinationColumn) {
-          destinationColumn.taskIds.push(taskId);
-        }
+      //   // Add task to the destination column (newBoardId corresponds to columnId)
+      //   const destinationColumn = columns[updateTask.newBoardId.toString()];
+      //   if (destinationColumn) {
+      //     destinationColumn.taskIds.push(taskId);
+      //   }
 
-        // Update the task details in the store
-        tasks[taskId] = {
-          ...tasks[taskId],
-          name: updateTask.name,
-          description: updateTask.description,
-          boardId: updateTask.newBoardId,
-        };
+      //   // Update the task details in the store
+      //   tasks[taskId] = {
+      //     ...tasks[taskId],
+      //     name: updateTask.name,
+      //     description: updateTask.description,
+      //     boardId: updateTask.newBoardId,
+      //   };
 
-        return { columns, tasks };
-      });
+      //   return { columns, tasks };
+      // });
 
       // Send the changes to the backend
       await performApiUpdate(
-        () => api.put(`/v1/projects/${projectId}/tasks/${taskId}`, updateTask),
+        () =>
+          api.put(
+            `/v1/projects/${projectId}/tasks/${Number(taskId)}`,
+            updateTask,
+          ),
         "Task updated successfully!",
       );
     },

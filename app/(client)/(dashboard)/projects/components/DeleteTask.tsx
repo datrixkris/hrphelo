@@ -50,6 +50,7 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
               type="button"
               onClick={handleDeleteTask}
               className="btn btn-error"
+              disabled={loading}
             >
               {loading ? "Deleting..." : "Yes, delete"}
             </button>
