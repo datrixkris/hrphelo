@@ -33,8 +33,6 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       const [movedColumnId] = newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, movedColumnId);
 
-      // Update column order in the store
-
       // Extract slugs (column IDs) and log them
       const formattedSlugs = newColumnOrder.map((slug) => ({ slug }));
       reorderColumns(projectId, formattedSlugs);
@@ -43,7 +41,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       return;
     }
 
-    // board source and destination are the same, return
+    // if the item isn't moved, return
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -51,7 +49,8 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       return;
     }
 
-    // moving tasks between columns
+    // moving tasks between columns and stuff like that
+    // get board data and board object keys for source board and destination board
     const { board: start, boardKey: startKey } = findBoardById(
       columns,
       source.droppableId,
@@ -60,19 +59,12 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       columns,
       destination.droppableId,
     )!;
-    console.log(
-      "these aer the collumns :",
-      columns,
-      start,
-      finish,
-      source,
-      tasks,
-    );
 
-    // if within the same column
+    // if item is dragged and dropped within within the same column
     if (start?.id == finish?.id) {
+      // rearrange the taasks in the board acordinly
       const newTaskIds = Array.from(start!.taskIds);
-      const [movedTaskId] = newTaskIds.splice(source.index, 1);
+      const [movedTaskId] = newTaskIds.splice(source.index, 1); //this here gets the string key used to identify the task in the object.
       newTaskIds.splice(destination.index, 0, movedTaskId);
 
       const newColumn = {
@@ -85,12 +77,17 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
         [startKey]: newColumn,
       };
 
+      // save new column data to persist for the ui
       useKanbanStore.setState({ columns: newColumns });
-      console.log(columns, newColumns);
+
+      const updatedTask = tasks[movedTaskId];
+      // hit the api to save the arrangement... how this is working to preserve the arrangement beats me
+      reorderTasks(projectId, draggableId, updatedTask);
       return;
     }
 
     // handle task moving from one board to the other
+    // arrange the tasks in the source column/board by removing the task
     const startTaskIds = Array.from(start.taskIds);
     const [movedTaskId] = startTaskIds.splice(source.index, 1);
     const newStartColumn = {
@@ -98,6 +95,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       taskIds: startTaskIds,
     };
 
+    // arrange the tasks in the destination column/board by adding the task
     const finishTaskIds = Array.from(finish.taskIds);
     finishTaskIds.splice(destination.index, 0, movedTaskId);
     const newFinishColumn = {
@@ -105,6 +103,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       taskIds: finishTaskIds,
     };
 
+    // save the columns and persist in the store
     const newColumns = {
       ...columns,
       [startKey]: newStartColumn,
@@ -117,13 +116,14 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       boardId: Number(newFinishColumn.id),
     };
 
-    console.log(updatedTask, draggableId, newFinishColumn.id);
+    // hit the api to save the arrangement... again, how this is working to preserve the arrangement beats me
     reorderTasks(projectId, draggableId, updatedTask);
   };
 
+  // function to find board using the boards integer id
   function findBoardById(
-    data: { [key: string]: Column },
-    boardId: number | string,
+    data: { [key: string]: Column }, //all columns data
+    boardId: number | string, //integer id
   ) {
     for (const boardKey in data) {
       const board = data[boardKey];
