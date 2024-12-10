@@ -2,7 +2,7 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Column, Task } from "../stores/kanbanStore";
 import TaskComponent from "./TaskComponent";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AddTasks } from "./AddTasks";
 
 type ColumnComponentProps = {
@@ -23,6 +23,8 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
 }) => {
   const [activeColumnId, setActiveColumnId] = useState<number | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [bgColor, setBgColor] = useState("");
+  const [textColor, setTextColor] = useState("");
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -35,6 +37,18 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
   const openModal = (id: number) => setActiveColumnId(id);
   const closeModal = () => setActiveColumnId(null);
 
+  const getBoardColors = () => {
+    const text = column.color ? `text-[${column.color}]` : "text-base-content";
+    const bg = column.color ? `bg-[${column.color}]/20` : "bg-base-100";
+    return { bg, text };
+  };
+
+  useEffect(() => {
+    const { bg, text } = getBoardColors();
+    setBgColor(bg);
+    setTextColor(text);
+  });
+
   return (
     <Draggable draggableId={String(column.id)} index={index}>
       {(provided) => (
@@ -45,11 +59,13 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
         >
           <div
             {...provided.dragHandleProps}
-            className="group sticky top-0 z-20 mb-2 flex items-center justify-between bg-base-100 px-2 py-3 shadow-[rgba(0,0,15,0.2)_0px_0px_10px_0]"
+            className={`group sticky top-0 z-20 mb-2 flex items-center justify-between px-2 py-3 shadow-[rgba(0,0,15,0.2)_0px_0px_10px_0] ${bgColor}`}
           >
-            <h2 className="font-semibold text-primary">{column.name}</h2>
+            <h2 className={` font-semibold ${textColor}`}>
+              {column.name}
+            </h2>
             <div className="dropdown hidden group-hover:inline-block">
-              <div className="px-2 py-1 text-primary">
+              <div className="px-2 py-1 text-base-content">
                 <Icon
                   icon="octicon:kebab-horizontal-24"
                   onClick={toggleDropdown}

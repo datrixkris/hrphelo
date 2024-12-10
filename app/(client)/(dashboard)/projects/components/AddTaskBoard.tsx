@@ -73,6 +73,8 @@ export const AddTaskBoard: React.FC<AddTaskBoardProps> = ({
       description: data.description,
     };
 
+    console.log(columnData);
+
     if (column) {
       editColumn(columnData);
     } else {

@@ -59,7 +59,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
           ref={provided.innerRef}
           {...provided.draggableProps} // Ensure this is applied to the container
           {...provided.dragHandleProps} // Ensure this is applied to the drag handle
-          className="relative mb-2 rounded border bg-white p-2 py-3 text-left text-sm"
+          className="relative mb-2 rounded border bg-base-100 p-2 py-3 text-left text-sm"
         >
           {/* heading */}
           <div className="flex items-start justify-between">
