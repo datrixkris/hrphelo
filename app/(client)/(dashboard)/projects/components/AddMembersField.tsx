@@ -13,7 +13,7 @@ const AddMembersField = ({
   multiple = false, //allows for selecting multiple members, defaults at false
   showAvatars = true, //allows component to show selected members avatars
   selectedIds, //all member id's that are already selected.
-  excludedIds, // ids that shouldn't be part of the data list
+  // excludedIds, // ids that shouldn't be part of the data list
 }: {
   getIds: (ids: number[]) => void;
   multiple?: boolean;

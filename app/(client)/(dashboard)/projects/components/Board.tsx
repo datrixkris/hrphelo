@@ -17,12 +17,12 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
     columnOrder,
     tasks,
     deleteColumn,
-    reorderColumns, 
-    // reorderTasks
+    reorderColumns,
+    reorderTasks,
   } = useKanbanStore();
 
   const onDragEnd = (result: DropResult) => {
-    const { source, destination, type } = result;
+    const { source, destination, draggableId, type } = result;
 
     // If dropped outside a valid destination, do nothing
     if (!destination) return;
@@ -33,40 +33,106 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
       const [movedColumnId] = newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, movedColumnId);
 
-      // Update column order in the store
-
       // Extract slugs (column IDs) and log them
       const formattedSlugs = newColumnOrder.map((slug) => ({ slug }));
       reorderColumns(projectId, formattedSlugs);
 
       console.log("Formatted Column Slugs:", formattedSlugs);
+      return;
     }
 
-    // Handle task reordering within a column or across columns
-    // if (type === "task") {
-    //   console.log("task");
-      
-    //   const { draggableId: taskId } = result;
-    //   const sourceColumnId = source.droppableId;
-    //   const destinationColumnId = destination.droppableId;
-    
-    //   // Skip if the task wasn't moved
-    //   if (sourceColumnId === destinationColumnId && source.index === destination.index) return;
-    
-    //   const task = tasks[taskId];
-    
-    //   // Prepare the update payload
-    //   const updateTask = {
-    //     name: task.name,
-    //     description: task.description,
-    //     newBoardId: Number(destinationColumnId),
-    //   };
-    
-    //   // Call the store's reorderTasks function
-    //   reorderTasks(projectId, taskId, updateTask);
-    // }
-    
+    // if the item isn't moved, return
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    // moving tasks between columns and stuff like that
+    // get board data and board object keys for source board and destination board
+    const { board: start, boardKey: startKey } = findBoardById(
+      columns,
+      source.droppableId,
+    )!;
+    const { board: finish, boardKey: finishKey } = findBoardById(
+      columns,
+      destination.droppableId,
+    )!;
+
+    // if item is dragged and dropped within within the same column
+    if (start?.id == finish?.id) {
+      // rearrange the taasks in the board acordinly
+      const newTaskIds = Array.from(start!.taskIds);
+      const [movedTaskId] = newTaskIds.splice(source.index, 1); //this here gets the string key used to identify the task in the object.
+      newTaskIds.splice(destination.index, 0, movedTaskId);
+
+      const newColumn = {
+        ...start,
+        taskIds: newTaskIds,
+      };
+
+      const newColumns = {
+        ...columns,
+        [startKey]: newColumn,
+      };
+
+      // save new column data to persist for the ui
+      useKanbanStore.setState({ columns: newColumns });
+
+      const updatedTask = tasks[movedTaskId];
+      // hit the api to save the arrangement... how this is working to preserve the arrangement beats me
+      reorderTasks(projectId, draggableId, updatedTask);
+      return;
+    }
+
+    // handle task moving from one board to the other
+    // arrange the tasks in the source column/board by removing the task
+    const startTaskIds = Array.from(start.taskIds);
+    const [movedTaskId] = startTaskIds.splice(source.index, 1);
+    const newStartColumn = {
+      ...start,
+      taskIds: startTaskIds,
+    };
+
+    // arrange the tasks in the destination column/board by adding the task
+    const finishTaskIds = Array.from(finish.taskIds);
+    finishTaskIds.splice(destination.index, 0, movedTaskId);
+    const newFinishColumn = {
+      ...finish,
+      taskIds: finishTaskIds,
+    };
+
+    // save the columns and persist in the store
+    const newColumns = {
+      ...columns,
+      [startKey]: newStartColumn,
+      [finishKey]: newFinishColumn,
+    };
+    useKanbanStore.setState({ columns: newColumns });
+
+    const updatedTask = {
+      ...tasks[movedTaskId],
+      boardId: Number(newFinishColumn.id),
+    };
+
+    // hit the api to save the arrangement... again, how this is working to preserve the arrangement beats me
+    reorderTasks(projectId, draggableId, updatedTask);
   };
+
+  // function to find board using the boards integer id
+  function findBoardById(
+    data: { [key: string]: Column }, //all columns data
+    boardId: number | string, //integer id
+  ) {
+    for (const boardKey in data) {
+      const board = data[boardKey];
+      if (board.id === boardId) {
+        return { board, boardKey }; // Return the board directly
+      }
+    }
+    return null; // Return null if no matching board is found
+  }
 
   return (
     <div className="h-full w-full">
@@ -78,7 +144,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
         >
           {(provided) => (
             <div
-              className="flex h-full w-full space-x-4 overflow-x-scroll"
+              className="flex space-x-4 overflow-x-scroll"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
