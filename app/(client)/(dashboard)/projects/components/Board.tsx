@@ -2,6 +2,8 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { Column, useKanbanStore } from "../stores/kanbanStore";
 import ColumnComponent from "./ColumnComponent";
 import { useParams } from "next/navigation";
+import { useProjectDetailsContext } from "./project-details/ProjectDetailsContext";
+// import { useProjectStore } from "../stores/project-store";
 
 export interface IKanbanBoard {
   onEditColumn: (column: Column) => void;
@@ -11,6 +13,8 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
   const params = useParams<{ projectId: string; projectSlug: string }>();
 
   const projectId = Number(params.projectId);
+  const refreshData = useProjectDetailsContext()?.refreshData;
+  // const projectSlug = params.projectSlug;
 
   const {
     columns,
@@ -118,6 +122,15 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
 
     // hit the api to save the arrangement... again, how this is working to preserve the arrangement beats me
     reorderTasks(projectId, draggableId, updatedTask);
+    if (
+      finish.name.toLowerCase() === "completed" ||
+      start.name.toLowerCase() === "completed"
+    ) {
+      if (refreshData) {
+        refreshData(false);
+        console.log("progress updated");
+      }
+    }
   };
 
   // function to find board using the boards integer id

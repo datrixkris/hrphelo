@@ -3,7 +3,7 @@ import { ProjectData } from "../../types/project-types";
 
 interface ProjectDataTypes {
   projectDetails: ProjectData | null;
-  refreshData: () => void;
+  refreshData: (optionalLoading?: boolean) => void;
 }
 
 export const ProjectDetailsContext = createContext<ProjectDataTypes | null>(

@@ -11,7 +11,10 @@ interface ProjectStore {
   error?: string | null;
   fetchProjects: () => Promise<void>;
   createProject: (data: ProjectData) => Promise<void>;
-  fetchProjectById: (slug: string) => Promise<ProjectData[]>;
+  fetchProjectById: (
+    slug: string,
+    optionalLoading?: boolean,
+  ) => Promise<ProjectData[]>;
   updateProjectDetails: (data: ProjectData, id: number) => Promise<void>;
 }
 
@@ -61,8 +64,8 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
 
-  fetchProjectById: async (slug) => {
-    set({ loading: true, error: null });
+  fetchProjectById: async (slug, optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
 
     try {
       const response = (await api.get(`/v1/projects/${slug}/tasks`)).data;

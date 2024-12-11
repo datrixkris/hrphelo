@@ -33,8 +33,10 @@ const Project = () => {
     }
   }, [params.projectSlug, fetchProjectById]);
 
-  const fetchProjectData = async () => {
-    const data = (await fetchProjectById(params.projectSlug))[0];
+  const fetchProjectData = async (optionalLoading = true) => {
+    const data = (
+      await fetchProjectById(params.projectSlug, optionalLoading)
+    )[0];
     setProjectDetails(data);
     console.log(data);
   };
@@ -65,7 +67,11 @@ const Project = () => {
           {/* taskboard and project details */}
           <div className="mt-8">
             {toggleTaskboard ? (
-              <Taskboard project={projectDetails} />
+              <ProjectDetailsContext.Provider
+                value={{ projectDetails, refreshData: fetchProjectData }}
+              >
+                <Taskboard project={projectDetails} />
+              </ProjectDetailsContext.Provider>
             ) : (
               <ProjectDetailsContext.Provider
                 value={{ projectDetails, refreshData: fetchProjectData }}
