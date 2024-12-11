@@ -7,6 +7,14 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    {
+      pattern: /(text|bg)-[a-z]+/,
+    },
+    {
+      pattern: /bg-[a-z]+\/\d+/,
+    },
+  ],
   theme: {
     extend: {
       colors: {
@@ -23,7 +31,8 @@ const config: Config = {
 
   // daisyUI config (optional - here are the default values)
   daisyui: {
-    themes: ["light",
+    themes: [
+      "light",
       "dark",
       "retro",
       "black",
@@ -32,8 +41,8 @@ const config: Config = {
       "lemonade",
       "luxury",
       "valentine",
-      "synthwave",],
-
+      "synthwave",
+    ],
   },
 
   // darkMode: ['class', '[data-theme="black"]']

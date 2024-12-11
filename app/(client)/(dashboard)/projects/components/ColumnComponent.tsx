@@ -38,8 +38,10 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
   const closeModal = () => setActiveColumnId(null);
 
   const getBoardColors = () => {
-    const text = column.color ? `text-[${column.color}]` : "text-base-content";
-    const bg = column.color ? `bg-[${column.color}]/20` : "bg-base-100";
+    const bg = column.color ? `bg-${column.color}-500/10` : "bg-base-100";
+    const text = column.color
+      ? `text-${column.color}-500`
+      : "text-base-content";
     return { bg, text };
   };
 
@@ -47,7 +49,8 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
     const { bg, text } = getBoardColors();
     setBgColor(bg);
     setTextColor(text);
-  });
+    console.log(bg, text);
+  }, [column.color]);
 
   return (
     <Draggable draggableId={String(column.id)} index={index}>
@@ -61,9 +64,7 @@ const ColumnComponent: React.FC<ColumnComponentProps> = ({
             {...provided.dragHandleProps}
             className={`group sticky top-0 z-20 mb-2 flex items-center justify-between px-2 py-3 shadow-[rgba(0,0,15,0.2)_0px_0px_10px_0] ${bgColor}`}
           >
-            <h2 className={` font-semibold ${textColor}`}>
-              {column.name}
-            </h2>
+            <h2 className={`font-semibold ${textColor}`}>{column.name}</h2>
             <div className="dropdown hidden group-hover:inline-block">
               <div className="px-2 py-1 text-base-content">
                 <Icon
