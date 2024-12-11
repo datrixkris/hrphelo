@@ -93,6 +93,7 @@ const EditStaffForm = ({
       ...data,
       departmentId: Number(data.departmentId),
       supervisorId: Number(data.supervisorId),
+      designation: Number(data.designation),
       image: imageUrl,
     };
     if (staffDetails?.id) {
@@ -184,14 +185,14 @@ const EditStaffForm = ({
                 />
               </label>
 
-              {/* Role */}
+              {/* Designation */}
               <label className="form-control w-full">
                 <div className="label">
                   <span className="label-text">Designation</span>
                 </div>
                 <input
-                  {...register("designation")}
                   required
+                  {...register("designation")}
                   type="text"
                   placeholder="Staff designation"
                   className="input input-bordered w-full"

@@ -62,6 +62,7 @@ const AddStaffForm = ({
       ...data,
       departmentId: Number(data.departmentId),
       supervisorId: data.supervisorId ? Number(data.supervisorId) : null,
+      designation: data.designation,
       image: imageUrl,
     };
 
@@ -149,16 +150,16 @@ const AddStaffForm = ({
                 />
               </label>
 
-              {/* Role */}
+              {/* Designation */}
               <label className="form-control w-full">
                 <div className="label">
-                  <span className="label-text">Role</span>
+                  <span className="label-text">Designation</span>
                 </div>
                 <input
-                  {...register("role")}
                   required
+                  {...register("designation")}
                   type="text"
-                  placeholder="Staff Role"
+                  placeholder="Staff Designation"
                   className="input input-bordered w-full"
                 />
               </label>
