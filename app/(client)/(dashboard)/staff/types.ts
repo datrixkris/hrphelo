@@ -8,7 +8,7 @@ export interface StaffDetail {
   designation?: string;
   email?: string;
   contact?: string;
-  gender: string;
+  gender?: string;
   date_of_birth?: string;
   hiring_date?: string;
   supervisorId?: number;
@@ -26,6 +26,7 @@ export interface StaffData {
   staffId?: string;
   name: string;
   role?: string;
+  designation?: string;
   departmentId?: number;
   email?: string;
   contact?: string;
