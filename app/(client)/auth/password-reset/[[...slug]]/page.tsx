@@ -1,10 +1,10 @@
 "use client";
-import { submitSetForm } from "@/app/actions/auth";
+import { submitForgotPasswordForm, submitSetForm } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
+import Logo from "@/app/components/Logo";
 import { ResetFormData, resetSchema } from "@/app/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -21,38 +21,42 @@ const Page = ({ params }: { params: { slug: string } }) => {
   });
 
   const onSubmit = async (data: ResetFormData) => {
-    setLoading(true);
+    setLoading(true); // Start loading
     try {
-      const respond = await submitSetForm(data);
-      if (respond?.route) {
-        router.push(respond.route);
-        console.log(params);
+      let response;
+  
+      // Check if there's a code in params (slug is present)
+      if (params.slug) {
+        console.log("Processing password reset");
+  
+        // If there's a slug, submit the form to reset password
+        response = await submitForgotPasswordForm(data);
+      } else {
+        // Otherwise, submit the OTP form
+        response = await submitSetForm(data);
       }
+  
+      // Check the response and route accordingly
+      if (response?.route) {
+        router.push(response.route);  // Redirect to the next page
+        console.log("Redirecting to:", response.route);
+      }
+  
+
     } catch (error) {
-      console.error(error);
+      // Handle errors appropriately
+      console.error("Error during submission:", error);
     } finally {
-      setLoading(false);
+      setLoading(false);  // Stop loading
     }
   };
+  
   return (
-    <section className="h-screen bg-base-100 py-10 sm:py-16 lg:py-24">
+    <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-5 flex w-full justify-center text-center">
-            <Image
-              className="dark:hidden"
-              src="/images/hrphelo.png"
-              alt="logo"
-              width="200"
-              height="150"
-            />
-            <Image
-              className="hidden dark:block"
-              src="/images/hrphelo_white.png"
-              alt="logo"
-              width="200"
-              height="150"
-            />
+            <Logo width={200} height={150} />
           </div>
         </div>
 

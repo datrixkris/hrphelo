@@ -37,3 +37,7 @@ export type FirstResetData = {
   confirmPassword: string;
   otp: string;
 };
+export type ResetData = {
+  reset_token: string;
+  otp: string;
+};

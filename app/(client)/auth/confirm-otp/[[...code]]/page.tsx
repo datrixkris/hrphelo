@@ -1,13 +1,18 @@
 "use client";
-import { requestOtp, submitOtpForm } from "@/app/actions/auth";
+import {
+  requestResetOtp,
+  requestOtp,
+  submitOtpForm,
+  storeResetOtp,
+} from "@/app/actions/auth";
 import Button from "@/app/components/Button";
+import Logo from "@/app/components/Logo";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 
-const Page = () => {
+const Page = ({ params }: { params: { code: string } }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,24 +39,36 @@ const Page = () => {
   };
 
   const onSubmit = async () => {
-    setLoading(true);
+    setLoading(true); // Start loading state
     try {
       // Join the OTP array into a single string
       const otpData = otp.join("");
 
-      // Send OTP data as a string
-      const response = await submitOtpForm(otpData);
+      let response;
 
+      if (params.code) {
+        // If there's a code in params, store reset OTP
+        response = await storeResetOtp(otpData);
+      } else {
+        // Otherwise, submit the OTP form
+        response = await submitOtpForm(otpData);
+      }
+
+      // Handle routing or message from the response
       if (response?.route) {
         router.push(response.route);
-      }
-      if (response.message) {
+      } else if (response?.message) {
         setMessage(response.message);
+      } else {
+        // Handle a case where the response doesn't contain expected data
+        setMessage("Unexpected response format");
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
+      // Optionally, set an error message in the UI for the user
+      setMessage("There was an error processing your OTP.");
     } finally {
-      setLoading(false);
+      setLoading(false); // End loading state
     }
   };
 
@@ -85,29 +102,20 @@ const Page = () => {
   useLayoutEffect(() => {
     const isAuthenticated = useAuthStore.getState().isAuthenticated;
 
+    if (params.code) {
+      requestResetOtp(params.code);
+    }
+
     if (isAuthenticated) {
       router.push("/");
     }
   }, [router]);
 
   return (
-    <section className="flex h-screen w-full flex-col items-center justify-center bg-base-100">
+    <section className="flex h-screen w-full flex-col items-center justify-center bg-base-200">
       <div className="mx-auto max-w-2xl text-center">
         <div className="mb-7 flex w-full justify-center text-center">
-          <Image
-            className="dark:hidden"
-            src="/images/hrphelo.png"
-            alt="logo"
-            width="200"
-            height="150"
-          />
-          <Image
-            className="hidden dark:block"
-            src="/images/hrphelo_white.png"
-            alt="logo"
-            width="200"
-            height="150"
-          />
+          <Logo width={200} height={150} />
         </div>
       </div>
       <div className="w-full max-w-md rounded-lg bg-base-300 px-8 py-10 shadow-md">
@@ -129,6 +137,7 @@ const Page = () => {
               type="text"
               inputMode="numeric"
               maxLength={1}
+              autoComplete="off"
               value={digit}
               onChange={(e) => handleInputChange(e, index)}
               className="flex aspect-square w-14 cursor-text items-center justify-center rounded-lg bg-base-100 text-center text-2xl text-gray-700 dark:text-gray-100"
