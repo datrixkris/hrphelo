@@ -1,5 +1,6 @@
 import { Company } from "@/app/types/user-types";
 import { Department } from "../departments/types";
+import { User } from "@/app/types/user-types";
 
 export interface StaffDetail {
   id?: number;
@@ -33,6 +34,9 @@ export interface StaffData {
   image: string;
   hiring_date?: string;
   supervisorId?: number | null;
+  departments?: Department;
+  company?: Company;
+  user?: User;
 }
 
 export interface StaffProfile {

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { useState } from "react";
 import { StaffData } from "../../staff/types";
 import dayjs from "dayjs";
@@ -31,16 +30,22 @@ const UsersTable = ({ staff, setUserData }: UsersTableProps) => {
               <th>{member.name}</th>
               <td>{member.email}</td>
               <td>{dayjs(member.hiring_date).format("MMM D, YYYY")}</td>
-              <td>IT</td>
-              <td>{member.role}</td>
-              <td className="text-error">Not created</td>
+              <td>{member.departments?.name}</td>
+              <td>{member.designation}</td>
+              <td>
+                {member.user ? (
+                  <span className="text-success">Created</span>
+                ) : (
+                  <span className="text-error">Not created</span>
+                )}
+              </td>
               <td>
                 <div className="text-sm">
                   <button
-                    className="relative top-0.5 ml-1 rounded bg-success px-2 py-1 text-xs font-semibold text-white"
+                    className={`relative top-0.5 ml-1 break-keep rounded px-2 py-1 text-xs font-semibold text-white ${member.user ? "bg-info" : "bg-success"}`}
                     onClick={() => setUserData(member)}
                   >
-                    Add account
+                    {member.user ? "Edit account" : "Add account"}
                   </button>
                   {/* User Form */}
                 </div>
