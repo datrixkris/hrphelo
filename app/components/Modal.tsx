@@ -8,6 +8,7 @@ export interface ModalProps {
   onClose: () => void;
   clickOutside?: boolean;
   children: React.ReactNode;
+  width?: string;
 }
 
 const Modal = ({
@@ -15,6 +16,7 @@ const Modal = ({
   onClose,
   children,
   clickOutside = false,
+  width = "w-[90vw] sm:w-[600px] lg:w-[650px]",
 }: ModalProps) => {
   // Close the modal when clicking outside the modal content
   const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -31,7 +33,7 @@ const Modal = ({
     >
       <div className="h-full overflow-y-auto p-5">
         <div
-          className={`modal-content relative -translate-y-7 rounded border border-base-300 bg-base-100 p-5 text-base-content transition-transform ${
+          className={`modal-content relative -translate-y-7 rounded border border-base-300 bg-base-100 p-5 text-base-content transition-transform ${width} ${
             isOpen ? "!translate-y-0" : "!-translate-y-7"
           }`}
         >

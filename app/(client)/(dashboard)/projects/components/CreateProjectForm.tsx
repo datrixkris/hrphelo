@@ -59,7 +59,7 @@ const CreateProjectForm = ({
   return (
     <div>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="w-[90vw] sm:w-[600px] lg:w-[650px]">
+        <div className="w-full">
           {/* title */}
           <h2 className="mb-5 text-center text-2xl font-bold">
             Create project
