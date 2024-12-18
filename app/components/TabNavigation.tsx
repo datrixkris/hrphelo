@@ -10,7 +10,7 @@ const TabNavigation = ({
 }) => {
   return (
     <div className="no-scrollbar w-full overflow-x-scroll border-b border-base-300 bg-base-100">
-      <div className="px-5">
+      <div className="">
         <div className="flex">
           {tabs.map((tab) => (
             <button
