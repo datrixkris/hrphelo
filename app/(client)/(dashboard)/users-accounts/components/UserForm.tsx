@@ -73,9 +73,9 @@ const UserForm = ({
   };
 
   return (
-    <div className="">
+    <div className="overflow-auto">
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="w-[90vw] sm:w-[600px] lg:w-[650px]">
+        <div className="w-full">
           <h2 className="mb-5 text-center text-2xl font-bold">Staff Account</h2>
 
           <div className="mb-8">

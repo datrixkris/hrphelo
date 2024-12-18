@@ -58,8 +58,12 @@ const EditLeadForm = ({
 
   return (
     <div>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="w-[90vw] sm:w-[500px] lg:w-[500px]">
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        width={"w-[90vw] sm:w-[500px] lg:w-[500px]"}
+      >
+        <div className="w-full">
           <h2 className="mb-5 text-center text-2xl font-bold">Team Lead</h2>
 
           {/* add members search text */}
