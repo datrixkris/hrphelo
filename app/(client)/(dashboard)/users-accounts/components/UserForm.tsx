@@ -8,11 +8,14 @@ import { useStaffStore } from "../../staff/staff-store";
 import { StaffData, StaffDetail } from "../../staff/types";
 import UserPermissions from "./UserPermissions";
 import UserBasicInformation from "./UserBasicInformation";
+import { UserModules } from "../types";
+import { useUserAccountStore } from "../user-account-store";
+import { UsersInterface } from "./UsersList";
 
 interface UserFormProps {
   isOpen: boolean;
   onClose: () => void;
-  staffDetails: StaffData;
+  staffDetails: UsersInterface;
   refreshData?: () => Promise<void>;
 }
 
@@ -23,12 +26,13 @@ const UserForm = ({
   // refreshData,
 }: UserFormProps) => {
   const { updatingData, error, updateStaffDetails } = useStaffStore();
+  const createUser = useUserAccountStore((state) => state.createUser);
   const tabs = ["Permissions", "Basic Information"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
   const handleBasicInfoSubmit = async (staffData: StaffDetail) => {
-    if (staffDetails?.id) {
-      await updateStaffDetails(staffData, staffDetails.id);
+    if (staffDetails?.staff.id) {
+      await updateStaffDetails(staffData, staffDetails.staff.id);
     } else {
       alert("cannot find staff id to fetch data");
     }
@@ -40,6 +44,33 @@ const UserForm = ({
       onClose();
     } else {
       toast.error(useStaffStore.getState().error);
+    }
+  };
+
+  const handlePermissionsSubmit = async (permissions: UserModules[]) => {
+    const permissionsData = {
+      email: staffDetails.staff.email!,
+      permissions: permissions.map((item) => {
+        return {
+          moduleId: item.id,
+          ...item.permissions,
+        };
+      }),
+    };
+    console.log(permissions);
+    if (staffDetails?.staff.id) {
+      await createUser(permissionsData, staffDetails.staff.id);
+    } else {
+      alert("cannot find staff id to fetch data");
+    }
+    if (!useUserAccountStore.getState().error) {
+      console.log(error, updatingData);
+      // onClose();
+      //   await refreshData();
+      toast.success("Staff data updated");
+      onClose();
+    } else {
+      toast.error(useUserAccountStore.getState().error);
     }
   };
 
@@ -62,7 +93,7 @@ const UserForm = ({
           {activeTab === "Basic Information" && (
             <div>
               <UserBasicInformation
-                staffDetails={staffDetails}
+                staffDetails={staffDetails.staff}
                 onBasicInfoSubmit={handleBasicInfoSubmit}
               />
             </div>
@@ -70,7 +101,10 @@ const UserForm = ({
 
           {activeTab === "Permissions" && (
             <div>
-              <UserPermissions />
+              <UserPermissions
+                userPermissions={staffDetails.permissions}
+                onPermissionsSubmit={handlePermissionsSubmit}
+              />
             </div>
           )}
         </div>

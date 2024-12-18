@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { StaffData } from "../../staff/types";
 import dayjs from "dayjs";
 import UserForm from "./UserForm";
+import { UsersInterface } from "./UsersList";
 
 interface UsersTableProps {
-  staff: StaffData[];
-  setUserData: (data: StaffData) => void;
+  staff: UsersInterface[];
+  setUserFormData: (data: UsersInterface) => void;
 }
-const UsersTable = ({ staff, setUserData }: UsersTableProps) => {
+const UsersTable = ({ staff, setUserFormData }: UsersTableProps) => {
   return (
     <div className="overflow-x-auto">
       <table className="table table-lg rounded border border-base-300 bg-base-100">
@@ -26,14 +27,14 @@ const UsersTable = ({ staff, setUserData }: UsersTableProps) => {
         <tbody>
           {/* row 1 */}
           {staff.map((member) => (
-            <tr key={member.id} className="!text-sm">
-              <th>{member.name}</th>
-              <td>{member.email}</td>
-              <td>{dayjs(member.hiring_date).format("MMM D, YYYY")}</td>
-              <td>{member.departments?.name}</td>
-              <td>{member.designation}</td>
+            <tr key={member.staff.id} className="!text-sm">
+              <th>{member.staff.name}</th>
+              <td>{member.staff.email}</td>
+              <td>{dayjs(member.staff.hiring_date).format("MMM D, YYYY")}</td>
+              <td>{member.staff.departments?.name}</td>
+              <td>{member.staff.designation}</td>
               <td>
-                {member.user ? (
+                {member.staff.user ? (
                   <span className="text-success">Created</span>
                 ) : (
                   <span className="text-error">Not created</span>
@@ -42,10 +43,10 @@ const UsersTable = ({ staff, setUserData }: UsersTableProps) => {
               <td>
                 <div className="text-sm">
                   <button
-                    className={`relative top-0.5 ml-1 break-keep rounded px-2 py-1 text-xs font-semibold text-white ${member.user ? "bg-info" : "bg-success"}`}
-                    onClick={() => setUserData(member)}
+                    className={`relative top-0.5 ml-1 break-keep rounded px-2 py-1 text-xs font-semibold text-white ${member.staff.user ? "bg-info" : "bg-success"}`}
+                    onClick={() => setUserFormData(member)}
                   >
-                    {member.user ? "Edit account" : "Add account"}
+                    {member.staff.user ? "Edit account" : "Add account"}
                   </button>
                   {/* User Form */}
                 </div>
