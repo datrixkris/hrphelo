@@ -10,7 +10,7 @@ interface StaffTableProps {
 const StaffTable = ({ staff }: StaffTableProps) => {
   return (
     <div className="overflow-x-auto">
-      <table className="table table-lg rounded border border-base-300 bg-base-100">
+      <table className="table table-md rounded border border-base-300 bg-base-100">
         {/* head */}
         <thead className="">
           <tr>
@@ -18,7 +18,6 @@ const StaffTable = ({ staff }: StaffTableProps) => {
             <th>Staff ID</th>
             <th>Email</th>
             <th>Hiring Date</th>
-            <th>Designation</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -26,19 +25,33 @@ const StaffTable = ({ staff }: StaffTableProps) => {
           {/* row 1 */}
           {staff.map((member) => (
             <tr key={member.id} className="!text-sm">
-              <th>{member.name}</th>
+              <td>
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle size-12">
+                      <img src={member.image} alt={member.name} />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">{member.name}</div>
+                    <div className="text-xs">{member.designation}</div>
+                  </div>
+                </div>
+              </td>
               <td>{member.staffId}</td>
-              <td>{member.email}</td>
+              <td className="max-w-52 break-words">{member.email}</td>
               <td>{dayjs(member.hiring_date).format("MMM D, YYYY")}</td>
-              <td>{member.role}</td>
               <td>
                 <div className="text-sm">
-                  <Link href={`/staff/${member.id}`} className="text-nowrap">
+                  <Link
+                    href={`/staff/${member.id}`}
+                    className="text-nowrap rounded bg-success px-2 py-1 font-semibold text-white"
+                  >
                     <Icon
-                      icon="heroicons:eye"
+                      icon="heroicons:eye-16-solid"
                       className="inline-block text-lg"
                     />
-                    <span className="relative top-0.5 ml-1">View</span>
+                    <span className="relative ml-0.5 text-xs">Details</span>
                   </Link>
                 </div>
               </td>
