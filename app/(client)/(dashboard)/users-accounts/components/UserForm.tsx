@@ -14,14 +14,14 @@ interface UserFormProps {
   isOpen: boolean;
   onClose: () => void;
   staffDetails: UsersInterface;
-  refreshData?: () => Promise<void>;
+  refreshData: () => Promise<void>;
 }
 
 const UserForm = ({
   isOpen,
   onClose,
   staffDetails,
-  // refreshData,
+  refreshData,
 }: UserFormProps) => {
   const { updatingData, error, updateStaffDetails } = useStaffStore();
   const createUser = useUserAccountStore((state) => state.createUser);
@@ -38,6 +38,7 @@ const UserForm = ({
       console.log(error, updatingData);
       // onClose();
       //   await refreshData();
+      await refreshData();
       toast.success("Staff data updated");
       onClose();
     } else {
@@ -64,7 +65,7 @@ const UserForm = ({
     if (!useUserAccountStore.getState().error) {
       console.log(error, updatingData);
       // onClose();
-      //   await refreshData();
+      await refreshData();
       toast.success("Staff data updated");
       onClose();
     } else {

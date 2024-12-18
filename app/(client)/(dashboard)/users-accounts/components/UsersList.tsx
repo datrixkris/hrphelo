@@ -25,8 +25,15 @@ const UsersList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await fetchStaff(); //fetch staff data... this is all staff, account bearing or not
-      await fetchUsers(); //fetch user data... this is staff that have accounts
+      // check if staff data exist... if not fetch
+      if (useStaffStore.getState().staffs.length < 1) {
+        await fetchStaff(); //fetch staff data... this is all staff, account bearing or not
+      }
+      // check if users data exist... if not fetch
+      if (useUserAccountStore.getState().userAccounts.length < 1) {
+        await fetchUsers(); //fetch user data... this is staff that have accounts
+      }
+
       const usersData = useStaffStore.getState().staffs.map((staff) => {
         // check if staff has an account in the useraccounts data
         const userCreatedData = useUserAccountStore
@@ -43,6 +50,22 @@ const UsersList = () => {
 
     fetchData();
   }, [fetchStaff, fetchUsers]);
+
+  const refreshData = async () => {
+    await fetchStaff(); //fetch staff data... this is all staff, account bearing or not
+    await fetchUsers(); //fetch user data... this is staff that have accounts
+    const usersData = useStaffStore.getState().staffs.map((staff) => {
+      // check if staff has an account in the useraccounts data
+      const userCreatedData = useUserAccountStore
+        .getState()
+        .userAccounts.find((user) => user.staff.id === staff.id);
+
+      return userCreatedData
+        ? { staff, permissions: userCreatedData.permissions }
+        : { staff, permissions: null };
+    });
+    setUsersList(usersData);
+  };
 
   const getUserFormData = (data: UsersInterface) => {
     setOpenModal(true);
@@ -75,6 +98,7 @@ const UsersList = () => {
           isOpen={openModal}
           onClose={() => clearUserFormData()}
           staffDetails={userFormData}
+          refreshData={refreshData}
         />
       )}
     </div>
