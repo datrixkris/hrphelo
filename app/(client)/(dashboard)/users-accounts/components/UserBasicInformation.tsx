@@ -19,11 +19,11 @@ const UserBasicInformation = ({
     formState: { isDirty },
   } = useForm<StaffData>();
   const departments = useDepartmentStore((state) => state.departments);
-  const { staffs, fetchStaff } = useStaffStore();
+  const { staffs, fetchStaff, updatingData } = useStaffStore();
   const fetchDepartments = useDepartmentStore(
     (state) => state.fetchDepartments,
   );
-  const edit = false;
+  const [edit, setEdit] = useState(false);
 
   useEffect(() => {
     const fetchDepartmentsData = async () => {
@@ -104,7 +104,7 @@ const UserBasicInformation = ({
             defaultValue=""
             {...register("gender")}
             required
-            className="select select-bordered w-full"
+            className="select select-bordered w-full disabled:border-[#1f293733] disabled:bg-inherit disabled:text-base-content"
           >
             <option disabled value="">
               Gender{" "}
@@ -153,10 +153,10 @@ const UserBasicInformation = ({
             defaultValue=""
             {...register("departmentId")}
             required
-            className="select select-bordered w-full"
+            className="select select-bordered w-full disabled:border-[#1f293733] disabled:bg-inherit disabled:text-base-content"
           >
             <option disabled value="">
-              Choose a department
+              Not assigned
             </option>
             {departments.map((department) => {
               return (
@@ -189,12 +189,12 @@ const UserBasicInformation = ({
             <span className="label-text">Email</span>
           </div>
           <input
-            readOnly={!edit}
+            readOnly
             {...register("email")}
             required
             type="email"
             placeholder="Email here"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full read-only:cursor-not-allowed"
           />
         </label>
 
@@ -222,10 +222,10 @@ const UserBasicInformation = ({
             disabled={!edit}
             defaultValue=""
             {...register("supervisorId")}
-            className="select select-bordered w-full"
+            className="select select-bordered w-full disabled:border-[#1f293733] disabled:bg-inherit disabled:text-base-content"
           >
             <option disabled value="">
-              Choose a supervisor
+              Not assigned
             </option>
             {staffs.map((staff) => (
               <option key={staff.id} value={Number(staff.id)}>
@@ -239,10 +239,12 @@ const UserBasicInformation = ({
       <div className="!mt-10">
         {edit ? (
           <Button className="mx-auto w-1/2" disabled={!isDirty}>
-            {false ? "Saving..." : "Save"}
+            {updatingData ? "Saving..." : "Save"}
           </Button>
         ) : (
-          <Button className="mx-auto w-1/2">Edit</Button>
+          <Button className="mx-auto w-1/2" onClick={() => setEdit(true)}>
+            Edit
+          </Button>
         )}
       </div>
     </form>

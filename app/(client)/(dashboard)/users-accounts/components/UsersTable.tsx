@@ -11,7 +11,7 @@ interface UsersTableProps {
 const UsersTable = ({ staff, setUserFormData }: UsersTableProps) => {
   return (
     <div className="overflow-x-auto">
-      <table className="table table-lg rounded border border-base-300 bg-base-100">
+      <table className="table table-md rounded border border-base-300 bg-base-100">
         {/* head */}
         <thead className="">
           <tr>
@@ -29,7 +29,7 @@ const UsersTable = ({ staff, setUserFormData }: UsersTableProps) => {
           {staff.map((member) => (
             <tr key={member.staff.id} className="!text-sm">
               <th>{member.staff.name}</th>
-              <td>{member.staff.email}</td>
+              <td className="max-w-48 break-words">{member.staff.email}</td>
               <td>{dayjs(member.staff.hiring_date).format("MMM D, YYYY")}</td>
               <td>{member.staff.departments?.name}</td>
               <td>{member.staff.designation}</td>
@@ -43,7 +43,7 @@ const UsersTable = ({ staff, setUserFormData }: UsersTableProps) => {
               <td>
                 <div className="text-sm">
                   <button
-                    className={`relative top-0.5 ml-1 break-keep rounded px-2 py-1 text-xs font-semibold text-white ${member.staff.user ? "bg-info" : "bg-success"}`}
+                    className={`relative top-0.5 ml-1 text-nowrap rounded px-2 py-1 text-xs font-semibold text-white ${member.staff.user ? "bg-info" : "bg-success"}`}
                     onClick={() => setUserFormData(member)}
                   >
                     {member.staff.user ? "Edit account" : "Add account"}

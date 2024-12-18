@@ -20,13 +20,13 @@ const UsersList = () => {
   const [userFormData, setUserFormData] = useState<UsersInterface | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState<UsersInterface[]>([]);
+  const [usersList, setUsersList] = useState<UsersInterface[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await fetchStaff();
-      await fetchUsers();
+      await fetchStaff(); //fetch staff data... this is all staff, account bearing or not
+      await fetchUsers(); //fetch user data... this is staff that have accounts
       const usersData = useStaffStore.getState().staffs.map((staff) => {
         // check if staff has an account in the useraccounts data
         const userCreatedData = useUserAccountStore
@@ -37,7 +37,7 @@ const UsersList = () => {
           ? { staff, permissions: userCreatedData.permissions }
           : { staff, permissions: null };
       });
-      setUsers(usersData);
+      setUsersList(usersData);
       setLoading(false);
     };
 
@@ -56,13 +56,13 @@ const UsersList = () => {
   return (
     <div>
       <div className="">
-        {users.length < 1 && loading ? (
+        {usersList.length < 1 && loading ? (
           <div className="rounded text-center">
             <TableSkeleton />
           </div>
-        ) : users.length > 0 ? (
+        ) : usersList.length > 0 ? (
           <UsersTable
-            staff={users}
+            staff={usersList}
             setUserFormData={(data) => getUserFormData(data)}
           />
         ) : (
