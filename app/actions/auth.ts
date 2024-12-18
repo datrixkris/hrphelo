@@ -1,6 +1,6 @@
 // Import necessary modules and types
 import { api } from "../axiosApi/api";
-import { FirstResetData, LoginData, ResetFormData } from "../schemas";
+import { FirstResetData, LoginData, ResetData, ResetFormData } from "../schemas";
 import { useAuthStore } from "../stores/auth-store";
 
 // Submit login form
@@ -78,6 +78,7 @@ export const requestOtp = async () => {
   }
 };
 
+
 // Request password reset with the OTP
 export const requestPasswordReset = async (data: FirstResetData) => {
   try {
@@ -115,7 +116,7 @@ export const submitOtpForm = async (otp: string) => {
       const response = await requestPasswordReset(updatedResetData);
 
       if (response?.error) {
-        console.log("otp submition:", response?.error);
+        console.log("otp submission:", response?.error);
 
         return { message: response.error }
 
@@ -153,3 +154,81 @@ export const requestPasswordResetLink = async (formData: { email: string }) => {
     // };
   }
 }
+
+// Request OTP for verification during password reset
+export const requestResetOtp = async (code: string) => {
+  try {
+    const response = await api.get(`/v1/auth/otp/${code}`);
+
+    if (response.data.status === true) {
+      // Store the reset token in localStorage (preserving other data)
+      const existingData = JSON.parse(localStorage.getItem('resetPassData') || '{}');
+      localStorage.setItem('resetPassData', JSON.stringify({
+        ...existingData,
+        reset_token: code,  // Add reset_token or update if already present
+      }));
+
+      return { status: "success", message: response.data.message };
+    } else {
+      return { status: "fail", message: "Error sending OTP" };
+    }
+  } catch (error) {
+    console.error("Error requesting OTP:", error);
+    return { status: "fail", message: "Error sending OTP" };
+  }
+};
+
+// Store OTP in localStorage during reset
+export const storeResetOtp = async (code: string) => {
+  try {
+    // Retrieve the existing resetPassData and merge the OTP with it
+    const existingData = JSON.parse(localStorage.getItem('resetPassData') || '{}');
+    localStorage.setItem('resetPassData', JSON.stringify({
+      ...existingData,
+      otp: code,  // Add or update OTP in the resetPassData
+    }));
+
+    // Return the route to the reset password page
+    return { route: '/auth/password-reset/reset', message: "" };
+  } catch (error) {
+    console.error("Error storing OTP:", error);
+    return { route: '', message: "Error storing OTP" };
+  }
+};
+
+
+// Submit the form to set the new password
+export const submitForgotPasswordForm = async (formData: ResetFormData) => {
+  try {
+    // Retrieve the existing reset data from localStorage
+    
+    const storedResetData = localStorage.getItem('resetPassData');
+    const resetData: ResetData | null = storedResetData ? JSON.parse(storedResetData) : null;
+
+
+    if (resetData && resetData.reset_token && resetData.otp) {
+      // Prepare the updated reset data with password and confirm password
+      const updatedResetData = {
+        otp:resetData.otp,
+        password: formData.password,
+        confirm_password: formData.confirmPassword,
+      };
+
+      // Send the data to the API to reset the password
+      const response = await api.post(`/v1/auth/set-password/${resetData.reset_token}`, updatedResetData);
+
+      if (response.status === 200) {
+        // Successfully set the password, route to the login page
+        return { route: '/auth/login' };
+      } else {
+        return { error: "Failed to set password." };
+      }
+    } else {
+      return { error: "Reset data is incomplete or expired." };
+    }
+  } catch (error) {
+    console.error("Error submitting set form:", error);
+    return { error: "Error submitting the password reset form." };
+  }
+};
+

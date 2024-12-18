@@ -6,7 +6,7 @@ export interface StaffDetail {
   id?: number;
   staffId?: string;
   name?: string;
-  designation?: string;
+  designation?: number;
   email?: string;
   contact?: string;
   gender?: string;
@@ -27,7 +27,7 @@ export interface StaffData {
   staffId?: string;
   name: string;
   role?: string;
-  designation?: string;
+  designation?: number;
   departmentId?: number;
   email?: string;
   contact?: string;
