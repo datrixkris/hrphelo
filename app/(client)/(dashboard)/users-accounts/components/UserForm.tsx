@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 import Modal from "@/app/components/Modal";
-import { useDepartmentStore } from "../../departments/department-store";
 import TabNavigation from "@/app/components/TabNavigation";
 import { useStaffStore } from "../../staff/staff-store";
-import { StaffData, StaffDetail } from "../../staff/types";
+import { StaffDetail } from "../../staff/types";
 import UserPermissions from "./UserPermissions";
 import UserBasicInformation from "./UserBasicInformation";
 import { UserModules } from "../types";

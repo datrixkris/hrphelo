@@ -1,13 +1,13 @@
 "use client";
 
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableSkeleton from "@/app/components/TableSkeleton";
 import { useStaffStore } from "../../staff/staff-store";
 import UsersTable from "./UsersTable";
-import { StaffData, StaffDetail } from "../../staff/types";
+import { StaffData } from "../../staff/types";
 import UserForm from "./UserForm";
 import { useUserAccountStore } from "../user-account-store";
-import { Permissions, UserData } from "../types";
+import { Permissions } from "../types";
 
 export interface UsersInterface {
   staff: StaffData;

@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { StaffData } from "../../staff/types";
+import React from "react";
 import dayjs from "dayjs";
-import UserForm from "./UserForm";
 import { UsersInterface } from "./UsersList";
 
 interface UsersTableProps {
