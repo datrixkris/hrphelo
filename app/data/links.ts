@@ -34,6 +34,20 @@ export const clientSidebarLinks: SidebarLink[] = [
     ],
   },
   {
+    name: "Payroll",
+    icon: "hugeicons:bitcoin-money-01",
+    dropdown: [
+      {
+        name: "Employee Salary",
+        link: "/employee-salary",
+      },
+      {
+        name: "Payroll Policy",
+        link: "/payroll-policy",
+      },
+    ],
+  },
+  {
     name: "Projects",
     icon: "hugeicons:analytics-up",
     link: "/projects",
