@@ -17,14 +17,14 @@ const StaffFilterAndSearch = () => {
       {/* filter by department */}
       <div className="flex w-full gap-2">
         <select className="select select-bordered w-1/2 md:max-w-[200px]">
-          <option selected>All departments</option>
+          <option>All departments</option>
           <option>IT department</option>
           <option>HR department</option>
         </select>
 
         {/* filter by designation */}
         <select className="select select-bordered w-1/2 md:max-w-[200px]">
-          <option selected>All Designations</option>
+          <option>All Designations</option>
           <option>Head of Department</option>
           <option>Web Developer</option>
         </select>

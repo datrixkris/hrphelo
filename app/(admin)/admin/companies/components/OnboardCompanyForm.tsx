@@ -35,7 +35,7 @@ const OnboardCompanyForm = ({
   return (
     <div className="">
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="w-[90vw] sm:w-[600px] lg:w-[800px]">
+        <div className="w-full">
           <h2 className="mb-5 text-center text-2xl font-bold">Add Company</h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
