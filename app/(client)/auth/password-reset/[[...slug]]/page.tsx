@@ -21,33 +21,28 @@ const Page = ({ params }: { params: { slug: string } }) => {
   });
 
   const onSubmit = async (data: ResetFormData) => {
-    setLoading(true); // Start loading
+    setLoading(true); 
     try {
       let response;
   
-      // Check if there's a code in params (slug is present)
       if (params.slug) {
         console.log("Processing password reset");
   
-        // If there's a slug, submit the form to reset password
         response = await submitForgotPasswordForm(data);
       } else {
-        // Otherwise, submit the OTP form
         response = await submitSetForm(data);
       }
   
-      // Check the response and route accordingly
       if (response?.route) {
-        router.push(response.route);  // Redirect to the next page
+        router.push(response.route);  
         console.log("Redirecting to:", response.route);
       }
   
 
     } catch (error) {
-      // Handle errors appropriately
       console.error("Error during submission:", error);
     } finally {
-      setLoading(false);  // Stop loading
+      setLoading(false);  
     }
   };
   
