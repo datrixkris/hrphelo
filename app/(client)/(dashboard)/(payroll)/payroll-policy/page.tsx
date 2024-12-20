@@ -6,10 +6,10 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import PayrollConfigTable from "./components/payroll-config-table";
 import { toast } from "react-toastify";
-import Calendar from "./components/calendar";
 import { usePayrollStore } from "../payroll-store";
+import Calendar from "./components/calendar";
+import PayrollConfigTable from "./components/payroll-config-table";
 
 const payrollPolicySchema = z.object({
   name: z.string().min(4, {
