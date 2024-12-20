@@ -41,7 +41,7 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
           <div className="">
             <p className="text-lg font-semibold">{task.description}</p>
             <p className="text-base">
-              Are you sure you want to delete this task? {task.id}
+              Are you sure you want to delete this task?
             </p>
           </div>
 
