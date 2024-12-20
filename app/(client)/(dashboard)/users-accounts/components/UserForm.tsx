@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Modal from "@/app/components/Modal";
 import TabNavigation from "@/app/components/TabNavigation";
@@ -25,8 +25,14 @@ const UserForm = ({
 }: UserFormProps) => {
   const { updatingData, error, updateStaffDetails } = useStaffStore();
   const createUser = useUserAccountStore((state) => state.createUser);
+  const editUser = useUserAccountStore((state) => state.editUser);
   const tabs = ["Permissions", "Basic Information"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [isUserCreated, setIsUserCreated] = useState(false);
+
+  useEffect(() => {
+    setIsUserCreated(staffDetails.permissions ? true : false);
+  }, [staffDetails.permissions]);
 
   const handleBasicInfoSubmit = async (staffData: StaffDetail) => {
     if (staffDetails?.staff.id) {
@@ -58,7 +64,9 @@ const UserForm = ({
     };
     console.log(permissions);
     if (staffDetails?.staff.id) {
-      await createUser(permissionsData, staffDetails.staff.id);
+      isUserCreated
+        ? await editUser(permissionsData, staffDetails.staff.id)
+        : await createUser(permissionsData, staffDetails.staff.id);
     } else {
       alert("cannot find staff id to fetch data");
     }
@@ -66,7 +74,9 @@ const UserForm = ({
       console.log(error, updatingData);
       // onClose();
       await refreshData();
-      toast.success("Staff data updated");
+      isUserCreated
+        ? toast.success("User permissions edited")
+        : toast.success("User has been created successfully");
       onClose();
     } else {
       toast.error(useUserAccountStore.getState().error);
