@@ -65,7 +65,7 @@ const UserForm = ({
     console.log(permissions);
     if (staffDetails?.staff.id) {
       isUserCreated
-        ? await editUser(permissionsData, staffDetails.staff.id)
+        ? await editUser(permissionsData, staffDetails.staff.user!.id)
         : await createUser(permissionsData, staffDetails.staff.id);
     } else {
       alert("cannot find staff id to fetch data");
