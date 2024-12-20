@@ -8,10 +8,10 @@ import Button from "@/app/components/Button";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
 import { useStaffStore } from "../../staff/staff-store";
 import { toast } from "react-toastify";
 import EmployeeSalaryTable from "./components/employee-salary-table";
+import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
 
 interface PayrollFormData {
   staffId: number | null;
