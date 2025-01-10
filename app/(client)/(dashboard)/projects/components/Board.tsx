@@ -26,7 +26,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
   } = useKanbanStore();
 
   const onDragEnd = async (result: DropResult) => {
-    const { source, destination, draggableId, type } = result;
+    const { source, destination, type } = result;
 
     // If dropped outside a valid destination, do nothing
     if (!destination) return;

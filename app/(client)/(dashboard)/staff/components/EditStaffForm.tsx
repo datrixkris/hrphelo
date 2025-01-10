@@ -28,7 +28,7 @@ const EditStaffForm = ({
     register,
     handleSubmit,
     reset,
-    formState: { isDirty },
+    // formState: { isDirty },
   } = useForm<StaffDetail>();
   const departments = useDepartmentStore((state) => state.departments);
   const { updatingData, staffs, fetchStaff, error, updateStaffDetails } =
