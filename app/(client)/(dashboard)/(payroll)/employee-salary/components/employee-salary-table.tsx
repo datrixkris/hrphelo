@@ -33,7 +33,7 @@ const EmployeeSalaryTable = () => {
       }
     };
     fetchData();
-  }, [payrolls, staffs, fetchPayroll, fetchStaff]);
+  }, [staffs, fetchPayroll, fetchStaff]);
 
   return (
     <div className="overflow-x-auto">
