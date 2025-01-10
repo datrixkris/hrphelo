@@ -69,7 +69,7 @@ export default function Calendar() {
     if (payrollPeriods.length === 0) {
       fetchPayrollPeriod();
     }
-  }, [payrollPeriods, fetchPayrollPeriod]);
+  }, [ fetchPayrollPeriod]);
 
   return (
     <div className="mx-auto max-w-4xl space-y-3">

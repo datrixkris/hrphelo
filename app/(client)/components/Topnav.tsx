@@ -7,8 +7,7 @@ import MobileNav from "./MobileNav";
 const Topnav = () => {
   const user = useAuthStore((state) => state.user);
   const staffMember = user?.staff;
-  console.log(staffMember);
-
+  
   const [showMobileNav, setShowMobileNav] = useState(false);
 
   return (
