@@ -20,16 +20,16 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      if (user?.id) {
-        await fetchStaffProfile(user.id);
+      if (user?.staff.id) {
+        await fetchStaffProfile(user.staff.id);
         setProfileData(useStaffStore.getState().profile);
-        console.log(profileData);
       }
     };
 
     fetchProfileData();
-  }, []);
+  }, [user, fetchStaffProfile]);
 
+  // set profile complete status based on various profile data
   useEffect(() => {
     if (profileData) {
       setProfileComplete(
@@ -40,6 +40,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
     }
   }, [profileData]);
 
+  // logout
   const handleLogout = () => {
     logout();
     router.push("/auth/login");
@@ -73,10 +74,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
               </div>
             </div>
           ) : (
-            <div
-              className="tooltip tooltip-bottom tooltip-error"
-              data-tip="Complete your profile"
-            >
+            <div>
               <div className="avatar">
                 <div className="w-10 rounded-full">
                   <img src={profile?.image} alt="User Avatar" />
@@ -89,7 +87,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
             <p className="text-sm font-semibold">
               {profile?.name || "User Name"}
             </p>
-            <p className="">{profile?.role || "Role"}</p>
+            <p className="">{profile?.designation || "Role"}</p>
           </div>
         </div>
       </div>

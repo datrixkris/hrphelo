@@ -245,6 +245,7 @@ const EditStaffForm = ({
                   {...register("email")}
                   required
                   type="email"
+                  readOnly
                   placeholder="Email here"
                   className="input input-bordered w-full"
                 />
@@ -270,7 +271,6 @@ const EditStaffForm = ({
                 </div>
                 <select
                   {...register("supervisorId")}
-                  required
                   className="select select-bordered w-full"
                 >
                   <option disabled value="">
