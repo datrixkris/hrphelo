@@ -17,7 +17,7 @@ interface StaffStore {
     optionalLoading?: boolean,
   ) => Promise<StaffDetail>;
   updateStaffDetails: (data: StaffDetail, id: number) => Promise<void>;
-  fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>; 
+  fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>;
   updateStaffProfileDetails: (data: EditProfile, id: number) => Promise<void>;
 }
 
