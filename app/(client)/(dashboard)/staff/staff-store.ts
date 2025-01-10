@@ -17,7 +17,7 @@ interface StaffStore {
     optionalLoading?: boolean,
   ) => Promise<StaffDetail>;
   updateStaffDetails: (data: StaffDetail, id: number) => Promise<void>;
-  fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>; 
+  fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>;
   updateStaffProfileDetails: (data: EditProfile, id: number) => Promise<void>;
 }
 
@@ -56,6 +56,7 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
 
     try {
       const response = (await api.get(`/v1/profile/${id}`)).data;
+      console.log(response);
 
       set(() => ({ loading: false, profile: response[0] }));
       // return response;

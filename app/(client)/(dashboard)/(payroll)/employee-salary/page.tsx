@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import EmployeeSalaryTable from "./components/employee-salary-table";
 import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
 import Link from "next/link";
-import { log } from "console";
+// import { log } from "console";
 
 interface PayrollFormData {
   staffId: number | null;
@@ -73,7 +73,6 @@ const Page = () => {
     setFormData({});
   };
 
-
   const onSubmit = async (data: PayrollFormData) => {
     if (!selectedStaff && !data.staffId) {
       toast.error("Please select a staff member");
@@ -127,10 +126,9 @@ const Page = () => {
       fetchPayrollPeriod();
     }
 
-
-  if (salaryPeriod) {
-    setIsReady(true);
-  }
+    if (salaryPeriod) {
+      setIsReady(true);
+    }
   }, [staffs, fetchStaff]);
 
   return (

@@ -139,7 +139,9 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
     }
     try {
       await action();
-      toast.success(successMessage);
+      if (successMessage) {
+        toast.success(successMessage);
+      }
       await fetchColumn(projectId);
     } catch (err) {
       handleApiError(err as AxiosError<ApiErrorResponse>);
@@ -173,27 +175,20 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
     },
 
     addTask: async (data) => {
-      await performApiUpdate(
-        () => api.post(`/v1/projects/${get().projectId}/tasks`, data),
-        "Task added successfully!",
+      await performApiUpdate(() =>
+        api.post(`/v1/projects/${get().projectId}/tasks`, data),
       );
     },
 
     editTask: async (taskId, updatedTask) => {
-      await performApiUpdate(
-        () =>
-          api.put(
-            `/v1/projects/${get().projectId}/tasks/${taskId}`,
-            updatedTask,
-          ),
-        "Task updated successfully!",
+      await performApiUpdate(() =>
+        api.put(`/v1/projects/${get().projectId}/tasks/${taskId}`, updatedTask),
       );
     },
 
     deleteTask: async (taskId) => {
-      await performApiUpdate(
-        () => api.delete(`/v1/projects/${get().projectId}/tasks/${taskId}`),
-        "Task deleted successfully!",
+      await performApiUpdate(() =>
+        api.delete(`/v1/projects/${get().projectId}/tasks/${taskId}`),
       );
     },
 
@@ -259,13 +254,11 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
       // });
 
       // Send the changes to the backend
-      await performApiUpdate(
-        () =>
-          api.put(
-            `/v1/projects/${projectId}/tasks/${Number(taskId)}`,
-            updateTask,
-          ),
-        "Task updated successfully!",
+      await performApiUpdate(() =>
+        api.put(
+          `/v1/projects/${projectId}/tasks/${Number(taskId)}`,
+          updateTask,
+        ),
       );
     },
   };

@@ -41,7 +41,7 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
           <div className="">
             <p className="text-lg font-semibold">{task.description}</p>
             <p className="text-base">
-              Are you sure you want to delete this task? {task.id}
+              Are you sure you want to delete this task?
             </p>
           </div>
 
@@ -52,7 +52,7 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
               className="btn btn-error"
               disabled={loading}
             >
-              {loading ? "Deleting..." : "Yes, delete"}
+              {loading ? "Deleting..." : "Yes"}
             </button>
             <button type="button" onClick={onClose} className="btn px-8">
               No

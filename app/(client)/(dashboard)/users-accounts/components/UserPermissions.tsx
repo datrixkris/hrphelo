@@ -25,10 +25,10 @@ const UserPermissions = ({
       setErrorMessage("");
       if (useUserAccountStore.getState().modules.length === 0) {
         await fetchModules();
-      }
-      if (useUserAccountStore.getState().error) {
-        setErrorMessage("Couldn't fetch modules");
-        return;
+        if (useUserAccountStore.getState().error) {
+          setErrorMessage("Couldn't fetch modules");
+          return;
+        }
       }
 
       // set permissions for the form
@@ -48,7 +48,7 @@ const UserPermissions = ({
               modify: perm?.modify ?? false,
               delete: perm?.delete ?? false,
             };
-          } 
+          }
           // if no user permissions exist use module data
           else {
             permissions = {
@@ -73,7 +73,7 @@ const UserPermissions = ({
     };
 
     gettingModules();
-  }, []);
+  }, [userPermissions, fetchModules]);
 
   const handleToggleChange = (moduleId: number) => {
     setPermissions((prev) =>
@@ -265,9 +265,15 @@ const UserPermissions = ({
           </div>
 
           <div className="!mt-10">
-            <Button className="mx-auto w-1/2" disabled={updatingData}>
-              {updatingData ? "Creating user..." : "Create user"}
-            </Button>
+            {userPermissions ? (
+              <Button className="mx-auto w-1/2" disabled={updatingData}>
+                {updatingData ? "Editing permissions..." : "Edit permissions"}
+              </Button>
+            ) : (
+              <Button className="mx-auto w-1/2" disabled={updatingData}>
+                {updatingData ? "Creating user..." : "Create user"}
+              </Button>
+            )}
           </div>
         </form>
       )}

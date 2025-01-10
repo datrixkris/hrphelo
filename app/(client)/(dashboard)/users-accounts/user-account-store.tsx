@@ -24,6 +24,7 @@ interface UserAccountStore {
   fetchUsers: (optionalLoading?: boolean) => Promise<void>;
   fetchModules: (optionalLoading?: boolean) => Promise<void>;
   createUser: (data: CreateUserInterface, staffId: number) => Promise<void>;
+  editUser: (data: CreateUserInterface, staffId: number) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -75,6 +76,25 @@ export const useUserAccountStore = create<UserAccountStore>((set, get) => ({
 
     try {
       const response = await api.post(`/v1/users/${staffId}`, data);
+      await get().fetchModules(false);
+      set(() => ({ updatingData: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error: axiosError?.response?.data.message ?? axiosError.message,
+        updatingData: false,
+      }));
+
+      console.error(err);
+    }
+  },
+
+  editUser: async (data, staffId) => {
+    set({ updatingData: true, error: null });
+
+    try {
+      const response = await api.put(`/v1/users/${staffId}`, data);
       await get().fetchModules(false);
       set(() => ({ updatingData: false }));
       console.log(response.data);
