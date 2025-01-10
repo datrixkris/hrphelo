@@ -31,13 +31,14 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
 
   // set profile complete status based on various profile data
   useEffect(() => {
-    if (profileData) {
+    if (profileData && !profileData.isDefault) {
       setProfileComplete(
         profileData.bankInfoStatus &&
           profileData.personalInfoStatus &&
           profileData.iceContactsStatus,
       );
     }
+    console.log(profileData);
   }, [profileData]);
 
   // logout
