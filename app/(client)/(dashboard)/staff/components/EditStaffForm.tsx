@@ -89,8 +89,12 @@ const EditStaffForm = ({
       imageUrl = await uploadImageToCloudinary(selectedImage);
     }
 
+    // taking the email out so that I can update staff data
+    const { email, ...dataWithoutEmail } = data;
+    console.log(email);
+
     const staffData = {
-      ...data,
+      ...dataWithoutEmail,
       departmentId: Number(data.departmentId),
       supervisorId: Number(data.supervisorId),
       designation: Number(data.designation),
@@ -120,7 +124,10 @@ const EditStaffForm = ({
           <h2 className="mb-5 text-center text-2xl font-bold">Staff Profile</h2>
 
           <div className="mb-4 flex items-center justify-center">
-            <ImageUpload onImageSelect={(file) => setSelectedImage(file)} />
+            <ImageUpload
+              onImageSelect={(file) => setSelectedImage(file)}
+              image={staffDetails?.image}
+            />
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -245,6 +252,7 @@ const EditStaffForm = ({
                   {...register("email")}
                   required
                   type="email"
+                  readOnly
                   placeholder="Email here"
                   className="input input-bordered w-full"
                 />
@@ -270,7 +278,6 @@ const EditStaffForm = ({
                 </div>
                 <select
                   {...register("supervisorId")}
-                  required
                   className="select select-bordered w-full"
                 >
                   <option disabled value="">
@@ -287,10 +294,7 @@ const EditStaffForm = ({
 
             {/* submit */}
             <div className="!mt-10">
-              <Button
-                className="mx-auto w-1/2"
-                disabled={updatingData || !isDirty}
-              >
+              <Button className="mx-auto w-1/2" disabled={updatingData}>
                 {updatingData
                   ? "Updating Staff Details.."
                   : "Update Staff Details"}

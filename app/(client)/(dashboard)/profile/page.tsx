@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { StaffDetail, StaffProfile } from "../staff/types";
 import TabNavigation from "@/app/components/TabNavigation";
@@ -15,34 +15,16 @@ const TABS = ["Profile", "Projects", "Bank and Statutory", "Assets"];
 
 const Page = () => {
   const user = useAuthStore((state) => state.user);
-  const { fetchStaffProfile, loading, fetchStaffById } = useStaffStore();
+  const { fetchStaffProfile, fetchStaffById } = useStaffStore();
   const [staffDetails, setStaffDetails] = useState<StaffDetail | null>(null);
   const [profileDetails, setProfileDetails] = useState<StaffProfile | null>(
     null,
   );
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("Profile");
 
   // Fetch staff details
-  const fetchData = useCallback(async () => {
-    if (!user?.id) return; // Prevent fetch if staffId is missing
-    try {
-      const staffData = await fetchStaffById(Number(user.id));
-      await fetchStaffProfile(Number(user.id));
-
-      setStaffDetails(staffData);
-      setProfileDetails(useStaffStore.getState().profile);
-      console.log(
-        "This is the following data : ",
-        staffData,
-        useStaffStore.getState().profile,
-      );
-      setError(null);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load staff details. Please try again.");
-    }
-  }, [user?.id, fetchStaffById]);
 
   const refreshProfileData = () => {
     setProfileDetails(useStaffStore.getState().profile);
@@ -50,13 +32,37 @@ const Page = () => {
   };
 
   const refreshStaffData = async () => {
-    const staffData = await fetchStaffById(Number(user!.id), false);
+    const staffData = await fetchStaffById(Number(user!.staff.id), false);
     setStaffDetails(staffData);
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      if (!user?.staff.id) {
+        setLoading(false);
+        return;
+      } // Prevent fetch if staffId is missing
+      try {
+        const staffData = await fetchStaffById(Number(user.staff.id));
+        await fetchStaffProfile(Number(user.staff.id));
+
+        setStaffDetails(staffData);
+        setProfileDetails(useStaffStore.getState().profile);
+        // console.log(
+        //   "This is the following data : ",
+        //   staffData,
+        //   useStaffStore.getState().profile,
+        // );
+        setError(null);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load staff details. Please try again.");
+      }
+      setLoading(false);
+    };
     fetchData();
-  }, [fetchData]);
+  }, [user, fetchStaffById, fetchStaffProfile]);
 
   return (
     <div>
@@ -83,7 +89,7 @@ const Page = () => {
             <div className="skeleton h-32 w-full"></div>
           </div>
         </div>
-      ) : false ? (
+      ) : error ? (
         <div className="my-5 text-red-500">{error}</div>
       ) : (
         <div className="my-5">
@@ -94,30 +100,31 @@ const Page = () => {
           />
 
           {/* Tab Navigation */}
-          <TabNavigation
-            tabs={TABS}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          {!user?.isDefault && (
+            <TabNavigation
+              tabs={TABS}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          )}
 
           {/* Tab Content */}
-          <div className="py-5">
-            {activeTab === "Profile" ? (
-              <ProfileDataContext.Provider
-                value={{
-                  profileData: profileDetails,
-                  refreshData: refreshProfileData,
-                }}
-              >
-                <ProfileComponent profile={profileDetails} />
-              </ProfileDataContext.Provider>
-            ) : activeTab === "Profile" ? (
-              <div>No profile information available.</div>
-            ) : null}
-            {/* {activeTab === "Assets" && <StaffAssets />}
-            {activeTab === "Projects" && <ProjectList />} */}
-            {/* Add components for other tabs as needed */}
-          </div>
+          {!user?.isDefault && (
+            <div className="py-5">
+              {activeTab === "Profile" ? (
+                <ProfileDataContext.Provider
+                  value={{
+                    profileData: profileDetails,
+                    refreshData: refreshProfileData,
+                  }}
+                >
+                  <ProfileComponent profile={profileDetails} />
+                </ProfileDataContext.Provider>
+              ) : activeTab === "Profile" ? (
+                <div>No profile information available.</div>
+              ) : null}
+            </div>
+          )}
         </div>
       )}
     </div>

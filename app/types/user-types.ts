@@ -8,42 +8,44 @@ export interface Company {
   contact: string;
   email: string;
   company_size: string;
-
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 }
 
-// Define the Staff type
 export interface Staff {
-  id: number,
-  departmentId?: number,
-  supervisorId?: number,
-  companyId: number,
-  staffId?: number,
-  name: string,
-  gender?: string,
-  date_of_birth?: string,
-  email: string
-  contact: number
-  hiring_date: string,
-  image: string
-  role?: string,
-  createdAt: string
-  updatedAt: string
-  deletedAt?: string
+  id: number;
+  departmentId: number | null;
+  supervisorId: number | null;
+  companyId: number;
+  staffId: string;
+  name: string;
+  gender: string | null;
+  date_of_birth: string | null;
+  email: string;
+  contact: string;
+  hiring_date: string;
+  designation: string | null;
+  isDefault: boolean;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 }
 
-// Define the main User type
 export interface User {
   id: number;
   email: string;
   staffId: number;
   companyId: number;
   isPasswordReset: boolean;
-  createdAt: string; // Could also use Date type depending on how it's handled
-  updatedAt: string; // Could also use Date type depending on how it's handled
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   company: Company;
   staff: Staff;
-  leaveYear:number
+  leaveYear: number;
+  iat: number; // Issued At timestamp
+  exp: number; // Expiration timestamp
 }
-
-
-

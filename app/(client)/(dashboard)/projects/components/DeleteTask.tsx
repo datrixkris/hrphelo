@@ -52,7 +52,7 @@ const DeleteTask = ({ onClose, task }: { onClose: () => void; task: Task }) => {
               className="btn btn-error"
               disabled={loading}
             >
-              {loading ? "Deleting..." : "Yes, delete"}
+              {loading ? "Deleting..." : "Yes"}
             </button>
             <button type="button" onClick={onClose} className="btn px-8">
               No
