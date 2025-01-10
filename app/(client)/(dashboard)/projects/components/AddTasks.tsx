@@ -77,7 +77,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <label className="form-control w-full">
-            <span className="label">Task Description</span>
+            <span className="label">Task Description *</span>
             <textarea
               {...register("description")}
               rows={2}
@@ -93,7 +93,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
           {/* Task priority */}
           <label className="form-control w-full">
             <div className="label">
-              <span className="label-text">Task priority</span>
+              <span className="label-text">Task priority *</span>
             </div>
             <select
               defaultValue=""

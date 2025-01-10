@@ -16,6 +16,7 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
           <tr>
             <th></th>
             <th>Company Name</th>
+            <th>Email</th>
             <th>Location</th>
             <th>No. of Staff</th>
             <th>Date Registered</th>
@@ -28,6 +29,7 @@ const CompanyTable = ({ companies }: CompanyTableProps) => {
             <tr key={company.id} className="hover !text-sm">
               <th>{index + 1}</th>
               <td>{company.name}</td>
+              <td>{company.email}</td>
               <td>{company.address}</td>
               <td>{company.company_size}</td>
               <td>{dayjs(company.createdAt).format("MMM D, YYYY")}</td>
