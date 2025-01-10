@@ -25,8 +25,8 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
     reorderTasks,
   } = useKanbanStore();
 
-  const onDragEnd = (result: DropResult) => {
-    const { source, destination, draggableId, type } = result;
+  const onDragEnd = async (result: DropResult) => {
+    const { source, destination, type } = result;
 
     // If dropped outside a valid destination, do nothing
     if (!destination) return;
@@ -86,7 +86,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
 
       const updatedTask = tasks[movedTaskId];
       // hit the api to save the arrangement... how this is working to preserve the arrangement beats me
-      reorderTasks(projectId, draggableId, updatedTask);
+      await reorderTasks(projectId, updatedTask.id, updatedTask);
       return;
     }
 
@@ -121,7 +121,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
     };
 
     // hit the api to save the arrangement... again, how this is working to preserve the arrangement beats me
-    reorderTasks(projectId, draggableId, updatedTask);
+    await reorderTasks(projectId, updatedTask.id, updatedTask);
     if (
       finish.name.toLowerCase() === "completed" ||
       start.name.toLowerCase() === "completed"

@@ -12,6 +12,7 @@ export type Task = {
   due_date?: string | null;
   priority?: "high" | "highest" | "medium" | "low";
   staffId?: number;
+  slug: string;
   assignee?: {
     id: number;
     name: string;
@@ -99,6 +100,7 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
           due_date: task.due_date,
           priority: task.priority,
           assignee: task.assignee,
+          slug: task.slug,
         };
       });
     });
