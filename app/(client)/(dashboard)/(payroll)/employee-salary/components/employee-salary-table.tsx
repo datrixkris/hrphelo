@@ -13,9 +13,9 @@ const EmployeeSalaryTable = () => {
 
   // Filter staff that has payrolls
   const staffWithPayrolls = useMemo(() => {
-    if (!staffs || payrolls.length === 0) return [];
+    if (!staffs || staffs.length === 0 || payrolls.length === 0) return [];
     return staffs.filter((staff) =>
-      payrolls.some((payroll) => payroll.payroll[0].staffId === staff.id),
+      payrolls.some((payroll) => payroll.payroll?.[0]?.staffId === staff.id),
     );
   }, [staffs, payrolls]);
 
@@ -24,7 +24,7 @@ const EmployeeSalaryTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (payrolls.length === 0) {
-        fetchPayroll();
+        await fetchPayroll();
       }
       console.log("get");
 
@@ -33,7 +33,7 @@ const EmployeeSalaryTable = () => {
       }
     };
     fetchData();
-  }, [payrolls, fetchPayroll]);
+  }, [payrolls, staffs, fetchPayroll, fetchStaff]);
 
   return (
     <div className="overflow-x-auto">
