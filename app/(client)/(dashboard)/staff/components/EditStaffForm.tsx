@@ -292,7 +292,7 @@ const EditStaffForm = ({
                 disabled={updatingData || !isDirty}
               >
                 {updatingData
-                  ? "Updating Staff Details.."
+                  ? "Updating Staff Details..."
                   : "Update Staff Details"}
               </Button>
             </div>
