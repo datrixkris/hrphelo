@@ -68,7 +68,7 @@ const KanbanBoard: React.FC<IKanbanBoard> = ({ onEditColumn }) => {
     if (start?.id == finish?.id) {
       // rearrange the taasks in the board acordinly
       const newTaskIds = Array.from(start!.taskIds);
-      const [movedTaskId] = newTaskIds.splice(source.index, 1); //this here gets the string key used to identify the task in the object.
+      const [movedTaskId] = newTaskIds.splice(source.index, 1); //This here gets the string key used to identify the task in the object.
       newTaskIds.splice(destination.index, 0, movedTaskId);
 
       const newColumn = {
