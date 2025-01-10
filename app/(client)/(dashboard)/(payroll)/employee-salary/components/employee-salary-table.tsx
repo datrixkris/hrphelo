@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useMemo, } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { usePayrollStore } from "../../payroll-store";
@@ -26,6 +26,7 @@ const EmployeeSalaryTable = () => {
       if (payrolls.length === 0) {
         fetchPayroll();
       }
+      console.log("get");
 
       if (!staffs) {
         await fetchStaff();
