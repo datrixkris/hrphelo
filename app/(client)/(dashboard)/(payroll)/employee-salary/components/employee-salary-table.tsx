@@ -4,91 +4,106 @@ import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { usePayrollStore } from "../../payroll-store";
 import { useStaffStore } from "../../../staff/staff-store";
+import TableSkeleton from "@/app/components/TableSkeleton";
 
 const EmployeeSalaryTable = () => {
   const { payrolls, fetchPayroll } = usePayrollStore();
   const { fetchStaff, staffs } = useStaffStore();
+  const [loading, setLoading] = React.useState(true);
 
-  // staff that has payrolls (only get staffs where id is = payroll.payroll.staffId)
-
-  // Filter staff that has payrolls
+  // staff that has payrolls
   const staffWithPayrolls = useMemo(() => {
     if (!staffs || staffs.length === 0 || payrolls.length === 0) return [];
     return staffs.filter((staff) =>
-      payrolls.some((payroll) => payroll.payroll?.[0]?.staffId === staff.id),
+      payrolls.some((payroll) => payroll.payroll?.[0]?.staffId === staff.id)
     );
   }, [staffs, payrolls]);
 
-  console.log("staffWithPayrolls::", staffWithPayrolls);
-
   useEffect(() => {
     const fetchData = async () => {
-      if (payrolls.length === 0) {
-        await fetchPayroll();
-      }
-      console.log("get");
-
-      if (!staffs) {
-        await fetchStaff();
+      setLoading(true);
+      try {
+        if (payrolls.length === 0) await fetchPayroll();
+        if (!staffs) await fetchStaff();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [staffs, fetchPayroll, fetchStaff]);
 
+  if (loading) {
+    return <TableSkeleton/>;
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="table table-lg rounded border border-base-300 bg-base-100">
-        {/* Table Head */}
         <thead>
           <tr>
-            <th>EMP ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Designation</th>
-            <th>Joining Date</th>
-            <th>Salary</th>
-            <th>Payslip</th>
-            <th></th>
+            <th scope="col">EMP ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Designation</th>
+            <th scope="col">Joining Date</th>
+            <th scope="col">Salary</th>
+            <th scope="col">Payslip</th>
+            <th scope="col"></th>
           </tr>
         </thead>
-        <tbody>
-          {staffWithPayrolls.map((staff) => (
-            <tr key={staff.id} className="!text-sm">
-              <td>{staff.staffId}</td>
-              <td>{staff.name}</td>
-              <td>{staff.email}</td>
-              <td>{staff.contact}</td>
-              <td>{staff.designation}</td>
-              <td>{dayjs(staff.hiring_date).format("MMM D, YYYY")}</td>
-              <td>$0</td>
-              <td>
-                <Link href={`employee-salary/payslip/${staff.id}`}>
-                  <button className="btn">
-                    <span className="ml-1">Generate Slip</span>
-                  </button>
-                </Link>
-              </td>
-              <td>
-                {" "}
-                <div className="flex items-center gap-1">
-                  <Icon
-                    icon="mage:edit"
-                    className="h-6 w-6 cursor-pointer text-blue-500"
-                    aria-label="Edit policy"
-                    // onClick={() => ()}
-                  />
-                  <Icon
-                    icon="weui:delete-outlined"
-                    className="h-6 w-6 cursor-pointer text-red-500"
-                    aria-label="Delete policy"
-                    // onClick={() => ()}
-                  />
-                </div>
+        {staffWithPayrolls.length > 0 ? (
+          <tbody>
+            {staffWithPayrolls.map((staff) => (
+              <tr key={staff.id} className="!text-sm">
+                <td>{staff.staffId}</td>
+                <td>{staff.name}</td>
+                <td>{staff.email}</td>
+                <td>{staff.contact}</td>
+                <td>{staff.designation}</td>
+                <td>{dayjs(staff.hiring_date).format("MMM D, YYYY")}</td>
+                <td>
+                  {/* {payrolls.find((payroll) => payroll.payroll?.[0]?.staffId === staff.id)?.salary || "$0"} */}
+                  <td>$0</td>
+
+                </td>
+                <td>
+                  <Link href={`employee-salary/payslip/${staff.id}`}>
+                    <button className="btn">
+                      <span className="ml-1">Generate Slip</span>
+                    </button>
+                  </Link>
+                </td>
+                <td>
+                  <div className="flex items-center gap-1">
+                    <Icon
+                      icon="mage:edit"
+                      className="h-6 w-6 cursor-pointer text-blue-500"
+                      aria-label="Edit policy"
+                      onClick={() => console.log(`Edit staff ${staff.id}`)}
+                    />
+                    <Icon
+                      icon="weui:delete-outlined"
+                      className="h-6 w-6 cursor-pointer text-red-500"
+                      aria-label="Delete policy"
+                      onClick={() => console.log(`Delete staff ${staff.id}`)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
+            <tr>
+              <td colSpan={9} className="text-center">
+                No staff with payrolls found.
               </td>
             </tr>
-          ))}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </div>
   );

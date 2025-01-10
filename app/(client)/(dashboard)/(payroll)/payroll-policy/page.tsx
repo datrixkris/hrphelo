@@ -188,7 +188,7 @@ const Page = () => {
                     formLoading ? "loading" : ""
                   }`}
                 >
-                  {formLoading ? "Creating..." : "Create Department"}
+                  {formLoading ? "Creating..." : "Create Policy"}
                 </button>
               </div>
             </form>

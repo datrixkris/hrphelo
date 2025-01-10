@@ -97,7 +97,7 @@ export default function PayrollConfigTable() {
     if (payrollPoliciesData.length === 0) {
       fetchPayrollPolicy();
     }
-  }, [payrollPoliciesData]);
+  }, []);
 
   return (
     <div className="w-full">

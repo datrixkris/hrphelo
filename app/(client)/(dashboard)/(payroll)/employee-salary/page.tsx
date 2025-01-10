@@ -12,6 +12,8 @@ import { useStaffStore } from "../../staff/staff-store";
 import { toast } from "react-toastify";
 import EmployeeSalaryTable from "./components/employee-salary-table";
 import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
+import Link from "next/link";
+import { log } from "console";
 
 interface PayrollFormData {
   staffId: number | null;
@@ -59,6 +61,7 @@ const Page = () => {
 
   const salaryPeriod = payrollPeriods[0];
 
+  const [isReady, setIsReady] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Function to open the modal
@@ -69,6 +72,7 @@ const Page = () => {
     reset();
     setFormData({});
   };
+
 
   const onSubmit = async (data: PayrollFormData) => {
     if (!selectedStaff && !data.staffId) {
@@ -122,6 +126,11 @@ const Page = () => {
     if (payrollPeriods.length === 0) {
       fetchPayrollPeriod();
     }
+
+
+  if (salaryPeriod) {
+    setIsReady(true);
+  }
   }, [staffs, fetchStaff]);
 
   return (
@@ -154,6 +163,19 @@ const Page = () => {
         <div className={`modal ${isModalOpen ? "modal-open" : ""}`}>
           <div className="modal-box w-11/12 max-w-5xl">
             <h3 className="text-lg font-bold">Add Employee Salary</h3>
+            {!isReady && (
+              <div className="text-red-500">
+                <p>
+                  Please create a payroll period before you can create a salary.
+                  Click{" "}
+                  <Link href="/payroll-policy" className="font-bold underline">
+                    here
+                  </Link>
+                  to create payroll period.
+                </p>
+              </div>
+            )}
+
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-5">
                 <div className="w-full">
@@ -163,7 +185,7 @@ const Page = () => {
                   <Select
                     options={memberOptions}
                     onChange={(selected) => setSelectedStaff(selected?.value)}
-                    isDisabled={loading}
+                    isDisabled={loading || !isReady}
                     placeholder="Select staff"
                   />
                 </div>
@@ -224,6 +246,7 @@ const Page = () => {
                 </button>
                 <button
                   type="submit"
+                  disabled={!isReady}
                   className={`btn btn-primary rounded ${loading ? "loading" : ""}`}
                 >
                   {loading ? "Saving..." : "Save Salary"}
