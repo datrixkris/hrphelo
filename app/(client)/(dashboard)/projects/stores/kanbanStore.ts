@@ -32,6 +32,7 @@ export type Column = {
 interface ApiErrorResponse {
   message?: string;
   code?: number;
+  error?: string;
 }
 
 type ColumnOrder = { slug: string }[];
@@ -64,7 +65,10 @@ export const useKanbanStore = create<KanbanState>((set, get) => {
   const setError = (error: string | null) => set({ error });
 
   const handleApiError = (error: AxiosError<ApiErrorResponse>) => {
-    const message = error?.response?.data?.message || error.message;
+    const message =
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      error.message;
     toast.error(message);
     setError(message);
     console.error("API Error:", error);

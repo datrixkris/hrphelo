@@ -38,6 +38,9 @@ const CreateProjectForm = ({
     const projectData = {
       name: data.name,
       description: data.description,
+      start_date: data.start_date,
+      due_date: data.end_date,
+      priority: data.priority,
       leaderId,
       memberIds,
     };
@@ -75,8 +78,8 @@ const CreateProjectForm = ({
                   </span>
                 </div>
                 <input
-                  {...register("name")}
                   required
+                  {...register("name")}
                   type="text"
                   placeholder="Enter project name"
                   className="input input-bordered w-full"
@@ -90,7 +93,12 @@ const CreateProjectForm = ({
                     Start date <span className="text-error">*</span>
                   </span>
                 </div>
-                <input type="date" className="input input-bordered w-full" />
+                <input
+                  type="date"
+                  required
+                  {...register("start_date")}
+                  className="input input-bordered w-full"
+                />
               </label>
 
               {/* End date */}
@@ -98,7 +106,11 @@ const CreateProjectForm = ({
                 <div className="label">
                   <span className="label-text">End date</span>
                 </div>
-                <input type="date" className="input input-bordered w-full" />
+                <input
+                  type="date"
+                  {...register("end_date")}
+                  className="input input-bordered w-full"
+                />
               </label>
 
               {/* Priority */}
@@ -112,10 +124,11 @@ const CreateProjectForm = ({
                   defaultValue=""
                   required
                   className="select select-bordered w-full"
+                  {...register("priority")}
                 >
-                  <option>High</option>
-                  <option>Medium</option>
-                  <option>Low</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
                 </select>
               </label>
 

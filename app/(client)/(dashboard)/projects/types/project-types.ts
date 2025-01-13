@@ -7,6 +7,7 @@ export interface ProjectData {
   description: string;
   start_date?: string | null; // Nullable if the value can be null
   end_date?: string | null; // Nullable if the value can be null
+  due_date?: string | null; // Nullable if the value can be null
   status?: "not_started" | "in_progress" | "completed"; // You can define other statuses if necessary
   priority?: "high" | "highest" | "medium" | "low" | null; // Nullable if the value can be null
   leaderId?: number;

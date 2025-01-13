@@ -38,7 +38,7 @@ const EditProjectDetails = ({
     const projectData = {
       name: data.name,
       description: data.description,
-      end_date: data.end_date,
+      due_date: data.end_date,
       priority: data.priority,
     };
 
