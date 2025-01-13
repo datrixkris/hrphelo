@@ -75,7 +75,7 @@ const AddStaffForm = ({
       setSelectedImage(null); // Reset the selected image
       onClose();
     } else {
-      toast.error(`Failed to add staff: ${!useStaffStore.getState().error}`);
+      toast.error(`Failed to add staff: ${useStaffStore.getState().error}`);
     }
   };
 
