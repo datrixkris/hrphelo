@@ -52,6 +52,7 @@ const AddStaffForm = ({
 
     const data = await response.json();
     setImageLoading(false);
+    console.log(imageLoading);
     return data.secure_url;
   };
 
