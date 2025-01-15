@@ -20,6 +20,7 @@ export interface ProjectData {
   members?: Member[]; // Array of members associated with the project
   progress?: number; // Percentage or value representing progress
   memberIds?: (number | undefined)[];
+  creator?: Creator | null;
 }
 
 export interface Board {
@@ -65,4 +66,10 @@ export interface Task {
   companyId?: number;
   staffId?: number;
   slug: string;
+}
+
+export interface Creator {
+  id: number;
+  name: string;
+  image: string;
 }

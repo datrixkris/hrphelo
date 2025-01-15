@@ -52,7 +52,7 @@ const ProjectMeta = () => {
         {/* created by */}
         <div className="flex items-center justify-between border-y p-2 py-3 odd:bg-base-200 even:bg-base-100">
           <div className="">Created By:</div>
-          <div className="">John Doe</div>
+          <div className="">{project?.creator?.name}</div>
         </div>
 
         {/* status */}

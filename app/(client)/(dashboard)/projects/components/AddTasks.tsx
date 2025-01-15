@@ -106,7 +106,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
-              <option value="highest">Highest</option>
+              {/* <option value="highest">Highest</option> */}
             </select>
             <div className="label">
               {errors.priority && (
