@@ -95,6 +95,7 @@ const Page = () => {
         <div className="my-5">
           {/* <UserProfileDetailsCard /> */}
           <StaffDetailsCard
+            defaultAccount={profileDetails?.isDefault}
             staffDetails={staffDetails}
             refreshData={refreshStaffData}
           />
