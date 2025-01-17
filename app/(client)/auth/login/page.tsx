@@ -50,9 +50,7 @@ const Page = () => {
     const fetchUser = async () => {
       await useAuthStore.getState().fetchUserData();
       const isAuthenticated = useAuthStore.getState().isAuthenticated;
-      console.log("looo:", isAuthenticated);
-      const userData = useAuthStore.getState().user;
-      console.log("Current user data:", userData);
+      // const userData = useAuthStore.getState().user;
       if (isAuthenticated) {
         router.push("/");
       }

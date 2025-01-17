@@ -11,6 +11,9 @@ import { useForm } from "react-hook-form";
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const [loading, setLoading] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false); 
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); 
+  
   const router = useRouter();
   const {
     register,
@@ -21,31 +24,29 @@ const Page = ({ params }: { params: { slug: string } }) => {
   });
 
   const onSubmit = async (data: ResetFormData) => {
-    setLoading(true); 
+    setLoading(true);
     try {
       let response;
-  
+
       if (params.slug) {
         console.log("Processing password reset");
-  
+
         response = await submitForgotPasswordForm(data);
       } else {
         response = await submitSetForm(data);
       }
-  
+
       if (response?.route) {
-        router.push(response.route);  
+        router.push(response.route);
         console.log("Redirecting to:", response.route);
       }
-  
-
     } catch (error) {
       console.error("Error during submission:", error);
     } finally {
-      setLoading(false);  
+      setLoading(false);
     }
   };
-  
+
   return (
     <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -60,17 +61,14 @@ const Page = ({ params }: { params: { slug: string } }) => {
             <div className="px-4 py-6 sm:px-8 sm:py-7">
               <div className="mb-10 text-center">
                 {" "}
-                <h2 className="text-2xl font-bold leading-tight text-black dark:text-white">
+                <h2 className="text-2xl font-bold leading-tight">
                   Reset new password{" "}
                 </h2>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-5">
                   <div>
-                    <label
-                      htmlFor=""
-                      className="text-base font-medium text-gray-900 dark:text-white"
-                    >
+                    <label htmlFor="" className="text-base font-medium">
                       Password{" "}
                     </label>
                     <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
@@ -81,9 +79,14 @@ const Page = ({ params }: { params: { slug: string } }) => {
 
                       <input
                         {...register("password")}
-                        type="password"
+                        type={passwordVisible ? "text" : "password"} 
                         className="grow"
                         placeholder="Password"
+                      />
+                         <Icon
+                        icon={passwordVisible ? "mdi:eye-off" : "mdi:eye"}
+                        className="cursor-pointer"
+                        onClick={() => setPasswordVisible(!passwordVisible)}
                       />
                     </div>
                     {errors.password && (
@@ -91,10 +94,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
                     )}
                   </div>
                   <div>
-                    <label
-                      htmlFor=""
-                      className="text-base font-medium text-gray-900 dark:text-white"
-                    >
+                    <label htmlFor="" className="text-base font-medium">
                       Confirm Password
                     </label>
                     <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
@@ -104,10 +104,15 @@ const Page = ({ params }: { params: { slug: string } }) => {
                       />
 
                       <input
-                        type="password"
+                        type={confirmPasswordVisible ? "text" : "password"} 
                         {...register("confirmPassword")}
                         className="grow"
                         placeholder="  Confirm Password"
+                      />
+                      <Icon
+                        icon={confirmPasswordVisible ? "mdi:eye-off" : "mdi:eye"}
+                        className="cursor-pointer"
+                        onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
                       />
                     </div>
                     {errors.confirmPassword && (
