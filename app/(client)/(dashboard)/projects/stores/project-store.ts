@@ -21,6 +21,7 @@ interface ProjectStore {
 interface ApiErrorResponse {
   message?: string;
   code?: number;
+  error?: string;
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -38,7 +39,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -56,7 +60,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         updatingData: false,
       }));
 
@@ -74,7 +81,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -92,7 +102,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         updatingData: false,
       }));
 

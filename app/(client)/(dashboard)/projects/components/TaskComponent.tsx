@@ -53,7 +53,7 @@ const TaskComponent: React.FC<TaskComponentProps> = ({
 
   if (!task) return null;
   return (
-    <Draggable key={task.id} draggableId={task.id} index={index}>
+    <Draggable key={task.id} draggableId={task.slug} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}

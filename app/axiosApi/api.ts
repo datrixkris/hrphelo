@@ -26,36 +26,100 @@ api.interceptors.request.use(
 );
 
 // Add a response interceptor
+// api.interceptors.response.use(
+//   (response) => {
+//     // Any status code that lie within the range of 2xx cause this function to trigger
+//     // Do something with response data
+//     console.log("Api response intercepted");
+//     return response;
+//   },
+//   async (error) => {
+//     // if (error.response?.status === 401) {
+//     //   if (typeof window !== "undefined") {
+//     //     localStorage.removeItem("accessToken");
+//     //     console.log(
+//     //       "lksjdlfkjslkjdlkfjslkjldkjfflskjlkdjfflksjlkjdlkfjslkjdfs",
+//     //     );
+//     //   }
+//     // }
+
+//     // Any status codes that falls outside the range of 2xx cause this function to trigger
+//     // Do something with response error
+//     const originalRequest = error.config;
+//     originalRequest._retry = originalRequest._retry || false;
+
+//     console.log(originalRequest);
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+
+//       try {
+//         console.log(useAuthStore.getState().refreshToken);
+//         const response = await api.post("/v1/auth/refresh-token", {
+//           refresh_token: useAuthStore.getState().refreshToken,
+//         });
+//         console.log(response);
+//         useAuthStore.setState({ accessToken: response.data.token });
+//         return api(originalRequest);
+//       } catch (err) {
+//         console.log(err);
+//         // logout()
+//         useAuthStore.getState().logout();
+//       }
+//     }
+//     console.log("Api response error");
+//     // useAuthStore.getState().logout();
+//     return Promise.reject(error);
+//   },
+// );
+
 api.interceptors.response.use(
   (response) => {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
+    // Handle successful responses
     console.log("Api response intercepted");
     return response;
   },
   async (error) => {
-    if (error.response?.status === 401) {
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("accessToken");
+    const originalRequest = error.config;
+
+    // Initialize `_retry` if not set
+    originalRequest._retry = originalRequest._retry || false;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      // Prevent retrying the refresh-token API itself
+      if (originalRequest.url.includes("/v1/auth/refresh-token")) {
+        return Promise.reject(error);
+      }
+
+      try {
+        // Retrieve refreshToken and other methods from the auth store
+        const { refreshToken, logout } = useAuthStore.getState();
+
+        if (!refreshToken) {
+          logout();
+          return Promise.reject(error);
+        }
+
+        // Attempt to refresh the token
+        const response = await api.post("/v1/auth/refresh-token", {
+          refresh_token: refreshToken,
+        });
+
+        // Update the accessToken in the auth store
+        useAuthStore.setState({ accessToken: response.data.token });
+
+        // Retry the original request with the new token
+        originalRequest.headers.Authorization = response.data.token;
+        return api(originalRequest);
+      } catch (err) {
+        console.error("Token refresh failed:", err);
+        useAuthStore.getState().logout();
+        return Promise.reject(err);
       }
     }
 
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    // const originalRequest = error.config
-    // if (error.response?.status === 401 && !originalRequest._retry) {
-    //   originalRequest._retry = true
-
-    //   try {
-    //     const response = await api.get('/v1/auth/refresh-token')
-    //     useAuthStore.setState({accessToken: response.data.accessToken})
-    //     return api(originalRequest)
-    //   } catch (err){
-    //     console.log(err)
-    //     // logout()
-    //   }
-    // }
-    console.log("Api response error");
+    console.error("Api response error:", error);
     return Promise.reject(error);
   },
 );

@@ -24,6 +24,7 @@ interface StaffStore {
 interface ApiErrorResponse {
   message?: string;
   code?: number;
+  error?: string;
 }
 
 export const useStaffStore = create<StaffStore>((set, get) => ({
@@ -42,7 +43,10 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -63,7 +67,10 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -81,7 +88,10 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
 
@@ -99,7 +109,10 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -117,7 +130,10 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         updatingData: false,
       }));
 
@@ -137,7 +153,10 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         updatingData: false,
       }));
 

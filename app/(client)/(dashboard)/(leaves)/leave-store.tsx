@@ -22,6 +22,7 @@ interface LeaveStore {
 interface ApiErrorResponse {
   message?: string;
   code?: number;
+  error?: string;
 }
 
 export const useLeaveStore = create<LeaveStore>((set, get) => ({
@@ -121,7 +122,10 @@ export const useLeaveStore = create<LeaveStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -136,7 +140,10 @@ export const useLeaveStore = create<LeaveStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);

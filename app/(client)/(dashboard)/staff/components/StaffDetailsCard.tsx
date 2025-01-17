@@ -10,9 +10,14 @@ import Link from "next/link";
 interface StaffDetailsProps {
   staffDetails: StaffDetail | null;
   refreshData: () => Promise<void>;
+  defaultAccount?: boolean;
 }
 
-const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
+const StaffDetailsCard = ({
+  staffDetails,
+  refreshData,
+  defaultAccount,
+}: StaffDetailsProps) => {
   const [openModal, setOpenModal] = useState(false);
   return (
     <>
@@ -22,7 +27,9 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
           <div className="flex flex-col items-start justify-center gap-4 text-center sm:flex-row sm:justify-start sm:text-left">
             {/* image */}
             <div className="avatar mx-auto shrink-0 sm:mx-0">
-              <div className="w-32 rounded-full lg:w-36">
+              <div
+                className={`rounded-full ${defaultAccount ? "w-24 lg:w-28" : "w-32 lg:w-36"}`}
+              >
                 <img src={staffDetails?.image} />
               </div>
             </div>
@@ -40,11 +47,14 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
               <p className="mt-4 font-semibold">
                 Staff ID: {staffDetails?.staffId}{" "}
               </p>
-              <p className="text-sm text-neutral-400">
+              <p className="mb-1 text-sm text-neutral-400">
                 Date Joined:{" "}
                 {staffDetails?.hiring_date
                   ? dayjs(staffDetails?.hiring_date).format("MMM D, YYYY")
                   : "N/A"}
+              </p>
+              <p className="text-sm text-error">
+                {defaultAccount && "Default account"}
               </p>
             </div>
           </div>
@@ -68,57 +78,69 @@ const StaffDetailsCard = ({ staffDetails, refreshData }: StaffDetailsProps) => {
                 </td>
               </tr>
               {/* Birthday */}
-              <tr>
-                <td className="py-2 pr-3 font-semibold lg:w-32">Birthday:</td>
-                <td className="text-neutral-400">
-                  {staffDetails?.date_of_birth
-                    ? dayjs(staffDetails?.date_of_birth).format("MMM D, YYYY")
-                    : "N/A"}
-                </td>
-              </tr>
+              {!defaultAccount && (
+                <tr>
+                  <td className="py-2 pr-3 font-semibold lg:w-32">Birthday:</td>
+                  <td className="text-neutral-400">
+                    {staffDetails?.date_of_birth
+                      ? dayjs(staffDetails?.date_of_birth).format("MMM D, YYYY")
+                      : "N/A"}
+                  </td>
+                </tr>
+              )}
               {/* Address */}
-              <tr>
-                <td className="py-2 pr-3 font-semibold lg:w-32">Address:</td>
-                <td className="text-neutral-400"> N/A </td>
-              </tr>
+              {!defaultAccount && (
+                <tr>
+                  <td className="py-2 pr-3 font-semibold lg:w-32">Address:</td>
+                  <td className="text-neutral-400"> N/A </td>
+                </tr>
+              )}
               {/* Gender */}
-              <tr>
-                <td className="py-2 pr-3 font-semibold lg:w-32">Gender:</td>
-                <td className="text-neutral-400">
-                  {staffDetails?.gender ? staffDetails?.gender : "N/A"}
-                </td>
-              </tr>
+              {!defaultAccount && (
+                <tr>
+                  <td className="py-2 pr-3 font-semibold lg:w-32">Gender:</td>
+                  <td className="text-neutral-400">
+                    {staffDetails?.gender ? staffDetails?.gender : "N/A"}
+                  </td>
+                </tr>
+              )}
               {/* Supervisor */}
-              <tr>
-                <td className="py-2 pr-3 font-semibold lg:w-32">Supervisor:</td>
-                <td className="">
-                  {staffDetails?.supervisorId ? (
-                    <div className="flex cursor-pointer items-center gap-2 text-hr-yellow transition-colors hover:text-hr-yellow-dark">
-                      {/* <div className="avatar">
+              {!defaultAccount && (
+                <tr>
+                  <td className="py-2 pr-3 font-semibold lg:w-32">
+                    Supervisor:
+                  </td>
+                  <td className="">
+                    {staffDetails?.supervisorId ? (
+                      <div className="flex cursor-pointer items-center gap-2 text-hr-yellow transition-colors hover:text-hr-yellow-dark">
+                        {/* <div className="avatar">
                       <div className="w-8 rounded-full">
                         <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
                       </div>
                     </div> */}
-                      <Link href={`/staff/${staffDetails.supervisorId}`}>
-                        {staffDetails?.supervisorId}
-                      </Link>
-                    </div>
-                  ) : (
-                    <p className="text-sm text-neutral-400">Not assigned</p>
-                  )}
-                </td>
-              </tr>
+                        <Link href={`/staff/${staffDetails.supervisorId}`}>
+                          {staffDetails?.supervisorId}
+                        </Link>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-neutral-400">Not assigned</p>
+                    )}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
 
         {/* edit button */}
-        <div
-          onClick={() => setOpenModal(true)}
-          className="absolute right-5 flex size-10 cursor-pointer items-center justify-center rounded-full bg-hr-yellow text-black transition-colors hover:bg-hr-yellow-dark"
-        >
-          <Icon icon="heroicons:pencil" className="text-xl" />
-        </div>
+        {!defaultAccount && (
+          <div
+            onClick={() => setOpenModal(true)}
+            className="absolute right-5 flex size-10 cursor-pointer items-center justify-center rounded-full bg-hr-yellow text-black transition-colors hover:bg-hr-yellow-dark"
+          >
+            <Icon icon="heroicons:pencil" className="text-xl" />
+          </div>
+        )}
       </div>
       <EditStaffForm
         staffDetails={staffDetails}

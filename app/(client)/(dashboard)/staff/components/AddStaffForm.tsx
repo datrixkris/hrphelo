@@ -23,6 +23,7 @@ const AddStaffForm = ({
   const departments = useDepartmentStore((state) => state.departments);
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
 
   useEffect(() => {
     const fetchDepartmentsData = async () => {
@@ -36,6 +37,7 @@ const AddStaffForm = ({
   }, [isOpen, departments.length, fetchDepartments]);
 
   const uploadImageToCloudinary = async (file: File) => {
+    setImageLoading(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "hrphelo");
@@ -49,6 +51,8 @@ const AddStaffForm = ({
     );
 
     const data = await response.json();
+    setImageLoading(false);
+    console.log(imageLoading);
     return data.secure_url;
   };
 
@@ -72,10 +76,11 @@ const AddStaffForm = ({
       toast.success("Staff added successfully!");
       fetchStaff();
       reset();
+      imageUrl = "";
       setSelectedImage(null); // Reset the selected image
       onClose();
     } else {
-      toast.error(`Failed to add staff: ${!useStaffStore.getState().error}`);
+      toast.error(`Failed to add staff: ${useStaffStore.getState().error}`);
     }
   };
 
