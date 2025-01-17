@@ -23,7 +23,7 @@ const StaffDetailsCard = ({
     <>
       <div className="relative flex flex-col gap-3 divide-y divide-dashed divide-base-300 rounded border border-base-300 bg-base-100 p-5 md:flex-row md:divide-x md:divide-y-0">
         <div className="pb-5 md:w-1/2 md:pb-0 lg:w-[45%]">
-          {/* image and staff details */}
+          {/* image and staff detailss */}
           <div className="flex flex-col items-start justify-center gap-4 text-center sm:flex-row sm:justify-start sm:text-left">
             {/* image */}
             <div className="avatar mx-auto shrink-0 sm:mx-0">
