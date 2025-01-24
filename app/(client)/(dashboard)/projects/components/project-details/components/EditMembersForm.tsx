@@ -5,7 +5,7 @@ import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import Button from "@/app/components/Button";
 // import { Icon } from "@iconify/react/dist/iconify.js";
 import { Member } from "../../../types/project-types";
-import { useStaffStore } from "@/app/(client)/(dashboard)/staff/staff-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 // import { StaffData } from "@/app/(client)/(dashboard)/staff/types";
 
 const EditMembersForm = ({

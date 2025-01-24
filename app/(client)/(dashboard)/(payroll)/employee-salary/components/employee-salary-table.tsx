@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import dayjs from "dayjs";
 import { usePayrollStore } from "../../payroll-store";
-import { useStaffStore } from "../../../staff/staff-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import TableSkeleton from "@/app/components/TableSkeleton";
 
 const EmployeeSalaryTable = () => {
@@ -15,7 +15,7 @@ const EmployeeSalaryTable = () => {
   const staffWithPayrolls = useMemo(() => {
     if (!staffs || staffs.length === 0 || payrolls.length === 0) return [];
     return staffs.filter((staff) =>
-      payrolls.some((payroll) => payroll.payroll?.[0]?.staffId === staff.id)
+      payrolls.some((payroll) => payroll.payroll?.[0]?.staffId === staff.id),
     );
   }, [staffs, payrolls]);
 
@@ -35,7 +35,7 @@ const EmployeeSalaryTable = () => {
   }, [staffs, fetchPayroll, fetchStaff]);
 
   if (loading) {
-    return <TableSkeleton/>;
+    return <TableSkeleton />;
   }
 
   return (
@@ -67,7 +67,6 @@ const EmployeeSalaryTable = () => {
                 <td>
                   {/* {payrolls.find((payroll) => payroll.payroll?.[0]?.staffId === staff.id)?.salary || "$0"} */}
                   <td>$0</td>
-
                 </td>
                 <td>
                   <Link href={`employee-salary/payslip/${staff.id}`}>

@@ -3,7 +3,7 @@
 // import { useStaffStore } from "../staff-store";
 // import { StaffProfile as ProfileType } from "../types";
 import Section from "./ProfileSection";
-import { StaffProfile } from "../../staff/types";
+import { StaffProfile } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 
 type TStaffProfil = {
   profile: StaffProfile | null;

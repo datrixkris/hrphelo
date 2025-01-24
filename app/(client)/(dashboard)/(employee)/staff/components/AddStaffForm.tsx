@@ -155,20 +155,6 @@ const AddStaffForm = ({
                 />
               </label>
 
-              {/* Designation */}
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text">Designation</span>
-                </div>
-                <input
-                  required
-                  {...register("designation")}
-                  type="text"
-                  placeholder="Staff Designation"
-                  className="input input-bordered w-full"
-                />
-              </label>
-
               {/* Staff Department */}
               <label className="form-control w-full">
                 <div className="label">
@@ -191,6 +177,20 @@ const AddStaffForm = ({
                     );
                   })}
                 </select>
+              </label>
+
+              {/* Designation */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Designation</span>
+                </div>
+                <input
+                  required
+                  {...register("designation")}
+                  type="text"
+                  placeholder="Staff Designation"
+                  className="input input-bordered w-full"
+                />
               </label>
 
               {/* Contact number */}
