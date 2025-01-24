@@ -2,15 +2,17 @@ import { create } from "zustand";
 import { api } from "../../../axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { StaffData, StaffDetail, StaffProfile, EditProfile } from "./types";
+import { StaffData, StaffDetail, StaffProfile, EditProfile, staffOrgnogram } from "./types";
 
 interface StaffStore {
   staffs: StaffData[];
+  staffOrgnogram: staffOrgnogram[]
   profile: StaffProfile | null;
   loading?: boolean; //for fetching
   updatingData?: boolean; //for updating data
   error?: string | null;
   fetchStaff: () => Promise<void>;
+  fetchStaffOrg: () => Promise<void>;
   addStaff: (data: StaffData) => Promise<void>;
   fetchStaffById: (
     id: number,
@@ -29,6 +31,7 @@ interface ApiErrorResponse {
 
 export const useStaffStore = create<StaffStore>((set, get) => ({
   staffs: [],
+  staffOrgnogram: [],
   profile: null,
   loading: false,
   updatingData: false,
@@ -160,6 +163,26 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
         updatingData: false,
       }));
 
+      console.error(err);
+    }
+  },
+
+  fetchStaffOrg: async () => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.get("/v1/company/organogram")).data;
+      set(() => ({ staffOrgnogram: response, loading: false }));
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
       console.error(err);
     }
   },

@@ -11,13 +11,29 @@ const EmployeeSalaryTable = () => {
   const { fetchStaff, staffs } = useStaffStore();
   const [loading, setLoading] = React.useState(true);
 
+  console.log("Payrolls::", payrolls);
+
   // staff that has payrolls
   const staffWithPayrolls = useMemo(() => {
-    if (!staffs || staffs.length === 0 || payrolls.length === 0) return [];
-    return staffs.filter((staff) =>
-      payrolls.some((payroll) => payroll.payroll?.[0]?.staffId === staff.id)
-    );
+    if (!staffs || staffs.length === 0 || !payrolls || payrolls.length === 0)
+      return [];
+
+    return staffs
+      .map((staff) => {
+        const payroll = payrolls.find((payroll) => payroll.to.id === staff.id);
+        if (payroll) {
+          return {
+            ...staff,
+            payslip_uri: payroll.payslip_uri,
+            net_pay: payroll.netPay,
+          };
+        }
+        return null;
+      })
+      .filter((staff) => staff !== null);
   }, [staffs, payrolls]);
+
+  console.log("staffWithPayrolls::", staffWithPayrolls);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +51,7 @@ const EmployeeSalaryTable = () => {
   }, [staffs, fetchPayroll, fetchStaff]);
 
   if (loading) {
-    return <TableSkeleton/>;
+    return <TableSkeleton />;
   }
 
   return (
@@ -65,12 +81,15 @@ const EmployeeSalaryTable = () => {
                 <td>{staff.designation}</td>
                 <td>{dayjs(staff.hiring_date).format("MMM D, YYYY")}</td>
                 <td>
-                  {/* {payrolls.find((payroll) => payroll.payroll?.[0]?.staffId === staff.id)?.salary || "$0"} */}
-                  <td>$0</td>
-
+                  {staff.net_pay.currency}
+                  {staff.net_pay.value}
                 </td>
                 <td>
-                  <Link href={`employee-salary/payslip/${staff.id}`}>
+                  <Link
+                    href={staff.payslip_uri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <button className="btn">
                       <span className="ml-1">Generate Slip</span>
                     </button>

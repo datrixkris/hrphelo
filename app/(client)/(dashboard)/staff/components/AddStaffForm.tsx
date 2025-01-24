@@ -73,11 +73,13 @@ const AddStaffForm = ({
     await addStaff(staffData);
 
     if (!useStaffStore.getState().error) {
-      toast.success("Staff added successfully!");
+      toast.success("Staff added successfully1111!");
       fetchStaff();
       reset();
       imageUrl = "";
-      setSelectedImage(null); // Reset the selected image
+      setSelectedImage(() => null);
+      console.log("selectedImage", selectedImage);
+
       onClose();
     } else {
       toast.error(`Failed to add staff: ${useStaffStore.getState().error}`);
