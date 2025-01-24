@@ -2,6 +2,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect } from "react";
 import { useDepartmentStore } from "../department-store";
+import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const id = params.slug;
@@ -29,24 +30,18 @@ const Page = ({ params }: { params: { slug: string } }) => {
   return (
     <div>
       <div className="mb-[1.875rem]">
+        {/* header plus breadcrumbs */}
         <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-lg font-medium leading-[1.2] sm:mb-[5px] sm:text-2xl md:text-[26px]">
-              Department
-            </h3>
-            <ul className="hidden flex-wrap text-[14px] font-medium sm:flex md:text-base">
-              <li>
-                <a href="/" className="text-[#333333]">Dashboard</a>
-              </li>
-              <li>
-                <span className="px-2 dark:text-[#6c757d]">/</span>
-              </li>
-              <li className="text-[#6c757d]">Departments</li>
-            </ul>
-          </div>
-          <div>
-            {/* Action button can be added here */}
-          </div>
+          <PageTitleWithCrumbs
+            title="Department details"
+            crumbs={[
+              { name: "Dashboard", link: "/dashboard" },
+              { name: "Departments", link: "/departments" },
+              { name: "Department details" },
+            ]}
+          />
+
+          {/* add designation button */}
         </div>
       </div>
 
@@ -58,13 +53,14 @@ const Page = ({ params }: { params: { slug: string } }) => {
           </p>
 
           {/* Employee table */}
-          <div className="overflow-x-auto border-t mt-5">
+          <div className="mt-5 overflow-x-auto border-t">
             <table className="table">
               <thead>
                 <tr>
                   <th>Employee ID</th>
                   <th>Name</th>
                   <th>Email</th>
+                  <th>Designation</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -73,8 +69,9 @@ const Page = ({ params }: { params: { slug: string } }) => {
                   department.staff.map((employee) => (
                     <tr key={employee.id} className="hover">
                       <td>{employee.id}</td>
-                      <td>{employee.name}</td> 
+                      <td>{employee.name}</td>
                       <td>{employee.email}</td>
+                      <td>Designation</td>
                       <td>
                         <button>
                           <Icon icon="mdi:eye" className="h-6 w-6" />
@@ -84,7 +81,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={4} className="text-center">
+                    <td colSpan={5} className="text-center">
                       No employees available.
                     </td>
                   </tr>

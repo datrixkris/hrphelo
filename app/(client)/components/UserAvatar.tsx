@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Staff } from "@/app/types/user-types";
 import Link from "next/link";
-import { useStaffStore } from "../(dashboard)/staff/staff-store";
-import { StaffProfile } from "../(dashboard)/staff/types";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
+// import { StaffProfile } from "../(dashboard)/staff/types";
+import { StaffProfile } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 
 interface UserAvatarProp {
   profile: Staff;

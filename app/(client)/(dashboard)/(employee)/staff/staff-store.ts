@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { api } from "../../../axiosApi/api";
+import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { StaffData, StaffDetail, StaffProfile, EditProfile, staffOrgnogram } from "./types";

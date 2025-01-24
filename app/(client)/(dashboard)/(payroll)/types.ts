@@ -30,7 +30,7 @@ export type PaySlipData = {
   };
 };
 
-  type PayrollEntry = {
+  export type PayrollEntry = {
     id: number;
     companyId: number;
     staffId: number;

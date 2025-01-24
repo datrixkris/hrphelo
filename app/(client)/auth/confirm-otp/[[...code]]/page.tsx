@@ -1,7 +1,7 @@
 "use client";
 import {
   requestResetOtp,
-  requestOtp,
+  // requestOtp,
   submitOtpForm,
   storeResetOtp,
 } from "@/app/actions/auth";

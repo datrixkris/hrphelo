@@ -1,6 +1,6 @@
 import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInputComponent";
 import React, { useEffect, useState } from "react";
-import { useStaffStore } from "../../staff/staff-store";
+import { useStaffStore } from "../../(employee)/staff/staff-store";
 
 interface Data {
   name: string;

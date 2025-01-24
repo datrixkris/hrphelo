@@ -8,8 +8,9 @@ import { useStaffStore } from "../staff-store";
 import { StaffDetail } from "../types";
 import StaffProfile from "../components/StaffProfile";
 import StaffAssets from "../components/StaffAssets";
-import ProjectList from "../../projects/components/ProjectList";
+// import ProjectList from "../../projects/components/ProjectList";
 import MyOrgChart from "../components/OrgChart";
+import ProjectList from "@/app/(client)/(dashboard)/projects/components/ProjectList";
 
 const TABS = [
   "Profile",

@@ -76,41 +76,41 @@ export const DepartmentTable = ({
         <table className="table table-lg rounded border border-base-300 bg-base-100">
           <thead>
             <tr className="">
-              <th></th>
+              {/* <th></th> */}
               <th>Department Name</th>
-              <th>Employee</th>
-              <th>Action</th>
+              <th>No of Employees</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {departments.map((department, index) => (
               <tr key={department.id || index} className="">
-                <th>{index + 1}</th>
+                {/* <th>{index + 1}</th> */}
                 <td>{department.name}</td>
                 <td>{department.staff?.length || 0}</td>
                 <td>
-                  <div className="flex items-center gap-1">
-                    <Icon
-                      icon="mage:edit"
-                      className="h-6 w-6 cursor-pointer text-blue-500"
-                      aria-label="Edit department"
-                      onClick={() => openEditModal(department.id)}
-                    />
-                    <Icon
-                      icon="weui:delete-outlined"
-                      className="h-6 w-6 cursor-pointer text-red-500"
-                      aria-label="Delete department"
-                      onClick={() => openDeleteModal(department.id)}
-                    />
+                  <div className="flex items-center gap-1.5">
                     <Link
                       href={`/departments/${department.id}`}
                       aria-label="View department details"
                     >
                       <Icon
                         icon="mdi:eye"
-                        className="h-6 w-6 cursor-pointer text-green-500"
+                        className="cursor-pointer text-xl text-success"
                       />
                     </Link>
+                    <Icon
+                      icon="mage:edit"
+                      className="cursor-pointer text-xl text-info"
+                      aria-label="Edit department"
+                      onClick={() => openEditModal(department.id)}
+                    />
+                    <Icon
+                      icon="weui:delete-outlined"
+                      className="cursor-pointer text-xl text-error"
+                      aria-label="Delete department"
+                      onClick={() => openDeleteModal(department.id)}
+                    />
                   </div>
                 </td>
               </tr>
