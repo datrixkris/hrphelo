@@ -8,7 +8,7 @@ import { usePayrollStore } from "../../../payroll-store";
 import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import { useCompanyStore } from "@/app/(admin)/admin/companies/company-store";
 import { Company } from "@/app/(admin)/admin/companies/types";
-import { StaffDetail } from "../../../../staff/types";
+import { StaffDetail } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 import { useParams } from "next/navigation";
 
 export default function Page() {
