@@ -4,7 +4,7 @@ import AddMembersField from "../../AddMembersField";
 import { useProjectDetailsContext } from "../ProjectDetailsContext";
 import Button from "@/app/components/Button";
 import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
-import { StaffData } from "@/app/(client)/(dashboard)/staff/types";
+import { StaffData } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 import { useProjectStore } from "../../../stores/project-store";
 import { toast } from "react-toastify";
 

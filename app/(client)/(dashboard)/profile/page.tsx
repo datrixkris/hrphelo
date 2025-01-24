@@ -2,7 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
-import { StaffDetail, StaffProfile } from "../staff/types";
+import {
+  StaffDetail,
+  StaffProfile,
+} from "@/app/(client)/(dashboard)/(employee)/staff/types";
 import TabNavigation from "@/app/components/TabNavigation";
 import ProfileComponent from "./components/ProfileComponent";
 // import UserProfileDetailsCard from "./components/UserProfileDetailsCard";

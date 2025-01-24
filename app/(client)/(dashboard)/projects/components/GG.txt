@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { SelectorStaff } from "@/app/components/SelectorStaff";
-import { StaffData } from "../../staff/types";
+import { StaffData } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 import { div } from "framer-motion/client";
 import { useKanbanStore } from "../kanbanStore";
 

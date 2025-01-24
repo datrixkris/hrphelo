@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { StaffProfile } from "../staff/types";
+import { StaffProfile } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 
 interface ProfileDataTypes {
   profileData: StaffProfile | null;

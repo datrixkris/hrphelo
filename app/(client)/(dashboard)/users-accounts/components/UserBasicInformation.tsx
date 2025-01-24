@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StaffData, StaffDetail } from "../../staff/types";
+import {
+  StaffData,
+  StaffDetail,
+} from "@/app/(client)/(dashboard)/(employee)/staff/types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDepartmentStore } from "@/app/(client)/(dashboard)/(employee)/departments/department-store";
 import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
