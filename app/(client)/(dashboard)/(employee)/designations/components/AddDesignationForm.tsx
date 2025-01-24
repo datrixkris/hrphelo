@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDepartmentStore } from "../../departments/department-store";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { Designation } from "../types";
 import { useDesignationStore } from "../designations-store";
 interface AddDesignationFormProps {
@@ -52,15 +51,16 @@ const AddDesignationForm = ({
       : await addDesignation(data);
 
     if (!useDesignationStore.getState().error) {
-      toast.success("Designation added successfully!");
+      // toast.success("Designation added successfully!");
       await fetchDesignations();
       reset();
       closeModal();
-    } else {
-      toast.error(
-        `Failed to add designation: ${useDesignationStore.getState().error}`,
-      ); //error message
     }
+    // else {
+    //   toast.error(
+    //     `Failed to add designation: ${useDesignationStore.getState().error}`,
+    //   ); //error message
+    // }
   };
 
   return (
