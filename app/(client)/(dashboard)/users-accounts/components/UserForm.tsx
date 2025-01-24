@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Modal from "@/app/components/Modal";
 import TabNavigation from "@/app/components/TabNavigation";
-import { useStaffStore } from "../../staff/staff-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import { StaffDetail } from "../../staff/types";
 import UserPermissions from "./UserPermissions";
 import UserBasicInformation from "./UserBasicInformation";

@@ -7,8 +7,8 @@ import TabNavigation from "@/app/components/TabNavigation";
 import ProfileComponent from "./components/ProfileComponent";
 // import UserProfileDetailsCard from "./components/UserProfileDetailsCard";
 import { useAuthStore } from "@/app/stores/auth-store";
-import { useStaffStore } from "../staff/staff-store";
-import StaffDetailsCard from "../staff/components/StaffDetailsCard";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
+import StaffDetailsCard from "@/app/(client)/(dashboard)/(employee)/staff/components/StaffDetailsCard";
 import { ProfileDataContext } from "./profileDataContext";
 
 const TABS = ["Profile", "Projects", "Bank and Statutory", "Assets"];

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import TableSkeleton from "@/app/components/TableSkeleton";
-import { useStaffStore } from "../../staff/staff-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import UsersTable from "./UsersTable";
 import { StaffData } from "../../staff/types";
 import UserForm from "./UserForm";

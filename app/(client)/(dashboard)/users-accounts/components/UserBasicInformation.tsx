@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { StaffData, StaffDetail } from "../../staff/types";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDepartmentStore } from "../../departments/department-store";
-import { useStaffStore } from "../../staff/staff-store";
+import { useDepartmentStore } from "@/app/(client)/(dashboard)/(employee)/departments/department-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import Button from "@/app/components/Button";
 
 const UserBasicInformation = ({

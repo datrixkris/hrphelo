@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
-import { useStaffStore } from "../(client)/(dashboard)/staff/staff-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import { StaffData } from "../(client)/(dashboard)/staff/types";
 
 // interface Staff {

@@ -2,7 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useStaffStore } from "../../staff/staff-store";
+import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useProfileDataContext } from "../profileDataContext";

@@ -6,14 +6,22 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/dashboard",
   },
   {
-    name: "Departments",
-    icon: "hugeicons:departement",
-    link: "/departments",
-  },
-  {
     name: "Staff",
     icon: "hugeicons:user-group",
-    link: "/staff",
+    dropdown: [
+      {
+        name: "Departments",
+        link: "/departments",
+      },
+      {
+        name: "Staff List",
+        link: "/staff",
+      },
+      {
+        name: "Designations",
+        link: "/designations",
+      },
+    ],
   },
   {
     name: "Leaves",
