@@ -1,6 +1,6 @@
 import React from "react";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
-import FilterAndSearch from "../staff/components/StaffFilterAndSearch";
+import FilterAndSearch from "@/app/(client)/(dashboard)/(employee)/staff/components/StaffFilterAndSearch";
 import UsersList from "./components/UsersList";
 
 const Page = () => {
