@@ -9,6 +9,7 @@ import { StaffDetail } from "../types";
 import { useDepartmentStore } from "../../departments/department-store";
 // import { useParams } from "next/navigation";
 import { useStaffStore } from "../staff-store";
+import { useDesignationStore } from "../../designations/designations-store";
 
 interface EditStaffProps {
   isOpen: boolean;
@@ -28,16 +29,18 @@ const EditStaffForm = ({
     register,
     handleSubmit,
     reset,
+    watch,
     // formState: { isDirty },
   } = useForm<StaffDetail>();
-  const departments = useDepartmentStore((state) => state.departments);
   const { updatingData, staffs, fetchStaff, error, updateStaffDetails } =
     useStaffStore();
-  const fetchDepartments = useDepartmentStore(
-    (state) => state.fetchDepartments,
-  );
+  const { fetchDepartments, departments } = useDepartmentStore();
+  const { designations, fetchDesignations } = useDesignationStore();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [disableDesignationField, setDisableDesignationField] = useState(false);
 
+  // fetch departments data
   useEffect(() => {
     const fetchDepartmentsData = async () => {
       // check if there are no data before you hit the api
@@ -47,9 +50,18 @@ const EditStaffForm = ({
       }
     };
 
+    // placeholder for fetching designation data || this is meant to fetch data based on department selected
+    const fetchDesignationData = async () => {
+      setDisableDesignationField(true);
+      await fetchDesignations();
+      setDisableDesignationField(false);
+    };
+
     fetchDepartmentsData();
 
     if (staffDetails) {
+      fetchDesignationData();
+
       reset({
         name: staffDetails.name,
         staffId: staffDetails.staffId,
@@ -64,9 +76,11 @@ const EditStaffForm = ({
         supervisorId: staffDetails.supervisorId,
       });
     }
-  }, [staffDetails, reset]);
+  }, [staffDetails, reset, departments.length, fetchDepartments, fetchStaff]);
 
+  // upload image to cloudinary
   const uploadImageToCloudinary = async (file: File) => {
+    setImageLoading(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "hrphelo");
@@ -80,8 +94,25 @@ const EditStaffForm = ({
     );
 
     const data = await response.json();
+    setImageLoading(false);
     return data.secure_url;
   };
+
+  // watch for changes in the department select
+  const departmentId = watch("departmentId");
+
+  // fetch designation data based on depqartment selected
+  useEffect(() => {
+    const fetchData = async () => {
+      setDisableDesignationField(true);
+      await fetchDesignations();
+      setDisableDesignationField(false);
+    };
+    if (departmentId) {
+      console.log("Department ID: ", departmentId);
+      fetchData();
+    }
+  }, [departmentId, fetchDesignations]);
 
   const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
     let imageUrl = staffDetails?.image || "";
@@ -192,20 +223,6 @@ const EditStaffForm = ({
                 />
               </label>
 
-              {/* Designation */}
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text">Designation</span>
-                </div>
-                <input
-                  required
-                  {...register("designation")}
-                  type="text"
-                  placeholder="Staff designation"
-                  className="input input-bordered w-full"
-                />
-              </label>
-
               {/* Staff Department */}
               <label className="form-control w-full">
                 <div className="label">
@@ -223,6 +240,34 @@ const EditStaffForm = ({
                     return (
                       <option value={Number(department.id)} key={department.id}>
                         {department.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+
+              {/* Designation */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Designation</span>
+                </div>
+                <select
+                  defaultValue=""
+                  {...register("designation")}
+                  required
+                  className="select select-bordered w-full"
+                  disabled={disableDesignationField}
+                >
+                  <option disabled value="">
+                    Choose a designation
+                  </option>
+                  {designations.map((designation) => {
+                    return (
+                      <option
+                        value={Number(designation.id)}
+                        key={designation.id}
+                      >
+                        {designation.name}
                       </option>
                     );
                   })}
@@ -295,7 +340,7 @@ const EditStaffForm = ({
             {/* submit */}
             <div className="!mt-10">
               <Button className="mx-auto w-1/2" disabled={updatingData}>
-                {updatingData
+                {updatingData || imageLoading
                   ? "Updating Staff Details.."
                   : "Update Staff Details"}
               </Button>
