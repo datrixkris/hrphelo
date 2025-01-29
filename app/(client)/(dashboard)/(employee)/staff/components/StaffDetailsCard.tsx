@@ -38,10 +38,10 @@ const StaffDetailsCard = ({
             <div className="mx-auto sm:mx-0">
               <p className="text-2xl font-bold">{staffDetails?.name}</p>
               <p className="cursor-pointer text-hr-yellow transition-colors hover:text-hr-yellow-dark">
-                {staffDetails?.departments?.name}
+                {staffDetails?.department?.name}
               </p>
               <p className="mt-1 text-sm text-neutral-400">
-                {staffDetails?.designation}
+                {staffDetails?.designations?.name}
               </p>
 
               <p className="mt-4 font-semibold">
@@ -142,12 +142,14 @@ const StaffDetailsCard = ({
           </div>
         )}
       </div>
-      <EditStaffForm
-        staffDetails={staffDetails}
-        isOpen={openModal}
-        onClose={() => setOpenModal(false)}
-        refreshData={refreshData}
-      />
+      {openModal && (
+        <EditStaffForm
+          staffDetails={staffDetails}
+          isOpen={openModal}
+          onClose={() => setOpenModal(false)}
+          refreshData={refreshData}
+        />
+      )}
     </>
   );
 };

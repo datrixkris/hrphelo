@@ -41,14 +41,16 @@ const AddDesignationForm = ({
 
   //   submitting form
   const onSubmit: SubmitHandler<Designation> = async (data) => {
-    // const designationData = {
-    //   name: data.name,
-    // };
+    const designationData = {
+      ...data,
+      name: data.name,
+      departmentId: Number(data.departmentId),
+    };
 
     // check if edit or add to use the appropriate api
     type === "edit"
-      ? await updateDesignation(data.id, data)
-      : await addDesignation(data);
+      ? await updateDesignation(data.id, designationData)
+      : await addDesignation(designationData);
 
     if (!useDesignationStore.getState().error) {
       // toast.success("Designation added successfully!");

@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/app/components/Button";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "@/app/components/Modal";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import { StaffDetail } from "../types";
 import { useDepartmentStore } from "../../departments/department-store";
 // import { useParams } from "next/navigation";
 import { useStaffStore } from "../staff-store";
+import { Designation } from "../../designations/types";
 
 interface EditStaffProps {
   isOpen: boolean;
@@ -28,16 +29,41 @@ const EditStaffForm = ({
     register,
     handleSubmit,
     reset,
+    watch,
     // formState: { isDirty },
   } = useForm<StaffDetail>();
-  const departments = useDepartmentStore((state) => state.departments);
-  const { updatingData, staffs, fetchStaff, error, updateStaffDetails } =
+  const { updatingData, fetchStaff, error, updateStaffDetails } =
     useStaffStore();
-  const fetchDepartments = useDepartmentStore(
-    (state) => state.fetchDepartments,
-  );
+  const { fetchDepartments, departments, fetchDepartmentById } =
+    useDepartmentStore();
+  // const { designations, fetchDesignations } = useDesignationStore();
+  const [designations, setDesignations] = useState<Designation[]>([]);
+  const [fetchingDesignations, setFetchingDesignations] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [disableDesignationField, setDisableDesignationField] = useState(false);
 
+  // function for fetching designations data
+  const fetchDesignationData = useCallback(
+    async (id: number) => {
+      setDisableDesignationField(true);
+      setFetchingDesignations(true);
+      const response = await fetchDepartmentById(id);
+      setDisableDesignationField(false);
+      if (response) {
+        setDesignations(response.designations.map((item) => item));
+        setFetchingDesignations(false);
+      }
+    },
+    [
+      fetchDepartmentById,
+      setDisableDesignationField,
+      setFetchingDesignations,
+      setDesignations,
+    ],
+  );
+
+  // fetch departments data
   useEffect(() => {
     const fetchDepartmentsData = async () => {
       // check if there are no data before you hit the api
@@ -61,12 +87,24 @@ const EditStaffForm = ({
         contact: staffDetails.contact,
         departmentId: staffDetails.departmentId,
         hiring_date: staffDetails.hiring_date?.slice(0, 10),
-        supervisorId: staffDetails.supervisorId,
+        // supervisorId: staffDetails.supervisorId,
       });
+      if (staffDetails.departmentId) {
+        fetchDesignationData(staffDetails.departmentId);
+      }
     }
-  }, [staffDetails, reset]);
+  }, [
+    staffDetails,
+    reset,
+    departments.length,
+    fetchDepartments,
+    fetchStaff,
+    fetchDesignationData,
+  ]);
 
+  // upload image to cloudinary
   const uploadImageToCloudinary = async (file: File) => {
+    setImageLoading(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "hrphelo");
@@ -80,9 +118,22 @@ const EditStaffForm = ({
     );
 
     const data = await response.json();
+    setImageLoading(false);
     return data.secure_url;
   };
 
+  // watch for changes in the department select
+  const departmentId = watch("departmentId");
+
+  // fetch designation data based on depqartment selected
+  useEffect(() => {
+    if (departmentId) {
+      console.log("Department ID: ", departmentId);
+      fetchDesignationData(departmentId);
+    }
+  }, [departmentId, fetchDesignationData]);
+
+  // submit form
   const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
     let imageUrl = staffDetails?.image || "";
     if (selectedImage) {
@@ -96,7 +147,7 @@ const EditStaffForm = ({
     const staffData = {
       ...dataWithoutEmail,
       departmentId: Number(data.departmentId),
-      supervisorId: Number(data.supervisorId),
+      // supervisorId: Number(data.supervisorId),
       designation: Number(data.designation),
       image: imageUrl,
     };
@@ -192,20 +243,6 @@ const EditStaffForm = ({
                 />
               </label>
 
-              {/* Designation */}
-              <label className="form-control w-full">
-                <div className="label">
-                  <span className="label-text">Designation</span>
-                </div>
-                <input
-                  required
-                  {...register("designation")}
-                  type="text"
-                  placeholder="Staff designation"
-                  className="input input-bordered w-full"
-                />
-              </label>
-
               {/* Staff Department */}
               <label className="form-control w-full">
                 <div className="label">
@@ -223,6 +260,34 @@ const EditStaffForm = ({
                     return (
                       <option value={Number(department.id)} key={department.id}>
                         {department.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+
+              {/* Designation */}
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text">Designation</span>
+                </div>
+                <select
+                  defaultValue=""
+                  {...register("designation")}
+                  required
+                  className={`select select-bordered w-full ${fetchingDesignations ? "!cursor-progress" : ""}`}
+                  disabled={disableDesignationField}
+                >
+                  <option disabled value="">
+                    Choose a designation
+                  </option>
+                  {designations.map((designation) => {
+                    return (
+                      <option
+                        value={Number(designation.id)}
+                        key={designation.id}
+                      >
+                        {designation.name}
                       </option>
                     );
                   })}
@@ -272,7 +337,7 @@ const EditStaffForm = ({
               </label>
 
               {/* Supervisor */}
-              <label className="form-control w-full">
+              {/* <label className="form-control w-full">
                 <div className="label">
                   <span className="label-text">Supervisor</span>
                 </div>
@@ -289,13 +354,13 @@ const EditStaffForm = ({
                     </option>
                   ))}
                 </select>
-              </label>
+              </label> */}
             </div>
 
             {/* submit */}
             <div className="!mt-10">
               <Button className="mx-auto w-1/2" disabled={updatingData}>
-                {updatingData
+                {updatingData || imageLoading
                   ? "Updating Staff Details.."
                   : "Update Staff Details"}
               </Button>
