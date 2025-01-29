@@ -4,9 +4,9 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { StaffData, StaffDetail, StaffProfile, EditProfile } from "./types";
 
-interface SearchCriteria {
-  designationId?: number;
-  departmentId?: number;
+export interface SearchCriteria {
+  designationId?: number | null;
+  departmentId?: number | null;
   name?: string;
   email?: string;
 }
@@ -187,6 +187,7 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
           axiosError.message,
         loading: false,
       }));
+      toast.error(get().error);
       console.error(err);
     }
   },
