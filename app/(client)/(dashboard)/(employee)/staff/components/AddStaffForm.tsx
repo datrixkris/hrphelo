@@ -7,7 +7,8 @@ import ImageUpload from "./ImageUpload";
 import { StaffData } from "../types";
 import { useStaffStore } from "../staff-store";
 import { useDepartmentStore } from "../../departments/department-store";
-import { useDesignationStore } from "../../designations/designations-store";
+import { Designation } from "../../designations/types";
+// import { useDesignationStore } from "../../designations/designations-store";
 
 const AddStaffForm = ({
   isOpen,
@@ -17,9 +18,12 @@ const AddStaffForm = ({
   onClose: () => void;
 }) => {
   const { register, handleSubmit, reset, watch } = useForm<StaffData>();
-  const { addStaff, loading, fetchStaff, staffs } = useStaffStore();
-  const { fetchDepartments, departments } = useDepartmentStore();
-  const { designations, fetchDesignations } = useDesignationStore();
+  const { addStaff, loading, fetchStaff } = useStaffStore();
+  const { fetchDepartments, departments, fetchDepartmentById } =
+    useDepartmentStore();
+  // const { designations, fetchDesignations } = useDesignationStore();
+  const [designations, setDesignations] = useState<Designation[]>([]);
+  const [fetchingDesignations, setFetchingDesignations] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [disableDesignationField, setDisableDesignationField] = useState(true);
@@ -61,16 +65,21 @@ const AddStaffForm = ({
 
   // fetch designation data based on depqartment selected
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (id: number) => {
       setDisableDesignationField(true);
-      await fetchDesignations();
+      setFetchingDesignations(true);
+      const response = await fetchDepartmentById(id);
       setDisableDesignationField(false);
+      if (response) {
+        setDesignations(response.designations.map((item) => item));
+        setFetchingDesignations(false);
+      }
     };
     if (departmentId) {
       console.log("Department ID: ", departmentId);
-      fetchData();
+      fetchData(departmentId);
     }
-  }, [departmentId, fetchDesignations]);
+  }, [departmentId, fetchDepartmentById]);
 
   const onSubmit: SubmitHandler<StaffData> = async (data) => {
     let imageUrl = "";
@@ -81,8 +90,8 @@ const AddStaffForm = ({
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
-      supervisorId: data.supervisorId ? Number(data.supervisorId) : null,
-      designation: data.designation,
+      // supervisorId: data.supervisorId ? Number(data.supervisorId) : null,
+      designation: Number(data.designation),
       image: imageUrl,
     };
 
@@ -204,7 +213,7 @@ const AddStaffForm = ({
                   defaultValue=""
                   {...register("designation")}
                   required
-                  className="select select-bordered w-full"
+                  className={`select select-bordered w-full ${fetchingDesignations ? "!cursor-progress" : ""}`}
                   disabled={disableDesignationField}
                 >
                   <option disabled value="">
@@ -266,7 +275,7 @@ const AddStaffForm = ({
               </label>
 
               {/* Supervisor */}
-              <label className="form-control w-full">
+              {/* <label className="form-control w-full">
                 <div className="label">
                   <span className="label-text">Supervisor</span>
                 </div>
@@ -284,7 +293,7 @@ const AddStaffForm = ({
                     </option>
                   ))}
                 </select>
-              </label>
+              </label> */}
             </div>
 
             {/* submit */}

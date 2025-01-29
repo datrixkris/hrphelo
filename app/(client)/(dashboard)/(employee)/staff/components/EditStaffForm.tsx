@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/app/components/Button";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Modal from "@/app/components/Modal";
 import { toast } from "react-toastify";
@@ -9,7 +9,7 @@ import { StaffDetail } from "../types";
 import { useDepartmentStore } from "../../departments/department-store";
 // import { useParams } from "next/navigation";
 import { useStaffStore } from "../staff-store";
-import { useDesignationStore } from "../../designations/designations-store";
+import { Designation } from "../../designations/types";
 
 interface EditStaffProps {
   isOpen: boolean;
@@ -32,13 +32,36 @@ const EditStaffForm = ({
     watch,
     // formState: { isDirty },
   } = useForm<StaffDetail>();
-  const { updatingData, staffs, fetchStaff, error, updateStaffDetails } =
+  const { updatingData, fetchStaff, error, updateStaffDetails } =
     useStaffStore();
-  const { fetchDepartments, departments } = useDepartmentStore();
-  const { designations, fetchDesignations } = useDesignationStore();
+  const { fetchDepartments, departments, fetchDepartmentById } =
+    useDepartmentStore();
+  // const { designations, fetchDesignations } = useDesignationStore();
+  const [designations, setDesignations] = useState<Designation[]>([]);
+  const [fetchingDesignations, setFetchingDesignations] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [disableDesignationField, setDisableDesignationField] = useState(false);
+
+  // function for fetching designations data
+  const fetchDesignationData = useCallback(
+    async (id: number) => {
+      setDisableDesignationField(true);
+      setFetchingDesignations(true);
+      const response = await fetchDepartmentById(id);
+      setDisableDesignationField(false);
+      if (response) {
+        setDesignations(response.designations.map((item) => item));
+        setFetchingDesignations(false);
+      }
+    },
+    [
+      fetchDepartmentById,
+      setDisableDesignationField,
+      setFetchingDesignations,
+      setDesignations,
+    ],
+  );
 
   // fetch departments data
   useEffect(() => {
@@ -50,18 +73,9 @@ const EditStaffForm = ({
       }
     };
 
-    // placeholder for fetching designation data || this is meant to fetch data based on department selected
-    const fetchDesignationData = async () => {
-      setDisableDesignationField(true);
-      await fetchDesignations();
-      setDisableDesignationField(false);
-    };
-
     fetchDepartmentsData();
 
     if (staffDetails) {
-      fetchDesignationData();
-
       reset({
         name: staffDetails.name,
         staffId: staffDetails.staffId,
@@ -73,10 +87,20 @@ const EditStaffForm = ({
         contact: staffDetails.contact,
         departmentId: staffDetails.departmentId,
         hiring_date: staffDetails.hiring_date?.slice(0, 10),
-        supervisorId: staffDetails.supervisorId,
+        // supervisorId: staffDetails.supervisorId,
       });
+      if (staffDetails.departmentId) {
+        fetchDesignationData(staffDetails.departmentId);
+      }
     }
-  }, [staffDetails, reset, departments.length, fetchDepartments, fetchStaff]);
+  }, [
+    staffDetails,
+    reset,
+    departments.length,
+    fetchDepartments,
+    fetchStaff,
+    fetchDesignationData,
+  ]);
 
   // upload image to cloudinary
   const uploadImageToCloudinary = async (file: File) => {
@@ -103,17 +127,13 @@ const EditStaffForm = ({
 
   // fetch designation data based on depqartment selected
   useEffect(() => {
-    const fetchData = async () => {
-      setDisableDesignationField(true);
-      await fetchDesignations();
-      setDisableDesignationField(false);
-    };
     if (departmentId) {
       console.log("Department ID: ", departmentId);
-      fetchData();
+      fetchDesignationData(departmentId);
     }
-  }, [departmentId, fetchDesignations]);
+  }, [departmentId, fetchDesignationData]);
 
+  // submit form
   const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
     let imageUrl = staffDetails?.image || "";
     if (selectedImage) {
@@ -127,7 +147,7 @@ const EditStaffForm = ({
     const staffData = {
       ...dataWithoutEmail,
       departmentId: Number(data.departmentId),
-      supervisorId: Number(data.supervisorId),
+      // supervisorId: Number(data.supervisorId),
       designation: Number(data.designation),
       image: imageUrl,
     };
@@ -255,7 +275,7 @@ const EditStaffForm = ({
                   defaultValue=""
                   {...register("designation")}
                   required
-                  className="select select-bordered w-full"
+                  className={`select select-bordered w-full ${fetchingDesignations ? "!cursor-progress" : ""}`}
                   disabled={disableDesignationField}
                 >
                   <option disabled value="">
@@ -317,7 +337,7 @@ const EditStaffForm = ({
               </label>
 
               {/* Supervisor */}
-              <label className="form-control w-full">
+              {/* <label className="form-control w-full">
                 <div className="label">
                   <span className="label-text">Supervisor</span>
                 </div>
@@ -334,7 +354,7 @@ const EditStaffForm = ({
                     </option>
                   ))}
                 </select>
-              </label>
+              </label> */}
             </div>
 
             {/* submit */}
