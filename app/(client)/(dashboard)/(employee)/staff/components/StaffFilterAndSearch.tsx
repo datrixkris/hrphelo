@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Icon } from "@iconify/react";
 import useDebounce from "@/app/hooks/debounce";
