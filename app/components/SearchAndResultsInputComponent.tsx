@@ -46,9 +46,10 @@ const SearchAndResultsInputComponent = ({
     if (searchTerm) {
       searchByName(searchTerm);
     }
-  }, [data, searchByName, searchTerm]);
+  }, [data]);
 
   function selectItem(item: Data) {
+    setSearchTerm(item.name);
     const data = { ...item, selected: !item.selected };
 
     onSelected(data);
@@ -83,6 +84,7 @@ const SearchAndResultsInputComponent = ({
         <input
           type="text"
           className="grow"
+          value={searchTerm}
           placeholder="Search by name"
           onChange={(e) => searchByName(e.target.value)}
         />
