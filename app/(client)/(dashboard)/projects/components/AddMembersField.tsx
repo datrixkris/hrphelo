@@ -2,7 +2,7 @@ import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInp
 import React, { useEffect, useState } from "react";
 import { useStaffStore } from "../../(employee)/staff/staff-store";
 
-interface Data {
+export interface Data {
   name: string;
   id: number;
   selected: boolean;

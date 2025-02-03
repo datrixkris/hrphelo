@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -6,6 +6,10 @@ import { ProjectData } from "../types/project-types";
 import { useProjectStore } from "../stores/project-store";
 import { toast } from "react-toastify";
 import AddMembersField from "./AddMembersField";
+import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInputComponent";
+import { useStaffStore } from "../../(employee)/staff/staff-store";
+import { Data as PotentialMembersType } from "@/app/components/SearchAndResultsInputComponent";
+import { set } from "date-fns";
 
 const CreateProjectForm = ({
   isOpen,
@@ -20,6 +24,26 @@ const CreateProjectForm = ({
   const [leaderId, setLeaderId] = useState<number>();
   const [leaderError, setLeaderError] = useState("");
   const [memberError, setMemberError] = useState("");
+  const { staffs, fetchStaff, loading: staffLoading } = useStaffStore();
+  const [potentialMembers, setPotentialMembers] = useState<
+    PotentialMembersType[]
+  >([]);
+
+  useEffect(() => {
+    const fetchStaffData = async () => {
+      await fetchStaff();
+      setPotentialMembers(
+        useStaffStore.getState().staffs.map((staff) => ({
+          id: staff.id,
+          name: staff.name,
+          selected: false,
+        })),
+      );
+    };
+    fetchStaffData();
+  }, [fetchStaff]);
+
+  function selectMember(data: PotentialMembersType) {}
 
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {
     if (leaderId == undefined) {
@@ -158,6 +182,14 @@ const CreateProjectForm = ({
                 />
                 <span className="label-text text-error">{memberError}</span>
               </label>
+            </div>
+
+            <div className="">
+              <SearchAndResultsInputComponent
+                data={potentialMembers}
+                onSelected={(data) => console.log(data)}
+                loading={staffLoading}
+              />
             </div>
 
             {/* Description */}
