@@ -6,58 +6,61 @@ interface MyOrgChartProp {
 }
 
 const MyOrgChart = ({ orgnogramData }: MyOrgChartProp) => {
-
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "../BALKAN_OrgChartJS/orgchart.js";
-    script.async = true;
+    const loadScript = (src: string): Promise<void> =>
+      new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
 
-    let chart: any;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
 
-    script.onload = () => {
-      const treeElement = document.getElementById("tree");
+        document.body.appendChild(script);
+      });
 
-      if (treeElement) {
-        try {
-          chart = new OrgChart(treeElement, {
-            mouseScrool: OrgChart.action.none, 
-            scaleInitial: 0.5,
-            scaleMin: 0.5,
-            scaleMax: 2,
-            template: "olivia",
-            enableDragDrop: true,
-            nodeMouseClick: OrgChart.action.none,
-            nodeBinding: {
-              field_0: "name",
-              field_1: "title",
-              img_0: "img",
-            },
-            tags: {
-              group: {
-                template: "group",
+    let chart: OrgChart | null = null;
+
+    loadScript("../BALKAN_OrgChartJS/orgchart.js")
+      .then(() => {
+        const treeElement = document.getElementById("tree");
+
+        if (treeElement) {
+          try {
+            chart = new OrgChart(treeElement, {
+              mouseScrool: OrgChart.action.none,
+              scaleInitial: 0.5,
+              scaleMin: 0.5,
+              scaleMax: 2,
+              template: "olivia",
+              enableDragDrop: true,
+              nodeMouseClick: OrgChart.action.none,
+              nodeBinding: {
+                field_0: "name",
+                field_1: "title",
+                img_0: "img",
               },
-            },
-            nodes: orgnogramData,
-          });
-        } catch (err) {
-          console.error("Failed to initialize OrgChart:", err);
+              tags: {
+                group: {
+                  template: "group",
+                },
+              },
+              nodes: orgnogramData,
+            });
+          } catch (err) {
+            console.error("Failed to initialize OrgChart:", err);
+            treeElement.innerHTML = "Failed to load organization chart.";
+          }
+        } else {
+          console.error("Element with id 'tree' not found.");
         }
-      } else {
-        console.error("Element with id 'tree' not found.");
-      }
-    };
-
-    script.onerror = () => {
-      console.error("Failed to load OrgChart script.");
-    };
-
-    document.body.appendChild(script);
+      })
+      .catch((err) => console.error(err));
 
     return () => {
       if (chart) {
         chart.destroy();
       }
-      document.body.removeChild(script);
     };
   }, [orgnogramData]);
 

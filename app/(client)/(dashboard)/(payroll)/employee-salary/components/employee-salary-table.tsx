@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useMemo } from "react";
 import { Icon } from "@iconify/react";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import { usePayrollStore } from "../../payroll-store";
 import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import TableSkeleton from "@/app/components/TableSkeleton";
@@ -11,13 +11,14 @@ const EmployeeSalaryTable = () => {
   const { fetchStaff, staffs } = useStaffStore();
   const [loading, setLoading] = React.useState(true);
 
-  console.log("Payrolls::", payrolls);
+  const BaseURL = process.env.NEXT_PUBLIC_BaseURL;
+
+  console.log("Payrolls::", BaseURL);
 
   // staff that has payrolls
   const staffWithPayrolls = useMemo(() => {
     if (!staffs || staffs.length === 0 || !payrolls || payrolls.length === 0)
       return [];
-
     return staffs
       .map((staff) => {
         const payroll = payrolls.find((payroll) => payroll.to.id === staff.id);
@@ -53,6 +54,7 @@ const EmployeeSalaryTable = () => {
   if (loading) {
     return <TableSkeleton />;
   }
+  // console.log(`${BaseURL}${payroll.payslip_uri}`);
 
   return (
     <div className="overflow-x-auto">
@@ -72,42 +74,58 @@ const EmployeeSalaryTable = () => {
         </thead>
         {staffWithPayrolls.length > 0 ? (
           <tbody>
-            {staffWithPayrolls.map((staff) => (
-              <tr key={staff.id} className="!text-sm">
-                <td>{staff.staffId}</td>
-                <td>{staff.name}</td>
-                <td>{staff.email}</td>
-                <td>{staff.contact}</td>
-                <td>{staff.designation}</td>
-                <td>{dayjs(staff.hiring_date).format("MMM D, YYYY")}</td>
+            {payrolls.map((payroll) => (
+              <tr key={payroll.payslipNo} className="!text-sm">
+                <td>6666</td>
+                <td>{payroll.to.name}</td>
+                <td>{payroll.to.email}</td>
+                <td>{payroll.to.phone}</td>
+                <td>tester</td>
+                <td>78888</td>
                 <td>
-                  {staff.net_pay.currency}
-                  {staff.net_pay.value}
+                  {payroll.netPay.currency}
+                  {payroll.netPay.value}
                 </td>
+                {/* <td>
+                  {payroll.payslip_uri ? (
+                    <Link
+                      href={`${BaseURL}${payroll.payslip_uri}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+           
+                      
+                      <button className="btn bg-green-300 ">
+                        <span className="text-sm">View Slip</span>
+                      </button>
+                    </Link>
+                  ) : (
+                    <span>No payslip</span> 
+                  )}
+                </td> */}
                 <td>
                   <Link
-                    href={staff.payslip_uri}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`employee-salary/payslip/${payroll.to.id}`}
                   >
-                    <button className="btn">
-                      <span className="ml-1">Generate Slip</span>
+                    <button className="btn bg-green-300">
+                      <span className="text-sm">View Slip</span>
                     </button>
                   </Link>
                 </td>
+
                 <td>
                   <div className="flex items-center gap-1">
                     <Icon
                       icon="mage:edit"
                       className="h-6 w-6 cursor-pointer text-blue-500"
                       aria-label="Edit policy"
-                      onClick={() => console.log(`Edit staff ${staff.id}`)}
+                      // onClick={() => console.log(`Edit staff ${staff.id}`)}
                     />
                     <Icon
                       icon="weui:delete-outlined"
                       className="h-6 w-6 cursor-pointer text-red-500"
                       aria-label="Delete policy"
-                      onClick={() => console.log(`Delete staff ${staff.id}`)}
+                      // onClick={() => console.log(`Delete staff ${staff.id}`)}
                     />
                   </div>
                 </td>
