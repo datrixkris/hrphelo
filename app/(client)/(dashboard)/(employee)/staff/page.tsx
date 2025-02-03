@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-
-import FilterAndSearch from "./components/StaffFilterAndSearch";
 import AddStaff from "./components/AddStaff";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import StaffList from "./components/StaffList";
@@ -22,11 +20,6 @@ const Page = () => {
         <div>
           <AddStaff />
         </div>
-      </div>
-
-      {/* search and filter */}
-      <div className="my-5">
-        <FilterAndSearch />
       </div>
 
       {/* table */}

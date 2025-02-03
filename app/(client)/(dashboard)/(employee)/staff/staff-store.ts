@@ -4,6 +4,13 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { StaffData, StaffDetail, StaffProfile, EditProfile, staffOrgnogram } from "./types";
 
+export interface SearchCriteria {
+  designationId?: number | null;
+  departmentId?: number | null;
+  name?: string;
+  email?: string;
+}
+
 interface StaffStore {
   staffs: StaffData[];
   staffOrgnogram: staffOrgnogram[]
@@ -21,6 +28,7 @@ interface StaffStore {
   updateStaffDetails: (data: StaffDetail, id: number) => Promise<void>;
   fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>;
   updateStaffProfileDetails: (data: EditProfile, id: number) => Promise<void>;
+  searchStaff: (criteria: SearchCriteria) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -173,6 +181,26 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     try {
       const response = (await api.get("/v1/company/organogram")).data;
       set(() => ({ staffOrgnogram: response, loading: false }));
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  searchStaff: async (criteria: SearchCriteria) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.post("/v1/staff/search/", criteria)).data;
+      set(() => ({ staffs: response, loading: false }));
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
