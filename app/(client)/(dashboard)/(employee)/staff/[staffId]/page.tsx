@@ -8,13 +8,27 @@ import { useStaffStore } from "../staff-store";
 import { StaffDetail } from "../types";
 import StaffProfile from "../components/StaffProfile";
 import StaffAssets from "../components/StaffAssets";
+// import ProjectList from "../../projects/components/ProjectList";
+import MyOrgChart from "../components/OrgChart";
 import ProjectList from "@/app/(client)/(dashboard)/projects/components/ProjectList";
 
-const TABS = ["Profile", "Projects", "Bank and Statutory", "Assets"];
+const TABS = [
+  "Profile",
+  "Projects",
+  "Bank and Statutory",
+  "Assets",
+  "Organogram",
+];
 
 const Page = () => {
   const { staffId } = useParams();
-  const { fetchStaffProfile, fetchStaffById, profile } = useStaffStore();
+  const {
+    fetchStaffProfile,
+    fetchStaffById,
+    profile,
+    fetchStaffOrg,
+    staffOrgnogram,
+  } = useStaffStore();
   const loading = useStaffStore((state) => state.loading);
   const [staffDetails, setStaffDetails] = useState<StaffDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +40,8 @@ const Page = () => {
     try {
       const data = await fetchStaffById(Number(staffId));
       await fetchStaffProfile(Number(staffId));
+      await fetchStaffOrg();
+
       setStaffDetails(data);
       setError(null);
     } catch (err) {
@@ -83,6 +99,9 @@ const Page = () => {
             ) : null}{" "}
             {activeTab === "Assets" && <StaffAssets />}
             {activeTab === "Projects" && <ProjectList />}
+            {staffOrgnogram.length !== 0 && activeTab === "Organogram" && (
+              <MyOrgChart orgnogramData={staffOrgnogram} />
+            )}
             {/* Add components for other tabs as needed */}
           </div>
         </div>

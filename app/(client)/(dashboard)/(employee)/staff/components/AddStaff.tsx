@@ -20,7 +20,7 @@ const AddStaff = () => {
       {/* add company modal */}
       {/* <Modal isOpen={openModal} onClose={() => setOpenModal(false)}> */}
 
-      <AddStaffForm isOpen={openModal} onClose={() => setOpenModal(false)} />
+      {openModal && <AddStaffForm isOpen={openModal} onClose={() => setOpenModal(false)} />}
     </div>
   );
 };

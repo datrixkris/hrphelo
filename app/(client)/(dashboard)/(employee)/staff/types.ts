@@ -95,3 +95,13 @@ export interface EditProfile {
   account_number?: string;
   bank_branch?: string;
 }
+
+export interface staffOrgnogram {
+  id: string,
+  name: string,
+  description: string,
+  tags?: string[],
+  img?: string,
+  stpid?: string
+
+}

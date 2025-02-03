@@ -1,14 +1,36 @@
 export type PaySlipData = {
-    id: number;
-    companyId: number;
-    period: string;
-    createdAt: string; 
-    updatedAt: string; 
-    deletedAt: string | null;
-    payroll: PayrollEntry[];
+  payslipNo: string; 
+  payslip_uri: string;
+  salaryMonth: string;
+  from: {
+    name: string;
+    email: string;
+    phone: string;
   };
-  
-  type PayrollEntry = {
+  to: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+  };
+  dateRange: string;
+  benefits: Array<{
+    name: string;
+    amount: string; 
+  }>;
+  deductions: Array<{
+    name: string;
+    amount: string; 
+  }>;
+  totalBenefits: number;
+  totalDeductions: number;
+  netPay: {
+    value: number;
+    currency: string;
+  };
+};
+
+  export type PayrollEntry = {
     id: number;
     companyId: number;
     staffId: number;
