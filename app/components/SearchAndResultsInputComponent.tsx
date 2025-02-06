@@ -43,7 +43,7 @@ const SearchAndResultsInputComponent = ({
 
   useEffect(() => {
     setNewData(data);
-    // console.log(data);
+    console.log(data);
     // console.log(newData);
     if (searchTerm) {
       searchByName(searchTerm);
@@ -114,12 +114,15 @@ const SearchAndResultsInputComponent = ({
                 return (
                   <li
                     onClick={() => selectItem(item)}
-                    className={`flex cursor-pointer items-center justify-between p-2 hover:bg-base-200 ${item.selected && "bg-success hover:bg-success"}`}
+                    className={`flex cursor-pointer items-center justify-between p-2 hover:bg-base-200`}
                     key={item.id}
                   >
                     {item.name}
                     {item.selected && (
-                      <Icon icon="heroicons:check" className="text-xl" />
+                      <Icon
+                        icon="material-symbols-light:check-circle"
+                        className="text-xl text-success"
+                      />
                     )}
                   </li>
                 );
