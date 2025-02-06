@@ -7,7 +7,7 @@ export interface StaffDetail {
   id?: number;
   staffId?: string;
   name?: string;
-  designation?: number;
+  designation?: number | number[];
   email?: string;
   contact?: string;
   gender?: string;
@@ -18,7 +18,7 @@ export interface StaffDetail {
   company?: Company;
   image?: string;
   departmentId?: number;
-  designations?: Designation;
+  designations?: Designation[];
 }
 
 export interface StaffData {
@@ -29,7 +29,7 @@ export interface StaffData {
   staffId?: string;
   name: string;
   role?: string;
-  designation?: number;
+  designation?: number | number[];
   departmentId?: number;
   email?: string;
   contact?: string;
@@ -39,6 +39,7 @@ export interface StaffData {
   departments?: Department;
   company?: Company;
   user?: User;
+  designations?: Designation[];
 }
 
 export interface StaffProfile {
@@ -94,4 +95,13 @@ export interface EditProfile {
   bank_name?: string;
   account_number?: string;
   bank_branch?: string;
+}
+
+export interface staffOrgnogram {
+  id: string;
+  name: string;
+  description: string;
+  tags?: string[];
+  img?: string;
+  stpid?: string;
 }

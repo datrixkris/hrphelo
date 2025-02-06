@@ -11,8 +11,6 @@ import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff
 import { toast } from "react-toastify";
 import EmployeeSalaryTable from "./components/employee-salary-table";
 import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
-import Link from "next/link";
-// import { log } from "console";
 
 interface PayrollFormData {
   staffId: number | null;
@@ -34,6 +32,11 @@ const Page = () => {
     label: staff.name,
   }));
 
+  const payrollPeriodsOptions = payrollPeriods.map((period) => ({
+    value: period.id,
+    label: period.period,
+  }));
+
   const benefits = payrollPolicies.filter(
     (policy) => policy.pol_type === "Benefit",
   );
@@ -42,6 +45,9 @@ const Page = () => {
   );
 
   const [selectedStaff, setSelectedStaff] = useState<number | undefined>();
+  const [selectedPayrollPeriod, setSelectedPayrollPeriod] = useState<
+    number | undefined
+  >();
   const [formData, setFormData] = useState<{ [key: string]: number }>({});
 
   const { handleSubmit, reset } = useForm({
@@ -58,9 +64,6 @@ const Page = () => {
     }));
   };
 
-  const salaryPeriod = payrollPeriods[0];
-
-  const [isReady, setIsReady] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Function to open the modal
@@ -77,6 +80,10 @@ const Page = () => {
       toast.error("Please select a staff member");
       return;
     }
+    if (!selectedPayrollPeriod) {
+      toast.error("Please select a payroll period");
+      return;
+    }
 
     const computations = [
       ...benefits.map((policy) => ({
@@ -91,20 +98,19 @@ const Page = () => {
 
     const payload: createStaffPayrollData = {
       staffId: selectedStaff || data.staffId!,
-      salary_period_id: salaryPeriod.id,
+      salary_period_id: selectedPayrollPeriod,
       computations,
     };
 
     try {
-      console.log("Form submitted successfully", payload);
-      const success = await CreatePayroll(payload);
+      const response = await CreatePayroll(payload);
 
-      if (success) {
-        toast.success("Salary created successfully");
-        closeCreateModal();
+      if (typeof response === "object" && response.message) {
+        toast.error(response.message);
       } else {
-        toast.error("Failed to add salary");
+        toast.success("Salary created successfully");
       }
+
       closeCreateModal();
     } catch (err) {
       console.error(err);
@@ -123,10 +129,6 @@ const Page = () => {
     }
     if (payrollPeriods.length === 0) {
       fetchPayrollPeriod();
-    }
-
-    if (salaryPeriod) {
-      setIsReady(true);
     }
   }, [staffs, fetchStaff]);
 
@@ -160,19 +162,6 @@ const Page = () => {
         <div className={`modal ${isModalOpen ? "modal-open" : ""}`}>
           <div className="modal-box w-11/12 max-w-5xl">
             <h3 className="text-lg font-bold">Add Employee Salary</h3>
-            {!isReady && (
-              <div className="text-red-500">
-                <p>
-                  Please create a payroll period before you can create a salary.
-                  Click{" "}
-                  <Link href="/payroll-policy" className="font-bold underline">
-                    here
-                  </Link>
-                  to create payroll period.
-                </p>
-              </div>
-            )}
-
             <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div className="flex gap-5">
                 <div className="w-full">
@@ -182,8 +171,23 @@ const Page = () => {
                   <Select
                     options={memberOptions}
                     onChange={(selected) => setSelectedStaff(selected?.value)}
-                    isDisabled={loading || !isReady}
+                    isDisabled={loading}
                     placeholder="Select staff"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-5">
+                <div className="w-full">
+                  <label className="block font-medium text-gray-700">
+                    Payroll period
+                  </label>
+                  <Select
+                    options={payrollPeriodsOptions}
+                    onChange={(selected) =>
+                      setSelectedPayrollPeriod(selected?.value)
+                    }
+                    isDisabled={loading}
+                    placeholder="Select payroll period"
                   />
                 </div>
               </div>
@@ -243,7 +247,6 @@ const Page = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={!isReady}
                   className={`btn btn-primary rounded ${loading ? "loading" : ""}`}
                 >
                   {loading ? "Saving..." : "Save Salary"}

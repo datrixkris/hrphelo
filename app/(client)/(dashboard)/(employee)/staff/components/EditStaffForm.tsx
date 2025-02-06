@@ -82,7 +82,7 @@ const EditStaffForm = ({
         gender: staffDetails.gender,
         image: staffDetails.image,
         date_of_birth: staffDetails.date_of_birth?.slice(0, 10),
-        designation: staffDetails.designation,
+        designation: staffDetails.designations![0].id,
         email: staffDetails.email,
         contact: staffDetails.contact,
         departmentId: staffDetails.departmentId,
@@ -148,7 +148,7 @@ const EditStaffForm = ({
       ...dataWithoutEmail,
       departmentId: Number(data.departmentId),
       // supervisorId: Number(data.supervisorId),
-      designation: Number(data.designation),
+      designation: [Number(data.designation)],
       image: imageUrl,
     };
     if (staffDetails?.id) {

@@ -55,7 +55,7 @@ interface PayrollStore {
   fetchStaffPaySlip: (id: number) => Promise<void>;
   addPayrollPolicy: (data: TPayrollPolicy) => Promise<boolean>;
   CreatePayrollPeriod: (data: DataType) => Promise<boolean>;
-  CreatePayroll: (data: createStaffPayrollData) => Promise<boolean>;
+  CreatePayroll: (data: createStaffPayrollData) => Promise<boolean | { message: string }>;
   // updatePayrollPolicy: (data: StaffDetail, id: number) => Promise<void>;
 }
 
@@ -182,17 +182,30 @@ export const usePayrollStore = create<PayrollStore>((set, get) => ({
     }
   },
 
-  CreatePayroll: async (data) => {
+  CreatePayroll: async (data: createStaffPayrollData): Promise<boolean | { message: string }> => {
     set({ loading: true, error: null });
+
     try {
       await api.post<ApiResponse>("/v1/payroll", data);
-      set(() => ({ loading: false }));
+      set({ loading: false });
+
       return true;
-    } catch (err) {
-      console.error("Error creating payroll :", err);
-      return false;
+    } catch (err: unknown) {
+      set({ loading: false });
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+
+
+
+      console.error("Error creating payroll:", axiosError.message || "Unknown API error");
+
+      return { message: axiosError.message || "An error occurred while creating payroll" };
+
+      console.error("Unknown error creating payroll:", err);
+      return { message: "An unexpected error occurred" };
     }
   },
+
+
 
   // updatePayrollPolicy: async (data, id) => {
   //     set({ updatingData: true, error: null });

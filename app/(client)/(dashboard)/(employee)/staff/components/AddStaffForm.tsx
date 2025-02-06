@@ -90,19 +90,27 @@ const AddStaffForm = ({
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
-      // supervisorId: data.supervisorId ? Number(data.supervisorId) : null,
-      designation: Number(data.designation),
+      designation: [Number(data.designation)],
+      // designations: designations
+      //   .filter((item) => item.id == data.designation)
+      //   .map((item) => {
+      //     return { id: item.id, name: item.name };
+      //   }),
       image: imageUrl,
     };
+
+    // delete staffData.designation;
 
     await addStaff(staffData);
 
     if (!useStaffStore.getState().error) {
-      toast.success("Staff added successfully!");
+      toast.success("Staff added successfully1111!");
       fetchStaff();
       reset();
       imageUrl = "";
-      setSelectedImage(null); // Reset the selected image
+      setSelectedImage(() => null);
+      console.log("selectedImage", selectedImage);
+
       onClose();
     } else {
       toast.error(`Failed to add staff: ${useStaffStore.getState().error}`);

@@ -1,7 +1,7 @@
 "use client";
 import {
   requestResetOtp,
-  requestOtp,
+  // requestOtp,
   submitOtpForm,
   storeResetOtp,
 } from "@/app/actions/auth";
@@ -74,7 +74,7 @@ const Page = ({ params }: { params: { code: string } }) => {
 
   const handleOtpRequest = async () => {
     try {
-      const response = await requestOtp();
+      const response = await requestResetOtp(params.code);
       setMessage(response.message);
       setCanRequestOtp(false); // Disable the request button
       setTimer(30); // Set the timer to 30 seconds

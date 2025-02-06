@@ -1,6 +1,6 @@
 import React from "react";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
-import FilterAndSearch from "@/app/(client)/(dashboard)/(employee)/staff/components/StaffFilterAndSearch";
+// import FilterAndSearch from "@/app/(client)/(dashboard)/(employee)/staff/components/StaffFilterAndSearch";
 import UsersList from "./components/UsersList";
 
 const Page = () => {
@@ -19,9 +19,7 @@ const Page = () => {
       </div>
 
       {/* search and filter */}
-      <div className="my-5">
-        <FilterAndSearch />
-      </div>
+      <div className="my-5">{/* <FilterAndSearch /> */}</div>
 
       {/* table */}
       <UsersList />
