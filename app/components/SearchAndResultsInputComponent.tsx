@@ -43,13 +43,15 @@ const SearchAndResultsInputComponent = ({
 
   useEffect(() => {
     setNewData(data);
+    // console.log(data);
+    // console.log(newData);
     if (searchTerm) {
       searchByName(searchTerm);
     }
   }, [data]);
 
   function selectItem(item: Data) {
-    setSearchTerm(item.name);
+    // setSearchTerm(item.name);
     const data = { ...item, selected: !item.selected };
 
     onSelected(data);

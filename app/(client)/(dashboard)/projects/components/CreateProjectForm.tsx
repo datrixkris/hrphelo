@@ -43,7 +43,13 @@ const CreateProjectForm = ({
     fetchStaffData();
   }, [fetchStaff]);
 
-  function selectMember(data: PotentialMembersType) {}
+  function selectMember(data: PotentialMembersType) {
+    console.log(data);
+    setPotentialMembers((prevData) =>
+      prevData.map((item) => (item.id === data.id ? data : item)),
+    );
+    // console.log(potentialMembers);
+  }
 
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {
     if (leaderId == undefined) {
@@ -187,7 +193,7 @@ const CreateProjectForm = ({
             <div className="">
               <SearchAndResultsInputComponent
                 data={potentialMembers}
-                onSelected={(data) => console.log(data)}
+                onSelected={(selected) => selectMember(selected)}
                 loading={staffLoading}
               />
             </div>
