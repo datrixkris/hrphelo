@@ -45,7 +45,7 @@ const StaffDetailsCard = ({
                   {staffDetails?.designations?.map(
                     (designation, index, array) => {
                       return (
-                        <span>
+                        <span key={designation.id}>
                           {designation.name}
                           {index !== array.length - 1 ? " | " : ""}
                         </span>
