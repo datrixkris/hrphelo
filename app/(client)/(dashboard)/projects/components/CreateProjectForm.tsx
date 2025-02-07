@@ -125,8 +125,6 @@ const CreateProjectForm = ({
     setLeaderId(data.selected ? data.id : null);
   }
 
-  function getMemberList(member: "leader" | "member") {}
-
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {
     if (leaderId == undefined) {
       setLeaderError("Select project lead");
