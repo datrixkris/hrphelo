@@ -11,31 +11,6 @@ const EmployeeSalaryTable = () => {
   const { fetchStaff, staffs } = useStaffStore();
   const [loading, setLoading] = React.useState(true);
 
-  const BaseURL = process.env.NEXT_PUBLIC_BaseURL;
-
-  console.log("Payrolls::", BaseURL);
-
-  // staff that has payrolls
-  const staffWithPayrolls = useMemo(() => {
-    if (!staffs || staffs.length === 0 || !payrolls || payrolls.length === 0)
-      return [];
-    return staffs
-      .map((staff) => {
-        const payroll = payrolls.find((payroll) => payroll.to.id === staff.id);
-        if (payroll) {
-          return {
-            ...staff,
-            payslip_uri: payroll.payslip_uri,
-            net_pay: payroll.netPay,
-          };
-        }
-        return null;
-      })
-      .filter((staff) => staff !== null);
-  }, [staffs, payrolls]);
-
-  console.log("staffWithPayrolls::", staffWithPayrolls);
-
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -54,7 +29,6 @@ const EmployeeSalaryTable = () => {
   if (loading) {
     return <TableSkeleton />;
   }
-  // console.log(`${BaseURL}${payroll.payslip_uri}`);
 
   return (
     <div className="overflow-x-auto">
@@ -69,14 +43,14 @@ const EmployeeSalaryTable = () => {
             <th scope="col">Joining Date</th>
             <th scope="col">Salary</th>
             <th scope="col">Payslip</th>
-            <th scope="col"></th>
+            {/* <th scope="col"></th> */}
           </tr>
         </thead>
-        {staffWithPayrolls.length > 0 ? (
+        {payrolls.length > 0 ? (
           <tbody>
-            {payrolls.map((payroll) => (
-              <tr key={payroll.payslipNo} className="!text-sm">
-                <td>6666</td>
+            {payrolls.map((payroll, index) => (
+              <tr key={index} className="!text-sm">
+                <td>{payroll.to.id}</td>
                 <td>{payroll.to.name}</td>
                 <td>{payroll.to.email}</td>
                 <td>{payroll.to.phone}</td>
@@ -86,34 +60,15 @@ const EmployeeSalaryTable = () => {
                   {payroll.netPay.currency}
                   {payroll.netPay.value}
                 </td>
-                {/* <td>
-                  {payroll.payslip_uri ? (
-                    <Link
-                      href={`${BaseURL}${payroll.payslip_uri}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-           
-                      
-                      <button className="btn bg-green-300 ">
-                        <span className="text-sm">View Slip</span>
-                      </button>
-                    </Link>
-                  ) : (
-                    <span>No payslip</span> 
-                  )}
-                </td> */}
                 <td>
-                  <Link
-                    href={`employee-salary/payslip/${payroll.to.id}`}
-                  >
-                    <button className="btn bg-green-300">
+                  <Link href={`employee-salary/payslip/${payroll.payslipNo}`}>
+                    <button className="btn bg-green-400">
                       <span className="text-sm">View Slip</span>
                     </button>
                   </Link>
                 </td>
 
-                <td>
+                {/* <td>
                   <div className="flex items-center gap-1">
                     <Icon
                       icon="mage:edit"
@@ -128,7 +83,7 @@ const EmployeeSalaryTable = () => {
                       // onClick={() => console.log(`Delete staff ${staff.id}`)}
                     />
                   </div>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

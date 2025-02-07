@@ -71,8 +71,6 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
 
     try {
       const response = (await api.get(`/v1/profile/${id}`)).data;
-      console.log(response);
-
       set(() => ({ loading: false, profile: response[0] }));
       // return response;
     } catch (err) {
