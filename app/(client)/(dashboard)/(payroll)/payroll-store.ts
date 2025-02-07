@@ -46,13 +46,13 @@ interface PayrollStore {
   payrollPeriods: PayrollPeriod[];
   payrolls: PaySlipData[];
   loading?: boolean;
-  payslip: PaySlipData[] | [];
+  payslip: PaySlipData | null;
   updatingData?: boolean;
   error?: string | null;
   fetchPayrollPolicy: () => Promise<void>;
   fetchPayrollPeriod: () => Promise<void>;
   fetchPayroll: () => Promise<void>;
-  fetchStaffPaySlip: (id: number) => Promise<void>;
+  fetchStaffPaySlip: (id: string) => Promise<void>;
   addPayrollPolicy: (data: TPayrollPolicy) => Promise<boolean>;
   CreatePayrollPeriod: (data: DataType) => Promise<boolean>;
   CreatePayroll: (data: createStaffPayrollData) => Promise<boolean | { message: string }>;
@@ -72,7 +72,7 @@ interface ApiResponse {
 
 export const usePayrollStore = create<PayrollStore>((set, get) => ({
   payrolls: [],
-  payslip: [],
+  payslip: null,
   payrollPolicies: [],
   payrollPeriods: [],
   loading: false,
@@ -138,11 +138,11 @@ export const usePayrollStore = create<PayrollStore>((set, get) => ({
     }
   },
 
-  fetchStaffPaySlip: async (id: number) => {
+  fetchStaffPaySlip: async (id: string) => {
     set({ loading: true, error: null });
 
     try {
-      const response = (await api.get(`/v1/payroll/${id}`)).data;
+      const response = (await api.get(`/v1/payroll/slip/${id}`)).data;
 
       set(() => ({ loading: false, payslip: response }));
       // return response;
