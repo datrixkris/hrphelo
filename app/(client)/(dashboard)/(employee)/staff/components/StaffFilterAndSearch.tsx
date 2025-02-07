@@ -34,8 +34,10 @@ const StaffFilterAndSearch = ({
   }
 
   function clearSearch() {
-    setSearchText("");
-    getSearchTerm("");
+    if (searchText) {
+      setSearchText("");
+      getSearchTerm("");
+    }
   }
 
   return (

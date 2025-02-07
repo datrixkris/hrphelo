@@ -9,7 +9,11 @@ import { StaffDetail } from "../types";
 import { useDepartmentStore } from "../../departments/department-store";
 // import { useParams } from "next/navigation";
 import { useStaffStore } from "../staff-store";
-import { Designation } from "../../designations/types";
+// import { Designation } from "../../designations/types";
+import SearchAndResultsInputComponent, {
+  Data as SearchAndResultsComponentType,
+} from "@/app/components/SearchAndResultsInputComponent";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface EditStaffProps {
   isOpen: boolean;
@@ -37,11 +41,15 @@ const EditStaffForm = ({
   const { fetchDepartments, departments, fetchDepartmentById } =
     useDepartmentStore();
   // const { designations, fetchDesignations } = useDesignationStore();
-  const [designations, setDesignations] = useState<Designation[]>([]);
+  const [designations, setDesignations] = useState<
+    SearchAndResultsComponentType[]
+  >([]);
   const [fetchingDesignations, setFetchingDesignations] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [disableDesignationField, setDisableDesignationField] = useState(false);
+  const [designationIds, setDesignationIds] = useState<number[]>([]);
+  const [designationError, setDesignationError] = useState("");
 
   // function for fetching designations data
   const fetchDesignationData = useCallback(
@@ -51,7 +59,26 @@ const EditStaffForm = ({
       const response = await fetchDepartmentById(id);
       setDisableDesignationField(false);
       if (response) {
-        setDesignations(response.designations.map((item) => item));
+        setDesignations(
+          response.designations.map((item) => {
+            if (
+              staffDetails?.designations
+                ?.map((designation) => designation.id)
+                .includes(item.id)
+            ) {
+              return {
+                name: item.name,
+                id: item.id,
+                selected: true,
+              };
+            }
+            return {
+              name: item.name,
+              id: item.id,
+              selected: false,
+            };
+          }),
+        );
         setFetchingDesignations(false);
       }
     },
@@ -82,7 +109,7 @@ const EditStaffForm = ({
         gender: staffDetails.gender,
         image: staffDetails.image,
         date_of_birth: staffDetails.date_of_birth?.slice(0, 10),
-        designation: staffDetails.designations![0].id,
+        designation: staffDetails.designations![0].id, //not necessary.. yet to find out
         email: staffDetails.email,
         contact: staffDetails.contact,
         departmentId: staffDetails.departmentId,
@@ -133,11 +160,42 @@ const EditStaffForm = ({
     }
   }, [departmentId, fetchDesignationData]);
 
+  function selectDesignations(data: SearchAndResultsComponentType) {
+    setDesignations((prevData) =>
+      prevData.map((item) => (item.id === data.id ? data : item)),
+    );
+  }
+
+  function removeSelectedDesignation(data: SearchAndResultsComponentType) {
+    setDesignations((prevData) =>
+      prevData.map((item) =>
+        item.id === data.id ? { ...data, selected: false } : item,
+      ),
+    );
+  }
+
+  //set ids if designation changes
+  useEffect(() => {
+    setDesignationIds(
+      designations
+        .filter((designation) => designation.selected)
+        .map((item) => item.id),
+    );
+    console.log(designationIds);
+  }, [designations]);
+
   // submit form
   const onSubmit: SubmitHandler<StaffDetail> = async (data) => {
     let imageUrl = staffDetails?.image || "";
     if (selectedImage) {
       imageUrl = await uploadImageToCloudinary(selectedImage);
+    }
+
+    if (designationIds == undefined || designationIds.length == 0) {
+      setDesignationError("Select at least one team designation");
+      return;
+    } else {
+      setDesignationError("");
     }
 
     // taking the email out so that I can update staff data
@@ -147,8 +205,7 @@ const EditStaffForm = ({
     const staffData = {
       ...dataWithoutEmail,
       departmentId: Number(data.departmentId),
-      // supervisorId: Number(data.supervisorId),
-      designation: [Number(data.designation)],
+      designation: designationIds,
       image: imageUrl,
     };
     if (staffDetails?.id) {
@@ -267,11 +324,21 @@ const EditStaffForm = ({
               </label>
 
               {/* Designation */}
-              <label className="form-control w-full">
+              <label
+                className={`form-control w-full ${disableDesignationField ? "pointer-events-none opacity-50" : ""}`}
+              >
                 <div className="label">
-                  <span className="label-text">Designation</span>
+                  <span className="label-text">Designations</span>
+                  {fetchingDesignations && (
+                    <span className="label-text-alt">
+                      <Icon
+                        icon="line-md:loading-twotone-loop"
+                        className="text-lg"
+                      />
+                    </span>
+                  )}
                 </div>
-                <select
+                {/* <select
                   defaultValue=""
                   {...register("designation")}
                   required
@@ -291,7 +358,39 @@ const EditStaffForm = ({
                       </option>
                     );
                   })}
-                </select>
+                </select> */}
+                <SearchAndResultsInputComponent
+                  data={designations}
+                  onSelected={(data) => selectDesignations(data)}
+                  loading={fetchingDesignations}
+                />
+                {/* selected designations */}
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {designations.map((designation) => {
+                    if (designation.selected) {
+                      return (
+                        <div
+                          key={designation.id}
+                          className="badge badge-outline text-xs"
+                        >
+                          {designation.name}{" "}
+                          <Icon
+                            icon="heroicons:x-circle-16-solid"
+                            className="ml-1 cursor-pointer text-sm"
+                            onClick={() =>
+                              removeSelectedDesignation(designation)
+                            }
+                          />
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+                {designationError && (
+                  <span className="label-text text-error">
+                    {designationError}
+                  </span>
+                )}
               </label>
 
               {/* Contact number */}

@@ -5,11 +5,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ProjectData } from "../types/project-types";
 import { useProjectStore } from "../stores/project-store";
 import { toast } from "react-toastify";
-import AddMembersField from "./AddMembersField";
+// import AddMembersField from "./AddMembersField";
 import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInputComponent";
 import { useStaffStore } from "../../(employee)/staff/staff-store";
 import { Data as SelectComponentData } from "@/app/components/SearchAndResultsInputComponent";
-import { set } from "date-fns";
+// import { set } from "date-fns";
 
 interface PotentialMembersType {
   id: number;
@@ -28,7 +28,7 @@ const CreateProjectForm = ({
   const { register, handleSubmit, reset } = useForm<ProjectData>();
   const { createProject, updatingData, fetchProjects } = useProjectStore();
   const [memberIds, setMemberIds] = useState<number[]>([]);
-  const [leaderId, setLeaderId] = useState<number>();
+  const [leaderId, setLeaderId] = useState<number | null>(null);
   const [leaderError, setLeaderError] = useState("");
   const [memberError, setMemberError] = useState("");
   const { staffs, fetchStaff, loading: staffLoading } = useStaffStore();
@@ -77,10 +77,18 @@ const CreateProjectForm = ({
       }),
     );
     console.log(potentialMembers);
+    if (data.id === leaderId) {
+      setLeaderId(null);
+    }
+    setMemberIds((prev) => {
+      if (data.selected) {
+        return [...prev, data.id];
+      }
+      return prev.filter((item) => item !== data.id);
+    });
   }
 
   function selectLeader(data: SelectComponentData) {
-    setLeaderId
     setPotentialMembers((prevData) =>
       prevData.map((item) => {
         item.type === "member"
@@ -108,6 +116,13 @@ const CreateProjectForm = ({
         }
       }),
     );
+
+    if (memberIds.includes(data.id)) {
+      setMemberIds((prev) => {
+        return prev.filter((item) => item !== data.id);
+      });
+    }
+    setLeaderId(data.selected ? data.id : null);
   }
 
   function getMemberList(member: "leader" | "member") {}
@@ -250,6 +265,27 @@ const CreateProjectForm = ({
                   onSelected={(selected) => selectLeader(selected)}
                   loading={staffLoading}
                 />
+                {/* avatars */}
+                {
+                  <div className="my-2 -space-x-4 rtl:space-x-reverse">
+                    {staffs.map((staff) => {
+                      if (leaderId === staff.id) {
+                        return (
+                          <div key={staff.id}>
+                            <div className="tooltip" data-tip={staff.name}>
+                              <div className="avatar">
+                                <div className="w-11 rounded-full border">
+                                  <img src={staff.image} alt={staff.name} />
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-xs">{staff.name}</p>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                }
                 {leaderError && (
                   <span className="label-text text-error">{leaderError}</span>
                 )}
@@ -289,8 +325,8 @@ const CreateProjectForm = ({
                   <div className="my-2 -space-x-4 rtl:space-x-reverse">
                     {staffs.map((staff) => {
                       if (
-                        potentialMembers.some((item) => {
-                          return item.selected ? item.id === staff.id : false;
+                        memberIds.some((item) => {
+                          return item ? item === staff.id : false;
                         })
                       ) {
                         return (
@@ -313,14 +349,6 @@ const CreateProjectForm = ({
                 <span className="label-text text-error">{memberError}</span>
               </label>
             </div>
-
-            {/* <div className="">
-              <SearchAndResultsInputComponent
-                data={potentialMembers}
-                onSelected={(selected) => selectMember(selected)}
-                loading={staffLoading}
-              />
-            </div> */}
 
             {/* Description */}
             <div className="mt-5">
