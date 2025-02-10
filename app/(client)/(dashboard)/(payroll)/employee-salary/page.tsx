@@ -24,8 +24,9 @@ const Page = () => {
     payrollPeriods,
     fetchPayrollPeriod,
     CreatePayroll,
+    loading,
   } = usePayrollStore();
-  const { staffs, loading, fetchStaff } = useStaffStore();
+  const { staffs, fetchStaff } = useStaffStore();
 
   const memberOptions = staffs?.map((staff) => ({
     value: staff.id,
