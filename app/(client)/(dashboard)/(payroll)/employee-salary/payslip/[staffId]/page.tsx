@@ -8,6 +8,7 @@ import { usePayrollStore } from "../../../payroll-store";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Loading from "@/app/components/Loading";
+import { numberToMonth } from "@/utils/functions";
 
 export default function Page() {
   const params = useParams<{ staffId: string }>();
@@ -43,7 +44,7 @@ export default function Page() {
             crumbs={[
               { name: "Dashboard", link: "/dashboard" },
               { name: "Employee Salary", link: "/employee-salary" },
-              { name: "Payslip",  },
+              { name: "Payslip" },
             ]}
           />
 
@@ -79,7 +80,10 @@ export default function Page() {
                 </h5>
                 <p className="">
                   Salary Month :{" "}
-                  <span className="text-black">{}October 2024</span>
+                  <span className="text-black">
+                    {numberToMonth(Number(payslip?.salaryMonth))}
+                    {/* 2024 */}
+                  </span>
                 </p>
               </div>
             </div>
@@ -121,13 +125,13 @@ export default function Page() {
               </div>
             </div>
             <div>
-              <h5 className="mb-4 text-center text-lg font-semibold">
+              {/* <h5 className="mb-4 text-center text-lg font-semibold">
                 Payslip for {payslip?.salaryMonth}
-              </h5>
+              </h5> */}
               <div className="flex gap-5">
                 <div className="w-full">
                   <div className="mb-3 divide-y rounded-lg border">
-                    <div className="bg-base-200 p-3 font-medium">
+                    <div className="bg-base-200 p-3 font-medium rounded-lg">
                       <h3 className="text-md font-semibold"> Benefits</h3>
                     </div>
                     {payslip?.benefits.map((entry) => (
@@ -151,7 +155,7 @@ export default function Page() {
                 </div>
                 <div className="w-full">
                   <div className="mb-3 divide-y rounded-lg border">
-                    <div className="bg-base-200 p-3 font-medium">
+                    <div className="bg-base-200 p-3 font-medium rounded-lg">
                       <h6>Deductions</h6>
                     </div>
                     {payslip?.deductions.map((entry) => (
