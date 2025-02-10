@@ -17,7 +17,7 @@ const UsersTable = ({ staff, setUserFormData }: UsersTableProps) => {
             <th>Email</th>
             <th>Hiring Date</th>
             <th>Department</th>
-            <th>Designation</th>
+            {/* <th>Designation</th> */}
             <th>Account Status</th>
             <th>Actions</th>
           </tr>
@@ -29,8 +29,8 @@ const UsersTable = ({ staff, setUserFormData }: UsersTableProps) => {
               <th>{member.staff.name}</th>
               <td className="max-w-48 break-words">{member.staff.email}</td>
               <td>{dayjs(member.staff.hiring_date).format("MMM D, YYYY")}</td>
-              <td>{member.staff.departments?.name}</td>
-              <td>{member.staff.designation}</td>
+              <td>{member.staff.department?.name}</td>
+
               <td>
                 {member.staff.user ? (
                   <span className="text-success">Created</span>

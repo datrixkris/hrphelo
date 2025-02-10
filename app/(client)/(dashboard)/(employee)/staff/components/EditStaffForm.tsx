@@ -109,7 +109,7 @@ const EditStaffForm = ({
         gender: staffDetails.gender,
         image: staffDetails.image,
         date_of_birth: staffDetails.date_of_birth?.slice(0, 10),
-        designation: staffDetails.designations![0].id, //not necessary.. yet to find out
+        // designation: staffDetails.designations![0].id, //not necessary.. yet to find out
         email: staffDetails.email,
         contact: staffDetails.contact,
         departmentId: staffDetails.departmentId,

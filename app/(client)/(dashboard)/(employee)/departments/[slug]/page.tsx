@@ -57,7 +57,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th>Employee ID</th>
+                  <th>Staff ID</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Designation</th>
@@ -68,13 +68,16 @@ const Page = ({ params }: { params: { slug: string } }) => {
                 {department.staff?.length ? (
                   department.staff.map((employee) => (
                     <tr key={employee.id} className="hover">
-                      <td>{employee.id}</td>
+                      <td>{employee.staffId}</td>
                       <td>{employee.name}</td>
                       <td>{employee.email}</td>
                       <td>Designation</td>
                       <td>
                         <button>
-                          <Icon icon="mdi:eye" className="h-6 w-6" />
+                          <Icon
+                            icon="mdi:eye"
+                            className="cursor-pointer text-xl text-success"
+                          />
                         </button>
                       </td>
                     </tr>

@@ -149,7 +149,7 @@ const AddStaffForm = ({
     await addStaff(staffData);
 
     if (!useStaffStore.getState().error) {
-      toast.success("Staff added successfully1111!");
+      toast.success("Staff added successfully!");
       fetchStaff();
       reset();
       imageUrl = "";
