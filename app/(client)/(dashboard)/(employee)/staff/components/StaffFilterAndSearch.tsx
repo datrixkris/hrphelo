@@ -33,17 +33,11 @@ const StaffFilterAndSearch = ({
     debouncedSearch(event.target.value);
   }
 
-  function handleDepartment(event: React.ChangeEvent<HTMLSelectElement>) {
-    getDepartmentId(parseInt(event.target.value));
-  }
-
-  function handleDesignation(event: React.ChangeEvent<HTMLSelectElement>) {
-    getDesignationId(parseInt(event.target.value));
-  }
-
   function clearSearch() {
-    setSearchText("");
-    getSearchTerm("");
+    if (searchText) {
+      setSearchText("");
+      getSearchTerm("");
+    }
   }
 
   return (
@@ -69,7 +63,7 @@ const StaffFilterAndSearch = ({
       <div className="flex w-full gap-2">
         <select
           className="select select-bordered w-1/2 md:max-w-[200px]"
-          onChange={handleDepartment}
+          onChange={(e) => getDepartmentId(parseInt(e.target.value))}
         >
           <option value="">All departments</option>
           {allDepartments.map((department) => {
@@ -84,7 +78,7 @@ const StaffFilterAndSearch = ({
         {/* filter by designation */}
         <select
           className="select select-bordered w-1/2 md:max-w-[200px]"
-          onChange={handleDesignation}
+          onChange={(e) => getDesignationId(parseInt(e.target.value))}
         >
           <option value="">All Designations</option>
           {allDesignations.map((designation) => {

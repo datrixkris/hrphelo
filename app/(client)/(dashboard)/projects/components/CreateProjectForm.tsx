@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "@/app/components/Modal";
 import Button from "@/app/components/Button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ProjectData } from "../types/project-types";
 import { useProjectStore } from "../stores/project-store";
 import { toast } from "react-toastify";
-import AddMembersField from "./AddMembersField";
+// import AddMembersField from "./AddMembersField";
+import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInputComponent";
+import { useStaffStore } from "../../(employee)/staff/staff-store";
+import { Data as SelectComponentData } from "@/app/components/SearchAndResultsInputComponent";
+// import { set } from "date-fns";
+
+interface PotentialMembersType {
+  id: number;
+  name: string;
+  type: "leader" | "member" | null;
+  selected: boolean;
+}
 
 const CreateProjectForm = ({
   isOpen,
@@ -17,9 +28,102 @@ const CreateProjectForm = ({
   const { register, handleSubmit, reset } = useForm<ProjectData>();
   const { createProject, updatingData, fetchProjects } = useProjectStore();
   const [memberIds, setMemberIds] = useState<number[]>([]);
-  const [leaderId, setLeaderId] = useState<number>();
+  const [leaderId, setLeaderId] = useState<number | null>(null);
   const [leaderError, setLeaderError] = useState("");
   const [memberError, setMemberError] = useState("");
+  const { staffs, fetchStaff, loading: staffLoading } = useStaffStore();
+  const [potentialMembers, setPotentialMembers] = useState<
+    PotentialMembersType[]
+  >([]);
+
+  useEffect(() => {
+    const fetchStaffData = async () => {
+      await fetchStaff();
+      setPotentialMembers(
+        useStaffStore.getState().staffs.map((staff) => ({
+          id: staff.id,
+          name: staff.name,
+          selected: false,
+          type: null,
+        })),
+      );
+    };
+    fetchStaffData();
+  }, [fetchStaff]);
+
+  function selectMembers(data: SelectComponentData) {
+    console.log(data);
+    setPotentialMembers((prevData) =>
+      prevData.map((item) => {
+        if (item.id === data.id) {
+          if (data.selected) {
+            return {
+              ...data,
+              type: "member",
+            };
+          } else {
+            return {
+              ...data,
+              type: item.type,
+            };
+          }
+        } else {
+          if (item.type === "member" || item.type === "leader") {
+            return item;
+          } else {
+            return { ...item, type: null };
+          }
+        }
+      }),
+    );
+    console.log(potentialMembers);
+    if (data.id === leaderId) {
+      setLeaderId(null);
+    }
+    setMemberIds((prev) => {
+      if (data.selected) {
+        return [...prev, data.id];
+      }
+      return prev.filter((item) => item !== data.id);
+    });
+  }
+
+  function selectLeader(data: SelectComponentData) {
+    setPotentialMembers((prevData) =>
+      prevData.map((item) => {
+        item.type === "member"
+          ? (item.selected = item.selected)
+          : (item.selected = false);
+
+        if (item.id === data.id) {
+          if (data.selected) {
+            return {
+              ...data,
+              type: "leader",
+            };
+          } else {
+            return {
+              ...data,
+              type: item.type,
+            };
+          }
+        } else {
+          if (item.type === "member") {
+            return item;
+          } else {
+            return { ...item, type: null };
+          }
+        }
+      }),
+    );
+
+    if (memberIds.includes(data.id)) {
+      setMemberIds((prev) => {
+        return prev.filter((item) => item !== data.id);
+      });
+    }
+    setLeaderId(data.selected ? data.id : null);
+  }
 
   const onSubmit: SubmitHandler<ProjectData> = async (data) => {
     if (leaderId == undefined) {
@@ -137,10 +241,49 @@ const CreateProjectForm = ({
                 <div className="label">
                   <span className="label-text">Select project lead</span>
                 </div>
-                <AddMembersField
+                {/* <AddMembersField
                   getIds={(ids) => setLeaderId(ids[0])}
                   excludedIds={memberIds ? memberIds : []}
+                /> */}
+                <SearchAndResultsInputComponent
+                  data={potentialMembers.map((item) => {
+                    if (item.type === "leader") {
+                      return {
+                        name: item.name,
+                        id: item.id,
+                        selected: item.selected,
+                      };
+                    }
+                    return {
+                      name: item.name,
+                      id: item.id,
+                      selected: false,
+                    };
+                  })}
+                  onSelected={(selected) => selectLeader(selected)}
+                  loading={staffLoading}
                 />
+                {/* avatars */}
+                {
+                  <div className="my-2 -space-x-4 rtl:space-x-reverse">
+                    {staffs.map((staff) => {
+                      if (leaderId === staff.id) {
+                        return (
+                          <div key={staff.id}>
+                            <div className="tooltip" data-tip={staff.name}>
+                              <div className="avatar">
+                                <div className="w-11 rounded-full border">
+                                  <img src={staff.image} alt={staff.name} />
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-xs">{staff.name}</p>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                }
                 {leaderError && (
                   <span className="label-text text-error">{leaderError}</span>
                 )}
@@ -151,11 +294,56 @@ const CreateProjectForm = ({
                 <div className="label">
                   <span className="label-text">Select team members</span>
                 </div>
-                <AddMembersField
+                {/* <AddMembersField
                   getIds={(ids) => setMemberIds(ids)}
                   multiple={true}
                   excludedIds={leaderId ? [leaderId] : []}
+                /> */}
+                <SearchAndResultsInputComponent
+                  data={potentialMembers.map((item) => {
+                    if (item.type === "member") {
+                      return {
+                        name: item.name,
+                        id: item.id,
+                        selected: item.selected,
+                      };
+                    }
+                    return {
+                      name: item.name,
+                      id: item.id,
+                      selected: false,
+                    };
+                  })}
+                  onSelected={(selected) => selectMembers(selected)}
+                  loading={staffLoading}
                 />
+
+                {/* avatars */}
+                {
+                  <div className="my-2 -space-x-4 rtl:space-x-reverse">
+                    {staffs.map((staff) => {
+                      if (
+                        memberIds.some((item) => {
+                          return item ? item === staff.id : false;
+                        })
+                      ) {
+                        return (
+                          <div
+                            className="tooltip"
+                            data-tip={staff.name}
+                            key={staff.id}
+                          >
+                            <div className="avatar">
+                              <div className="w-11 rounded-full border">
+                                <img src={staff.image} alt={staff.name} />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                }
                 <span className="label-text text-error">{memberError}</span>
               </label>
             </div>

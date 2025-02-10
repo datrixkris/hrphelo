@@ -7,8 +7,12 @@ import ImageUpload from "./ImageUpload";
 import { StaffData } from "../types";
 import { useStaffStore } from "../staff-store";
 import { useDepartmentStore } from "../../departments/department-store";
-import { Designation } from "../../designations/types";
+// import { Designation } from "../../designations/types";
 // import { useDesignationStore } from "../../designations/designations-store";
+import SearchAndResultsInputComponent, {
+  Data as SearchAndResultsComponentType,
+} from "@/app/components/SearchAndResultsInputComponent";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const AddStaffForm = ({
   isOpen,
@@ -22,11 +26,15 @@ const AddStaffForm = ({
   const { fetchDepartments, departments, fetchDepartmentById } =
     useDepartmentStore();
   // const { designations, fetchDesignations } = useDesignationStore();
-  const [designations, setDesignations] = useState<Designation[]>([]);
+  const [designations, setDesignations] = useState<
+    SearchAndResultsComponentType[]
+  >([]);
   const [fetchingDesignations, setFetchingDesignations] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [disableDesignationField, setDisableDesignationField] = useState(true);
+  const [designationIds, setDesignationIds] = useState<number[]>([]);
+  const [designationError, setDesignationError] = useState("");
 
   // fetch departments data
   useEffect(() => {
@@ -71,7 +79,15 @@ const AddStaffForm = ({
       const response = await fetchDepartmentById(id);
       setDisableDesignationField(false);
       if (response) {
-        setDesignations(response.designations.map((item) => item));
+        setDesignations(
+          response.designations.map((item) => {
+            return {
+              name: item.name,
+              id: item.id,
+              selected: false,
+            };
+          }),
+        );
         setFetchingDesignations(false);
       }
     };
@@ -81,25 +97,54 @@ const AddStaffForm = ({
     }
   }, [departmentId, fetchDepartmentById]);
 
+  function selectDesignations(data: SearchAndResultsComponentType) {
+    setDesignations((prevData) =>
+      prevData.map((item) => (item.id === data.id ? data : item)),
+    );
+  }
+
+  function removeSelectedDesignation(data: SearchAndResultsComponentType) {
+    setDesignations((prevData) =>
+      prevData.map((item) =>
+        item.id === data.id ? { ...data, selected: false } : item,
+      ),
+    );
+  }
+
+  //set ids if designation changes
+  useEffect(() => {
+    setDesignationIds(
+      designations
+        .filter((designation) => designation.selected)
+        .map((item) => item.id),
+    );
+    console.log(designationIds);
+  }, [designations]);
+
+  // submit form
   const onSubmit: SubmitHandler<StaffData> = async (data) => {
     let imageUrl = "";
     if (selectedImage) {
       imageUrl = await uploadImageToCloudinary(selectedImage);
     }
 
+    if (designationIds == undefined || designationIds.length == 0) {
+      setDesignationError("Select at least one team designation");
+      return;
+    } else {
+      setDesignationError("");
+    }
+
     const staffData = {
       ...data,
       departmentId: Number(data.departmentId),
-      designation: [Number(data.designation)],
-      // designations: designations
-      //   .filter((item) => item.id == data.designation)
-      //   .map((item) => {
-      //     return { id: item.id, name: item.name };
-      //   }),
+      designation: designationIds,
       image: imageUrl,
     };
 
-    // delete staffData.designation;
+    if (!data.staffId) {
+      delete staffData.staffId;
+    }
 
     await addStaff(staffData);
 
@@ -213,11 +258,21 @@ const AddStaffForm = ({
               </label>
 
               {/* Designation */}
-              <label className="form-control w-full">
+              <label
+                className={`form-control w-full ${disableDesignationField ? "pointer-events-none opacity-50" : ""}`}
+              >
                 <div className="label">
-                  <span className="label-text">Designation</span>
+                  <span className="label-text">Designations</span>
+                  {fetchingDesignations && (
+                    <span className="label-text-alt">
+                      <Icon
+                        icon="line-md:loading-twotone-loop"
+                        className="text-lg"
+                      />
+                    </span>
+                  )}
                 </div>
-                <select
+                {/* <select
                   defaultValue=""
                   {...register("designation")}
                   required
@@ -237,7 +292,39 @@ const AddStaffForm = ({
                       </option>
                     );
                   })}
-                </select>
+                </select> */}
+                <SearchAndResultsInputComponent
+                  data={designations}
+                  onSelected={(data) => selectDesignations(data)}
+                  loading={fetchingDesignations}
+                />
+                {/* selected designations */}
+                <div className="mt-2 flex flex-wrap gap-1">
+                  {designations.map((designation) => {
+                    if (designation.selected) {
+                      return (
+                        <div
+                          key={designation.id}
+                          className="badge badge-outline text-xs"
+                        >
+                          {designation.name}{" "}
+                          <Icon
+                            icon="heroicons:x-circle-16-solid"
+                            className="ml-1 cursor-pointer text-sm"
+                            onClick={() =>
+                              removeSelectedDesignation(designation)
+                            }
+                          />
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+                {designationError && (
+                  <span className="label-text text-error">
+                    {designationError}
+                  </span>
+                )}
               </label>
 
               {/* Contact number */}

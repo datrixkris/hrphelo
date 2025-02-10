@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useRef, useState } from "react";
 
-interface Data {
+export interface Data {
   name: string;
   id: number;
   selected: boolean;
@@ -22,7 +22,7 @@ const SearchAndResultsInputComponent = ({
 }: SearchAndResultsInputComponentProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const [newData, setNewData] = useState(data);
+  const [newData, setNewData] = useState<Data[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   // Detects clicks outside of the dropdown
@@ -43,12 +43,15 @@ const SearchAndResultsInputComponent = ({
 
   useEffect(() => {
     setNewData(data);
+    console.log(data);
+    // console.log(newData);
     if (searchTerm) {
       searchByName(searchTerm);
     }
   }, [data]);
 
   function selectItem(item: Data) {
+    // setSearchTerm(item.name);
     const data = { ...item, selected: !item.selected };
 
     onSelected(data);
@@ -62,7 +65,7 @@ const SearchAndResultsInputComponent = ({
     }
   }
 
-  const searchByName = (str: string) => {
+  function searchByName(str: string) {
     setShowDropdown(true);
     setSearchTerm(str);
     if (str === "") {
@@ -75,7 +78,7 @@ const SearchAndResultsInputComponent = ({
         ),
       );
     }
-  };
+  }
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -83,6 +86,7 @@ const SearchAndResultsInputComponent = ({
         <input
           type="text"
           className="grow"
+          value={searchTerm}
           placeholder="Search by name"
           onChange={(e) => searchByName(e.target.value)}
         />
@@ -100,22 +104,25 @@ const SearchAndResultsInputComponent = ({
             <p className="p-2 text-center text-neutral-400">
               <Icon icon="eos-icons:loading" className="m-auto text-2xl" />
             </p>
-          ) : newData.length < 1 && !loading ? (
+          ) : newData?.length < 1 && !loading ? (
             <p className="p-2 text-center text-neutral-400">
               No data available
             </p>
           ) : (
             <ul className="space-y-1">
-              {newData.map((item) => {
+              {newData?.map((item) => {
                 return (
                   <li
                     onClick={() => selectItem(item)}
-                    className={`flex cursor-pointer items-center justify-between p-2 hover:bg-base-200 ${item.selected && "bg-success hover:bg-success"}`}
+                    className={`flex cursor-pointer items-center justify-between p-2 hover:bg-base-200`}
                     key={item.id}
                   >
                     {item.name}
                     {item.selected && (
-                      <Icon icon="heroicons:check" className="text-xl" />
+                      <Icon
+                        icon="material-symbols-light:check-circle"
+                        className="text-xl text-success"
+                      />
                     )}
                   </li>
                 );
