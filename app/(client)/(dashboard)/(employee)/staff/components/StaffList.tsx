@@ -12,8 +12,7 @@ const StaffList = () => {
   const { departments, fetchDepartments } = useDepartmentStore();
   const { designations, fetchDesignations } = useDesignationStore();
   const [criteria, setCriteria] = useState<SearchCriteria>({
-    name: "",
-    email: "",
+    search: "",
     designationId: null,
     departmentId: null,
   });
@@ -25,7 +24,7 @@ const StaffList = () => {
   }, [fetchStaff, fetchDepartments, fetchDesignations]);
 
   const getSearchTerm = (term: string) => {
-    setCriteria({ ...criteria, name: term });
+    setCriteria({ ...criteria, search: term });
   };
 
   const getDepartmentId = (id: number) => {

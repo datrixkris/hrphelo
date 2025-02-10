@@ -2,18 +2,23 @@ import { create } from "zustand";
 import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { StaffData, StaffDetail, StaffProfile, EditProfile, staffOrgnogram } from "./types";
+import {
+  StaffData,
+  StaffDetail,
+  StaffProfile,
+  EditProfile,
+  staffOrgnogram,
+} from "./types";
 
 export interface SearchCriteria {
   designationId?: number | null;
   departmentId?: number | null;
-  name?: string;
-  email?: string;
+  search?: string;
 }
 
 interface StaffStore {
   staffs: StaffData[];
-  staffOrgnogram: staffOrgnogram[]
+  staffOrgnogram: staffOrgnogram[];
   profile: StaffProfile | null;
   loading?: boolean; //for fetching
   updatingData?: boolean; //for updating data
