@@ -36,7 +36,7 @@ export interface StaffData {
   image: string;
   hiring_date?: string;
   supervisorId?: number | null;
-  departments?: Department;
+  department?: Department;
   company?: Company;
   user?: User;
   designations?: Designation[];
