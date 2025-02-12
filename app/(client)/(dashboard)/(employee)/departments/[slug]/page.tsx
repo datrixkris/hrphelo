@@ -41,7 +41,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
         {/* header plus breadcrumbs */}
         <div className="flex items-center justify-between">
           <PageTitleWithCrumbs
-            title={department.name}
+            title={`${department.name} Department`}
             crumbs={[
               { name: "Dashboard", link: "/dashboard" },
               { name: "Departments", link: "/departments" },
