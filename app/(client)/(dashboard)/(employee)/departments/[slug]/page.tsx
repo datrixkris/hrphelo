@@ -1,11 +1,19 @@
 "use client";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useEffect } from "react";
+// import { Icon } from "@iconify/react/dist/iconify.js";
+import React, { useEffect, useState } from "react";
 import { useDepartmentStore } from "../department-store";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
+import TabNavigation from "@/app/components/TabNavigation";
+import DepartmentStaffList from "../components/DepartmentStaffList";
+import DepartmentDesignations from "../components/DepartmentDesignations";
+import DepartmentChecklist from "../components/DepartmentChecklist";
+
+const Tabs = ["Staff", "Designations", "Checklists"];
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const id = params.slug;
+
+  const [activeTab, setActiveTab] = useState<string>("Staff");
   const { loading, fetchDepartmentById, department } = useDepartmentStore();
 
   useEffect(() => {
@@ -33,19 +41,17 @@ const Page = ({ params }: { params: { slug: string } }) => {
         {/* header plus breadcrumbs */}
         <div className="flex items-center justify-between">
           <PageTitleWithCrumbs
-            title="Department details"
+            title={department.name}
             crumbs={[
               { name: "Dashboard", link: "/dashboard" },
               { name: "Departments", link: "/departments" },
               { name: "Department details" },
             ]}
           />
-
-          {/* add designation button */}
         </div>
       </div>
 
-      <div className="w-full bg-base-100 p-10">
+      <div className="w-full">
         <div className="mb-10">
           <h3 className="text-xl font-semibold">{department.name}</h3>
           <p className="text-gray-500">
@@ -53,44 +59,19 @@ const Page = ({ params }: { params: { slug: string } }) => {
           </p>
 
           {/* Employee table */}
-          <div className="mt-5 overflow-x-auto border-t">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Staff ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Designation</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {department.staff?.length ? (
-                  department.staff.map((employee) => (
-                    <tr key={employee.id} className="hover">
-                      <td>{employee.staffId}</td>
-                      <td>{employee.name}</td>
-                      <td>{employee.email}</td>
-                      <td>Designation</td>
-                      <td>
-                        <button>
-                          <Icon
-                            icon="mdi:eye"
-                            className="cursor-pointer text-xl text-success"
-                          />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={5} className="text-center">
-                      No employees available.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          <div className="mt-5 overflow-x-auto bg-base-100">
+            {/* tabs */}
+            <TabNavigation
+              tabs={Tabs}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+
+            {activeTab === "Staff" && (
+              <DepartmentStaffList department={department} />
+            )}
+            {activeTab === "Designations" && <DepartmentDesignations />}
+            {activeTab === "Checklists" && <DepartmentChecklist />}
           </div>
         </div>
       </div>
