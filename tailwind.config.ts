@@ -14,6 +14,9 @@ const config: Config = {
     {
       pattern: /bg-[a-z]+\/\d+/,
     },
+    {
+      pattern: /progress-[a-z]+\/\d+/,
+    },
   ],
   theme: {
     extend: {

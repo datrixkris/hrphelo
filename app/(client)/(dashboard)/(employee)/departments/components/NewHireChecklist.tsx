@@ -1,4 +1,5 @@
 import React from "react";
+import ProgressBar from "../../../projects/components/ProgressBar";
 
 interface NewHireChecklistProps {
   openModal: boolean;
@@ -14,8 +15,14 @@ const NewHireChecklist = ({ openModal, closeModal }: NewHireChecklistProps) => {
           <h2 className="text-xl font-semibold uppercase">
             Christian Amoakohene
           </h2>
-          <p className="text-sm capitalize">IT Department</p>
-          <p className="text-sm text-error">Staff Checklist Progress: 20%</p>
+          <p className="mb-5 text-sm capitalize">IT Department</p>
+
+          {/* progress bar */}
+          <div className="flex items-center gap-3">
+            <p className="text-sm font-bold"> Progress</p>
+            <ProgressBar progress={80} />
+            <p className="text-sm font-bold">20%</p>
+          </div>
         </div>
 
         {/* checklist */}
@@ -49,9 +56,10 @@ const FormList = ({ closeModal }: { closeModal: () => void }) => {
           <div className="form-control">
             <label className="label cursor-pointer">
               <input
-                type="checkbox"
+                type="radio"
+                name="1"
                 defaultChecked
-                className="checkbox-neutral checkbox"
+                className="radio-neutral radio"
               />
               <span className="label-text pl-1">Does not apply</span>
             </label>
@@ -61,15 +69,17 @@ const FormList = ({ closeModal }: { closeModal: () => void }) => {
           <div className="form-control">
             <label className="label cursor-pointer">
               <input
-                type="checkbox"
+                type="radio"
+                name="1"
                 defaultChecked
-                className="checkbox-success checkbox"
+                className="radio-success radio"
               />
               <span className="label-text pl-1">Completed</span>
             </label>
           </div>
         </div>
       </div>
+
       <div className="flex items-center justify-between p-2">
         {/* description */}
         <div className="space-y-1">
@@ -89,9 +99,10 @@ const FormList = ({ closeModal }: { closeModal: () => void }) => {
           <div className="form-control">
             <label className="label cursor-pointer">
               <input
-                type="checkbox"
+                type="radio"
+                name="2"
                 defaultChecked
-                className="checkbox-neutral checkbox"
+                className="radio-neutral radio"
               />
               <span className="label-text pl-1">Does not apply</span>
             </label>
@@ -101,49 +112,10 @@ const FormList = ({ closeModal }: { closeModal: () => void }) => {
           <div className="form-control">
             <label className="label cursor-pointer">
               <input
-                type="checkbox"
+                type="radio"
+                name="2"
                 defaultChecked
-                className="checkbox-success checkbox"
-              />
-              <span className="label-text pl-1">Completed</span>
-            </label>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center justify-between p-2">
-        {/* description */}
-        <div className="space-y-1">
-          {/* Name of checklist */}
-          <p className="text-sm font-bold uppercase text-hr-yellow">Devices</p>
-          {/* description */}
-          <p className="text-sm">Give out the following devices</p>
-          {/* Assets */}
-          <p className="text-xs">
-            <span className="font-semibold">Assets:</span> <span>Computer</span>
-          </p>
-        </div>
-
-        {/* actions */}
-        <div className="flex gap-2">
-          {/* does not apply */}
-          <div className="form-control">
-            <label className="label cursor-pointer">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="checkbox-neutral checkbox"
-              />
-              <span className="label-text pl-1">Does not apply</span>
-            </label>
-          </div>
-
-          {/* completed */}
-          <div className="form-control">
-            <label className="label cursor-pointer">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="checkbox-success checkbox"
+                className="radio-success radio"
               />
               <span className="label-text pl-1">Completed</span>
             </label>

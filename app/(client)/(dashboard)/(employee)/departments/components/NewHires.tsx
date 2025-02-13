@@ -29,7 +29,10 @@ const NewHires = () => {
                 </p>
               </td>
               <td>
-                <div className="inline-block text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white">
+                <div
+                  className="inline-block cursor-pointer text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
+                  onClick={() => setOpenModal(true)}
+                >
                   <Icon
                     icon="heroicons:eye-16-solid"
                     className="inline-block text-lg"
@@ -49,7 +52,7 @@ const NewHires = () => {
               </td>
               <td>
                 <div
-                  className="inline-block text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
+                  className="inline-block cursor-pointer text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
                   onClick={() => setOpenModal(true)}
                 >
                   <Icon

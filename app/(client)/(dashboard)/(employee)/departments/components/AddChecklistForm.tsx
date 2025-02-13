@@ -4,14 +4,21 @@ import React, { useState } from "react";
 interface AddChecklistFormProps {
   openModal: boolean;
   closeModal: () => void;
+  edit?: boolean;
 }
 
-const AddChecklistForm = ({ openModal, closeModal }: AddChecklistFormProps) => {
+const AddChecklistForm = ({
+  openModal,
+  closeModal,
+  edit = false,
+}: AddChecklistFormProps) => {
   const [showAsset, setShowAsset] = useState(false);
   return (
     <div className={`modal ${openModal ? "modal-open" : ""}`}>
       <div className="modal-box">
-        <h2 className="mb-5 text-center text-xl font-bold">Add Checklist</h2>
+        <h2 className="mb-5 text-center text-xl font-bold">
+          {edit ? "Edit Checklist" : "Add Checklist"}
+        </h2>
 
         <form className="space-y-2">
           {/* title */}
@@ -105,9 +112,15 @@ const AddChecklistForm = ({ openModal, closeModal }: AddChecklistFormProps) => {
             <button type="button" onClick={closeModal} className="btn rounded">
               Cancel
             </button>
-            <button type="submit" className={`btn btn-primary rounded`}>
-              {false ? "Adding..." : "Add Checklist"}
-            </button>
+            {edit ? (
+              <button type="submit" className={`btn btn-primary rounded`}>
+                {false ? "Editing..." : "Edit Checklist"}
+              </button>
+            ) : (
+              <button type="submit" className={`btn btn-primary rounded`}>
+                {false ? "Adding..." : "Add Checklist"}
+              </button>
+            )}
           </div>
         </form>
       </div>
