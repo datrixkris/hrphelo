@@ -6,6 +6,11 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/dashboard",
   },
   {
+    name: "Onboarding",
+    icon: "hugeicons:user-add-01",
+    link: "/onboarding",
+  },
+  {
     name: "Staff",
     icon: "hugeicons:user-group",
     dropdown: [
