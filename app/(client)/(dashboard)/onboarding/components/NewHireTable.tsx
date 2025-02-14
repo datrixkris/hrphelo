@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { progressColor } from "../../projects/components/ProgressBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import OnboardingNewHireChecklist from "./OnboardingNewHireChecklist";
+// import OnboardingNewHireChecklist from "./OnboardingNewHireChecklist";
 import Link from "next/link";
 
 const NewHireTable = () => {

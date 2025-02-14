@@ -1,9 +1,13 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Checklist = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+
+  useEffect(() => {
+    console.log(openEdit, openDelete);
+  }, []);
 
   return (
     <>
