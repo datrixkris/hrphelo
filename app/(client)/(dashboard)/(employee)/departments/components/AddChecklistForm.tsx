@@ -1,5 +1,12 @@
 import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInputComponent";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useOnboardingStore } from "../../../onboarding/onboarding-store";
+import { CreateChecklist } from "../../../onboarding/types";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useDepartmentStore } from "../department-store";
+import { Data as DeptStaffData } from "@/app/components/SearchAndResultsInputComponent";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { is } from "date-fns/locale";
 
 interface AddChecklistFormProps {
   openModal: boolean;
@@ -13,6 +20,64 @@ const AddChecklistForm = ({
   edit = false,
 }: AddChecklistFormProps) => {
   const [showAsset, setShowAsset] = useState(false);
+  const { createChecklist, loading } = useOnboardingStore();
+  const { register, handleSubmit, reset } = useForm<CreateChecklist>();
+  const [deptStaff, setDeptStaff] = useState<DeptStaffData[]>([]);
+  const department = useDepartmentStore((state) => state.department);
+  const [assigneeId, setAssigneeId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (useDepartmentStore.getState().department) {
+      const staff = useDepartmentStore
+        .getState()
+        .department!.staff.map((item) => {
+          return {
+            name: item.name,
+            id: item.id,
+            selected: false,
+          };
+        });
+      setDeptStaff(staff);
+    }
+  }, []);
+
+  function selectMember(data: DeptStaffData) {
+    console.log(data);
+    setDeptStaff((prev) =>
+      prev.map((item) => {
+        return item.id === data.id ? data : { ...item, selected: false };
+      }),
+    );
+    setAssigneeId(data.selected ? data.id : null);
+  }
+
+  function removeAssignee() {
+    setDeptStaff((prev) =>
+      prev.map((item) => {
+        return { ...item, selected: false };
+      }),
+    );
+    setAssigneeId(null);
+  }
+
+  // submitting form
+  const onSubmit: SubmitHandler<CreateChecklist> = async (data) => {
+    const checklistData = {
+      ...data,
+      assignee: assigneeId,
+      departmentId: department!.id,
+      companyId: department!.company.id,
+      is_optional: !data.is_optional,
+    };
+    await createChecklist(checklistData);
+
+    if (!useOnboardingStore.getState().error) {
+      reset();
+      removeAssignee();
+      closeModal();
+    }
+  };
+
   return (
     <div className={`modal ${openModal ? "modal-open" : ""}`}>
       <div className="modal-box">
@@ -20,7 +85,7 @@ const AddChecklistForm = ({
           {edit ? "Edit Checklist" : "Add Checklist"}
         </h2>
 
-        <form className="space-y-2">
+        <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
           {/* title */}
           <label className="form-control w-full">
             <div className="label">
@@ -31,7 +96,7 @@ const AddChecklistForm = ({
             <input
               required
               type="text"
-              //   readOnly={type === "view"}
+              {...register("name")}
               placeholder="Checklist title"
               className="input input-bordered w-full"
             />
@@ -43,6 +108,7 @@ const AddChecklistForm = ({
               <span className="label-text">Checklist description</span>
             </div>
             <textarea
+              {...register("description")}
               className="textarea textarea-bordered"
               placeholder="Describe your checklist"
             ></textarea>
@@ -53,17 +119,39 @@ const AddChecklistForm = ({
             <div className="label">
               <span className="label-text">Assignee</span>
             </div>
-            {/* <input
-              required
-              type="text"
-              //   readOnly={type === "view"}
-              placeholder="Checklist title"
-              className="input input-bordered w-full"
-            /> */}
             <SearchAndResultsInputComponent
-              data={[]}
-              onSelected={() => console.log()}
+              data={deptStaff}
+              onSelected={selectMember}
             />
+            {/* avatars */}
+            {
+              <div className="my-2 -space-x-4 rtl:space-x-reverse">
+                {department?.staff.map((staff) => {
+                  if (assigneeId === staff.id) {
+                    return (
+                      <div
+                        key={staff.id}
+                        className="flex w-fit flex-col items-center justify-center"
+                      >
+                        <div className="tooltip" data-tip={staff.name}>
+                          <div className="avatar relative">
+                            <div className="w-11 rounded-full border">
+                              <img src={staff.image} alt={staff.name} />
+                            </div>
+                            <Icon
+                              icon="heroicons:x-circle"
+                              className="absolute -right-2 top-0 cursor-pointer text-xl"
+                              onClick={removeAssignee}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-xs">{staff.name}</p>
+                      </div>
+                    );
+                  }
+                })}
+              </div>
+            }
           </label>
 
           <div className="grid grid-cols-2 gap-3">
@@ -85,10 +173,11 @@ const AddChecklistForm = ({
               {showAsset && (
                 <label className="form-control w-full">
                   <input
-                    required
+                    required={showAsset}
                     type="text"
                     placeholder="Enter asset name"
                     className="input input-bordered w-full"
+                    {...register("assetType")}
                   />
                 </label>
               )}
@@ -99,7 +188,7 @@ const AddChecklistForm = ({
                 <label className="label cursor-pointer justify-start">
                   <input
                     type="checkbox"
-                    defaultChecked
+                    {...register("is_optional")}
                     className="checkbox-info checkbox"
                   />
                   <span className="label-text pl-1">Checklist is required</span>
@@ -118,7 +207,7 @@ const AddChecklistForm = ({
               </button>
             ) : (
               <button type="submit" className={`btn btn-primary rounded`}>
-                {false ? "Adding..." : "Add Checklist"}
+                {loading ? "Adding..." : "Add Checklist"}
               </button>
             )}
           </div>

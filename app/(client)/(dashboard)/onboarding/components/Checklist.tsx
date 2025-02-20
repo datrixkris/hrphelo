@@ -1,7 +1,12 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
+import { Checklist as ChecklistType } from "../types";
 
-const Checklist = () => {
+interface ChecklistProps {
+  checklist: ChecklistType;
+}
+
+const Checklist = ({ checklist }: ChecklistProps) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -19,17 +24,22 @@ const Checklist = () => {
         <div className="space-y-1">
           {/* Name of checklist */}
           <p className="text-sm font-semibold uppercase text-hr-yellow">
-            Devices{" "}
-            <span className="badge badge-error badge-sm text-[10px] font-normal normal-case">
-              All staff
-            </span>
+            {checklist.name}{" "}
+            {!checklist.is_optional && (
+              <span className="badge badge-error badge-sm text-[10px] font-normal normal-case">
+                All staff
+              </span>
+            )}
           </p>
           {/* description */}
-          <p className="text-sm">Give out the following devices</p>
+          <p className="text-sm">{checklist.description}</p>
           {/* Assets */}
-          <p className="text-xs">
-            <span className="font-semibold">Asset:</span> <span>Computer</span>
-          </p>
+          {checklist.assetType && (
+            <p className="text-xs">
+              <span className="font-semibold">Asset:</span>{" "}
+              <span>{checklist.assetType}</span>
+            </p>
+          )}
           {/* assignee */}
           {/* <p className="text-xs">
             <span className="font-semibold">Assigned to:</span>{" "}

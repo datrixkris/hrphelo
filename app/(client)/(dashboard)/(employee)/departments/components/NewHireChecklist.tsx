@@ -9,7 +9,7 @@ interface NewHireChecklistProps {
 const NewHireChecklist = ({ openModal, closeModal }: NewHireChecklistProps) => {
   return (
     <div className={`modal ${openModal ? "modal-open" : ""}`}>
-      <div className="modal-box max-w-[850px]">
+      <div className="modal-box max-w-[850px] divide-y-2">
         {/* heading */}
         <div className="">
           <h2 className="text-xl font-semibold uppercase">
@@ -36,7 +36,7 @@ export default NewHireChecklist;
 
 const FormList = ({ closeModal }: { closeModal: () => void }) => {
   return (
-    <form className="mt-5 space-y-4 divide-y-2">
+    <form className="mt-5 space-y-4 divide-y">
       <div className="flex items-center justify-between p-2">
         {/* description */}
         <div className="space-y-1 line-through opacity-50">
@@ -125,9 +125,9 @@ const FormList = ({ closeModal }: { closeModal: () => void }) => {
 
       <div className="buttons flex justify-end gap-2 pt-4">
         <button className="btn" onClick={closeModal} type="button">
-          Cancel
+          Close
         </button>
-        <button className="btn btn-primary">Save</button>
+        {/* <button className="btn btn-primary">Save</button> */}
       </div>
     </form>
   );
