@@ -30,13 +30,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     fetchUser();
   }, [router]);
 
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.on("mychecklist", (data: any) => {
-  //       console.log("New checklis message", data);
-  //     });
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (socket) {
+      console.log("working");
+      
+      socket.on("mychecklists", (data: any) => {
+        console.log("New checklis message", data);
+      });
+    }
+  }, []);
 
   return (
     <div>

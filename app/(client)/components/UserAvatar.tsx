@@ -39,7 +39,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
           profileData.iceContactsStatus,
       );
     }
-    console.log(profileData);
+    // console.log(profileData);
   }, [profileData]);
 
   // logout
