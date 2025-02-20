@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useLayoutEffect, useState } from "react";
+import { use, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Topnav from "../components/Topnav";
@@ -10,11 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
 import Setting from "@/app/components/Setting";
 import { ThemeContext } from "@/app/context/ThemeContext";
+import { useSocket } from "@/utils/socket";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapse, setCollapse] = useState(false);
   const { changeTheme } = useContext(ThemeContext);
+  const { socket } = useSocket();
 
   useLayoutEffect(() => {
     const fetchUser = async () => {
@@ -27,6 +29,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     fetchUser();
   }, [router]);
+
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.on("mychecklist", (data: any) => {
+  //       console.log("New checklis message", data);
+  //     });
+  //   }
+  // }, []);
 
   return (
     <div>

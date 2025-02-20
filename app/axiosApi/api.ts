@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "../stores/auth-store";
 
-const baseURL = "https://hrphelo.wavebeep.com/";
+export const baseURL = "https://hrphelo.wavebeep.com/";
 
 export const api = axios.create({
   baseURL,
