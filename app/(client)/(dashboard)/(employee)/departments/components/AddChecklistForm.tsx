@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useDepartmentStore } from "../department-store";
 import { Data as DeptStaffData } from "@/app/components/SearchAndResultsInputComponent";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { is } from "date-fns/locale";
+// import { is } from "date-fns/locale";
 
 interface AddChecklistFormProps {
   openModal: boolean;
