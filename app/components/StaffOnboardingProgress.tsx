@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useSocket } from "@/utils/socket";
 import { TOnboarding } from "../types/onboarding-types";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useAuthStore } from "../stores/auth-store";
+import { api } from "../axiosApi/api";
 
 const StaffOnboardingProgress = () => {
   const { socket } = useSocket();
-
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [checklistData, setChecklistData] = useState<TOnboarding[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
   // Group items by department
   const groupedByDepartment = checklistData.reduce(
@@ -39,9 +40,22 @@ const StaffOnboardingProgress = () => {
   useEffect(() => {
     if (!socket) return;
 
-    const handleConnect = () => {
-      setIsLoading(false);
+    const fetchUser = async () => {
+      await useAuthStore.getState().fetchUserData();
+      const user = useAuthStore.getState().user;
+      return user;
+    };
+
+    const handleConnect = async () => {
+      const user = await fetchUser();
+
       console.log("Socket is fully connected, ID:", socket.id);
+      if (user) {
+        console.log("Registering socket with ID:", user.id);
+        socket.emit("registerSocket", user.id);
+      }
+
+      await api.get("/v1/mychecklists")
     };
 
     const handleChecklists = (data: TOnboarding[]) => {
@@ -50,6 +64,19 @@ const StaffOnboardingProgress = () => {
     };
 
     socket.on("connect", handleConnect);
+
+    // socket.on("connect", async () => {
+    //   const user = await fetchUser();
+    //   console.log("Socket is fully connected, ID:", socket.id);
+
+    //   if (user) {
+    //     console.log("Registering socket with ID:", user.id);
+    //     socket.emit("registerSocket", user.id);
+
+    //     setIsLoading(false);
+    //   }
+    // });
+
     socket.on("mychecklists", handleChecklists);
 
     return () => {
@@ -58,9 +85,9 @@ const StaffOnboardingProgress = () => {
     };
   }, [socket]);
 
-  if (isLoading) {
-    return null;
-  }
+  // if (isLoading) {
+  //   return null;
+  // }
 
   return (
     <div className="">
@@ -90,7 +117,7 @@ const StaffOnboardingProgress = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu min-h-full w-80 bg-base-200 p-4 text-base-content">
+          <ul className="menu min-h-full w-96 bg-base-200 p-4 text-base-content">
             <div className="pt-3">
               <h5 className="mb-2 text-xl font-semibold">
                 Staff Onboarding Progress
@@ -176,7 +203,7 @@ export const ChecklistItem = (data: TOnboarding) => {
   };
 
   return (
-    <div className="border-b border-base-200 py-2">
+    <div className="border-b border-base-300 py-2">
       {" "}
       <div className="flex items-center justify-between">
         {/* description */}
