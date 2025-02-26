@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "../components/Sidebar";
 import Topnav from "../components/Topnav";
@@ -10,13 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
 import Setting from "@/app/components/Setting";
 import { ThemeContext } from "@/app/context/ThemeContext";
-import { useSocket } from "@/utils/socket";
+// import { useSocket } from "@/utils/socket";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapse, setCollapse] = useState(false);
   const { changeTheme } = useContext(ThemeContext);
-  const { socket } = useSocket();
+  // const { socket } = useSocket();
+
 
   useLayoutEffect(() => {
     const fetchUser = async () => {
@@ -30,15 +31,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     fetchUser();
   }, [router]);
 
-  useEffect(() => {
-    if (socket) {
-      console.log("working");
-      
-      socket.on("mychecklists", (data: any) => {
-        console.log("New checklis message", data);
-      });
-    }
-  }, []);
+
+
+  // useEffect(() => {
+  //   if (socket) {
+  //     // Wait for the "connect" event to ensure the socket is fully connected
+  //     socket.on("connect", () => {
+  //       console.log("Socket is fully connected, ID:", socket.id);
+  //     });
+
+  //     socket.on("mychecklists", (data: any) => {
+  //       console.log("New checklist message", data);
+  //     });
+  //   }
+  // }, [socket]);
+
+
+ 
 
   return (
     <div>

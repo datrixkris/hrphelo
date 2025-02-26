@@ -3,17 +3,18 @@ import { UserAvatar } from "./UserAvatar";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { Icon } from "@iconify/react";
 import MobileNav from "./MobileNav";
+import StaffOnboardingProgress from "@/app/components/StaffOnboardingProgress";
 
 const Topnav = () => {
   const user = useAuthStore((state) => state.user);
   const staffMember = user?.staff;
-  
+
   const [showMobileNav, setShowMobileNav] = useState(false);
 
   return (
     <>
-      <nav className="sticky top-0 z-40 bg-gradient-to-r from-hr-yellow-light via-hr-yellow to-hr-yellow-dark py-3 text-hr-dark">
-        <div className="maximum-width flex items-center justify-between">
+      <nav className="sticky top-0 z-40 h-20 bg-gradient-to-r from-hr-yellow-light via-hr-yellow to-hr-yellow-dark py-3 text-hr-dark">
+        <div className="maximum-width flex h-full items-center justify-between">
           {/* title */}
           <div className="flex items-center gap-4">
             <Icon
@@ -27,7 +28,9 @@ const Topnav = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {staffMember && <UserAvatar profile={user?.staff} />}
+            <StaffOnboardingProgress />
+
+            {staffMember && <UserAvatar profile={staffMember} />}
           </div>
         </div>
       </nav>

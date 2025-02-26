@@ -149,7 +149,7 @@ const Page = () => {
               <Icon icon="hugeicons:file-export" />
               Export
             </button>
-            <Button onClick={openAddSalaryModal}>Add Salary</Button>
+            <Button onClick={openAddSalaryModal}>Compute Payroll</Button>
           </div>
         </div>
       </div>
