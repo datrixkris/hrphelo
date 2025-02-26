@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useAuthStore } from "../stores/auth-store";
 
-const baseURL = "https://hrphelo.wavebeep.com/";
+export const baseURL = "https://hrphelo.wavebeep.com/";
 
 export const api = axios.create({
   baseURL,
@@ -16,7 +16,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = token;
     }
-    console.log("Api request intercepted");
+    // console.log("Api request intercepted");
     return config;
   },
   (error) => {
@@ -75,7 +75,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     // Handle successful responses
-    console.log("Api response intercepted");
+    // console.log("Api response intercepted");
     return response;
   },
   async (error) => {
@@ -119,7 +119,7 @@ api.interceptors.response.use(
       }
     }
 
-    console.error("Api response error:", error);
+    // console.error("Api response error:", error);
     return Promise.reject(error);
   },
 );

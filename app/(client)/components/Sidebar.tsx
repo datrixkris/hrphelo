@@ -7,9 +7,9 @@ import { clientSidebarLinks as links } from "@/app/data/links";
 
 const Sidebar = () => {
   return (
-    <div className="relative h-full border-r border-base-300 bg-base-100 p-4">
+    <div className="relative h-full border-r border-base-300 bg-base-100 p-2">
       {/* logo  */}
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex h-14 items-center justify-center gap-2">
         {/* logo */}
         <div className="flex size-14 items-center justify-center rounded-full border">
           <Icon icon="heroicons:building-office-2" className="text-4xl"></Icon>

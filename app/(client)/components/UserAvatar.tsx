@@ -39,7 +39,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
           profileData.iceContactsStatus,
       );
     }
-    console.log(profileData);
+    // console.log(profileData);
   }, [profileData]);
 
   // logout
@@ -85,12 +85,12 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
             </div>
           )}
           {/* User name and role */}
-          <div className="hidden text-xs md:block">
+          {/* <div className="hidden text-xs md:block">
             <p className="text-sm font-semibold">
               {profile?.name || "User Name"}
             </p>
             <p className="">{profile?.designation || "Role"}</p>
-          </div>
+          </div> */}
         </div>
       </div>
       <ul
