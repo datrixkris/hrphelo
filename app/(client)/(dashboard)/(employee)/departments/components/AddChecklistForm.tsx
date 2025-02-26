@@ -65,8 +65,6 @@ const AddChecklistForm = ({
     const checklistData = {
       ...data,
       assignee: assigneeId,
-      departmentId: department!.id,
-      companyId: department!.company.id,
       is_optional: !data.is_optional,
     };
     await createChecklist(checklistData);
@@ -170,7 +168,7 @@ const AddChecklistForm = ({
               </div>
 
               {/* asset */}
-              {showAsset && (
+              {/* {showAsset && (
                 <label className="form-control w-full">
                   <input
                     required={showAsset}
@@ -180,7 +178,7 @@ const AddChecklistForm = ({
                     {...register("assetType")}
                   />
                 </label>
-              )}
+              )} */}
             </div>
 
             <div className="">

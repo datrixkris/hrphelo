@@ -16,7 +16,7 @@ const DepartmentStaffList = ({ department }: DepartmentStaffListProps) => {
       </div>
       {/* Staff list */}
       <StaffTable
-        hideColumn={["Hiring Date"]}
+        hideColumn={["Hiring Date", "Department"]}
         staff={department.staff.map((item) => item)}
       />
     </div>
