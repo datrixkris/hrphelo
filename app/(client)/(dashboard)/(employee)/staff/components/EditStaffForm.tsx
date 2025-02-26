@@ -460,7 +460,7 @@ const EditStaffForm = ({
             <div className="!mt-10">
               <Button className="mx-auto w-1/2" disabled={updatingData}>
                 {updatingData || imageLoading
-                  ? "Updating Staff Details..."
+                  ? "Updating Staff Details.."
                   : "Update Staff Details"}
               </Button>
             </div>
