@@ -115,7 +115,7 @@ const StaffOnboardingProgress = () => {
                       aria-controls={`accordion-${index}`}
                     >
                       <span className="text-lg font-semibold">
-                        {group.department.name}
+                        {group.department.name} Department
                       </span>
                       <svg
                         className={`h-5 w-5 transform transition-transform duration-200 ${
@@ -167,7 +167,7 @@ export const ChecklistItem = (data: TOnboarding) => {
 
   const handleQuerySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!query.trim()) return; 
+    if (!query.trim()) return;
 
     console.log(`Query submitted for ${data.name}: ${query}`);
 
@@ -194,20 +194,32 @@ export const ChecklistItem = (data: TOnboarding) => {
         </div>
 
         {/* actions */}
-        <div className="flex flex-col items-center gap-2 ">
-          {" "}
-          <Icon
-            icon="hugeicons:checkmark-badge-03"
-            className="h-4 w-4 rounded text-success"
-          />
-          <button
-            onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
-            className="btn btn-ghost btn-xs"
-            aria-label={`Query about ${data.name}`}
-          >
-            <Icon icon="hugeicons:question" className="h-4 w-4" />
-          </button>
-        </div>
+        {data.staffChecklists.length > 0 ? (
+          <div className="flex flex-col items-center gap-2">
+            {" "}
+            <Icon
+              icon="hugeicons:checkmark-badge-03"
+              className="h-4 w-4 rounded text-success"
+            />
+            <button
+              onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
+              className="btn btn-ghost btn-xs"
+              aria-label={`Query about ${data.name}`}
+            >
+              <Icon icon="hugeicons:question" className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center">
+            {" "}
+            <div className="tooltip tooltip-bottom" data-tip="Pending">
+              <Icon
+                icon="hugeicons:clock-01"
+                className="h-4 w-4 rounded text-red-500"
+              />
+            </div>
+          </div>
+        )}
       </div>
       {isQueryFormOpen && (
         <form
