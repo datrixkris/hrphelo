@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
 import Setting from "@/app/components/Setting";
 import { ThemeContext } from "@/app/context/ThemeContext";
-// import { useSocket } from "@/utils/socket";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
