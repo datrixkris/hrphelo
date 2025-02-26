@@ -8,6 +8,7 @@ const StaffOnboardingProgress = () => {
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [checklistData, setChecklistData] = useState<TOnboarding[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Group items by department
   const groupedByDepartment = checklistData.reduce(
@@ -31,7 +32,6 @@ const StaffOnboardingProgress = () => {
   // Convert grouped object to array for rendering
   const departmentGroups = Object.values(groupedByDepartment);
 
-
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
@@ -40,6 +40,7 @@ const StaffOnboardingProgress = () => {
     if (!socket) return;
 
     const handleConnect = () => {
+      setIsLoading(false);
       console.log("Socket is fully connected, ID:", socket.id);
     };
 
@@ -56,6 +57,10 @@ const StaffOnboardingProgress = () => {
       socket.off("mychecklists", handleChecklists);
     };
   }, [socket]);
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className="">
@@ -90,7 +95,7 @@ const StaffOnboardingProgress = () => {
               <h5 className="mb-2 text-xl font-semibold">
                 Staff Onboarding Progress
               </h5>
-              <h6>
+              <h6 className="text-justify">
                 You can see the details of your onboarding, actions to be done
                 by various departments to complete your onboarding and make your
                 work easier in the company.
@@ -106,8 +111,10 @@ const StaffOnboardingProgress = () => {
                     <button
                       className="flex w-full items-center justify-between p-4 text-left focus:outline-none"
                       onClick={() => toggleAccordion(index)}
+                      aria-expanded={activeIndex === index}
+                      aria-controls={`accordion-${index}`}
                     >
-                      <span className="font-semibold text-lg">
+                      <span className="text-lg font-semibold">
                         {group.department.name}
                       </span>
                       <svg
@@ -127,18 +134,22 @@ const StaffOnboardingProgress = () => {
                       </svg>
                     </button>
                     <div
-                      className={`p-4 text-gray-600 ${
+                      className={`px-4 pb-4 text-gray-600 ${
                         activeIndex === index ? "block" : "hidden"
                       }`}
                     >
                       {group.items.map((item) => (
-                        <ChecklistItem {...item} key={item.id}/>
+                        <ChecklistItem {...item} key={item.id} />
                       ))}
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-gray-500">No onboarding tasks available.</p>
+                <div className="flex items-center justify-center rounded-lg bg-base-100 shadow-md">
+                  <p className="text-gray-500">
+                    No onboarding tasks available.
+                  </p>
+                </div>
               )}
             </div>
           </ul>
@@ -151,29 +162,85 @@ const StaffOnboardingProgress = () => {
 export default StaffOnboardingProgress;
 
 export const ChecklistItem = (data: TOnboarding) => {
+  const [isQueryFormOpen, setIsQueryFormOpen] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const handleQuerySubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return; 
+
+    console.log(`Query submitted for ${data.name}: ${query}`);
+
+    setQuery("");
+    setIsQueryFormOpen(false);
+  };
+
   return (
-    <div className="flex items-center justify-between border-b border-base-300 py-2">
-      {/* description */}
-      <div className="space-y-1 opacity-50">
-        {/* Name of checklist */}
-        <p className="text-sm font-semibold capitalize text-hr-yellow">
-          {data.name}
-        </p>
+    <div className="border-b border-base-200 py-2">
+      {" "}
+      <div className="flex items-center justify-between">
         {/* description */}
-        <p className="text-xs">{data.description}</p>
-        {/* Assets */}
-        {/* <p className="text-xs">
+        <div className="space-y-1">
+          {/* Name of checklist */}
+          <p className="text-sm font-semibold capitalize text-hr-yellow">
+            {data.name}
+          </p>
+          {/* description */}
+          <p className="text-sm">{data.description}</p>
+          {/* Assets */}
+          {/* <p className="text-xs">
             <span className="font-semibold">Assets:</span> <span>Computer</span>
           </p> */}
-      </div>
+        </div>
 
-      {/* actions */}
-      <div className="flex items-center gap-2">
-        <Icon
-          icon="hugeicons:checkmark-badge-03"
-          className="h-4 w-4 rounded text-success"
-        />
+        {/* actions */}
+        <div className="flex flex-col items-center gap-2 ">
+          {" "}
+          <Icon
+            icon="hugeicons:checkmark-badge-03"
+            className="h-4 w-4 rounded text-success"
+          />
+          <button
+            onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
+            className="btn btn-ghost btn-xs"
+            aria-label={`Query about ${data.name}`}
+          >
+            <Icon icon="hugeicons:question" className="h-4 w-4" />
+          </button>
+        </div>
       </div>
+      {isQueryFormOpen && (
+        <form
+          onSubmit={handleQuerySubmit}
+          className="mt-2 space-y-2 rounded-lg bg-base-100 p-3 shadow-inner"
+        >
+          <div>
+            <label htmlFor={`query-${data.id}`} className="text-xs font-medium">
+              Your Query
+            </label>
+            <textarea
+              id={`query-${data.id}`}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Enter your question or comment..."
+              className="textarea textarea-bordered w-full text-sm"
+              rows={2}
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={() => setIsQueryFormOpen(false)}
+              className="btn btn-ghost btn-sm"
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary btn-sm">
+              Submit
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };
