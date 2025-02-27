@@ -6,13 +6,20 @@ import { useOnboardingStore } from "../onboarding-store";
 import { useDepartmentStore } from "../../(employee)/departments/department-store";
 
 const DepartmentalChecklists = () => {
-  const { fetchAllChecklists, checklists, loading } = useOnboardingStore();
+  const {
+    fetchAllChecklists,
+    checklists,
+    loading,
+    // fetchAllChecklistsGroupedByDepartment,
+    // checklistsGroupedByDepartment,
+  } = useOnboardingStore();
   const { fetchDepartments, departments } = useDepartmentStore();
 
   useEffect(() => {
     const fetchData = async () => {
       await fetchAllChecklists();
       await fetchDepartments();
+      // await fetchAllChecklistsGroupedByDepartment();
       console.log(useOnboardingStore.getState().checklists);
     };
 

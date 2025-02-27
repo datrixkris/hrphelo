@@ -1,6 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Checklist as ChecklistType } from "../types";
+import ConfirmationModal from "@/app/components/ConfirmationModal";
+import AddChecklistForm from "../../(employee)/departments/components/AddChecklistForm";
+import { useOnboardingStore } from "../onboarding-store";
 
 interface ChecklistProps {
   checklist: ChecklistType;
@@ -9,10 +12,16 @@ interface ChecklistProps {
 const Checklist = ({ checklist }: ChecklistProps) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const { deleteChecklist, updatingData } = useOnboardingStore();
 
   useEffect(() => {
     console.log(openEdit, openDelete);
-  }, []);
+  }, [openEdit, openDelete]);
+
+  async function delChecklist(id: number) {
+    await deleteChecklist(id);
+    setOpenDelete(false);
+  }
 
   return (
     <>
@@ -41,10 +50,12 @@ const Checklist = ({ checklist }: ChecklistProps) => {
             </p>
           )}
           {/* assignee */}
-          {/* <p className="text-xs">
-            <span className="font-semibold">Assigned to:</span>{" "}
-            <span>Kris Wale</span>
-          </p> */}
+          {checklist.assignedStaff && (
+            <p className="text-xs">
+              <span className="font-semibold">Assigned to:</span>{" "}
+              <span>{checklist.assignedStaff.name}</span>
+            </p>
+          )}
           {/* edit and delete */}
           <p className="!mt-2 flex gap-3 text-xs">
             <button
@@ -64,25 +75,26 @@ const Checklist = ({ checklist }: ChecklistProps) => {
         </div>
       </li>
 
-      {/* {openDelete && (
-          <ConfirmationModal
-            isOpen={openDelete}
-            onConfirm={() => console.log("somthing")}
-            message="Are you sure you want to delete?"
-            onCancel={() => setOpenDelete(false)}
-            title={`Delete Checklist`}
-            type="delete"
-            loading={false}
-          />
-        )} */}
+      {openDelete && (
+        <ConfirmationModal
+          isOpen={openDelete}
+          onConfirm={() => delChecklist(checklist.id)}
+          message="Are you sure you want to delete?"
+          onCancel={() => setOpenDelete(false)}
+          title={`Delete Checklist`}
+          type="delete"
+          loading={updatingData}
+        />
+      )}
 
-      {/* {openEdit && (
-          <AddChecklistForm
-            edit={true}
-            openModal={openEdit}
-            closeModal={() => setOpenEdit(false)}
-          />
-        )} */}
+      {openEdit && (
+        <AddChecklistForm
+          checklistData={checklist}
+          edit={true}
+          openModal={openEdit}
+          closeModal={() => setOpenEdit(false)}
+        />
+      )}
     </>
   );
 };

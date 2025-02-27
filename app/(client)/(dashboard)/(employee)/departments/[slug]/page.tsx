@@ -24,6 +24,11 @@ const Page = ({ params }: { params: { slug: string } }) => {
     };
 
     fetchDepartment();
+
+    return () => {
+      // cleanup
+      useDepartmentStore.setState({ department: null });
+    };
   }, [id, fetchDepartmentById]);
 
   if (loading) {

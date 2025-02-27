@@ -1,7 +1,7 @@
 import SearchAndResultsInputComponent from "@/app/components/SearchAndResultsInputComponent";
 import React, { useEffect, useState } from "react";
 import { useOnboardingStore } from "../../../onboarding/onboarding-store";
-import { CreateChecklist } from "../../../onboarding/types";
+import { Checklist, CreateChecklist } from "../../../onboarding/types";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useDepartmentStore } from "../department-store";
 import { Data as DeptStaffData } from "@/app/components/SearchAndResultsInputComponent";
@@ -12,18 +12,26 @@ interface AddChecklistFormProps {
   openModal: boolean;
   closeModal: () => void;
   edit?: boolean;
+  checklistData?: Checklist;
+  refresh?: (id: number) => Promise<void>;
 }
 
 const AddChecklistForm = ({
   openModal,
   closeModal,
   edit = false,
+  checklistData,
+  refresh,
 }: AddChecklistFormProps) => {
   const [showAsset, setShowAsset] = useState(false);
-  const { createChecklist, loading } = useOnboardingStore();
+  const { createChecklist, loading, editChecklist, updatingData } =
+    useOnboardingStore();
   const { register, handleSubmit, reset } = useForm<CreateChecklist>();
   const [deptStaff, setDeptStaff] = useState<DeptStaffData[]>([]);
   const department = useDepartmentStore((state) => state.department);
+  // const fetchDepartmentById = useDepartmentStore(
+  //   (state) => state.fetchDepartmentById,
+  // );
   const [assigneeId, setAssigneeId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -40,6 +48,19 @@ const AddChecklistForm = ({
       setDeptStaff(staff);
     }
   }, []);
+
+  useEffect(() => {
+    if (edit && checklistData) {
+      reset({
+        name: checklistData.name,
+        description: checklistData.description,
+        is_optional: !checklistData.is_optional,
+      });
+      if (checklistData.assignedStaff) {
+        setAssigneeId(checklistData.assignedStaff.id);
+      }
+    }
+  }, [checklistData, reset, edit]);
 
   function selectMember(data: DeptStaffData) {
     console.log(data);
@@ -62,14 +83,17 @@ const AddChecklistForm = ({
 
   // submitting form
   const onSubmit: SubmitHandler<CreateChecklist> = async (data) => {
-    const checklistData = {
+    const checkData = {
       ...data,
       assignee: assigneeId,
       is_optional: !data.is_optional,
     };
-    await createChecklist(checklistData);
+    edit && checklistData
+      ? await editChecklist(checkData, checklistData.id)
+      : await createChecklist(checkData);
 
     if (!useOnboardingStore.getState().error) {
+      refresh && (await refresh(department!.id));
       reset();
       removeAssignee();
       closeModal();
@@ -113,44 +137,46 @@ const AddChecklistForm = ({
           </label>
 
           {/* Assignee */}
-          <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Assignee</span>
-            </div>
-            <SearchAndResultsInputComponent
-              data={deptStaff}
-              onSelected={selectMember}
-            />
-            {/* avatars */}
-            {
-              <div className="my-2 -space-x-4 rtl:space-x-reverse">
-                {department?.staff.map((staff) => {
-                  if (assigneeId === staff.id) {
-                    return (
-                      <div
-                        key={staff.id}
-                        className="flex w-fit flex-col items-center justify-center"
-                      >
-                        <div className="tooltip" data-tip={staff.name}>
-                          <div className="avatar relative">
-                            <div className="w-11 rounded-full border">
-                              <img src={staff.image} alt={staff.name} />
-                            </div>
-                            <Icon
-                              icon="heroicons:x-circle"
-                              className="absolute -right-2 top-0 cursor-pointer text-xl"
-                              onClick={removeAssignee}
-                            />
-                          </div>
-                        </div>
-                        <p className="text-xs">{staff.name}</p>
-                      </div>
-                    );
-                  }
-                })}
+          {department && (
+            <label className="form-control w-full">
+              <div className="label">
+                <span className="label-text">Assignee</span>
               </div>
-            }
-          </label>
+              <SearchAndResultsInputComponent
+                data={deptStaff}
+                onSelected={selectMember}
+              />
+              {/* avatars */}
+              {
+                <div className="my-2 -space-x-4 rtl:space-x-reverse">
+                  {department?.staff.map((staff) => {
+                    if (assigneeId === staff.id) {
+                      return (
+                        <div
+                          key={staff.id}
+                          className="flex w-fit flex-col items-center justify-center"
+                        >
+                          <div className="tooltip" data-tip={staff.name}>
+                            <div className="avatar relative">
+                              <div className="w-11 rounded-full border">
+                                <img src={staff.image} alt={staff.name} />
+                              </div>
+                              <Icon
+                                icon="heroicons:x-circle"
+                                className="absolute -right-2 top-0 cursor-pointer text-xl"
+                                onClick={removeAssignee}
+                              />
+                            </div>
+                          </div>
+                          <p className="text-xs">{staff.name}</p>
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              }
+            </label>
+          )}
 
           <div className="grid grid-cols-2 gap-3">
             <div className="">
@@ -200,11 +226,19 @@ const AddChecklistForm = ({
               Cancel
             </button>
             {edit ? (
-              <button type="submit" className={`btn btn-primary rounded`}>
-                {false ? "Editing..." : "Edit Checklist"}
+              <button
+                type="submit"
+                disabled={updatingData}
+                className={`btn btn-primary rounded`}
+              >
+                {updatingData ? "Editing..." : "Edit Checklist"}
               </button>
             ) : (
-              <button type="submit" className={`btn btn-primary rounded`}>
+              <button
+                disabled={loading}
+                type="submit"
+                className={`btn btn-primary rounded`}
+              >
                 {loading ? "Adding..." : "Add Checklist"}
               </button>
             )}

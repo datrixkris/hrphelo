@@ -2,7 +2,11 @@ import { create } from "zustand";
 import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { Checklist, CreateChecklist } from "./types";
+import {
+  Checklist,
+  ChecklistGroupedByDepartment,
+  CreateChecklist,
+} from "./types";
 
 interface ApiErrorResponse {
   message?: string;
@@ -12,27 +16,75 @@ interface ApiErrorResponse {
 
 interface OnboardingStore {
   checklists: Checklist[];
+  checklistsGroupedByDepartment: ChecklistGroupedByDepartment[];
   loading?: boolean; //for fetching
   updatingData?: boolean; //for updating data
   error?: string | null;
-  fetchAllChecklists: () => Promise<void>;
+  fetchAllChecklists: (optionalLoading?: boolean) => Promise<void>;
+  fetchAllChecklistsGroupedByDepartment: () => Promise<void>;
+  fetchChecklistByDepartment: (id: number) => Promise<Checklist[]>;
   createChecklist: (data: CreateChecklist) => Promise<void>;
+  editChecklist: (data: CreateChecklist, id: number) => Promise<void>;
+  deleteChecklist: (id: number) => Promise<void>;
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   checklists: [],
+  checklistsGroupedByDepartment: [],
   loading: false,
   updatingData: false,
   error: null,
 
   // all functions
 
-  fetchAllChecklists: async () => {
-    set({ loading: true, error: null });
+  fetchAllChecklists: async (optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
 
     try {
       const response = (await api.get("/v1/checklists")).data;
       set(() => ({ checklists: response, loading: false }));
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  fetchAllChecklistsGroupedByDepartment: async () => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.get("/v1/checklists/departments")).data;
+      set(() => ({ checklistsGroupedByDepartment: response, loading: false }));
+      console.log(response);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  fetchChecklistByDepartment: async (id: number) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.get(`/v1/checklists/department/${id}`)).data;
+      console.log(response);
+      return response;
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
@@ -63,7 +115,49 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
           axiosError.message,
         loading: false,
       }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
 
+  editChecklist: async (data: CreateChecklist, id: number) => {
+    set({ updatingData: true, error: null });
+
+    try {
+      const response = await api.put(`/v1/checklists/${id}`, data);
+      set(() => ({ updatingData: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        updatingData: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  deleteChecklist: async (id: number) => {
+    set({ updatingData: true, error: null });
+
+    try {
+      const response = await api.delete(`/v1/checklists/${id}`);
+      set(() => ({ updatingData: false }));
+      console.log(response.data);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        updatingData: false,
+      }));
+      toast.error(get().error);
       console.error(err);
     }
   },
