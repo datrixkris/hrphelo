@@ -4,12 +4,13 @@ import { TOnboarding } from "../types/onboarding-types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useAuthStore } from "../stores/auth-store";
 import { api } from "../axiosApi/api";
+import { cn } from "@/utils/cn";
 
 const StaffOnboardingProgress = () => {
   const { socket } = useSocket();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [checklistData, setChecklistData] = useState<TOnboarding[]>([]);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Group items by department
   const groupedByDepartment = checklistData.reduce(
@@ -33,6 +34,16 @@ const StaffOnboardingProgress = () => {
   // Convert grouped object to array for rendering
   const departmentGroups = Object.values(groupedByDepartment);
 
+  const calculateProgress = () => {
+    if (checklistData.length === 0) return 0;
+    const completed = checklistData.filter(
+      (item) => item.staffChecklists.length > 0,
+    ).length;
+    return Math.round((completed / checklistData.length) * 100);
+  };
+
+  const progress = calculateProgress();
+
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
@@ -55,7 +66,8 @@ const StaffOnboardingProgress = () => {
         socket.emit("registerSocket", user.id);
       }
 
-      await api.get("/v1/mychecklists")
+      await api.get("/v1/mychecklists");
+      setIsLoading(false);
     };
 
     const handleChecklists = (data: TOnboarding[]) => {
@@ -85,9 +97,9 @@ const StaffOnboardingProgress = () => {
     };
   }, [socket]);
 
-  // if (isLoading) {
-  //   return null;
-  // }
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className="">
@@ -99,14 +111,23 @@ const StaffOnboardingProgress = () => {
             data-tip="Onboarding Progress"
           >
             <label htmlFor="my-drawer-6">
-              <div
-                className="radial-progress text-xs font-light text-primary"
-                style={
-                  { "--value": "70", "--size": "3rem" } as React.CSSProperties
-                }
-                role="progressbar"
-              >
-                70%
+              <div className="flex gap-2 rounded-3xl bg-slate-100 p-2">
+                {" "}
+                <div
+                  className="radial-progress text-xs font-light text-primary"
+                  style={
+                    {
+                      "--value": progress,
+                      "--size": "3rem",
+                    } as React.CSSProperties
+                  }
+                  role="progressbar"
+                >
+                  {progress}%
+                </div>
+                <div className="flex items-center text-xs font-semibold">
+                  Onboarding <br /> progress
+                </div>
               </div>
             </label>
           </div>
@@ -123,9 +144,8 @@ const StaffOnboardingProgress = () => {
                 Staff Onboarding Progress
               </h5>
               <h6 className="text-justify">
-                You can see the details of your onboarding, actions to be done
-                by various departments to complete your onboarding and make your
-                work easier in the company.
+                View your onboarding details and tasks from various departments
+                to streamline your start at the company.
               </h6>
             </div>
             <div className="mt-4 space-y-4">
@@ -207,7 +227,7 @@ export const ChecklistItem = (data: TOnboarding) => {
       {" "}
       <div className="flex items-center justify-between">
         {/* description */}
-        <div className="space-y-1">
+        <div className={cn("space-y-1",data.staffChecklists.length > 0 &&"line-through opacity-50")}>
           {/* Name of checklist */}
           <p className="text-sm font-semibold capitalize text-hr-yellow">
             {data.name}
@@ -251,7 +271,7 @@ export const ChecklistItem = (data: TOnboarding) => {
       {isQueryFormOpen && (
         <form
           onSubmit={handleQuerySubmit}
-          className="mt-2 space-y-2 rounded-lg bg-base-100 p-3 shadow-inner"
+          className="mt-2 space-y-2 rounded-lg bg-base-100 p-2 shadow border"
         >
           <div>
             <label htmlFor={`query-${data.id}`} className="text-xs font-medium">
@@ -263,7 +283,7 @@ export const ChecklistItem = (data: TOnboarding) => {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Enter your question or comment..."
               className="textarea textarea-bordered w-full text-sm"
-              rows={2}
+              rows={3}
             />
           </div>
           <div className="flex justify-end gap-2">
