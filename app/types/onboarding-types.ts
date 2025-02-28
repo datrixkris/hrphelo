@@ -27,6 +27,7 @@ export interface TOnboarding {
     companyId: number,
     staffId: number,
     checklistId: number,
+    comment?: string
     status: string,
     createdAt: string,
     updatedAt: string,

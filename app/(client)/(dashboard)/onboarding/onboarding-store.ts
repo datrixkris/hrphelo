@@ -28,7 +28,10 @@ interface OnboardingStore {
     optionalLoading?: boolean,
   ) => Promise<Checklist[]>;
   createChecklist: (data: CreateChecklist) => Promise<void>;
-  submitQuery: (comment: string, checklistId: number) => Promise<void>;
+  submitQuery: (
+    comment: { comment: string },
+    checklistId: number,
+  ) => Promise<void>;
   editChecklist: (data: CreateChecklist, id: number) => Promise<void>;
   deleteChecklist: (id: number) => Promise<void>;
   markChecklist: (data: MarkChecklist) => Promise<void>;
@@ -169,7 +172,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
 
-  submitQuery: async (comment: string, checklistId: number) => {
+  submitQuery: async (comment: { comment: string }, checklistId: number) => {
     set({ loading: true, error: null });
     try {
       await api.post(`/v1/checklists/${checklistId}/query`, comment);
