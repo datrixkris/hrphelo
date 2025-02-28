@@ -1,11 +1,21 @@
 import Button from "@/app/components/Button";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddChecklistForm from "./AddChecklistForm";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
+import { useOnboardingStore } from "../../../onboarding/onboarding-store";
+import { Checklist } from "../../../onboarding/types";
+import { useDepartmentStore } from "../department-store";
 
-const Checklists = () => {
+const Checklists = ({
+  checklists,
+  refresh,
+}: {
+  checklists: Checklist[];
+  refresh?: (id: number) => Promise<void>;
+}) => {
   const [openModal, setOpenModal] = useState(false);
+
   return (
     <div className="">
       <div className="flex justify-end">
@@ -17,9 +27,9 @@ const Checklists = () => {
       </div>
 
       <ul className="">
-        <List />
-        <List />
-        <List />
+        {checklists.map((checklist) => (
+          <List key={checklist.id} checklist={checklist} refresh={refresh} />
+        ))}
       </ul>
 
       {/* checklist form */}
@@ -27,6 +37,7 @@ const Checklists = () => {
         <AddChecklistForm
           openModal={openModal}
           closeModal={() => setOpenModal(false)}
+          refresh={refresh}
         />
       )}
     </div>
@@ -35,9 +46,27 @@ const Checklists = () => {
 
 export default Checklists;
 
-const List = () => {
+const List = ({
+  checklist,
+  refresh,
+}: {
+  checklist: Checklist;
+  refresh?: (id: number) => Promise<void>;
+}) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const { deleteChecklist, updatingData } = useOnboardingStore();
+  const { department } = useDepartmentStore();
+
+  useEffect(() => {
+    console.log(openEdit, openDelete);
+  }, [openEdit, openDelete]);
+
+  async function delChecklist(id: number) {
+    await deleteChecklist(id);
+    refresh && (await refresh(department!.id));
+    setOpenDelete(false);
+  }
 
   return (
     <>
@@ -49,22 +78,29 @@ const List = () => {
         <div className="space-y-1">
           {/* Name of checklist */}
           <p className="text-sm font-bold uppercase text-hr-yellow">
-            Devices{" "}
-            <span className="badge badge-error badge-sm text-[10px] font-normal normal-case">
-              All staff
-            </span>
+            {checklist.name}{" "}
+            {!checklist.is_optional && (
+              <span className="badge badge-error badge-sm text-[10px] font-normal normal-case">
+                All staff
+              </span>
+            )}
           </p>
           {/* description */}
-          <p className="text-sm">Give out the following devices</p>
+          <p className="text-sm">{checklist.description}</p>
           {/* Assets */}
-          <p className="text-xs">
-            <span className="font-semibold">Asset:</span> <span>Computer</span>
-          </p>
+          {checklist.assetType && (
+            <p className="text-xs">
+              <span className="font-semibold">Asset:</span>{" "}
+              <span>Computer</span>
+            </p>
+          )}
           {/* assignee */}
-          <p className="text-xs">
-            <span className="font-semibold">Assigned to:</span>{" "}
-            <span>Kris Wale</span>
-          </p>
+          {checklist.assignedStaff && (
+            <p className="text-xs">
+              <span className="font-semibold">Assigned to:</span>{" "}
+              <span>{checklist.assignedStaff.name}</span>
+            </p>
+          )}
           {/* edit and delete */}
           <p className="!mt-2 flex gap-3 text-xs">
             <button
@@ -87,20 +123,22 @@ const List = () => {
       {openDelete && (
         <ConfirmationModal
           isOpen={openDelete}
-          onConfirm={() => console.log("somthing")}
+          onConfirm={() => delChecklist(checklist.id)}
           message="Are you sure you want to delete?"
           onCancel={() => setOpenDelete(false)}
           title={`Delete Checklist`}
           type="delete"
-          loading={false}
+          loading={updatingData}
         />
       )}
 
       {openEdit && (
         <AddChecklistForm
+          checklistData={checklist}
           edit={true}
           openModal={openEdit}
           closeModal={() => setOpenEdit(false)}
+          refresh={refresh}
         />
       )}
     </>
