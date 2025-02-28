@@ -2,7 +2,6 @@ import { Company } from "@/app/types/user-types";
 import { Department } from "../departments/types";
 import { User } from "@/app/types/user-types";
 import { Designation } from "../designations/types";
-import { StaffChecklist } from "../../onboarding/types";
 
 export interface StaffDetail {
   id?: number;

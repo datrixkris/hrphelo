@@ -6,7 +6,6 @@ import NewHires from "./NewHires";
 import { useDepartmentStore } from "../department-store";
 import { Checklist } from "../../../onboarding/types";
 import { useOnboardingStore } from "../../../onboarding/onboarding-store";
-import { useStaffStore } from "../../staff/staff-store";
 import useGetNewHire from "@/app/hooks/useGetNewHire";
 
 const DepartmentChecklist = () => {
