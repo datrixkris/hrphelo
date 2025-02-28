@@ -13,7 +13,7 @@ const DepartmentChecklist = () => {
   );
   const { department } = useDepartmentStore();
   const [checklists, setChecklists] = useState<Checklist[]>([]);
-  const { fetchChecklistByDepartment } = useOnboardingStore();
+  const { fetchChecklistByDepartment, loading } = useOnboardingStore();
 
   // fetch all checklists
   useEffect(() => {
@@ -28,7 +28,7 @@ const DepartmentChecklist = () => {
   }, []);
 
   async function refresh(deptId: number) {
-    const list = await fetchChecklistByDepartment(deptId);
+    const list = await fetchChecklistByDepartment(deptId, false);
     setChecklists(list);
   }
 
@@ -61,7 +61,19 @@ const DepartmentChecklist = () => {
 
       <div className="">
         {activeTab === "checklists" && (
-          <Checklists checklists={checklists} refresh={refresh} />
+          <>
+            {loading ? (
+              <div>
+                <div className="flex w-52 flex-col gap-4">
+                  <div className="skeleton h-4 w-28"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+            ) : (
+              <Checklists checklists={checklists} refresh={refresh} />
+            )}
+          </>
         )}
         {activeTab === "new hires" && <NewHires />}
       </div>
