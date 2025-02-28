@@ -37,7 +37,7 @@ export interface StaffChecklist {
   status: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt: string | null;
 }
 
 export interface CreateChecklist {
@@ -53,4 +53,10 @@ export interface CreateChecklist {
 export interface ChecklistGroupedByDepartment {
   department: string;
   checklists: Checklist[];
+}
+
+export interface MarkChecklist {
+  staffId: number;
+  checklistId: number;
+  status: "does_not_apply" | "apply";
 }

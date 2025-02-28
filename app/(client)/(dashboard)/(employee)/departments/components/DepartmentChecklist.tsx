@@ -11,15 +11,18 @@ const DepartmentChecklist = () => {
   const [activeTab, setActiveTab] = useState<"checklists" | "new hires">(
     "checklists",
   );
+  const [loading, setLoading] = useState(false);
   const { department } = useDepartmentStore();
   const [checklists, setChecklists] = useState<Checklist[]>([]);
-  const { fetchChecklistByDepartment, loading } = useOnboardingStore();
+  const { fetchChecklistByDepartment } = useOnboardingStore();
 
   // fetch all checklists
   useEffect(() => {
     const fetchChecklists = async () => {
       if (department?.id) {
+        setLoading(true);
         const list = await fetchChecklistByDepartment(department.id);
+        setLoading(false);
         setChecklists(list);
       }
     };

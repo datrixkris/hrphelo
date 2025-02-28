@@ -2,6 +2,7 @@ import { Company } from "@/app/types/user-types";
 import { Department } from "../departments/types";
 import { User } from "@/app/types/user-types";
 import { Designation } from "../designations/types";
+import { StaffChecklist } from "../../onboarding/types";
 
 export interface StaffDetail {
   id?: number;
@@ -40,6 +41,7 @@ export interface StaffData {
   company?: Company;
   user?: User;
   designations?: Designation[];
+  checklistStatus?: "incomplete" | "completed";
 }
 
 export interface StaffProfile {
