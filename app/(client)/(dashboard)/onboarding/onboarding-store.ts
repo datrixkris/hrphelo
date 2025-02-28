@@ -22,7 +22,7 @@ interface OnboardingStore {
   error?: string | null;
   fetchAllChecklists: (optionalLoading?: boolean) => Promise<void>;
   fetchAllChecklistsGroupedByDepartment: () => Promise<void>;
-  fetchChecklistByDepartment: (id: number) => Promise<Checklist[]>;
+  fetchChecklistByDepartment: (id: number, optionalLoading?: boolean) => Promise<Checklist[]>;
   createChecklist: (data: CreateChecklist) => Promise<void>;
   editChecklist: (data: CreateChecklist, id: number) => Promise<void>;
   deleteChecklist: (id: number) => Promise<void>;
@@ -78,12 +78,13 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
 
-  fetchChecklistByDepartment: async (id: number) => {
-    set({ loading: true, error: null });
+  fetchChecklistByDepartment: async (id: number, optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
 
     try {
       const response = (await api.get(`/v1/checklists/department/${id}`)).data;
       console.log(response);
+      set({ loading: false });
       return response;
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
