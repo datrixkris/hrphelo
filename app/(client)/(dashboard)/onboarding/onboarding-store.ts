@@ -17,6 +17,7 @@ interface OnboardingStore {
   error?: string | null;
   fetchAllChecklists: () => Promise<void>;
   createChecklist: (data: CreateChecklist) => Promise<void>;
+  submitQuery: (comment: string, checklistId: number) => Promise<void>
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
@@ -67,4 +68,21 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       console.error(err);
     }
   },
+
+  submitQuery: async (comment: string, checklistId: number) => {
+    set({ loading: true, error: null });
+    try {
+      await api.post(`/v1/checklists/${checklistId}/query`, comment);
+      set(() => ({ loading: false }));
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+    }
+  }
 }));

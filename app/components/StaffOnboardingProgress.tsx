@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useAuthStore } from "../stores/auth-store";
 import { api } from "../axiosApi/api";
 import { cn } from "@/utils/cn";
+import { useOnboardingStore } from "../(client)/(dashboard)/onboarding/onboarding-store";
 
 const StaffOnboardingProgress = () => {
   const { socket } = useSocket();
@@ -212,9 +213,12 @@ export const ChecklistItem = (data: TOnboarding) => {
   const [isQueryFormOpen, setIsQueryFormOpen] = useState(false);
   const [query, setQuery] = useState("");
 
+  const { submitQuery } = useOnboardingStore();
+
   const handleQuerySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
+    submitQuery(query, data.staffChecklists[0].id);
 
     console.log(`Query submitted for ${data.name}: ${query}`);
 
@@ -227,7 +231,12 @@ export const ChecklistItem = (data: TOnboarding) => {
       {" "}
       <div className="flex items-center justify-between">
         {/* description */}
-        <div className={cn("space-y-1",data.staffChecklists.length > 0 &&"line-through opacity-50")}>
+        <div
+          className={cn(
+            "space-y-1",
+            data.staffChecklists.length > 0 && "line-through opacity-50",
+          )}
+        >
           {/* Name of checklist */}
           <p className="text-sm font-semibold capitalize text-hr-yellow">
             {data.name}
@@ -271,7 +280,7 @@ export const ChecklistItem = (data: TOnboarding) => {
       {isQueryFormOpen && (
         <form
           onSubmit={handleQuerySubmit}
-          className="mt-2 space-y-2 rounded-lg bg-base-100 p-2 shadow border"
+          className="mt-2 space-y-2 rounded-lg border bg-base-100 p-2 shadow"
         >
           <div>
             <label htmlFor={`query-${data.id}`} className="text-xs font-medium">
