@@ -27,6 +27,7 @@ interface OnboardingStore {
   submitQuery: (comment: string, checklistId: number) => Promise<void>
   editChecklist: (data: CreateChecklist, id: number) => Promise<void>;
   deleteChecklist: (id: number) => Promise<void>;
+
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
