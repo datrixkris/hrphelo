@@ -74,6 +74,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     try {
       await api.post(`/v1/checklists/${checklistId}/query`, comment);
       set(() => ({ loading: false }));
+      toast.success("Query submitted successfully")
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       set(() => ({

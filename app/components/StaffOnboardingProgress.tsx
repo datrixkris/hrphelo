@@ -220,8 +220,6 @@ export const ChecklistItem = (data: TOnboarding) => {
     if (!query.trim()) return;
     submitQuery(query, data.staffChecklists[0].id);
 
-    console.log(`Query submitted for ${data.name}: ${query}`);
-
     setQuery("");
     setIsQueryFormOpen(false);
   };
