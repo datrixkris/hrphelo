@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Checklist } from "../../../onboarding/types";
 
 type ChecklistStatus = "not-apply" | "completed" | "";
 interface AssetFormInput {
@@ -7,10 +8,11 @@ interface AssetFormInput {
   description: string;
 }
 
-const NewHireFormList = () => {
+const NewHireFormList = ({ checklist }: { checklist: Checklist }) => {
   const [checked, setChecked] = useState<ChecklistStatus>("");
   const [showForm, setShowForm] = useState(false);
   const [assets, setAssets] = useState<AssetFormInput[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // useEffect(() => {}, [checked]);
   const handleCheckboxChange = (
@@ -18,6 +20,13 @@ const NewHireFormList = () => {
     checkStatus: ChecklistStatus,
   ) => {
     if (event.target.checked) {
+      if (checkStatus === "completed") {
+        if (assets.length === 0) {
+          setShowForm(true);
+          setErrorMessage("Please add an asset");
+          return;
+        }
+      }
       setChecked(checkStatus);
     } else {
       setChecked("");
@@ -27,6 +36,7 @@ const NewHireFormList = () => {
   function getFormInput(data: AssetFormInput) {
     console.log(data);
     setAssets([...assets, data]);
+    setErrorMessage("");
     setShowForm(false);
   }
 
@@ -38,9 +48,11 @@ const NewHireFormList = () => {
           className={`space-y-1 ${checked === "completed" ? "line-through opacity-50" : ""}`}
         >
           {/* Name of checklist */}
-          <p className="text-sm font-bold uppercase text-hr-yellow">Devices</p>
+          <p className="text-sm font-bold uppercase text-hr-yellow">
+            {checklist.name}
+          </p>
           {/* description */}
-          <p className="text-sm">Give out the following devices</p>
+          <p className="text-sm">{checklist.description}</p>
           {/* Assets */}
           <div className="space-y-1">
             {assets.length > 0 && (
@@ -58,23 +70,30 @@ const NewHireFormList = () => {
         </div>
 
         {/* add asset */}
-        {!showForm ? (
-          <>
-            {checked === "" && (
+        {checklist.assetType === "physical" && (
+          <div className="">
+            {!showForm ? (
+              <>
+                {checked === "" && (
+                  <div className="my-2">
+                    <button
+                      onClick={() => setShowForm(true)}
+                      className="btn btn-xs flex items-center justify-center gap-1 text-xs"
+                    >
+                      <Icon icon="heroicons:plus" className="" />{" "}
+                      <span>Add asset</span>
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
               <div className="my-2">
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="btn btn-xs flex items-center justify-center gap-1 text-xs"
-                >
-                  <Icon icon="heroicons:plus" className="" />{" "}
-                  <span>Add asset</span>
-                </button>
+                <AssetForm
+                  getFormInput={getFormInput}
+                  errorMessage={errorMessage}
+                />
               </div>
             )}
-          </>
-        ) : (
-          <div className="my-2">
-            <AssetForm getFormInput={getFormInput} />
           </div>
         )}
       </div>
@@ -117,8 +136,10 @@ export default NewHireFormList;
 
 const AssetForm = ({
   getFormInput,
+  errorMessage,
 }: {
   getFormInput: (data: AssetFormInput) => void;
+  errorMessage: string;
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -131,6 +152,7 @@ const AssetForm = ({
 
   return (
     <form className="space-y-2" onSubmit={handleSubmit}>
+      {errorMessage && <p className="text-xs text-red-500">{errorMessage}</p>}
       <input
         type="text"
         placeholder="Enter asset"

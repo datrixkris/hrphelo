@@ -38,7 +38,7 @@ export interface StaffData {
   hiring_date?: string;
   supervisorId?: number | null;
   department?: Department;
-  company?: Company;
+  company: Company;
   user?: User;
   designations?: Designation[];
   checklistStatus?: "incomplete" | "completed";

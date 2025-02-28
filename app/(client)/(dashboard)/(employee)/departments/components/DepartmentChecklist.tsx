@@ -6,6 +6,8 @@ import NewHires from "./NewHires";
 import { useDepartmentStore } from "../department-store";
 import { Checklist } from "../../../onboarding/types";
 import { useOnboardingStore } from "../../../onboarding/onboarding-store";
+import { useStaffStore } from "../../staff/staff-store";
+import useGetNewHire from "@/app/hooks/useGetNewHire";
 
 const DepartmentChecklist = () => {
   const [activeTab, setActiveTab] = useState<"checklists" | "new hires">(
@@ -15,6 +17,7 @@ const DepartmentChecklist = () => {
   const { department } = useDepartmentStore();
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const { fetchChecklistByDepartment } = useOnboardingStore();
+  const { newHires } = useGetNewHire();
 
   // fetch all checklists
   useEffect(() => {
@@ -28,7 +31,8 @@ const DepartmentChecklist = () => {
     };
 
     fetchChecklists();
-  }, []);
+    console.log("fetching checklists", newHires);
+  }, [newHires]);
 
   async function refresh(deptId: number) {
     const list = await fetchChecklistByDepartment(deptId, false);
@@ -58,7 +62,7 @@ const DepartmentChecklist = () => {
           onClick={() => setActiveTab("new hires")}
         >
           New Hires&apos; Progress
-          <div className="badge badge-info">2</div>
+          <div className="badge badge-info">{newHires.length}</div>
         </button>
       </div>
 
@@ -78,7 +82,7 @@ const DepartmentChecklist = () => {
             )}
           </>
         )}
-        {activeTab === "new hires" && <NewHires />}
+        {activeTab === "new hires" && <NewHires newHires={newHires} />}
       </div>
     </div>
   );
