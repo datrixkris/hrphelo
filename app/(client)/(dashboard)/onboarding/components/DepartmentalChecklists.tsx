@@ -26,6 +26,10 @@ const DepartmentalChecklists = () => {
     fetchData();
   }, []);
 
+  async function refresh() {
+    await fetchAllChecklists(false);
+  }
+
   return (
     <div className="rounded bg-base-100 p-4">
       <div className="mb-5">
@@ -68,7 +72,11 @@ const DepartmentalChecklists = () => {
                   {checklists.map((checklist) => {
                     if (checklist.departmentId === department.id) {
                       return (
-                        <Checklist key={checklist.id} checklist={checklist} />
+                        <Checklist
+                          key={checklist.id}
+                          checklist={checklist}
+                          refresh={refresh}
+                        />
                       );
                     }
                   })}

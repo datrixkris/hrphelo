@@ -14,6 +14,7 @@ interface AddChecklistFormProps {
   edit?: boolean;
   checklistData?: Checklist;
   refresh?: (id: number) => Promise<void>;
+  refreshAll?: () => Promise<void>;
 }
 
 const AddChecklistForm = ({
@@ -22,6 +23,7 @@ const AddChecklistForm = ({
   edit = false,
   checklistData,
   refresh,
+  refreshAll,
 }: AddChecklistFormProps) => {
   const [showAsset, setShowAsset] = useState(false);
   const { createChecklist, loading, editChecklist, updatingData } =
@@ -94,6 +96,7 @@ const AddChecklistForm = ({
 
     if (!useOnboardingStore.getState().error) {
       refresh && (await refresh(department!.id));
+      refreshAll && (await refreshAll());
       reset();
       removeAssignee();
       closeModal();
@@ -228,10 +231,10 @@ const AddChecklistForm = ({
             {edit ? (
               <button
                 type="submit"
-                disabled={updatingData}
+                disabled={updatingData || loading}
                 className={`btn btn-primary rounded`}
               >
-                {updatingData ? "Editing..." : "Edit Checklist"}
+                {updatingData || loading ? "Editing..." : "Edit Checklist"}
               </button>
             ) : (
               <button

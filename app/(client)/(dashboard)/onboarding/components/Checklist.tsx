@@ -7,9 +7,10 @@ import { useOnboardingStore } from "../onboarding-store";
 
 interface ChecklistProps {
   checklist: ChecklistType;
+  refresh: () => Promise<void>;
 }
 
-const Checklist = ({ checklist }: ChecklistProps) => {
+const Checklist = ({ checklist, refresh }: ChecklistProps) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const { deleteChecklist, updatingData } = useOnboardingStore();
@@ -20,6 +21,7 @@ const Checklist = ({ checklist }: ChecklistProps) => {
 
   async function delChecklist(id: number) {
     await deleteChecklist(id);
+    await refresh();
     setOpenDelete(false);
   }
 
@@ -93,6 +95,7 @@ const Checklist = ({ checklist }: ChecklistProps) => {
           edit={true}
           openModal={openEdit}
           closeModal={() => setOpenEdit(false)}
+          refreshAll={refresh}
         />
       )}
     </>
