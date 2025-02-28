@@ -6,18 +6,29 @@ import { useOnboardingStore } from "../onboarding-store";
 import { useDepartmentStore } from "../../(employee)/departments/department-store";
 
 const DepartmentalChecklists = () => {
-  const { fetchAllChecklists, checklists, loading } = useOnboardingStore();
+  const {
+    fetchAllChecklists,
+    checklists,
+    loading,
+    // fetchAllChecklistsGroupedByDepartment,
+    // checklistsGroupedByDepartment,
+  } = useOnboardingStore();
   const { fetchDepartments, departments } = useDepartmentStore();
 
   useEffect(() => {
     const fetchData = async () => {
       await fetchAllChecklists();
       await fetchDepartments();
+      // await fetchAllChecklistsGroupedByDepartment();
       console.log(useOnboardingStore.getState().checklists);
     };
 
     fetchData();
   }, []);
+
+  async function refresh() {
+    await fetchAllChecklists(false);
+  }
 
   return (
     <div className="rounded bg-base-100 p-4">
@@ -61,7 +72,11 @@ const DepartmentalChecklists = () => {
                   {checklists.map((checklist) => {
                     if (checklist.departmentId === department.id) {
                       return (
-                        <Checklist key={checklist.id} checklist={checklist} />
+                        <Checklist
+                          key={checklist.id}
+                          checklist={checklist}
+                          refresh={refresh}
+                        />
                       );
                     }
                   })}

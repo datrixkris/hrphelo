@@ -1,13 +1,37 @@
 // import Button from "@/app/components/Button";
 // import { Icon } from "@iconify/react/dist/iconify.js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Checklists from "./Checklists";
 import NewHires from "./NewHires";
+import { useDepartmentStore } from "../department-store";
+import { Checklist } from "../../../onboarding/types";
+import { useOnboardingStore } from "../../../onboarding/onboarding-store";
 
 const DepartmentChecklist = () => {
   const [activeTab, setActiveTab] = useState<"checklists" | "new hires">(
     "checklists",
   );
+  const { department } = useDepartmentStore();
+  const [checklists, setChecklists] = useState<Checklist[]>([]);
+  const { fetchChecklistByDepartment } = useOnboardingStore();
+
+  // fetch all checklists
+  useEffect(() => {
+    const fetchChecklists = async () => {
+      if (department?.id) {
+        const list = await fetchChecklistByDepartment(department.id);
+        setChecklists(list);
+      }
+    };
+
+    fetchChecklists();
+  }, []);
+
+  async function refresh(deptId: number) {
+    const list = await fetchChecklistByDepartment(deptId);
+    setChecklists(list);
+  }
+
   return (
     <div className="space-y-5 p-4">
       {/* description */}
@@ -24,7 +48,7 @@ const DepartmentChecklist = () => {
           onClick={() => setActiveTab("checklists")}
         >
           Checklists
-          <div className="badge badge-info">3</div>
+          <div className="badge badge-info">{checklists.length}</div>
         </button>
         <button
           className={`btn ${activeTab === "new hires" ? "btn-neutral" : ""}`}
@@ -36,7 +60,9 @@ const DepartmentChecklist = () => {
       </div>
 
       <div className="">
-        {activeTab === "checklists" && <Checklists />}
+        {activeTab === "checklists" && (
+          <Checklists checklists={checklists} refresh={refresh} />
+        )}
         {activeTab === "new hires" && <NewHires />}
       </div>
     </div>

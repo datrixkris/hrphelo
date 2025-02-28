@@ -24,8 +24,20 @@ export interface Checklist {
     updatedAt: string;
     deletedAt: string | null;
   };
+  staffChecklists: StaffChecklist[];
   assignedStaff: StaffData;
   company: Company;
+}
+
+export interface StaffChecklist {
+  id: number;
+  companyId: number;
+  staffId: number;
+  checklistId: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }
 
 export interface CreateChecklist {
@@ -36,4 +48,9 @@ export interface CreateChecklist {
   assignee: number | null;
   is_optional: boolean;
   assetType?: string;
+}
+
+export interface ChecklistGroupedByDepartment {
+  department: string;
+  checklists: Checklist[];
 }
