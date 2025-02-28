@@ -218,7 +218,7 @@ export const ChecklistItem = (data: TOnboarding) => {
   const handleQuerySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
-    submitQuery(query, data.staffChecklists[0].id);
+    submitQuery({ comment: query }, data.staffChecklists[0].id);
 
     setQuery("");
     setIsQueryFormOpen(false);
@@ -255,13 +255,15 @@ export const ChecklistItem = (data: TOnboarding) => {
               icon="hugeicons:checkmark-badge-03"
               className="h-4 w-4 rounded text-success"
             />
-            <button
-              onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
-              className="btn btn-ghost btn-xs"
-              aria-label={`Query about ${data.name}`}
-            >
-              <Icon icon="hugeicons:question" className="h-4 w-4" />
-            </button>
+            {!data.staffChecklists[0].comment === undefined && (
+              <button
+                onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
+                className="btn btn-ghost btn-xs"
+                aria-label={`Query about ${data.name}`}
+              >
+                <Icon icon="hugeicons:question" className="h-4 w-4" />
+              </button>
+            )}
           </div>
         ) : (
           <div className="flex flex-col items-center">
