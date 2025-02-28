@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ProgressBar from "../../../projects/components/ProgressBar";
 import FormList from "./NewHireFormList";
 
