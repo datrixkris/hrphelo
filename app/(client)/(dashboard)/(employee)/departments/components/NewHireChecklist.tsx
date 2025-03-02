@@ -31,8 +31,10 @@ const NewHireChecklist = ({
           {/* progress bar */}
           <div className="flex items-center gap-3">
             <p className="text-sm font-bold"> Progress</p>
-            <ProgressBar progress={getNewHireProgress(staff)} />
-            <p className="text-sm font-bold">{getNewHireProgress(staff)}%</p>
+            <ProgressBar progress={getNewHireProgress(staff, department?.id)} />
+            <p className="text-sm font-bold">
+              {getNewHireProgress(staff, department?.id)}%
+            </p>
           </div>
         </div>
 
@@ -40,7 +42,13 @@ const NewHireChecklist = ({
         <div className="mt-5 space-y-4 divide-y">
           {staff.company.checklists.map((checklist) => {
             if (checklist.departmentId === department!.id) {
-              return <FormList checklist={checklist} key={checklist.id} />;
+              return (
+                <FormList
+                  checklist={checklist}
+                  key={checklist.id}
+                  staffId={staff.id}
+                />
+              );
             }
           })}
         </div>

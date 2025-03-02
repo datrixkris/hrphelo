@@ -58,5 +58,5 @@ export interface ChecklistGroupedByDepartment {
 export interface MarkChecklist {
   staffId: number;
   checklistId: number;
-  status: "does_not_apply" | "apply";
+  status: "does_not_apply" | "apply" | "" | null;
 }

@@ -1,35 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Checklist } from "../../../onboarding/types";
+import { useOnboardingStore } from "../../../onboarding/onboarding-store";
 
-type ChecklistStatus = "not-apply" | "completed" | "";
+type ChecklistStatus = "does_not_apply" | "apply" | "";
 interface AssetFormInput {
   name: string;
   description: string;
 }
 
-const NewHireFormList = ({ checklist }: { checklist: Checklist }) => {
+const NewHireFormList = ({
+  checklist,
+  staffId,
+}: {
+  checklist: Checklist;
+  staffId: number;
+}) => {
   const [checked, setChecked] = useState<ChecklistStatus>("");
   const [showForm, setShowForm] = useState(false);
   const [assets, setAssets] = useState<AssetFormInput[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const { markChecklist } = useOnboardingStore();
 
-  // useEffect(() => {}, [checked]);
+  //   set status of checklist whether complete or does not apply
+  useEffect(() => {
+    if (checklist?.staffChecklists[0]?.status === "does_not_apply") {
+      setChecked("does_not_apply");
+    } else if (checklist?.staffChecklists[0]?.status === "apply") {
+      setChecked("apply");
+    }
+    console.log(checked);
+  }, []);
+
   const handleCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     checkStatus: ChecklistStatus,
   ) => {
     if (event.target.checked) {
-      if (checkStatus === "completed") {
-        if (assets.length === 0) {
+      if (checkStatus === "apply") {
+        if (checklist.assetType === "physical" && assets.length === 0) {
           setShowForm(true);
           setErrorMessage("Please add an asset");
           return;
         }
+        setChecked(checkStatus);
+        markChecklist({
+          status: checkStatus,
+          checklistId: checklist.id,
+          staffId,
+        });
+        console.log("marking checklist", event.target.checked);
+      } else {
+        setChecked(checkStatus);
+        // if (checkStatus) {
+        markChecklist({
+          status: checkStatus,
+          checklistId: checklist.id,
+          staffId,
+        });
+        // }
       }
-      setChecked(checkStatus);
     } else {
       setChecked("");
+      markChecklist({
+        status: null,
+        checklistId: checklist.id,
+        staffId,
+      });
     }
   };
 
@@ -45,7 +82,7 @@ const NewHireFormList = ({ checklist }: { checklist: Checklist }) => {
       {/* description */}
       <div className="">
         <div
-          className={`space-y-1 ${checked === "completed" ? "line-through opacity-50" : ""}`}
+          className={`space-y-1 ${checked === "apply" ? "line-through opacity-50" : ""}`}
         >
           {/* Name of checklist */}
           <p className="text-sm font-bold uppercase text-hr-yellow">
@@ -105,26 +142,28 @@ const NewHireFormList = ({ checklist }: { checklist: Checklist }) => {
           <label className="label cursor-pointer">
             <input
               type="checkbox"
-              checked={checked === "not-apply"}
+              checked={checked === "does_not_apply"}
               name="1"
-              onChange={(event) => handleCheckboxChange(event, "not-apply")}
+              onChange={(event) =>
+                handleCheckboxChange(event, "does_not_apply")
+              }
               className="checkbox-warning checkbox"
             />
             <span className="label-text pl-1">Does not apply</span>
           </label>
         </div>
 
-        {/* completed */}
+        {/* apply */}
         <div className="form-control">
           <label className="label cursor-pointer">
             <input
               type="checkbox"
-              checked={checked === "completed"}
+              checked={checked === "apply"}
               name="1"
-              onChange={(event) => handleCheckboxChange(event, "completed")}
+              onChange={(event) => handleCheckboxChange(event, "apply")}
               className="checkbox-success checkbox"
             />
-            <span className="label-text pl-1">Completed</span>
+            <span className="label-text pl-1">Complete</span>
           </label>
         </div>
       </div>

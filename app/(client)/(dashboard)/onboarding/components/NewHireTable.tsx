@@ -5,9 +5,13 @@ import { progressColor } from "../../projects/components/ProgressBar";
 import { Icon } from "@iconify/react/dist/iconify.js";
 // import OnboardingNewHireChecklist from "./OnboardingNewHireChecklist";
 import Link from "next/link";
+import useGetNewHire, { getNewHireProgress } from "@/app/hooks/useGetNewHire";
+import { StaffData } from "../../(employee)/staff/types";
+import dayjs from "dayjs";
 
 const NewHireTable = () => {
   //   const [openModal, setOpenModal] = useState(false);
+  const { newHires } = useGetNewHire();
   return (
     <div className="rounded bg-base-100 p-4">
       <div className="mb-5">
@@ -27,69 +31,45 @@ const NewHireTable = () => {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            <tr>
-              <td>Cy Ganderton</td>
-              <td>IT</td>
-              <td>14th Feb, 2025</td>
-              <td>
-                <p className={`${"text-" + progressColor(20)} font-bold`}>
-                  20% completed
-                </p>
-              </td>
-              <td>
-                <Link href={`/onboarding/2/onboarding-details`}>
-                  <div
-                    className="inline-block cursor-pointer text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
-                    //   onClick={() => setOpenModal(true)}
-                  >
-                    <Icon
-                      icon="heroicons:eye-16-solid"
-                      className="inline-block text-lg"
-                    />
-                    <span className="relative ml-0.5 text-xs">Details</span>
-                  </div>
-                </Link>
-              </td>
-            </tr>
-            {/* row 2 */}
-            <tr>
-              <td>Hart Hagerty</td>
-              <td>Logistics</td>
-              <td>14th Feb, 2025</td>
-              <td>
-                <p className={`${"text-" + progressColor(94)} font-bold`}>
-                  94% completed
-                </p>
-              </td>
-              <td>
-                <Link href={`/onboarding/2/onboarding-details`}>
-                  <div
-                    className="inline-block cursor-pointer text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
-                    //   onClick={() => setOpenModal(true)}
-                  >
-                    <Icon
-                      icon="heroicons:eye-16-solid"
-                      className="inline-block text-lg"
-                    />
-                    <span className="relative ml-0.5 text-xs">Details</span>
-                  </div>
-                </Link>
-              </td>
-            </tr>
+            {newHires.map((staff) => {
+              return <NewHireTableRow key={staff.id} staff={staff} />;
+            })}
           </tbody>
         </table>
       </div>
-
-      {/* staffchecklist
-      {openModal && (
-        <OnboardingNewHireChecklist
-          openModal={openModal}
-          closeModal={() => setOpenModal(false)}
-        />
-      )} */}
     </div>
   );
 };
 
 export default NewHireTable;
+
+const NewHireTableRow = ({ staff }: { staff: StaffData }) => {
+  return (
+    <tr>
+      <th>{staff.name}</th>
+      <td>{staff.department?.name}</td>
+      <td>{dayjs(staff?.hiring_date).format("MMM D, YYYY")}</td>
+      <td>
+        <p
+          className={`${"text-" + progressColor(getNewHireProgress(staff))} font-bold`}
+        >
+          {getNewHireProgress(staff)}%
+        </p>
+      </td>
+      <td>
+        <Link href={`/onboarding/2/onboarding-details`}>
+          <div
+            className="inline-block cursor-pointer text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
+            //   onClick={() => setOpenModal(true)}
+          >
+            <Icon
+              icon="heroicons:eye-16-solid"
+              className="inline-block text-lg"
+            />
+            <span className="relative ml-0.5 text-xs">Details</span>
+          </div>
+        </Link>
+      </td>
+    </tr>
+  );
+};
