@@ -112,10 +112,10 @@ const StaffOnboardingProgress = () => {
             data-tip="Onboarding Progress"
           >
             <label htmlFor="my-drawer-6">
-              <div className="flex gap-2 rounded-3xl bg-slate-100 p-2">
+              <div className="flex gap-2 rounded-3xl bg-transparent p-2">
                 {" "}
                 <div
-                  className="radial-progress text-xs font-light text-primary"
+                  className="radial-progress text-xs font-light text-black"
                   style={
                     {
                       "--value": progress,
@@ -255,7 +255,7 @@ export const ChecklistItem = (data: TOnboarding) => {
               icon="hugeicons:checkmark-badge-03"
               className="h-4 w-4 rounded text-success"
             />
-            {!data.staffChecklists[0].comment === undefined && (
+            {data.staffChecklists[0].comment === undefined && (
               <button
                 onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
                 className="btn btn-ghost btn-xs"
