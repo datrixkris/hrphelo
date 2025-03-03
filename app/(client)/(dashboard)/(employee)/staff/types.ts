@@ -19,6 +19,7 @@ export interface StaffDetail {
   image?: string;
   departmentId?: number;
   designations?: Designation[];
+  checklistStatus?: "incomplete" | "completed";
 }
 
 export interface StaffData {

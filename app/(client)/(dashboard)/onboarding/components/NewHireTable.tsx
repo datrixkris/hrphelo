@@ -8,10 +8,11 @@ import Link from "next/link";
 import useGetNewHire, { getNewHireProgress } from "@/app/hooks/useGetNewHire";
 import { StaffData } from "../../(employee)/staff/types";
 import dayjs from "dayjs";
+import TableSkeleton from "@/app/components/TableSkeleton";
 
 const NewHireTable = () => {
   //   const [openModal, setOpenModal] = useState(false);
-  const { newHires } = useGetNewHire();
+  const { newHires, loading } = useGetNewHire();
   return (
     <div className="rounded bg-base-100 p-4">
       <div className="mb-5">
@@ -19,23 +20,27 @@ const NewHireTable = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="table table-sm">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Department</th>
-              <th>Date Hired</th>
-              <th>Progress</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {newHires.map((staff) => {
-              return <NewHireTableRow key={staff.id} staff={staff} />;
-            })}
-          </tbody>
-        </table>
+        {loading ? (
+          <TableSkeleton />
+        ) : (
+          <table className="table table-sm">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Date Hired</th>
+                <th>Progress</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {newHires.map((staff) => {
+                return <NewHireTableRow key={staff.id} staff={staff} />;
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
@@ -57,7 +62,7 @@ const NewHireTableRow = ({ staff }: { staff: StaffData }) => {
         </p>
       </td>
       <td>
-        <Link href={`/onboarding/2/onboarding-details`}>
+        <Link href={`/onboarding/${staff.id}/onboarding-details`}>
           <div
             className="inline-block cursor-pointer text-nowrap rounded bg-success px-2 py-1 text-sm font-semibold text-white"
             //   onClick={() => setOpenModal(true)}
