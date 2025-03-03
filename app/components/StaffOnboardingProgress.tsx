@@ -255,7 +255,7 @@ export const ChecklistItem = (data: TOnboarding) => {
               icon="hugeicons:checkmark-badge-03"
               className="h-4 w-4 rounded text-success"
             />
-            {data.staffChecklists[0].comment === undefined && (
+            {data.staffChecklists[0].checklistQueries === undefined && (
               <button
                 onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
                 className="btn btn-ghost btn-xs"

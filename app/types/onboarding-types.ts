@@ -27,10 +27,13 @@ export interface TOnboarding {
     companyId: number,
     staffId: number,
     checklistId: number,
-    comment?: string
     status: string,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string | null
+    checklistQueries: {
+      id: number
+      companyId: number
+      staffId: number
+      staffChecklistId: number
+      comment: string
+    }
   }[];
 }
