@@ -12,15 +12,15 @@ export function getNewHireProgress(staff: StaffData, deptId?: number) {
     ).length;
     completed = staff.company?.checklists
       .filter((checklist) => checklist.departmentId === deptId)
-      .map((item) => item.staffChecklists.some((i) => i.status)).length;
+      .filter((item) => item.staffChecklists?.status === "apply").length;
     return Math.round((completed / total) * 100) ?? 0;
   }
 
   //   overall progress with various departments involved
   else {
     total = staff?.company?.checklists?.length;
-    completed = staff?.company?.checklists?.filter((item) =>
-      item.staffChecklists.some((i) => i.status),
+    completed = staff?.company?.checklists?.filter(
+      (item) => item.staffChecklists?.status === "apply",
     ).length;
   }
 

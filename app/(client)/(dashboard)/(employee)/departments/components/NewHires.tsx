@@ -27,6 +27,9 @@ const NewHires = ({ newHires }: { newHires: StaffData[] }) => {
             })}
           </tbody>
         </table>
+        {newHires.length === 0 && (
+          <div className="mt-4 text-center text-gray-400">No new hires</div>
+        )}
       </div>
     </div>
   );
