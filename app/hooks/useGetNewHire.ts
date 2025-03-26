@@ -12,7 +12,7 @@ export function getNewHireProgress(staff: StaffData, deptId?: number) {
     ).length;
     completed = staff.company?.checklists
       .filter((checklist) => checklist.departmentId === deptId)
-      .filter((item) => item.staffChecklists?.status === "apply").length;
+      .filter((item) => item.staffChecklists?.status).length;
     return Math.round((completed / total) * 100) ?? 0;
   }
 
@@ -20,7 +20,7 @@ export function getNewHireProgress(staff: StaffData, deptId?: number) {
   else {
     total = staff?.company?.checklists?.length;
     completed = staff?.company?.checklists?.filter(
-      (item) => item.staffChecklists?.status === "apply",
+      (item) => item.staffChecklists?.status,
     ).length;
   }
 
