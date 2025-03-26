@@ -51,6 +51,8 @@ const NewHireChecklistDetails = ({
                       {getNewHireProgress(staff, department.id)}% completed
                     </span>
                   </div>
+
+                  {/* checklist items */}
                   <div className="collapse-content rounded-md bg-base-200/50 pl-10 pt-4">
                     {checklists.map((checklist) => {
                       if (checklist.departmentId === department.id) {
@@ -80,7 +82,7 @@ export const ChecklistItem = ({ checklist }: { checklist: Checklist }) => {
     <div>
       <div className="flex items-center justify-between p-2">
         {/* description */}
-        <div className="space-y-1 line-through opacity-50">
+        <div className="space-y-1">
           {/* Name of checklist */}
           <p className="text-sm font-bold uppercase text-hr-yellow">
             {checklist.name}
@@ -95,9 +97,21 @@ export const ChecklistItem = ({ checklist }: { checklist: Checklist }) => {
 
         {/* actions */}
         <div className="flex gap-2">
-          <span className="rounded bg-success/20 p-1 px-2 text-sm text-success">
-            Completed
-          </span>
+          {checklist.staffChecklists?.status === "apply" && (
+            <span className="rounded bg-success/15 p-1 px-2 text-sm font-bold text-success">
+              Completed
+            </span>
+          )}
+          {checklist.staffChecklists?.status === "does_not_apply" && (
+            <span className="rounded bg-warning/15 p-1 px-2 text-sm font-bold text-warning">
+              Does not apply
+            </span>
+          )}
+          {checklist.staffChecklists?.status === undefined && (
+            <span className="rounded bg-error/15 p-1 px-2 text-sm font-bold text-error">
+              Not completed
+            </span>
+          )}
         </div>
       </div>
     </div>
