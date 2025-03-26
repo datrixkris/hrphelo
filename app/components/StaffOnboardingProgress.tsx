@@ -37,9 +37,14 @@ const StaffOnboardingProgress = () => {
 
   const calculateProgress = () => {
     if (checklistData.length === 0) return 0;
+
+    console.log("checklistData", checklistData);
+
     const completed = checklistData.filter(
-      (item) => item.staffChecklists.length > 0,
+      (item) =>
+        Array.isArray(item.staffChecklists) && item.staffChecklists.length > 0,
     ).length;
+
     return Math.round((completed / checklistData.length) * 100);
   };
 
@@ -218,7 +223,11 @@ export const ChecklistItem = (data: TOnboarding) => {
   const handleQuerySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
-    submitQuery({ comment: query }, data.staffChecklists[0].id);
+
+    // Safely access staffChecklists
+    if (data.staffChecklists && data.staffChecklists[0]) {
+      submitQuery({ comment: query }, data.staffChecklists[0].id);
+    }
 
     setQuery("");
     setIsQueryFormOpen(false);
@@ -226,31 +235,23 @@ export const ChecklistItem = (data: TOnboarding) => {
 
   return (
     <div className="border-b border-base-300 py-2">
-      {" "}
       <div className="flex items-center justify-between">
-        {/* description */}
         <div
           className={cn(
             "space-y-1",
-            data.staffChecklists.length > 0 && "line-through opacity-50",
+            data.staffChecklists &&
+              data.staffChecklists.length > 0 &&
+              "line-through opacity-50",
           )}
         >
-          {/* Name of checklist */}
           <p className="text-sm font-semibold capitalize text-hr-yellow">
             {data.name}
           </p>
-          {/* description */}
           <p className="text-sm">{data.description}</p>
-          {/* Assets */}
-          {/* <p className="text-xs">
-            <span className="font-semibold">Assets:</span> <span>Computer</span>
-          </p> */}
         </div>
 
-        {/* actions */}
-        {data.staffChecklists.length > 0 ? (
+        {data.staffChecklists && data.staffChecklists.length > 0 ? (
           <div className="flex flex-col items-center gap-2">
-            {" "}
             <Icon
               icon="hugeicons:checkmark-badge-03"
               className="h-4 w-4 rounded text-success"
@@ -267,7 +268,6 @@ export const ChecklistItem = (data: TOnboarding) => {
           </div>
         ) : (
           <div className="flex flex-col items-center">
-            {" "}
             <div className="tooltip tooltip-bottom" data-tip="Pending">
               <Icon
                 icon="hugeicons:clock-01"
