@@ -6,29 +6,35 @@ import NewHires from "./NewHires";
 import { useDepartmentStore } from "../department-store";
 import { Checklist } from "../../../onboarding/types";
 import { useOnboardingStore } from "../../../onboarding/onboarding-store";
+import useGetNewHire from "@/app/hooks/useGetNewHire";
 
 const DepartmentChecklist = () => {
   const [activeTab, setActiveTab] = useState<"checklists" | "new hires">(
     "checklists",
   );
+  const [loading, setLoading] = useState(false);
   const { department } = useDepartmentStore();
   const [checklists, setChecklists] = useState<Checklist[]>([]);
   const { fetchChecklistByDepartment } = useOnboardingStore();
+  const { newHires } = useGetNewHire();
 
   // fetch all checklists
   useEffect(() => {
     const fetchChecklists = async () => {
       if (department?.id) {
+        setLoading(true);
         const list = await fetchChecklistByDepartment(department.id);
+        setLoading(false);
         setChecklists(list);
       }
     };
 
     fetchChecklists();
-  }, []);
+    console.log("fetching checklists", newHires);
+  }, [newHires]);
 
   async function refresh(deptId: number) {
-    const list = await fetchChecklistByDepartment(deptId);
+    const list = await fetchChecklistByDepartment(deptId, false);
     setChecklists(list);
   }
 
@@ -55,15 +61,27 @@ const DepartmentChecklist = () => {
           onClick={() => setActiveTab("new hires")}
         >
           New Hires&apos; Progress
-          <div className="badge badge-info">2</div>
+          <div className="badge badge-info">{newHires.length}</div>
         </button>
       </div>
 
       <div className="">
         {activeTab === "checklists" && (
-          <Checklists checklists={checklists} refresh={refresh} />
+          <>
+            {loading ? (
+              <div>
+                <div className="flex w-52 flex-col gap-4">
+                  <div className="skeleton h-4 w-28"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+            ) : (
+              <Checklists checklists={checklists} refresh={refresh} />
+            )}
+          </>
         )}
-        {activeTab === "new hires" && <NewHires />}
+        {activeTab === "new hires" && <NewHires newHires={newHires} />}
       </div>
     </div>
   );

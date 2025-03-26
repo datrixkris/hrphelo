@@ -24,7 +24,7 @@ export interface Checklist {
     updatedAt: string;
     deletedAt: string | null;
   };
-  staffChecklists: StaffChecklist[];
+  staffChecklists: StaffChecklist;
   assignedStaff: StaffData;
   company: Company;
 }
@@ -34,10 +34,10 @@ export interface StaffChecklist {
   companyId: number;
   staffId: number;
   checklistId: number;
-  status: string;
+  status: "does_not_apply" | "apply" | "" | null;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt: string | null;
 }
 
 export interface CreateChecklist {
@@ -53,4 +53,10 @@ export interface CreateChecklist {
 export interface ChecklistGroupedByDepartment {
   department: string;
   checklists: Checklist[];
+}
+
+export interface MarkChecklist {
+  staffId: number;
+  checklistId: number;
+  status: "does_not_apply" | "apply" | "" | null;
 }
