@@ -218,11 +218,11 @@ const Page = () => {
                       onInputChange={(e) =>
                         handleInputChange(policy.id, e.target.value)
                       }
-                      currencyValue={formData.currencies[policy.id] || "USD"}
+                      currencyValue={formData.currencies[policy.id] || "GHS"}
                       onCurrencyChange={(e) =>
                         handleCurrencyChange(policy.id, e)
                       }
-                      currencies={["USD", "EUR", "GBP", "JPY"]}
+                      currencies={["GHS","USD", "EUR", "GBP"]}
                       placeholder="0.00"
                       disabled={loading}
                     />
@@ -242,11 +242,11 @@ const Page = () => {
                       onInputChange={(e) =>
                         handleInputChange(policy.id, e.target.value)
                       }
-                      currencyValue={formData.currencies[policy.id] || "USD"}
+                      currencyValue={formData.currencies[policy.id] || "GHS"}
                       onCurrencyChange={(e) =>
                         handleCurrencyChange(policy.id, e)
                       }
-                      currencies={["USD", "EUR", "GBP", "JPY"]}
+                      currencies={["GHS","USD", "EUR", "GBP"]}
                       placeholder="0.00"
                       disabled={loading}
                     />

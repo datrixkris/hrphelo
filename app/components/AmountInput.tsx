@@ -27,6 +27,7 @@ const defaultCurrencySymbols: Record<string, string> = {
   AUD: "$",
   CHF: "CHF",
   CNY: "¥",
+  GHS:"₵"
 };
 
 export default function AmountInput({
@@ -36,11 +37,11 @@ export default function AmountInput({
   currencyName = "currency",
   value,
   onInputChange,
-  currencyValue = "USD",
+  currencyValue = "GHS",
   onCurrencyChange,
   placeholder = "0.00",
   prefix, // Optional prop for fixed prefix
-  currencies = ["USD", "CAD", "EUR"],
+  currencies = ["GHS","USD", "CAD", "EUR"],
   className = "",
   required = false,
   disabled = false,
@@ -61,7 +62,7 @@ export default function AmountInput({
         {label}
       </label>
       <div className="mt-2">
-        <div className="flex items-center rounded-md border bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+        <div className="flex items-center rounded-md border bg-base-100 pl-3 outline-1 -outline-offset-1 outline-gray-100 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
           <div className="shrink-0 select-none text-base text-gray-500 sm:text-sm/6">
             {displayedPrefix}
           </div>
@@ -72,7 +73,7 @@ export default function AmountInput({
             placeholder={placeholder}
             value={value}
             onChange={onInputChange}
-            className="input block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+            className="input block min-w-0 grow py-1.5 pl-1 pr-3 text-base bg-base-100 text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
             required={required}
             disabled={disabled}
           />
@@ -82,7 +83,7 @@ export default function AmountInput({
               aria-label="Currency"
               value={currencyValue}
               onChange={onCurrencyChange}
-              className="col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-7 text-base text-gray-500 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              className="col-start-1 row-start-1 w-full appearance-none rounded-md py-1.5 pl-3 pr-7 text-base bg-base-100 text-gray-500 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary sm:text-sm/6"
               disabled={disabled}
             >
               {currencies.map((currency) => (
