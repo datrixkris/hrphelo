@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
-
 import Button from "@/app/components/Button";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -11,6 +10,7 @@ import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff
 import { toast } from "react-toastify";
 import EmployeeSalaryTable from "./components/employee-salary-table";
 import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
+import AmountInput from "@/app/components/AmountInput";
 
 interface PayrollFormData {
   staffId: number | null;
@@ -39,19 +39,25 @@ const Page = () => {
   }));
 
   const benefits = payrollPolicies.filter(
-    (policy) => policy.pol_type === "Benefit",
+    (policy) => policy.pol_type === "Benefit"
   );
   const deduction = payrollPolicies.filter(
-    (policy) => policy.pol_type === "Deduction",
+    (policy) => policy.pol_type === "Deduction"
   );
 
   const [selectedStaff, setSelectedStaff] = useState<number | undefined>();
   const [selectedPayrollPeriod, setSelectedPayrollPeriod] = useState<
     number | undefined
   >();
-  const [formData, setFormData] = useState<{ [key: string]: number }>({});
+  const [formData, setFormData] = useState<{
+    amounts: { [key: string]: string };
+    currencies: { [key: string]: string };
+  }>({
+    amounts: {},
+    currencies: {},
+  });
 
-  const { handleSubmit, reset } = useForm({
+  const { handleSubmit, reset } = useForm<PayrollFormData>({
     defaultValues: {
       staffId: null,
       computations: {},
@@ -61,19 +67,28 @@ const Page = () => {
   const handleInputChange = (policyId: number, value: string) => {
     setFormData((prev) => ({
       ...prev,
-      [policyId]: parseFloat(value) || 0,
+      amounts: { ...prev.amounts, [policyId]: value },
+    }));
+  };
+
+  const handleCurrencyChange = (
+    policyId: number,
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      currencies: { ...prev.currencies, [policyId]: event.target.value },
     }));
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Function to open the modal
   const openAddSalaryModal = () => setIsModalOpen(true);
 
   const closeCreateModal = () => {
     setIsModalOpen(false);
     reset();
-    setFormData({});
+    setFormData({ amounts: {}, currencies: {} });
   };
 
   const onSubmit = async (data: PayrollFormData) => {
@@ -89,11 +104,11 @@ const Page = () => {
     const computations = [
       ...benefits.map((policy) => ({
         policyId: policy.id,
-        value: formData[policy.id] || 0,
+        value: parseFloat(formData.amounts[policy.id]) || 0,
       })),
       ...deduction.map((policy) => ({
         policyId: policy.id,
-        value: formData[policy.id] || 0,
+        value: parseFloat(formData.amounts[policy.id]) || 0,
       })),
     ];
 
@@ -115,7 +130,6 @@ const Page = () => {
       closeCreateModal();
     } catch (err) {
       console.error(err);
-
       toast.error("Failed to add salary");
     }
   };
@@ -124,14 +138,13 @@ const Page = () => {
     if (staffs.length === 0) {
       fetchStaff();
     }
-
     if (payrollPolicies.length === 0) {
       fetchPayrollPolicy();
     }
     if (payrollPeriods.length === 0) {
       fetchPayrollPeriod();
     }
-  }, [staffs, fetchStaff]);
+  }, [staffs, fetchStaff, fetchPayrollPolicy, fetchPayrollPeriod]);
 
   return (
     <div>
@@ -193,46 +206,50 @@ const Page = () => {
                 </div>
               </div>
 
-              {/* Payroll Policy Fields */}
+              {/* Benefits */}
               <div>
                 <h5>Benefits</h5>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {benefits.map((policy) => (
-                    <div key={policy.id}>
-                      <label className="block font-medium text-gray-700">
-                        {policy.name}
-                      </label>
-                      <input
-                        type="number"
-                        value={formData[policy.id] || ""}
-                        onChange={(e) =>
-                          handleInputChange(policy.id, e.target.value)
-                        }
-                        className="input input-bordered w-full"
-                        placeholder="Enter amount"
-                      />
-                    </div>
+                    <AmountInput
+                      key={policy.id}
+                      label={policy.name}
+                      value={formData.amounts[policy.id] || ""}
+                      onInputChange={(e) =>
+                        handleInputChange(policy.id, e.target.value)
+                      }
+                      currencyValue={formData.currencies[policy.id] || "USD"}
+                      onCurrencyChange={(e) =>
+                        handleCurrencyChange(policy.id, e)
+                      }
+                      currencies={["USD", "EUR", "GBP", "JPY"]}
+                      placeholder="0.00"
+                      disabled={loading}
+                    />
                   ))}
                 </div>
               </div>
+
+              {/* Deductions */}
               <div>
-                <h5>Deduction</h5>
+                <h5>Deductions</h5>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {deduction.map((policy) => (
-                    <div key={policy.id}>
-                      <label className="block font-medium text-gray-700">
-                        {policy.name}
-                      </label>
-                      <input
-                        type="number"
-                        value={formData[policy.id] || ""}
-                        onChange={(e) =>
-                          handleInputChange(policy.id, e.target.value)
-                        }
-                        className="input input-bordered w-full"
-                        placeholder="Enter amount"
-                      />
-                    </div>
+                    <AmountInput
+                      key={policy.id}
+                      label={policy.name}
+                      value={formData.amounts[policy.id] || ""}
+                      onInputChange={(e) =>
+                        handleInputChange(policy.id, e.target.value)
+                      }
+                      currencyValue={formData.currencies[policy.id] || "USD"}
+                      onCurrencyChange={(e) =>
+                        handleCurrencyChange(policy.id, e)
+                      }
+                      currencies={["USD", "EUR", "GBP", "JPY"]}
+                      placeholder="0.00"
+                      disabled={loading}
+                    />
                   ))}
                 </div>
               </div>
