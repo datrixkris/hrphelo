@@ -16,7 +16,7 @@ export function getNewHireProgress(staff: StaffData, deptId?: number) {
     return Math.round((completed / total) * 100) ?? 0;
   }
 
-  //   overall progress with various departments involved
+  //   overall progress with various departments involveds
   else {
     total = staff?.company?.checklists?.length;
     completed = staff?.company?.checklists?.filter(
