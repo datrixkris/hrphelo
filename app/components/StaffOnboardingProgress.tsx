@@ -40,9 +40,12 @@ const StaffOnboardingProgress = () => {
 
     console.log("checklistData", checklistData);
 
+    // const completed = checklistData.filter(
+    //   (item) =>
+    //     Array.isArray(item.staffChecklists) && item.staffChecklists.length > 0,
+    // ).length;
     const completed = checklistData.filter(
-      (item) =>
-        Array.isArray(item.staffChecklists) && item.staffChecklists.length > 0,
+      (item) => !item.staffChecklists == null,
     ).length;
 
     return Math.round((completed / checklistData.length) * 100);
@@ -224,9 +227,9 @@ export const ChecklistItem = (data: TOnboarding) => {
     e.preventDefault();
     if (!query.trim()) return;
 
-    // Safely access staffChecklists
-    if (data.staffChecklists && data.staffChecklists[0]) {
-      submitQuery({ comment: query }, data.staffChecklists[0].id);
+    // // Safely access staffChecklists
+    if (data.staffChecklists && data.staffChecklists.id) {
+      submitQuery({ comment: query }, data.staffChecklists.id);
     }
 
     setQuery("");
@@ -239,9 +242,7 @@ export const ChecklistItem = (data: TOnboarding) => {
         <div
           className={cn(
             "space-y-1",
-            data.staffChecklists &&
-              data.staffChecklists.length > 0 &&
-              "line-through opacity-50",
+            data.staffChecklists && "line-through opacity-50",
           )}
         >
           <p className="text-sm font-semibold capitalize text-hr-yellow">
@@ -250,13 +251,13 @@ export const ChecklistItem = (data: TOnboarding) => {
           <p className="text-sm">{data.description}</p>
         </div>
 
-        {data.staffChecklists && data.staffChecklists.length > 0 ? (
+        {data.staffChecklists ? (
           <div className="flex flex-col items-center gap-2">
             <Icon
               icon="hugeicons:checkmark-badge-03"
               className="h-4 w-4 rounded text-success"
             />
-            {data.staffChecklists[0].checklistQueries === undefined && (
+            {data.staffChecklists.checklistQueries === undefined && (
               <button
                 onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
                 className="btn btn-ghost btn-xs"
