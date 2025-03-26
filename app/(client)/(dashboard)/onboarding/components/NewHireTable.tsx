@@ -23,23 +23,28 @@ const NewHireTable = () => {
         {loading ? (
           <TableSkeleton />
         ) : (
-          <table className="table table-sm">
-            {/* head */}
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Date Hired</th>
-                <th>Progress</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {newHires.map((staff) => {
-                return <NewHireTableRow key={staff.id} staff={staff} />;
-              })}
-            </tbody>
-          </table>
+          <div>
+            <table className="table table-sm">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Date Hired</th>
+                  <th>Progress</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {newHires.map((staff) => {
+                  return <NewHireTableRow key={staff.id} staff={staff} />;
+                })}
+              </tbody>
+            </table>
+            {newHires.length === 0 && (
+              <div className="mt-4 text-center text-gray-400">No new hires</div>
+            )}
+          </div>
         )}
       </div>
     </div>

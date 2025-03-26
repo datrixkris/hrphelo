@@ -24,9 +24,9 @@ const NewHireFormList = ({
 
   //   set status of checklist whether complete or does not apply
   useEffect(() => {
-    if (checklist?.staffChecklists[0]?.status === "does_not_apply") {
+    if (checklist?.staffChecklists?.status === "does_not_apply") {
       setChecked("does_not_apply");
-    } else if (checklist?.staffChecklists[0]?.status === "apply") {
+    } else if (checklist?.staffChecklists?.status === "apply") {
       setChecked("apply");
     }
     console.log(checked);
