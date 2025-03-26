@@ -35,5 +35,5 @@ export interface TOnboarding {
       staffChecklistId: number
       comment: string
     }
-  }[];
+  };
 }
