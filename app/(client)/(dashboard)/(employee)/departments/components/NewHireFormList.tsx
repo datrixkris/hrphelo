@@ -6,21 +6,23 @@ import { useOnboardingStore } from "../../../onboarding/onboarding-store";
 type ChecklistStatus = "does_not_apply" | "apply" | "";
 interface AssetFormInput {
   name: string;
-  description: string;
+  details: string;
 }
 
 const NewHireFormList = ({
   checklist,
   staffId,
+  refresh,
 }: {
   checklist: Checklist;
   staffId: number;
+  refresh?: () => void;
 }) => {
   const [checked, setChecked] = useState<ChecklistStatus>("");
   const [showForm, setShowForm] = useState(false);
   const [assets, setAssets] = useState<AssetFormInput[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const { markChecklist } = useOnboardingStore();
+  const { markChecklist, loading } = useOnboardingStore();
 
   //   set status of checklist whether complete or does not apply
   useEffect(() => {
@@ -32,42 +34,52 @@ const NewHireFormList = ({
     console.log(checked);
   }, []);
 
-  const handleCheckboxChange = (
+  const handleCheckboxChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
     checkStatus: ChecklistStatus,
   ) => {
     if (event.target.checked) {
       if (checkStatus === "apply") {
+        // if check status is apply, check if assettype is physical and no assets have been added to prompt user to add asset
         if (checklist.assetType === "physical" && assets.length === 0) {
           setShowForm(true);
           setErrorMessage("Please add an asset");
           return;
         }
-        setChecked(checkStatus);
-        markChecklist({
+        await markChecklist({
           status: checkStatus,
           checklistId: checklist.id,
           staffId,
+          asset: assets.length > 0 ? { ...assets[0] } : null,
         });
+        if (!useOnboardingStore.getState().error) {
+          setChecked(checkStatus);
+          if (refresh) refresh();
+        }
         console.log("marking checklist", event.target.checked);
       } else {
-        setChecked(checkStatus);
         // if (checkStatus) {
-        markChecklist({
+        await markChecklist({
           status: checkStatus,
           checklistId: checklist.id,
           staffId,
         });
+        if (!useOnboardingStore.getState().error) {
+          setChecked(checkStatus);
+          if (refresh) refresh();
+        }
         // }
       }
-    } else {
-      setChecked("");
-      markChecklist({
-        status: null,
-        checklistId: checklist.id,
-        staffId,
-      });
     }
+    // uncheck
+    // else {
+    //   setChecked("");
+    //   await markChecklist({
+    //     status: null,
+    //     checklistId: checklist.id,
+    //     staffId,
+    //   });
+    // }
   };
 
   function getFormInput(data: AssetFormInput) {
@@ -78,7 +90,9 @@ const NewHireFormList = ({
   }
 
   return (
-    <div className="flex items-center justify-between gap-4 p-2">
+    <div
+      className={`flex items-center justify-between gap-4 p-2 ${loading ? "!pointer-events-none !cursor-not-allowed opacity-50" : ""}`}
+    >
       {/* description */}
       <div className="">
         <div
@@ -99,7 +113,7 @@ const NewHireFormList = ({
               <div key={index} className="flex items-center gap-2">
                 <Icon icon="heroicons:check-circle" className="text-success" />
                 <p className="text-xs">
-                  {asset.name} - {asset.description}
+                  {asset.name} - {asset.details}
                 </p>
               </div>
             ))}
@@ -113,13 +127,15 @@ const NewHireFormList = ({
               <>
                 {checked === "" && (
                   <div className="my-2">
-                    <button
-                      onClick={() => setShowForm(true)}
-                      className="btn btn-xs flex items-center justify-center gap-1 text-xs"
-                    >
-                      <Icon icon="heroicons:plus" className="" />{" "}
-                      <span>Add asset</span>
-                    </button>
+                    {assets.length === 0 && (
+                      <button
+                        onClick={() => setShowForm(true)}
+                        className="btn btn-xs flex items-center justify-center gap-1 text-xs"
+                      >
+                        <Icon icon="heroicons:plus" className="" />{" "}
+                        <span>Add asset</span>
+                      </button>
+                    )}
                   </div>
                 )}
               </>
@@ -137,6 +153,12 @@ const NewHireFormList = ({
 
       {/* actions */}
       <div className="flex shrink-0 gap-2">
+        {/* loading */}
+        {loading && (
+          <div className="self-center">
+            <Icon icon="line-md:loading-twotone-loop"></Icon>
+          </div>
+        )}
         {/* does not apply */}
         <div className="form-control">
           <label className="label cursor-pointer">
@@ -181,12 +203,12 @@ const AssetForm = ({
   errorMessage: string;
 }) => {
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [details, setDetails] = useState("");
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log({ name, description });
-    getFormInput({ name, description });
+    console.log({ name, details });
+    getFormInput({ name, details });
   }
 
   return (
@@ -203,8 +225,8 @@ const AssetForm = ({
       <textarea
         placeholder="Enter description/specification"
         className="textarea textarea-bordered textarea-xs w-full max-w-xs"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={details}
+        onChange={(e) => setDetails(e.target.value)}
       ></textarea>
       <div className="!-mt-0.5">
         <button className="btn btn-neutral btn-xs px-6">Add</button>

@@ -59,4 +59,5 @@ export interface MarkChecklist {
   staffId: number;
   checklistId: number;
   status: "does_not_apply" | "apply" | "" | null;
+  asset?: { name: string; details: string } | null;
 }

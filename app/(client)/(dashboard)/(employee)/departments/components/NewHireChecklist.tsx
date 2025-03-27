@@ -18,6 +18,10 @@ const NewHireChecklist = ({
 }: NewHireChecklistProps) => {
   const department = useDepartmentStore((state) => state.department);
 
+  function refresh() {
+    getNewHireProgress(staff, department?.id);
+  }
+
   return (
     <div className={`modal ${openModal ? "modal-open" : ""}`}>
       <div className="modal-box max-w-[850px] divide-y-2">
@@ -47,6 +51,7 @@ const NewHireChecklist = ({
                   checklist={checklist}
                   key={checklist.id}
                   staffId={staff.id}
+                  refresh={refresh}
                 />
               );
             }
