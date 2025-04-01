@@ -61,3 +61,20 @@ export interface MarkChecklist {
   status: "does_not_apply" | "apply" | "" | null;
   asset?: { name: string; details: string } | null;
 }
+
+interface StaffChecklistWithStaff extends StaffChecklist {
+  staff: StaffData;
+}
+
+export interface ChecklistQueries {
+  id: number;
+  companyId: number;
+  staffId: number;
+  staffChecklistId: number;
+  comment: string;
+  isClosed: "yes" | "no"; // Assuming it can only be "yes" or "no"
+  createdAt: string; // Using string since dates are typically ISO strings in APIs
+  updatedAt: string;
+  deletedAt: string | null; // Can be null if not deleted
+  staffChecklist: StaffChecklistWithStaff;
+}

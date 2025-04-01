@@ -8,7 +8,7 @@ import DepartmentStaffList from "../components/DepartmentStaffList";
 import DepartmentDesignations from "../components/DepartmentDesignations";
 import DepartmentChecklist from "../components/DepartmentChecklist";
 
-const Tabs = ["Staff", "Designations", "Checklists"];
+const Tabs = ["Staff", "Designations", "Onboarding"];
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const id = params.slug;
@@ -76,7 +76,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
               <DepartmentStaffList department={department} />
             )}
             {activeTab === "Designations" && <DepartmentDesignations />}
-            {activeTab === "Checklists" && <DepartmentChecklist />}
+            {activeTab === "Onboarding" && <DepartmentChecklist />}
           </div>
         </div>
       </div>
