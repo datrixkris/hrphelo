@@ -38,14 +38,9 @@ const StaffOnboardingProgress = () => {
   const calculateProgress = () => {
     if (checklistData.length === 0) return 0;
 
-    console.log("checklistData", checklistData);
-
-    // const completed = checklistData.filter(
-    //   (item) =>
-    //     Array.isArray(item.staffChecklists) && item.staffChecklists.length > 0,
-    // ).length;
     const completed = checklistData.filter(
       (item) => !(item.staffChecklists === null),
+
     ).length;
 
     return Math.round((completed / checklistData.length) * 100);
@@ -85,19 +80,6 @@ const StaffOnboardingProgress = () => {
     };
 
     socket.on("connect", handleConnect);
-
-    // socket.on("connect", async () => {
-    //   const user = await fetchUser();
-    //   console.log("Socket is fully connected, ID:", socket.id);
-
-    //   if (user) {
-    //     console.log("Registering socket with ID:", user.id);
-    //     socket.emit("registerSocket", user.id);
-
-    //     setIsLoading(false);
-    //   }
-    // });
-
     socket.on("mychecklists", handleChecklists);
 
     return () => {
@@ -121,7 +103,6 @@ const StaffOnboardingProgress = () => {
           >
             <label htmlFor="my-drawer-6">
               <div className="flex gap-2 rounded-3xl bg-transparent p-2">
-                {" "}
                 <div
                   className="radial-progress text-xs font-light text-black"
                   style={
@@ -208,6 +189,35 @@ const StaffOnboardingProgress = () => {
                 </div>
               )}
             </div>
+
+            {progress === 100 && (
+              <div className="alert alert-success mt-4">
+                <div className="flex items-center">
+                  <Icon
+                    icon="hugeicons:checkmark-badge-03"
+                    className="h-6 w-6"
+                  />
+                  <span>You&apos;ve completed all onboarding tasks!</span>
+                </div>
+              </div>
+            )}
+
+            <div className="divider"></div>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <p className="text-center text-sm">
+                You can now close the onboarding process when all tasks are
+                complete
+              </p>
+              <button
+                className={`btn btn-sm ${progress === 100 ? "btn-primary" : "btn-disabled"}`}
+                disabled={progress !== 100}
+                onClick={() => {
+                  console.log("Onboarding closed");
+                }}
+              >
+                Close Onboarding
+              </button>
+            </div>
           </ul>
         </div>
       </div>
@@ -227,7 +237,6 @@ export const ChecklistItem = (data: TOnboarding) => {
     e.preventDefault();
     if (!query.trim()) return;
 
-    // // Safely access staffChecklists
     if (data.staffChecklists && data.staffChecklists.id) {
       submitQuery({ comment: query }, data.staffChecklists.id);
     }
