@@ -196,7 +196,7 @@ const StaffOnboardingProgress = () => {
                     icon="hugeicons:checkmark-badge-03"
                     className="h-6 w-6"
                   />
-                  <span>You've completed all onboarding tasks!</span>
+                  <span>You&apos;ve completed all onboarding tasks!</span>
                 </div>
               </div>
             )}
