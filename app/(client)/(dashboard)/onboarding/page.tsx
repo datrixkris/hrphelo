@@ -17,7 +17,7 @@ const Page = () => {
         />
       </div>
 
-      {/* new hire table */}
+      {/* new hire table*/}
       <div className="my-5">
         <NewHireTable />
       </div>

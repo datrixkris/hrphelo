@@ -19,6 +19,7 @@ export interface StaffDetail {
   image?: string;
   departmentId?: number;
   designations?: Designation[];
+  checklistStatus?: "incomplete" | "completed";
 }
 
 export interface StaffData {
@@ -37,9 +38,10 @@ export interface StaffData {
   hiring_date?: string;
   supervisorId?: number | null;
   department?: Department;
-  company?: Company;
+  company: Company;
   user?: User;
   designations?: Designation[];
+  checklistStatus?: "incomplete" | "completed";
 }
 
 export interface StaffProfile {

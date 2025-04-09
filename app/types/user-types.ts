@@ -1,3 +1,5 @@
+import { Checklist } from "../(client)/(dashboard)/onboarding/types";
+
 // Define the Company type
 export interface Company {
   id: number;
@@ -11,6 +13,7 @@ export interface Company {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  checklists: Checklist[];
 }
 
 export interface Staff {

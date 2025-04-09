@@ -35,22 +35,17 @@ const Checklist = ({ checklist, refresh }: ChecklistProps) => {
         <div className="space-y-1">
           {/* Name of checklist */}
           <p className="text-sm font-semibold uppercase text-hr-yellow">
-            {checklist.name}{" "}
-            {!checklist.is_optional && (
-              <span className="badge badge-error badge-sm text-[10px] font-normal normal-case">
-                All staff
-              </span>
-            )}
+            {checklist.name}
           </p>
           {/* description */}
           <p className="text-sm">{checklist.description}</p>
           {/* Assets */}
-          {checklist.assetType && (
+          {/* {checklist.assetType && (
             <p className="text-xs">
               <span className="font-semibold">Asset:</span>{" "}
               <span>{checklist.assetType}</span>
             </p>
-          )}
+          )} */}
           {/* assignee */}
           {checklist.assignedStaff && (
             <p className="text-xs">

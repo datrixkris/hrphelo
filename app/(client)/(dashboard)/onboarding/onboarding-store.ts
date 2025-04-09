@@ -6,6 +6,7 @@ import {
   Checklist,
   ChecklistGroupedByDepartment,
   CreateChecklist,
+  MarkChecklist,
 } from "./types";
 
 interface ApiErrorResponse {
@@ -22,12 +23,18 @@ interface OnboardingStore {
   error?: string | null;
   fetchAllChecklists: (optionalLoading?: boolean) => Promise<void>;
   fetchAllChecklistsGroupedByDepartment: () => Promise<void>;
-  fetchChecklistByDepartment: (id: number) => Promise<Checklist[]>;
+  fetchChecklistByDepartment: (
+    id: number,
+    optionalLoading?: boolean,
+  ) => Promise<Checklist[]>;
   createChecklist: (data: CreateChecklist) => Promise<void>;
-  submitQuery: (comment: { comment: string }, checklistId: number) => Promise<void>
+  submitQuery: (
+    comment: { comment: string },
+    checklistId: number,
+  ) => Promise<void>;
   editChecklist: (data: CreateChecklist, id: number) => Promise<void>;
   deleteChecklist: (id: number) => Promise<void>;
-
+  markChecklist: (data: MarkChecklist) => Promise<void>;
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
@@ -80,12 +87,13 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
 
-  fetchChecklistByDepartment: async (id: number) => {
-    set({ loading: true, error: null });
+  fetchChecklistByDepartment: async (id: number, optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
 
     try {
       const response = (await api.get(`/v1/checklists/department/${id}`)).data;
       console.log(response);
+      set({ loading: false });
       return response;
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
@@ -169,7 +177,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     try {
       await api.post(`/v1/checklists/${checklistId}/query`, comment);
       set(() => ({ loading: false }));
-      toast.success("Query submitted successfully")
+      toast.success("Query submitted successfully");
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
       set(() => ({
@@ -180,5 +188,23 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         loading: false,
       }));
     }
-  }
+  },
+
+  markChecklist: async (data: MarkChecklist) => {
+    set({ loading: true, error: null });
+    try {
+      await api.post(`/v1/checklists/staff`, data);
+      set(() => ({ loading: false }));
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+    }
+  },
 }));
