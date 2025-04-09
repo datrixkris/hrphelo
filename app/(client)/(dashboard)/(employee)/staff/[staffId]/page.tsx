@@ -12,9 +12,8 @@ import MyOrgChart from "../components/OrgChart";
 import ProjectList from "@/app/(client)/(dashboard)/projects/components/ProjectList";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "@/app/axiosApi/api";
-import { useAuthStore } from "@/app/stores/auth-store";
+// import { useAuthStore } from "@/app/stores/auth-store";
 import { toast } from "react-toastify";
-
 
 const TABS = [
   "Profile",
@@ -78,20 +77,19 @@ const Page = () => {
     setSubmitError("");
 
     try {
-      const endpoint = isHR
-        ? "/v1/hr/terminate-employee"
-        : "/v1/resignations";
+      const endpoint = isHR ? "/v1/hr/terminate-employee" : "/v1/resignations";
 
       const payload = {
-        resignation_date: resignationDate, 
-        reason: resignationReason === "Other" ? otherReason : resignationReason,      };
+        resignation_date: resignationDate,
+        reason: resignationReason === "Other" ? otherReason : resignationReason,
+      };
 
       await api.post(endpoint, payload);
 
       // Reset form and close modal
       setResignationDate("");
       setResignationReason("");
-      setOtherReason("")
+      setOtherReason("");
       setShowResignationModal(false);
       await refreshStaffData();
 
@@ -175,7 +173,7 @@ const Page = () => {
               <>
                 If you wish to resign from your position, please initiate the
                 resignation process below. This will notify HR and your manager.
-                You'll need to specify your last working day and provide a
+                You&apos;ll need to specify your last working day and provide a
                 reason for your resignation.
               </>
             )}
