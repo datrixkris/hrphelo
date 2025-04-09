@@ -25,15 +25,12 @@ const AddChecklistForm = ({
   refresh,
   refreshAll,
 }: AddChecklistFormProps) => {
-  const [showAsset, setShowAsset] = useState(false);
+  const [assetType, setAssetType] = useState<"physical" | "digital">("digital");
   const { createChecklist, loading, editChecklist, updatingData } =
     useOnboardingStore();
   const { register, handleSubmit, reset } = useForm<CreateChecklist>();
   const [deptStaff, setDeptStaff] = useState<DeptStaffData[]>([]);
   const department = useDepartmentStore((state) => state.department);
-  // const fetchDepartmentById = useDepartmentStore(
-  //   (state) => state.fetchDepartmentById,
-  // );
   const [assigneeId, setAssigneeId] = useState<number | null>(null);
 
   useEffect(() => {
@@ -88,7 +85,7 @@ const AddChecklistForm = ({
     const checkData = {
       ...data,
       assignee: assigneeId,
-      is_optional: !data.is_optional,
+      assetType,
     };
     edit && checklistData
       ? await editChecklist(checkData, checklistData.id)
@@ -188,29 +185,18 @@ const AddChecklistForm = ({
                 <label className="label cursor-pointer justify-start">
                   <input
                     type="checkbox"
-                    onChange={(e) => setShowAsset(e.target.checked)}
-                    checked={showAsset}
+                    onChange={(e) =>
+                      setAssetType(e.target.checked ? "physical" : "digital")
+                    }
+                    checked={assetType === "physical" ? true : false}
                     className="checkbox-info checkbox"
                   />
                   <span className="label-text pl-1">Checklist is an asset</span>
                 </label>
               </div>
-
-              {/* asset */}
-              {/* {showAsset && (
-                <label className="form-control w-full">
-                  <input
-                    required={showAsset}
-                    type="text"
-                    placeholder="Enter asset name"
-                    className="input input-bordered w-full"
-                    {...register("assetType")}
-                  />
-                </label>
-              )} */}
             </div>
 
-            <div className="">
+            {/* <div className="">
               <div className="form-control">
                 <label className="label cursor-pointer justify-start">
                   <input
@@ -221,7 +207,7 @@ const AddChecklistForm = ({
                   <span className="label-text pl-1">Checklist is required</span>
                 </label>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="modal-action !mt-6 flex justify-end">

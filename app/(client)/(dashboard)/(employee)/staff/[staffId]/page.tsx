@@ -31,6 +31,7 @@ const Page = () => {
     fetchStaffById,
     profile,
     fetchStaffOrg,
+
     staffOrgnogram,
   } = useStaffStore();
   const loading = useStaffStore((state) => state.loading);

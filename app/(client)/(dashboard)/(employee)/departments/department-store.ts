@@ -1,6 +1,15 @@
 import { create } from "zustand";
 import { api } from "@/app/axiosApi/api";
 import { CreateDepartment, Department, GetDepartment } from "./types";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { ChecklistQueries } from "../../onboarding/types";
+
+interface ApiErrorResponse {
+  message?: string;
+  code?: number;
+  error?: string;
+}
 
 interface DepartmentStore {
   departments: Department[];
@@ -15,9 +24,18 @@ interface DepartmentStore {
   ) => Promise<boolean>;
   fetchDepartmentById: (id: number) => Promise<GetDepartment | null>; // Make return type nullable
   deleteDepartment: (id: number) => Promise<boolean>;
+  fetchChecklistQueries: (
+    departmentId: number,
+    optionalLoading?: boolean,
+  ) => Promise<ChecklistQueries[]>;
+  closeQuery: (
+    departmentId: number,
+    queryId: number,
+    data: { isClosed: "yes" | "no" },
+  ) => Promise<void>;
 }
 
-export const useDepartmentStore = create<DepartmentStore>((set) => ({
+export const useDepartmentStore = create<DepartmentStore>((set, get) => ({
   // State
   departments: [],
   department: null, // Initialize as null
@@ -104,6 +122,47 @@ export const useDepartmentStore = create<DepartmentStore>((set) => ({
       console.error(err);
       set({ error: "Failed to delete department", loading: false });
       return false;
+    }
+  },
+
+  fetchChecklistQueries: async (departmentId) => {
+    set({ error: null });
+
+    try {
+      const response = (await api.get(`/v1/checklists/${departmentId}/queries`))
+        .data;
+      console.log(response);
+      // set({ loading: false });
+      return response;
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        // loading: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  closeQuery: async (departmentId, queryId, data) => {
+    set({ error: null });
+    try {
+      await api.put(`/v1/checklists/${departmentId}/queries/${queryId}`, data);
+      // set(() => ({ loading: false }));
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        // loading: false,
+      }));
+      toast.error(get().error);
     }
   },
 }));

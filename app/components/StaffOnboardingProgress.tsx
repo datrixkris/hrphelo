@@ -39,7 +39,8 @@ const StaffOnboardingProgress = () => {
     if (checklistData.length === 0) return 0;
 
     const completed = checklistData.filter(
-      (item) => item.staffChecklists !== null,
+      (item) => !(item.staffChecklists === null),
+
     ).length;
 
     return Math.round((completed / checklistData.length) * 100);
@@ -265,7 +266,7 @@ export const ChecklistItem = (data: TOnboarding) => {
               icon="hugeicons:checkmark-badge-03"
               className="h-4 w-4 rounded text-success"
             />
-            {data.staffChecklists.checklistQueries === undefined && (
+            {data.staffChecklists.checklistQueries === null && (
               <button
                 onClick={() => setIsQueryFormOpen(!isQueryFormOpen)}
                 className="btn btn-ghost btn-xs"
