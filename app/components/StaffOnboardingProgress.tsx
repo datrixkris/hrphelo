@@ -39,7 +39,8 @@ const StaffOnboardingProgress = () => {
     if (checklistData.length === 0) return 0;
 
     const completed = checklistData.filter(
-      (item) => item.staffChecklists !== null,
+      (item) => !(item.staffChecklists === null),
+
     ).length;
 
     return Math.round((completed / checklistData.length) * 100);
