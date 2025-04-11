@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Checklist, ChecklistQueries } from "../../../onboarding/types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useDepartmentStore } from "../department-store";
+import dayjs from "dayjs";
 
 const Queries = ({
   queries,
@@ -23,7 +24,7 @@ const Queries = ({
               <th>Checklist</th>
               <th>Staff</th>
               <th>Department</th>
-              <th>Query Status</th>
+              <th>Created at</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -84,11 +85,7 @@ const QueryTableRow = ({
       </td>
       <td>{query.staffChecklist.staff.name}</td>
       <td>{query.staffChecklist.staff.department?.name}</td>
-      <td
-        className={`font-bold ${query.isClosed === "yes" ? "text-success" : "text-warning"}`}
-      >
-        {query.isClosed === "yes" ? "Closed" : "Pending"}
-      </td>
+      <td>{dayjs(query.createdAt).format("MMM D, YYYY - h:mm A")}</td>
       <td>
         <div
           className={`inline-block cursor-pointer text-nowrap rounded bg-error px-2 py-1 text-sm font-semibold text-white ${query.isClosed === "yes" ? "bg-success" : "bg-error"} `}

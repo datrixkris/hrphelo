@@ -4,6 +4,7 @@ import FormList from "./NewHireFormList";
 import { StaffData } from "../../staff/types";
 import { getNewHireProgress } from "@/app/hooks/useGetNewHire";
 import { useDepartmentStore } from "../department-store";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface NewHireChecklistProps {
   openModal: boolean;
@@ -26,7 +27,7 @@ const NewHireChecklist = ({
     <div className={`modal ${openModal ? "modal-open" : ""}`}>
       <div className="modal-box max-w-[850px] divide-y-2">
         {/* heading */}
-        <div className="">
+        <div className="relative">
           <h2 className="text-xl font-semibold uppercase">{staff.name}</h2>
           <p className="mb-5 text-sm capitalize">
             {staff.department?.name} department
@@ -40,6 +41,13 @@ const NewHireChecklist = ({
               {getNewHireProgress(staff, department?.id)}%
             </p>
           </div>
+
+          {/* close button */}
+          <Icon
+            icon="heroicons:x-circle"
+            className="absolute -right-2 -top-2 cursor-pointer text-4xl"
+            onClick={closeModal}
+          />
         </div>
 
         {/* checklist */}
@@ -60,7 +68,7 @@ const NewHireChecklist = ({
 
         <div className="buttons flex justify-end gap-2 pt-4">
           <button className="btn" onClick={closeModal} type="button">
-            Close
+            Save
           </button>
           {/* <button className="btn btn-primary">Save</button> */}
         </div>

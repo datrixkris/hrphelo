@@ -66,6 +66,11 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/projects",
   },
   {
+    name: "Resignations",
+    icon: "hugeicons:user-remove-01",
+    link: "/resignations",
+  },
+  {
     name: "Users Accounts",
     icon: "hugeicons:user-account",
     link: "/users-accounts",
