@@ -179,7 +179,7 @@ const Page = () => {
           <p className="mb-4 text-sm text-gray-600">
             If you wish to resign from your position, please initiate the
             resignation process below. This will notify HR and your manager.
-            You'll need to specify your last working day and provide a reason
+            You all need to specify your last working day and provide a reason
             for your resignation.
           </p>
         </div>
