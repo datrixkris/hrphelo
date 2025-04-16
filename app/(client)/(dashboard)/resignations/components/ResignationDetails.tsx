@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
-import { Checklist } from "../types";
-import { getNewHireProgress } from "@/app/hooks/useGetNewHire";
-import { StaffData } from "../../(employee)/staff/types";
+import React from "react";
+import { Checklist } from "../../onboarding/types";
 import { useDepartmentStore } from "../../(employee)/departments/department-store";
+import { StaffData } from "../../(employee)/staff/types";
 
-const NewHireChecklistDetails = ({
+const ResignationDetails = ({
   checklists,
   staff,
 }: {
@@ -12,15 +11,6 @@ const NewHireChecklistDetails = ({
   staff: StaffData;
 }) => {
   const { fetchDepartments, departments, loading } = useDepartmentStore();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchDepartments();
-      // await fetchAllChecklistsGroupedByDepartment();
-    };
-    fetchData();
-  }, []);
-
   return (
     <div className="rounded bg-base-100 p-5">
       {loading ? (
@@ -48,7 +38,7 @@ const NewHireChecklistDetails = ({
                       {department.name}
                     </span>{" "}
                     <span className="pl-1 text-sm text-hr-yellow">
-                      {getNewHireProgress(staff, department.id)}% completed
+                      20% completed
                     </span>
                   </div>
 
@@ -75,7 +65,7 @@ const NewHireChecklistDetails = ({
   );
 };
 
-export default NewHireChecklistDetails;
+export default ResignationDetails;
 
 export const ChecklistItem = ({ checklist }: { checklist: Checklist }) => {
   return (
