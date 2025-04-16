@@ -7,7 +7,7 @@ import { StaffData, StaffDetail } from "../../(employee)/staff/types";
 import ResignationDetails from "../components/ResignationDetails";
 
 const page = () => {
-  const [staffDetails, setStaffDetails] = useState<StaffDetail | null>(null);
+  const [staffDetails] = useState<StaffDetail | null>(null);
   return (
     <div>
       <div className="">

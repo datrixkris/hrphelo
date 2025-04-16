@@ -11,6 +11,9 @@ const ResignationDetails = ({
   staff: StaffData;
 }) => {
   const { fetchDepartments, departments, loading } = useDepartmentStore();
+
+  console.log(staff, fetchDepartments);
+
   return (
     <div className="rounded bg-base-100 p-5">
       {loading ? (

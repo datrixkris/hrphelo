@@ -34,6 +34,7 @@ export default Resignations;
 
 const TableRow = () => {
   const [openModal, setOpenModal] = useState(false);
+  console.log(openModal);
   return (
     <tr>
       <th>Brice Swyre</th>
