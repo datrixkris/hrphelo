@@ -4,7 +4,7 @@ import React, { useState } from "react";
 const Resignations = () => {
   return (
     <div className="space-y-5 p-4">
-      {/* description */}
+      {/* description  */}
 
       <p className="text-sm">Manage clearance of resigning staff here</p>
 
