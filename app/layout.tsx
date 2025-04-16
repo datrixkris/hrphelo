@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "./context/ThemeContext";
 import ClientThemeWrapper from "./context/ClientThemeWrapper";
 
+
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
       <body className={`${montserrat.className} `}>
         <ThemeProvider>
           <ClientThemeWrapper>
-            <div className="">{children}</div>
+            <div className="bg-base-200">{children}</div>
           </ClientThemeWrapper>
         </ThemeProvider>
       </body>

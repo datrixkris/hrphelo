@@ -17,6 +17,7 @@ interface CompanyStore {
 interface ApiErrorResponse {
   message?: string;
   code?: number;
+  error?: string;
 }
 
 export const useCompanyStore = create<CompanyStore>((set, get) => ({
@@ -36,7 +37,10 @@ export const useCompanyStore = create<CompanyStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -55,7 +59,10 @@ export const useCompanyStore = create<CompanyStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
       toast.error(get().error);
@@ -74,7 +81,10 @@ export const useCompanyStore = create<CompanyStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
 
@@ -93,7 +103,10 @@ export const useCompanyStore = create<CompanyStore>((set, get) => ({
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
-        error: axiosError?.response?.data.message ?? axiosError.message,
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
         loading: false,
       }));
 

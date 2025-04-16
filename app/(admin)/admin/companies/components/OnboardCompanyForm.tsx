@@ -1,10 +1,25 @@
 import Button from "@/app/components/Button";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Company } from "../types";
 import { useCompanyStore } from "../company-store";
 import Modal from "@/app/components/Modal";
 import { toast } from "react-toastify";
+
+// Define the schema using Zod
+const companySchema = z.object({
+  name: z.string().min(1, "Company name is required"),
+  address: z.string().min(1, "Company location is required"),
+  contact_person_contact: z
+    .string()
+    .length(10, "Number has to be ten characters"),
+  contact_person: z.string().min(1, "Contact person's name is required"),
+  contact: z.string().length(10, "Number has to be ten characters"),
+  company_size: z.string().min(1, "Number of staff must be at least 1"),
+  email: z.string().email("Invalid email address"),
+});
 
 const OnboardCompanyForm = ({
   isOpen,
@@ -13,7 +28,14 @@ const OnboardCompanyForm = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const { register, handleSubmit, reset } = useForm<Company>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Company>({
+    resolver: zodResolver(companySchema),
+  });
   const { OnboardCompany, loading, fetchCompanies } = useCompanyStore(
     (state) => state,
   );
@@ -35,7 +57,7 @@ const OnboardCompanyForm = ({
   return (
     <div className="">
       <Modal isOpen={isOpen} onClose={onClose}>
-        <div className="w-[90vw] sm:w-[600px] lg:w-[800px]">
+        <div className="w-full">
           <h2 className="mb-5 text-center text-2xl font-bold">Add Company</h2>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -52,6 +74,11 @@ const OnboardCompanyForm = ({
                   placeholder="Company name here"
                   className="input input-bordered w-full"
                 />
+                {errors.name && (
+                  <span className="text-xs text-error">
+                    {errors.name.message}
+                  </span>
+                )}
               </label>
 
               {/* Company Location */}
@@ -66,6 +93,11 @@ const OnboardCompanyForm = ({
                   placeholder="Company location here"
                   className="input input-bordered w-full"
                 />
+                {errors.address && (
+                  <span className="text-xs text-error">
+                    {errors.address.message}
+                  </span>
+                )}
               </label>
             </div>
 
@@ -80,10 +112,15 @@ const OnboardCompanyForm = ({
                 <input
                   {...register("contact_person_contact")}
                   required
-                  type="text"
+                  type="number"
                   placeholder="Contact person's number here"
                   className="input input-bordered w-full"
                 />
+                {errors.contact_person_contact && (
+                  <span className="text-xs text-error">
+                    {errors.contact_person_contact.message}
+                  </span>
+                )}
               </label>
 
               {/* Contact person&apos;s name */}
@@ -98,6 +135,11 @@ const OnboardCompanyForm = ({
                   placeholder="Contact person's name here"
                   className="input input-bordered w-full"
                 />
+                {errors.contact_person && (
+                  <span className="text-xs text-error">
+                    {errors.contact_person.message}
+                  </span>
+                )}
               </label>
             </div>
 
@@ -110,10 +152,15 @@ const OnboardCompanyForm = ({
                 <input
                   {...register("contact")}
                   required
-                  type="text"
+                  type="number"
                   placeholder="Company's telephone here"
                   className="input input-bordered w-full"
                 />
+                {errors.contact && (
+                  <span className="text-xs text-error">
+                    {errors.contact.message}
+                  </span>
+                )}
               </label>
 
               {/* Number of staff */}
@@ -128,6 +175,11 @@ const OnboardCompanyForm = ({
                   placeholder="Number of staff here"
                   className="input input-bordered w-full"
                 />
+                {errors.company_size && (
+                  <span className="text-xs text-error">
+                    {errors.company_size.message}
+                  </span>
+                )}
               </label>
             </div>
 
@@ -144,50 +196,12 @@ const OnboardCompanyForm = ({
                   placeholder="Company email here"
                   className="input input-bordered w-full"
                 />
+                {errors.email && (
+                  <span className="text-xs text-error">
+                    {errors.email.message}
+                  </span>
+                )}
               </label>
-
-              {/* Company&apos;s Registration Document */}
-              {/* <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">
-                Company&apos;s Registration Document
-              </span>
-            </div>
-            <input
-            {...register("document")}
-              required
-              type="file"
-              placeholder="Company&apos;s Registration Document here"
-              className="file-input input-bordered w-full"
-            />
-          </label> */}
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              {/* Director's National ID */}
-              {/* <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Director&apos;s National ID</span>
-            </div>
-            <input
-            //   required
-              type="text"
-              placeholder="Director&apos;s National ID here"
-              className="input input-bordered w-full"
-            />
-          </label> */}
-
-              {/* Director&apos;s National ID */}
-              {/* <label className="form-control w-full">
-            <div className="label">
-              <span className="label-text">Director&apos;s National ID</span>
-            </div>
-            <input
-              type="text"
-              placeholder="Director&apos;s National ID here"
-              className="input input-bordered w-full"
-            />
-          </label> */}
             </div>
 
             {/* submit */}

@@ -6,14 +6,27 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/dashboard",
   },
   {
-    name: "Departments",
-    icon: "hugeicons:departement",
-    link: "/departments",
+    name: "Onboarding",
+    icon: "hugeicons:user-add-01",
+    link: "/onboarding",
   },
   {
     name: "Staff",
     icon: "hugeicons:user-group",
-    link: "/staff",
+    dropdown: [
+      {
+        name: "Departments",
+        link: "/departments",
+      },
+      {
+        name: "Staff List",
+        link: "/staff",
+      },
+      {
+        name: "Designations",
+        link: "/designations",
+      },
+    ],
   },
   {
     name: "Leaves",
@@ -32,5 +45,29 @@ export const clientSidebarLinks: SidebarLink[] = [
         link: "/leave-settings",
       },
     ],
+  },
+  {
+    name: "Payroll",
+    icon: "hugeicons:bitcoin-money-01",
+    dropdown: [
+      {
+        name: "Employee Salary",
+        link: "/employee-salary",
+      },
+      {
+        name: "Payroll Policy",
+        link: "/payroll-policy",
+      },
+    ],
+  },
+  {
+    name: "Projects",
+    icon: "hugeicons:analytics-up",
+    link: "/projects",
+  },
+  {
+    name: "Users Accounts",
+    icon: "hugeicons:user-account",
+    link: "/users-accounts",
   },
 ];

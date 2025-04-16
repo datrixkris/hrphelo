@@ -1,8 +1,8 @@
 "use client";
 import { requestPasswordResetLink } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
+import Logo from "@/app/components/Logo";
 import { useAuthStore } from "@/app/stores/auth-store";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useLayoutEffect, useState } from "react";
 
@@ -43,24 +43,11 @@ const Page = () => {
   }, [router]);
 
   return (
-    <section className="h-screen bg-base-100 py-10 sm:py-16 lg:py-24">
+    <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mb-5 flex w-full justify-center text-center">
-            <Image
-              className="dark:hidden"
-              src="/images/hrphelo.png"
-              alt="logo"
-              width="200"
-              height="150"
-            />
-            <Image
-              className="hidden dark:block"
-              src="/images/hrphelo_white.png"
-              alt="logo"
-              width="200"
-              height="150"
-            />
+            <Logo width={200} height={150} />
           </div>
         </div>
 
@@ -68,10 +55,10 @@ const Page = () => {
           <div className="overflow-hidden rounded-md bg-base-300 shadow-md">
             <div className="px-4 py-6 sm:px-8 sm:py-7">
               <div className="mb-10 text-center">
-                <h2 className="text-2xl font-bold leading-tight text-black dark:text-white">
+                <h2 className="text-2xl font-bold leading-tight">
                   Forgot your password?
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                <p className="mt-2 text-sm leading-relaxed">
                   Please enter your email and we will send you an email with a
                   link to reset your password.
                 </p>

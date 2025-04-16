@@ -13,7 +13,6 @@ interface AddLeavePolicyFormProps {
 
 const leavePolicySchema = z.object({
   name: z.string().min(1, "Name is required"),
-  duration: z.number().min(1, "Duration must be a positive number"),
   description: z.string().optional(),
   useStaffLeaveDays: z.boolean(),
 });
@@ -35,18 +34,18 @@ export const AddLeavePolicyForm: React.FC<AddLeavePolicyFormProps> = ({
 
   const handleCreateLeavePolicy = async (data: LeavePolicy) => {
     try {
-      setFormLoading(true); 
+      setFormLoading(true);
       const success = await addLeavePolicy(data);
       if (success) {
         toast.success("Leave policy created successfully");
-        onClose(); 
+        onClose();
       } else {
         toast.error("Failed to create Leave Policy");
       }
     } catch (error) {
       toast.error("Failed to create Leave Policy");
     } finally {
-      setFormLoading(false); 
+      setFormLoading(false);
     }
   };
 
@@ -75,27 +74,12 @@ export const AddLeavePolicyForm: React.FC<AddLeavePolicyFormProps> = ({
 
             <div>
               <label className="block font-medium text-gray-700">
-                Leave Duration
-              </label>
-              <input
-                type="number"
-                {...register("duration", { valueAsNumber: true })}
-                className="input input-bordered w-full"
-              />
-              {errors.duration && (
-                <p className="text-sm text-red-500">
-                  {errors.duration.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block font-medium text-gray-700">
                 Description
               </label>
               <textarea
                 {...register("description")}
-                className="input input-bordered w-full"
+                rows={4}
+                className="textarea textarea-bordered mt-1 w-full"
               />
             </div>
             <div className="form-control w-52">

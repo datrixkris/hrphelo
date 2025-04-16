@@ -15,6 +15,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapse, setCollapse] = useState(false);
   const { changeTheme } = useContext(ThemeContext);
+  // const { socket } = useSocket();
 
 
   useLayoutEffect(() => {
@@ -28,6 +29,24 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     fetchUser();
   }, [router]);
+
+
+
+  // useEffect(() => {
+  //   if (socket) {
+  //     // Wait for the "connect" event to ensure the socket is fully connected
+  //     socket.on("connect", () => {
+  //       console.log("Socket is fully connected, ID:", socket.id);
+  //     });
+
+  //     socket.on("mychecklists", (data: any) => {
+  //       console.log("New checklist message", data);
+  //     });
+  //   }
+  // }, [socket]);
+
+
+ 
 
   return (
     <div>
