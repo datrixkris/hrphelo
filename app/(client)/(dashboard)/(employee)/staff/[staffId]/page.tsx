@@ -12,9 +12,7 @@ import MyOrgChart from "../components/OrgChart";
 import ProjectList from "@/app/(client)/(dashboard)/projects/components/ProjectList";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "@/app/axiosApi/api";
-import { useAuthStore } from "@/app/stores/auth-store";
 import { toast } from "react-toastify";
-
 
 const TABS = [
   "Profile",
@@ -46,7 +44,6 @@ const Page = () => {
   const [otherReason, setOtherReason] = useState("");
   // const user = useAuthStore((state) => state.user);
   // const isHR = user?.role === 'HR';
-  const isHR = false; // Replace with actual logic to determine if the user is HR
 
   // Fetch staff details
   const fetchData = useCallback(async () => {
@@ -78,33 +75,24 @@ const Page = () => {
     setSubmitError("");
 
     try {
-      const endpoint = isHR
-        ? "/v1/hr/terminate-employee"
-        : "/v1/resignations";
-
       const payload = {
-        resignation_date: resignationDate, 
-        reason: resignationReason === "Other" ? otherReason : resignationReason,      };
+        resignation_date: resignationDate,
+        reason: resignationReason === "Other" ? otherReason : resignationReason,
+      };
 
-      await api.post(endpoint, payload);
+      await api.post("/v1/hr/terminate-employee", payload);
 
       // Reset form and close modal
       setResignationDate("");
       setResignationReason("");
-      setOtherReason("")
+      setOtherReason("");
       setShowResignationModal(false);
       await refreshStaffData();
 
-      toast.success(
-        isHR
-          ? "Employee terminated successfully"
-          : "Resignation submitted successfully",
-      );
+      toast.success("Employee terminated successfully");
     } catch (err) {
       console.error(err);
-      setSubmitError(
-        `Failed to ${isHR ? "terminate employee" : "submit resignation"}. Please try again.`,
-      );
+      setSubmitError(`Failed to terminate employee}. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -161,44 +149,21 @@ const Page = () => {
       {/* Termination/Resignation Section */}
       <div className="mt-8 border-t border-base-300 pt-6">
         <div className="mb-4">
-          <h3 className="mb-2 text-lg font-semibold">
-            {isHR ? "Employee Termination" : "Resignation Process"}
-          </h3>
+          <h3 className="mb-2 text-lg font-semibold">Employee Termination</h3>
           <p className="mb-4 text-sm text-gray-600">
-            {isHR ? (
-              <>
-                As HR personnel, you can initiate termination procedures for
-                this employee. Please ensure all company policies and legal
-                requirements are followed.
-              </>
-            ) : (
-              <>
-                If you wish to resign from your position, please initiate the
-                resignation process below. This will notify HR and your manager.
-                You'll need to specify your last working day and provide a
-                reason for your resignation.
-              </>
-            )}
+            As HR personnel, you can initiate termination procedures for this
+            employee. Please ensure all company policies and legal requirements
+            are followed.
           </p>
         </div>
 
-        {isHR ? (
-          <button
-            onClick={() => setShowResignationModal(true)}
-            className="btn btn-error"
-          >
-            <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
-            Terminate Employee
-          </button>
-        ) : (
-          <button
-            onClick={() => setShowResignationModal(true)}
-            className="btn btn-outline btn-error"
-          >
-            <Icon icon="hugeicons:logout-01" className="mr-2 h-4 w-4" />
-            Initiate Resignation Process
-          </button>
-        )}
+        <button
+          onClick={() => setShowResignationModal(true)}
+          className="btn btn-error"
+        >
+          <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
+          Terminate Employee
+        </button>
       </div>
 
       {/* Resignation/Termination Modal */}
@@ -206,9 +171,7 @@ const Page = () => {
         <div className="modal modal-open">
           <div className="modal-box max-w-2xl">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold">
-                {isHR ? "Employee Termination" : "Initiate Resignation"}
-              </h3>
+              <h3 className="text-xl font-bold">Employee Termination</h3>
               <button
                 onClick={() => {
                   setShowResignationModal(false);
@@ -222,17 +185,8 @@ const Page = () => {
 
             <div className="mb-6">
               <p className="mb-2 text-sm text-gray-600">
-                {isHR ? (
-                  <>
-                    Please provide the following details to terminate this
-                    employee. This action will initiate the offboarding process.
-                  </>
-                ) : (
-                  <>
-                    Please provide the following details to initiate your
-                    resignation:
-                  </>
-                )}
+                Please provide the following details to terminate this employee.
+                This action will initiate the offboarding process.
               </p>
               {/* <ul className="text-sm text-gray-600 list-disc pl-5">
                 {isHR ? (
@@ -255,9 +209,7 @@ const Page = () => {
               <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text">
-                      {isHR ? "Termination Date*" : "Resignation Date*"}
-                    </span>
+                    <span className="label-text">Termination Date*</span>
                   </label>
                   <input
                     type="date"
@@ -265,27 +217,11 @@ const Page = () => {
                     value={resignationDate}
                     onChange={(e) => setResignationDate(e.target.value)}
                     required
-                    min={
-                      isHR
-                        ? undefined
-                        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-                            .toISOString()
-                            .split("T")[0]
-                    }
                   />
-                  {!isHR && (
-                    <label className="label">
-                      <span className="label-text-alt">
-                        Must be at least 30 days notice
-                      </span>
-                    </label>
-                  )}
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text">
-                      {isHR ? "Termination Reason*" : "Reason*"}
-                    </span>
+                    <span className="label-text">Termination Reason*</span>
                   </label>
                   <select
                     className="select select-bordered w-full"
@@ -294,31 +230,14 @@ const Page = () => {
                     required
                   >
                     <option value="">Select a reason</option>
-                    {isHR ? (
-                      <>
-                        <option value="Performance Issues">
-                          Performance Issues
-                        </option>
-                        <option value="Policy Violation">
-                          Policy Violation
-                        </option>
-                        <option value="Redundancy">Redundancy</option>
-                        <option value="Mutual Agreement">
-                          Mutual Agreement
-                        </option>
-                        <option value="Other">Other</option>
-                      </>
-                    ) : (
-                      <>
-                        <option value="Career Growth">Career Growth</option>
-                        <option value="Relocation">Relocation</option>
-                        <option value="Health Reasons">Health Reasons</option>
-                        <option value="Personal Reasons">
-                          Personal Reasons
-                        </option>
-                        <option value="Other">Other</option>
-                      </>
-                    )}
+
+                    <option value="Performance Issues">
+                      Performance Issues
+                    </option>
+                    <option value="Policy Violation">Policy Violation</option>
+                    <option value="Redundancy">Redundancy</option>
+                    <option value="Mutual Agreement">Mutual Agreement</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
               </div>
@@ -330,11 +249,7 @@ const Page = () => {
                   </label>
                   <textarea
                     className="textarea textarea-bordered w-full"
-                    placeholder={
-                      isHR
-                        ? "Enter termination reason..."
-                        : "Enter your reason..."
-                    }
+                    placeholder={"Enter termination reason..."}
                     value={otherReason}
                     onChange={(e) => setOtherReason(e.target.value)}
                     required
@@ -364,7 +279,7 @@ const Page = () => {
                 </button>
                 <button
                   type="submit"
-                  className={`btn ${isHR ? "btn-error" : "btn-primary"}`}
+                  className={`btn btn-error`}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -372,10 +287,8 @@ const Page = () => {
                       <span className="loading loading-spinner"></span>
                       Submitting...
                     </>
-                  ) : isHR ? (
-                    "Confirm Termination"
                   ) : (
-                    "Submit Resignation"
+                    "Confirm Termination"
                   )}
                 </button>
               </div>
