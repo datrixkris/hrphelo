@@ -6,7 +6,7 @@ import StaffDetails from "../components/StaffDetails";
 import { StaffData, StaffDetail } from "../../(employee)/staff/types";
 import ResignationDetails from "../components/ResignationDetails";
 
-const page = () => {
+const Page = () => {
   const [staffDetails] = useState<StaffDetail | null>(null);
   return (
     <div>
@@ -38,4 +38,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
