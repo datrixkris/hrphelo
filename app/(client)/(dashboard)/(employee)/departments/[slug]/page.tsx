@@ -7,8 +7,9 @@ import TabNavigation from "@/app/components/TabNavigation";
 import DepartmentStaffList from "../components/DepartmentStaffList";
 import DepartmentDesignations from "../components/DepartmentDesignations";
 import DepartmentChecklist from "../components/DepartmentChecklist";
+import Resignations from "../components/Resignations";
 
-const Tabs = ["Staff", "Designations", "Onboarding"];
+const Tabs = ["Staff", "Designations", "Onboarding", "Resignations"];
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const id = params.slug;
@@ -77,6 +78,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
             )}
             {activeTab === "Designations" && <DepartmentDesignations />}
             {activeTab === "Onboarding" && <DepartmentChecklist />}
+            {activeTab === "Resignations" && <Resignations />}
           </div>
         </div>
       </div>
