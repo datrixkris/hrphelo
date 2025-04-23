@@ -40,7 +40,6 @@ const StaffOnboardingProgress = () => {
 
     const completed = checklistData.filter(
       (item) => !(item.staffChecklists === null),
-
     ).length;
 
     return Math.round((completed / checklistData.length) * 100);
@@ -50,6 +49,13 @@ const StaffOnboardingProgress = () => {
 
   const toggleAccordion = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const closeOnboarding = async () => {
+    const user = useAuthStore.getState().user;
+    if (!user) return;
+    await api.get(`/v1/staff/${user.staff.id}/onboarding-complete`);
+    useAuthStore.getState().refreshUserData();
   };
 
   useEffect(() => {
@@ -212,7 +218,7 @@ const StaffOnboardingProgress = () => {
                 className={`btn btn-sm ${progress === 100 ? "btn-primary" : "btn-disabled"}`}
                 disabled={progress !== 100}
                 onClick={() => {
-                  console.log("Onboarding closed");
+                  closeOnboarding();
                 }}
               >
                 Close Onboarding
