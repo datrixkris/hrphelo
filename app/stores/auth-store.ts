@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { User } from "../types/user-types";
 import { api } from "../axiosApi/api";
-import { access } from "fs";
+// import { access } from "fs";
 
 interface AuthStore {
   accessToken: string | null;
@@ -49,7 +49,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   refreshUserData: async () => {
     try {
       const response = await api.post("/v1/auth/refresh-token", {
-        "refresh_token": useAuthStore.getState().refreshToken
+        refresh_token: useAuthStore.getState().refreshToken,
       });
       // Update isAuthenticated based on user and access token
       useAuthStore.setState({
@@ -57,7 +57,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
       });
       console.log(response.data);
 
-      localStorage.setItem("accessToken", JSON.stringify(response.data.accessToken));
+      localStorage.setItem(
+        "accessToken",
+        JSON.stringify(response.data.accessToken),
+      );
       // Fetch user data on successful login
       const userResponse = await api.get("/v1/user");
       useAuthStore.setState({ user: userResponse.data });
