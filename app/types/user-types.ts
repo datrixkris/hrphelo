@@ -10,9 +10,6 @@ export interface Company {
   contact: string;
   email: string;
   company_size: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
   checklists: Checklist[];
 }
 
@@ -34,20 +31,35 @@ export interface Staff {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  onboarding_complete: boolean;
+}
+
+interface Permission {
+  id: number;
+  create: boolean;
+  read: boolean;
+  modify: boolean;
+  delete: boolean;
+  userId: number;
+  moduleId: number;
+  module: Module;
+}
+
+interface Module {
+  id: number;
+  name: string;
 }
 
 export interface User {
   id: number;
   email: string;
   staffId: number;
-  companyId: number;
   isPasswordReset: boolean;
   isDefault: boolean;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
+  refreshToken: string;
   company: Company;
   staff: Staff;
+  permissions: Permission[];
   leaveYear: number;
   iat: number; // Issued At timestamp
   exp: number; // Expiration timestamp

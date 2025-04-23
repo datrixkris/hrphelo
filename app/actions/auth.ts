@@ -12,8 +12,6 @@ import { useAuthStore } from "../stores/auth-store";
 export const submitLoginForm = async (formData: LoginData) => {
   try {
     const response = await api.post("/v1/auth/login", formData);
-    console.log("response:", response);
-
     if (response.data.token) {
       // Set access and refresh token in Zustand store
       useAuthStore.setState({ accessToken: response.data.token });
