@@ -12,6 +12,7 @@ import MyOrgChart from "../components/OrgChart";
 import ProjectList from "@/app/(client)/(dashboard)/projects/components/ProjectList";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "@/app/axiosApi/api";
+
 import { toast } from "react-toastify";
 
 const TABS = [
@@ -75,6 +76,7 @@ const Page = () => {
     setSubmitError("");
 
     try {
+
       const payload = {
         resignation_date: resignationDate,
         reason: resignationReason === "Other" ? otherReason : resignationReason,
@@ -154,6 +156,7 @@ const Page = () => {
             As HR personnel, you can initiate termination procedures for this
             employee. Please ensure all company policies and legal requirements
             are followed.
+
           </p>
         </div>
 
