@@ -67,7 +67,7 @@ const TableRow = ({ resignation }: { resignation: Resignation }) => {
   //   const [staff] = useState<StaffData | null>(null);
   return (
     <tr>
-      <th>{resignation.staff.name}</th>
+      <th>{resignation.staff?.name}</th>
       <td>{resignation.reason}</td>
       <td>{dayjs(resignation?.createdAt).format("MMM D, YYYY")}</td>
       <td>{dayjs(resignation?.resignation_date).format("MMM D, YYYY")}</td>
