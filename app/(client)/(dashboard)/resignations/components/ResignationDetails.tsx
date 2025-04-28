@@ -27,7 +27,7 @@ const ResignationDetails = ({
   ): boolean {
     const notCleared = checklists
       .filter((checklist) => checklist.departmentId === departmentId)
-      .some((checklist) => checklist.staffChecklists.status === "apply");
+      .some((checklist) => checklist.staffChecklists?.status === "apply");
     return !notCleared;
   }
 
