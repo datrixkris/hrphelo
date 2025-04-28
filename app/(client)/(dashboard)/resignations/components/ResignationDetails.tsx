@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Checklist } from "../../onboarding/types";
 import { useDepartmentStore } from "../../(employee)/departments/department-store";
-import { StaffData } from "../../(employee)/staff/types";
+// import { StaffData } from "../../(employee)/staff/types";
 
 const ResignationDetails = ({
   checklists,
-  staff,
+  // staff,
 }: {
   checklists: Checklist[] | undefined;
-  staff: StaffData;
+  // staff: StaffData;
 }) => {
   const { fetchDepartments, departments, loading } = useDepartmentStore();
 

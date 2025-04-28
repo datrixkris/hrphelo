@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StaffData } from "../../staff/types";
+// import { StaffData } from "../../staff/types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Resignation } from "../../../resignations/types";
 import { Checklist } from "../../../onboarding/types";

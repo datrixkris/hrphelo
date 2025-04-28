@@ -13,7 +13,7 @@ const StaffDetails = ({
   staff: StaffDetail | null;
   resignation: Resignation | null;
 }) => {
-  const { loading, archiveStaff } = useStaffStore();
+  const archiveStaff = useStaffStore((state) => state.archiveStaff);
   const router = useRouter();
 
   async function archiveThisStaff(staffId: number | undefined) {

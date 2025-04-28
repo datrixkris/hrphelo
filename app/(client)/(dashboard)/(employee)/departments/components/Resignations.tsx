@@ -3,7 +3,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useState } from "react";
 import ResignationsChecklist from "./ResignationsChecklist";
-import { StaffData } from "../../staff/types";
+// import { StaffData } from "../../staff/types";
 import { useResignationsStore } from "../../../resignations/resignations-store";
 import { Resignation } from "../../../resignations/types";
 import TableSkeleton from "@/app/components/TableSkeleton";
@@ -49,7 +49,7 @@ const Resignations = () => {
               <tbody>
                 {/* row 1 */}
                 {resignations?.map((resignation) => (
-                  <TableRow resignation={resignation} />
+                  <TableRow key={resignation.id} resignation={resignation} />
                 ))}
               </tbody>
             </table>
@@ -64,7 +64,7 @@ export default Resignations;
 
 const TableRow = ({ resignation }: { resignation: Resignation }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [staff] = useState<StaffData | null>(null);
+  //   const [staff] = useState<StaffData | null>(null);
   return (
     <tr>
       <th>{resignation.staff.name}</th>

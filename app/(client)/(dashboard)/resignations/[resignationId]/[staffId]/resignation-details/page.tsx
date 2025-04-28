@@ -3,7 +3,7 @@
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import React, { useEffect, useState } from "react";
 import StaffDetails from "../../../components/StaffDetails";
-import { StaffData, StaffDetail } from "../../../../(employee)/staff/types";
+import { StaffDetail } from "../../../../(employee)/staff/types";
 import ResignationDetails from "../../../components/ResignationDetails";
 import { useParams } from "next/navigation";
 import { useResignationsStore } from "../../../resignations-store";
@@ -66,7 +66,7 @@ const Page = () => {
           <div className="my-5">
             <ResignationDetails
               checklists={staffDetails?.company?.checklists}
-              staff={staffDetails as StaffData}
+              // staff={staffDetails as StaffData}
             />
           </div>
         </div>

@@ -221,7 +221,7 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
 
   // archive staff...
   archiveStaff: async (staffId, optionalLoading = true) => {
-    set({ loading: true, error: null });
+    set({ loading: optionalLoading, error: null });
 
     try {
       const response = (await api.get(`/v1/staff/${staffId}/archive`)).data;
