@@ -3,7 +3,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useEffect, useState } from "react";
 import ResignationsChecklist from "./ResignationsChecklist";
-// import { StaffData } from "../../staff/types";
+// import { StaffData } from "../../staff/types";;
 import { useResignationsStore } from "../../../resignations/resignations-store";
 import { Resignation } from "../../../resignations/types";
 import TableSkeleton from "@/app/components/TableSkeleton";
