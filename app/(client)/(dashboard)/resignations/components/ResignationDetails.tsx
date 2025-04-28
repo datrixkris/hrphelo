@@ -75,8 +75,8 @@ const ResignationDetails = ({
                       // here, I am getting all checklist from a particular department using the department.id and also filtering to get only checklists with status apply or returned
                       if (
                         checklist.departmentId === department.id &&
-                        (checklist.staffChecklists.status === "apply" ||
-                          checklist.staffChecklists.status === "returned")
+                        (checklist.staffChecklists?.status === "apply" ||
+                          checklist.staffChecklists?.status === "returned")
                       ) {
                         return (
                           <ChecklistItem
