@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Checklist } from "../../../onboarding/types";
 import { useOnboardingStore } from "../../../onboarding/onboarding-store";
 
-type ChecklistStatus = "does_not_apply" | "apply" | "";
+export type ChecklistStatus = "does_not_apply" | "apply" | "returned" | "";
 interface AssetFormInput {
   name: string;
   details: string;
@@ -22,7 +22,7 @@ const NewHireFormList = ({
   const [showForm, setShowForm] = useState(false);
   const [assets, setAssets] = useState<AssetFormInput[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const { markChecklist, loading } = useOnboardingStore();
+  const { markChecklist, updatingData } = useOnboardingStore();
 
   //   set status of checklist whether complete or does not apply
   useEffect(() => {
@@ -91,7 +91,7 @@ const NewHireFormList = ({
 
   return (
     <div
-      className={`flex items-center justify-between gap-4 p-2 ${loading ? "!pointer-events-none !cursor-not-allowed opacity-50" : ""}`}
+      className={`flex items-center justify-between gap-4 p-2 ${updatingData ? "!pointer-events-none !cursor-not-allowed opacity-50" : ""}`}
     >
       {/* description */}
       <div className="">
@@ -153,8 +153,8 @@ const NewHireFormList = ({
 
       {/* actions */}
       <div className="flex shrink-0 gap-2">
-        {/* loading */}
-        {loading && (
+        {/* updatingData */}
+        {updatingData && (
           <div className="self-center">
             <Icon icon="line-md:loading-twotone-loop"></Icon>
           </div>

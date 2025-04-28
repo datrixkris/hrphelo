@@ -2,8 +2,30 @@ import React from "react";
 import { StaffDetail } from "../../(employee)/staff/types";
 import dayjs from "dayjs";
 import Button from "@/app/components/Button";
+import { Resignation } from "../types";
+import { useStaffStore } from "../../(employee)/staff/staff-store";
+import { useRouter } from "next/navigation";
 
-const StaffDetails = ({ staff }: { staff: StaffDetail | null }) => {
+const StaffDetails = ({
+  staff,
+  resignation,
+}: {
+  staff: StaffDetail | null;
+  resignation: Resignation | null;
+}) => {
+  const { loading, archiveStaff } = useStaffStore();
+  const router = useRouter();
+
+  async function archiveThisStaff(staffId: number | undefined) {
+    if (staffId) {
+      await archiveStaff(staffId);
+      setTimeout(() => {
+        // navigate
+        router.push("/resignations");
+      }, 4000);
+    }
+  }
+
   return (
     <div className="rounded bg-base-100 p-5">
       <div className="flex flex-col items-start justify-center gap-4 text-center sm:flex-row sm:justify-start sm:text-left">
@@ -20,7 +42,7 @@ const StaffDetails = ({ staff }: { staff: StaffDetail | null }) => {
           <p className="cursor-pointer text-hr-yellow transition-colors hover:text-hr-yellow-dark">
             {staff?.department?.name}
           </p>
-          <p className="mt-1 text-sm text-neutral-400">
+          <p className="text-sm text-neutral-400">
             {staff?.designations?.map((designation, index, array) => {
               return (
                 <span key={designation.id}>
@@ -31,13 +53,24 @@ const StaffDetails = ({ staff }: { staff: StaffDetail | null }) => {
             })}
           </p>
 
-          <p className="mt-4 font-semibold">Staff ID: {staff?.staffId}</p>
-          <p className="mb-1 text-sm text-neutral-400">
+          {/* <p className="mt-4 font-semibold">Staff ID: {staff?.staffId}</p> */}
+          <p className="mt-4 text-sm text-neutral-400">
             Date Joined:{" "}
             {staff?.hiring_date
               ? dayjs(staff.hiring_date).format("MMM D, YYYY")
               : "N/A"}
           </p>
+
+          <p className="mb-1 mt-4 text-sm text-neutral-400">
+            Resignation Date:{" "}
+            {staff?.hiring_date
+              ? dayjs(staff.hiring_date).format("MMM D, YYYY")
+              : "N/A"}
+          </p>
+          <p className="text-sm text-neutral-400">
+            Reason: {resignation?.reason}
+          </p>
+          {/* <p className="mb-1 font-semibold">Staff ID: {staff?.staffId}</p> */}
         </div>
       </div>
 
@@ -53,7 +86,7 @@ const StaffDetails = ({ staff }: { staff: StaffDetail | null }) => {
 
       {/* clear staff */}
       <div className="mt-5 flex items-center justify-end gap-3">
-        <Button>Clear Staff</Button>
+        <Button onClick={() => archiveThisStaff(staff?.id)}>Clear Staff</Button>
       </div>
     </div>
   );

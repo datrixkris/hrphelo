@@ -34,6 +34,7 @@ interface StaffStore {
   fetchStaffProfile: (id: number, optionalLoading?: boolean) => Promise<void>;
   updateStaffProfileDetails: (data: EditProfile, id: number) => Promise<void>;
   searchStaff: (criteria: SearchCriteria) => Promise<void>;
+  archiveStaff: (staffId: number, optionalLoading?: boolean) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -204,6 +205,30 @@ export const useStaffStore = create<StaffStore>((set, get) => ({
     try {
       const response = (await api.post("/v1/staff/search/", criteria)).data;
       set(() => ({ staffs: response, loading: false }));
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        loading: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  // archive staff...
+  archiveStaff: async (staffId, optionalLoading = true) => {
+    set({ loading: true, error: null });
+
+    try {
+      const response = (await api.get(`/v1/staff/${staffId}/archive`)).data;
+
+      // show toast upon success
+      toast.success(response.message);
+      set(() => ({ loading: false }));
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
