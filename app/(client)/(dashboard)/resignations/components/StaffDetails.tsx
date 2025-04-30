@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { StaffDetail } from "../../(employee)/staff/types";
 import dayjs from "dayjs";
 import Button from "@/app/components/Button";
 import { Resignation } from "../types";
 import { useStaffStore } from "../../(employee)/staff/staff-store";
 import { useRouter } from "next/navigation";
+import ConfirmationModal from "@/app/components/ConfirmationModal";
 
 const StaffDetails = ({
   staff,
@@ -13,8 +14,9 @@ const StaffDetails = ({
   staff: StaffDetail | null;
   resignation: Resignation | null;
 }) => {
-  const archiveStaff = useStaffStore((state) => state.archiveStaff);
+  const { loading, archiveStaff } = useStaffStore();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
   async function archiveThisStaff(staffId: number | undefined) {
     if (staffId) {
@@ -23,6 +25,8 @@ const StaffDetails = ({
         // navigate
         router.push("/resignations");
       }, 4000);
+    } else {
+      alert("No staff id");
     }
   }
 
@@ -86,8 +90,21 @@ const StaffDetails = ({
 
       {/* clear staff */}
       <div className="mt-5 flex items-center justify-end gap-3">
-        <Button onClick={() => archiveThisStaff(staff?.id)}>Clear Staff</Button>
+        <Button onClick={() => setIsOpen(true)} disabled={loading}>
+          Exit Staff
+        </Button>
       </div>
+
+      {/* confirmation of exiting */}
+      <ConfirmationModal
+        isOpen={isOpen}
+        title="Exiting Staff"
+        message="Are you sure you want to remove this staff member? They will be archived and will no longer have access to the platform."
+        onConfirm={() => archiveThisStaff(staff?.id)}
+        onCancel={() => setIsOpen(false)}
+        loading={loading}
+        type="delete"
+      />
     </div>
   );
 };
