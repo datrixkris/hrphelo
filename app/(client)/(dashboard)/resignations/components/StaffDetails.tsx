@@ -98,7 +98,7 @@ const StaffDetails = ({
       {/* confirmation of exiting */}
       <ConfirmationModal
         isOpen={isOpen}
-        title="Exiting Staff"
+        title="Confirm Exit"
         message="Are you sure you want to remove this staff member? They will be archived and will no longer have access to the platform."
         onConfirm={() => archiveThisStaff(staff?.id)}
         onCancel={() => setIsOpen(false)}
