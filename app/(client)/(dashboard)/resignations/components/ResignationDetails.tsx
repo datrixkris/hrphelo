@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Checklist } from "../../onboarding/types";
 import { useDepartmentStore } from "../../(employee)/departments/department-store";
-import { StaffData } from "../../(employee)/staff/types";
+// import { StaffData } from "../../(employee)/staff/types";
 
 const ResignationDetails = ({
   checklists,
-  staff,
+  // staff,
 }: {
   checklists: Checklist[] | undefined;
-  staff: StaffData;
+  // staff: StaffData;
 }) => {
   const { fetchDepartments, departments, loading } = useDepartmentStore();
 
-  console.log(staff, fetchDepartments);
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchDepartments();
+      // await fetchAllChecklistsGroupedByDepartment();
+    };
+    fetchData();
+  }, []);
+
+  //  this function checks if checklist contains one with status apply and returns true else false
+  function isChecklistCleared(
+    departmentId: number,
+    checklists: Checklist[],
+  ): boolean {
+    const notCleared = checklists
+      .filter((checklist) => checklist.departmentId === departmentId)
+      .some((checklist) => checklist.staffChecklists?.status === "apply");
+    return !notCleared;
+  }
 
   return (
     <div className="rounded bg-base-100 p-5">
@@ -40,15 +57,27 @@ const ResignationDetails = ({
                     <span className="rounded bg-base-200 p-1 px-2 text-sm font-bold uppercase">
                       {department.name}
                     </span>{" "}
-                    <span className="pl-1 text-sm text-hr-yellow">
-                      20% completed
-                    </span>
+                    {isChecklistCleared(department.id, checklists) ? (
+                      <span className="pl-1 text-sm text-success">
+                        Cleared - All department requirements have been
+                        satisfied by resigning staff
+                      </span>
+                    ) : (
+                      <span className="pl-1 text-sm text-warning">
+                        Not Cleared - Department requirements still pending
+                      </span>
+                    )}
                   </div>
 
                   {/* checklist items */}
                   <div className="collapse-content divide-y rounded-md bg-base-200/50 pl-10 pt-4">
                     {checklists.map((checklist) => {
-                      if (checklist.departmentId === department.id) {
+                      // here, I am getting all checklist from a particular department using the department.id and also filtering to get only checklists with status apply or returned
+                      if (
+                        checklist.departmentId === department.id &&
+                        (checklist.staffChecklists?.status === "apply" ||
+                          checklist.staffChecklists?.status === "returned")
+                      ) {
                         return (
                           <ChecklistItem
                             key={checklist.id}
@@ -90,19 +119,25 @@ export const ChecklistItem = ({ checklist }: { checklist: Checklist }) => {
 
         {/* actions */}
         <div className="flex gap-2">
-          {checklist.staffChecklists?.status === "apply" && (
+          {/* {checklist.staffChecklists?.status === "apply" && (
             <span className="rounded bg-success/15 p-1 px-2 text-sm font-bold text-success">
               Completed
             </span>
-          )}
-          {checklist.staffChecklists?.status === "does_not_apply" && (
+          )} */}
+          {/* {checklist.staffChecklists?.status === "does_not_apply" && (
             <span className="rounded bg-warning/15 p-1 px-2 text-sm font-bold text-warning">
               Does not apply
             </span>
+          )} */}
+          {checklist.staffChecklists?.status === "returned" && (
+            <span className="rounded bg-info/15 p-1 px-2 text-sm font-bold text-info">
+              Returned
+            </span>
           )}
-          {checklist.staffChecklists?.status === undefined && (
+          {/* if checklist status is applied, it means item has not been returned */}
+          {checklist.staffChecklists?.status === "apply" && (
             <span className="rounded bg-error/15 p-1 px-2 text-sm font-bold text-error">
-              Not completed
+              Not returned
             </span>
           )}
         </div>

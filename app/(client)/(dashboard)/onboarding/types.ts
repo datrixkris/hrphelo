@@ -34,7 +34,7 @@ export interface StaffChecklist {
   companyId: number;
   staffId: number;
   checklistId: number;
-  status: "does_not_apply" | "apply" | "" | null;
+  status: "does_not_apply" | "apply" | "returned" | "" | null;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -58,7 +58,7 @@ export interface ChecklistGroupedByDepartment {
 export interface MarkChecklist {
   staffId: number;
   checklistId: number;
-  status: "does_not_apply" | "apply" | "" | null;
+  status: "does_not_apply" | "apply" | "returned" | "" | null;
   asset?: { name: string; details: string } | null;
 }
 

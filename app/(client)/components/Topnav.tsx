@@ -11,7 +11,6 @@ const Topnav = () => {
 
   const [showMobileNav, setShowMobileNav] = useState(false);
   console.log("user", user);
-  
 
   return (
     <>
@@ -30,7 +29,7 @@ const Topnav = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            {!user?.staff.onboarding_complete && <StaffOnboardingProgress />}
+            {!user?.staff?.onboarding_complete && <StaffOnboardingProgress />}
 
             {staffMember && <UserAvatar profile={staffMember} />}
           </div>

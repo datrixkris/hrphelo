@@ -4,7 +4,7 @@ interface ConfirmationModalProps {
   isOpen: boolean;
   title: string;
   message: string;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   onCancel: () => void;
   type?: "delete" | "info";
   loading?: boolean;
@@ -33,6 +33,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
           <button
             onClick={onConfirm}
             className={`btn ${type === "delete" ? "btn-error" : "btn-primary"}`}
+            disabled={loading}
           >
             {loading ? "Confirming..." : "Confirm"}
           </button>

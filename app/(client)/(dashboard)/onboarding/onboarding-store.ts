@@ -35,6 +35,10 @@ interface OnboardingStore {
   editChecklist: (data: CreateChecklist, id: number) => Promise<void>;
   deleteChecklist: (id: number) => Promise<void>;
   markChecklist: (data: MarkChecklist) => Promise<void>;
+  fetchChecklistsWithStatusApply: (
+    staffId: number,
+    optionalLoading?: boolean,
+  ) => Promise<Checklist[]>;
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
@@ -190,13 +194,35 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
     }
   },
 
+  // function to mark checklists
   markChecklist: async (data: MarkChecklist) => {
-    set({ loading: true, error: null });
+    set({ updatingData: true, error: null });
     try {
       await api.post(`/v1/checklists/staff`, data);
-      set(() => ({ loading: false }));
+      set(() => ({ updatingData: false }));
     } catch (error) {
       const axiosError = error as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        updatingData: false,
+      }));
+      toast.error(get().error);
+    }
+  },
+
+  //   function to fetch all checklist with status apply
+  fetchChecklistsWithStatusApply: async (staffId, optionalLoading = true) => {
+    set({ loading: optionalLoading, error: null });
+
+    try {
+      const response = (await api.get(`/v1/checklists/staff/${staffId}`)).data;
+      set(() => ({ loading: false }));
+      return response;
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
         error:
           axiosError?.response?.data.error ??
@@ -205,6 +231,7 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
         loading: false,
       }));
       toast.error(get().error);
+      console.error(err);
     }
   },
 }));
