@@ -14,6 +14,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "@/app/axiosApi/api";
 
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/app/stores/auth-store";
 
 const TABS = [
   "Profile",
@@ -38,12 +39,11 @@ const Page = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("Profile");
   const [showResignationModal, setShowResignationModal] = useState(false);
-  const [resignationDate, setResignationDate] = useState("");
   const [resignationReason, setResignationReason] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [otherReason, setOtherReason] = useState("");
-  // const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
   // const isHR = user?.role === 'HR';
 
   // Fetch staff details
@@ -76,25 +76,23 @@ const Page = () => {
     setSubmitError("");
 
     try {
-
       const payload = {
-        resignation_date: resignationDate,
         reason: resignationReason === "Other" ? otherReason : resignationReason,
       };
 
-      await api.post("/v1/hr/terminate-employee", payload);
+      await api.post(`/v1/staff/${staffId}/terminate-contract`, payload);
 
-      // Reset form and close modal
-      setResignationDate("");
       setResignationReason("");
       setOtherReason("");
       setShowResignationModal(false);
-      await refreshStaffData();
+      await useAuthStore.getState().refreshUserData();
 
-      toast.success("Employee terminated successfully");
+      toast.success("Employee contract terminated successfully");
     } catch (err) {
       console.error(err);
-      setSubmitError(`Failed to terminate employee}. Please try again.`);
+      setSubmitError(
+        `Failed to terminate employee contract:${err}. Please try again.`,
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -111,11 +109,17 @@ const Page = () => {
           { name: "Staff Profile" },
         ]}
       />
-
       {/* Profile Details */}
       {loading ? (
-        <div className="my-5">Getting staff data...</div>
-      ) : error ? (
+        <div className="mb-5 grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
+          <div className="skeleton col-span-2 h-32 w-full"></div>
+          <div className="skeleton h-32 w-full"></div>
+          <div className="skeleton h-32 w-full"></div>
+          <div className="skeleton h-32 w-full"></div>
+          <div className="skeleton h-32 w-full"></div>
+        </div>
+      ) : // <div className="my-5">Getting staff data...</div>
+      error ? (
         <div className="my-5 text-red-500">{error}</div>
       ) : (
         <div className="mt-5">
@@ -146,35 +150,45 @@ const Page = () => {
           </div>
         </div>
       )}
-
-      {/* Resignation Section */}
-      {/* Termination/Resignation Section */}
-      <div className="mt-8 border-t border-base-300 pt-6">
-        <div className="mb-4">
-          <h3 className="mb-2 text-lg font-semibold">Employee Termination</h3>
-          <p className="mb-4 text-sm text-gray-600">
-            As HR personnel, you can initiate termination procedures for this
-            employee. Please ensure all company policies and legal requirements
-            are followed.
-
-          </p>
+      {loading ? (
+        <div className="flex w-full flex-col gap-4">
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-32 w-full"></div>
         </div>
-
-        <button
-          onClick={() => setShowResignationModal(true)}
-          className="btn btn-error"
-        >
-          <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
-          Terminate Employee
-        </button>
-      </div>
-
+      ) : (
+        <div className="mt-8 border-t border-base-300 pt-6">
+          <div className="mb-4">
+            <h3 className="mb-2 text-lg font-semibold">Employee Termination</h3>
+            <p className="mb-4 text-sm text-gray-600">
+              As HR personnel, you can initiate termination procedures for this
+              employee. Please ensure all company policies and legal
+              requirements are followed.
+            </p>
+          </div>
+          {user?.resignation ? (
+            <p className="mb-4 text-sm text-gray-600">
+              Contact termination has already been initiated. Please contact the
+              employee for further details.
+            </p>
+          ) : (
+            <button
+              onClick={() => setShowResignationModal(true)}
+              className="btn btn-error"
+            >
+              <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
+              End Contract
+            </button>
+          )}
+        </div>
+      )}{" "}
+      {/* Termination Section */}
       {/* Resignation/Termination Modal */}
       {showResignationModal && (
         <div className="modal modal-open">
           <div className="modal-box max-w-2xl">
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold">Employee Termination</h3>
+              <h3 className="text-xl font-bold">Contract Termination</h3>
               <button
                 onClick={() => {
                   setShowResignationModal(false);
@@ -188,40 +202,13 @@ const Page = () => {
 
             <div className="mb-6">
               <p className="mb-2 text-sm text-gray-600">
-                Please provide the following details to terminate this employee.
-                This action will initiate the offboarding process.
+                Please provide the following details to terminate this employee
+                contract. This action will initiate the offboarding process.
               </p>
-              {/* <ul className="text-sm text-gray-600 list-disc pl-5">
-                {isHR ? (
-                  <>
-                    <li>Last working day</li>
-                    <li>Reason for termination</li>
-                    <li>Any supporting documentation should be uploaded separately</li>
-                  </>
-                ) : (
-                  <>
-                    <li>Your last working day (must be at least 30 days from today)</li>
-                    <li>The reason for your resignation</li>
-                    <li>Any additional comments (optional)</li>
-                  </>
-                )}
-              </ul> */}
             </div>
 
             <form onSubmit={handleResignationSubmit}>
               <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Termination Date*</span>
-                  </label>
-                  <input
-                    type="date"
-                    className="input input-bordered w-full"
-                    value={resignationDate}
-                    onChange={(e) => setResignationDate(e.target.value)}
-                    required
-                  />
-                </div>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Termination Reason*</span>

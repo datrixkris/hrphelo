@@ -61,6 +61,7 @@ export interface User {
   staff: Staff;
   permissions: Permission[];
   leaveYear: number;
+  resignation:string;
   iat: number; // Issued At timestamp
   exp: number; // Expiration timestamp
 }

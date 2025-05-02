@@ -67,7 +67,7 @@ const Page = () => {
       setResignationReason("");
       setOtherReason("");
       setShowResignationModal(false);
-      await refreshStaffData();
+      await useAuthStore.getState().refreshUserData();
 
       toast.success("Resignation submitted successfully");
     } catch (err) {
@@ -172,26 +172,42 @@ const Page = () => {
       )}
 
       {/* Resignation Section */}
-      {/* Termination/Resignation Section */}
-      <div className="mt-8 border-t border-base-300 pt-6">
-        <div className="mb-4">
-          <h3 className="mb-2 text-lg font-semibold">Resignation Process</h3>
-          <p className="mb-4 text-sm text-gray-600">
-            If you wish to resign from your position, please initiate the
-            resignation process below. This will notify HR and your manager.
-            You all need to specify your last working day and provide a reason
-            for your resignation.
-          </p>
+      {loading ? (
+        <div className="flex w-full flex-col gap-4">
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-4 w-full"></div>
+          <div className="skeleton h-32 w-full"></div>
         </div>
-
-        <button
-          onClick={() => setShowResignationModal(true)}
-          className="btn btn-outline btn-error"
-        >
-          <Icon icon="hugeicons:logout-01" className="mr-2 h-4 w-4" />
-          Initiate Resignation Process
-        </button>
-      </div>
+      ) : (
+        <div className="mt-8 border-t border-base-300 pt-6">
+          <div className="mb-4">
+            <h3 className="mb-2 text-lg font-semibold">Resignation Process</h3>
+            <p className="mb-4 text-sm text-gray-600">
+              If you wish to resign from your position, please initiate the
+              resignation process below. This will notify HR and your manager.
+              You need to specify your last working day and provide a reason for
+              your resignation.
+            </p>
+          </div>
+          {user?.resignation ? (
+            <div className="alert alert-info mb-4">
+              <Icon icon="heroicons:information-circle" className="h-5 w-5" />
+              <span>
+                You have already initiated the resignation process. Please
+                contact HR for further assistance.
+              </span>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowResignationModal(true)}
+              className="btn btn-outline btn-error"
+            >
+              <Icon icon="hugeicons:logout-01" className="mr-2 h-4 w-4" />
+              Initiate Resignation Process
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Resignation/Termination Modal */}
       {showResignationModal && (
