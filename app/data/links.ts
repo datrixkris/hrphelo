@@ -71,8 +71,17 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/resignations",
   },
   {
-    name: "Users Accounts",
+    name: "Users Management",
     icon: "hugeicons:user-account",
-    link: "/users-accounts",
+    dropdown: [
+      {
+        name: "Users Accounts",
+        link: "/users-accounts",
+      },
+      {
+        name: "Roles & Permissions",
+        link: "/roles-permissions",
+      },
+    ],
   },
 ];
