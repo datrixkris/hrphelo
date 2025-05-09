@@ -11,16 +11,16 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/onboarding",
   },
   {
-    name: "Staff",
+    name: "Staff Management",
     icon: "hugeicons:user-group",
     dropdown: [
       {
-        name: "Departments",
-        link: "/departments",
-      },
-      {
         name: "Staff List",
         link: "/staff",
+      },
+      {
+        name: "Departments",
+        link: "/departments",
       },
       {
         name: "Designations",
@@ -29,7 +29,7 @@ export const clientSidebarLinks: SidebarLink[] = [
     ],
   },
   {
-    name: "Leaves",
+    name: "Leave Management",
     icon: "hugeicons:calendar-remove-01",
     dropdown: [
       {
@@ -47,7 +47,7 @@ export const clientSidebarLinks: SidebarLink[] = [
     ],
   },
   {
-    name: "Payroll",
+    name: "Payroll Management",
     icon: "hugeicons:bitcoin-money-01",
     dropdown: [
       {

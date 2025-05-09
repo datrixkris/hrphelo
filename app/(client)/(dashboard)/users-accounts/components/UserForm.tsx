@@ -9,6 +9,7 @@ import UserBasicInformation from "./UserBasicInformation";
 import { UserModules } from "../types";
 import { useUserAccountStore } from "../user-account-store";
 import { UsersInterface } from "./UsersList";
+import UserRoles from "./UserRoles";
 
 interface UserFormProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ interface UserFormProps {
   staffDetails: UsersInterface;
   refreshData: () => Promise<void>;
 }
+
+type Tabs = "Basic Information" | "Roles" | "Permissions";
 
 const UserForm = ({
   isOpen,
@@ -26,9 +29,9 @@ const UserForm = ({
   const { updatingData, error, updateStaffDetails } = useStaffStore();
   const createUser = useUserAccountStore((state) => state.createUser);
   const editUser = useUserAccountStore((state) => state.editUser);
-  const tabs = ["Permissions", "Basic Information"];
-  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isUserCreated, setIsUserCreated] = useState(false);
+  const tabs: Tabs[] = ["Basic Information", "Roles", "Permissions"];
+  const [activeTab, setActiveTab] = useState<Tabs>("Basic Information");
 
   useEffect(() => {
     setIsUserCreated(staffDetails.permissions ? true : false);
@@ -63,6 +66,7 @@ const UserForm = ({
       }),
     };
     console.log(permissions);
+    console.log(permissionsData);
     if (staffDetails?.staff.id) {
       isUserCreated
         ? await editUser(permissionsData, staffDetails.staff.user!.id)
@@ -94,7 +98,7 @@ const UserForm = ({
               tabs={tabs}
               activeTab={activeTab}
               setActiveTab={(tab) => {
-                setActiveTab(tab);
+                setActiveTab(tab as Tabs);
               }}
             />
           </div>
@@ -114,6 +118,12 @@ const UserForm = ({
                 userPermissions={staffDetails.permissions}
                 onPermissionsSubmit={handlePermissionsSubmit}
               />
+            </div>
+          )}
+
+          {activeTab === "Roles" && (
+            <div>
+              <UserRoles />
             </div>
           )}
         </div>
