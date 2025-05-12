@@ -1,5 +1,5 @@
 "use client";
-import { Icon } from "@iconify/react/dist/iconify.js";
+// import { Icon } from "@iconify/react/dist/iconify.js";
 import { useStaffStore } from "../staff-store";
 import { StaffProfile as ProfileType } from "../types";
 

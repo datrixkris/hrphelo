@@ -1,7 +1,7 @@
 "use client";
 
 import { useHasPermission } from "@/app/hooks/permissions";
-import { ModuleName, PermissionType } from "@/utils/permissions";
+import { ModuleName } from "@/utils/permissions";
 import React from "react";
 
 interface HasAccessProps {
