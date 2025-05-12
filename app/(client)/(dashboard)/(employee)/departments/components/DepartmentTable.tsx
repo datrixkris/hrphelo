@@ -5,6 +5,7 @@ import ConfirmationModal from "@/app/(client)/components/ConfirmationModal";
 import { toast } from "react-toastify";
 import EditDepartment from "./EditDepartment";
 import Link from "next/link";
+import { useHasPermission } from "@/app/hooks/permissions";
 
 interface DepartmentTableProps {
   departments: Department[];
@@ -27,6 +28,10 @@ export const DepartmentTable = ({
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<
     number | null
   >(null);
+
+  // permissions
+  const hasDeletePermission = useHasPermission("delete", "Department");
+  const hasEditPermission = useHasPermission("modify", "Department");
 
   // Function to open the Edit modal and set the department ID
   const openEditModal = (id: number) => {
@@ -99,18 +104,22 @@ export const DepartmentTable = ({
                         className="cursor-pointer text-xl text-success"
                       />
                     </Link>
-                    <Icon
-                      icon="mage:edit"
-                      className="cursor-pointer text-xl text-info"
-                      aria-label="Edit department"
-                      onClick={() => openEditModal(department.id)}
-                    />
-                    <Icon
-                      icon="weui:delete-outlined"
-                      className="cursor-pointer text-xl text-error"
-                      aria-label="Delete department"
-                      onClick={() => openDeleteModal(department.id)}
-                    />
+                    {hasEditPermission && (
+                      <Icon
+                        icon="mage:edit"
+                        className="cursor-pointer text-xl text-info"
+                        aria-label="Edit department"
+                        onClick={() => openEditModal(department.id)}
+                      />
+                    )}
+                    {hasDeletePermission && (
+                      <Icon
+                        icon="weui:delete-outlined"
+                        className="cursor-pointer text-xl text-error"
+                        aria-label="Delete department"
+                        onClick={() => openDeleteModal(department.id)}
+                      />
+                    )}
                   </div>
                 </td>
               </tr>

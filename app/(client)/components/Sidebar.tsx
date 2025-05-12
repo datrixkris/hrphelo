@@ -79,6 +79,16 @@ const Sidebar = () => {
               })}
             </div>
           )}
+          {!user && (
+            <div className="my-7 space-y-7">
+              <div className="skeleton h-4 w-[80%]"></div>
+              <div className="skeleton h-4 w-full"></div>
+              <div className="skeleton h-4 w-[60%]"></div>
+              <div className="skeleton h-4 w-[90%]"></div>
+              <div className="skeleton h-4 w-[75%]"></div>
+              <div className="skeleton h-4 w-full"></div>
+            </div>
+          )}
         </div>
       </div>
     </>

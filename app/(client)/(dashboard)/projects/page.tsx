@@ -1,11 +1,16 @@
+"use client";
+
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import React from "react";
 import ProjectFilterAndSearch from "./components/ProjectFilterAndSearch";
 import CreateProject from "./components/CreateProject";
 import ProjectList from "./components/ProjectList";
 import HasAccess from "../../components/HasAccess";
+import { useHasPermission } from "@/app/hooks/permissions";
 
 const ProjectsPage = () => {
+  // permission to create
+  const hasCreatePermission = useHasPermission("create", "Project");
   return (
     <HasAccess module="Project">
       <div>
@@ -18,9 +23,7 @@ const ProjectsPage = () => {
               { name: "Projects" },
             ]}
           />
-          <div>
-            <CreateProject />
-          </div>
+          <div>{hasCreatePermission && <CreateProject />}</div>
         </div>
 
         {/* project filters ui */}
