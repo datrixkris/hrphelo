@@ -159,7 +159,9 @@ const PermissionsComponent = ({
           <TableSkeleton />
         </div>
       ) : errorMessage !== "" ? (
-        <div className="text-center">{errorMessage}</div>
+        <div className="py-5 text-center text-sm text-neutral-400">
+          {errorMessage}
+        </div>
       ) : (
         <div>
           {/* table */}

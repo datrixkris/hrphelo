@@ -14,6 +14,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "@/app/axiosApi/api";
 
 import { toast } from "react-toastify";
+import HasAccess from "@/app/(client)/components/HasAccess";
 
 const TABS = [
   "Profile",
@@ -76,7 +77,6 @@ const Page = () => {
     setSubmitError("");
 
     try {
-
       const payload = {
         resignation_date: resignationDate,
         reason: resignationReason === "Other" ? otherReason : resignationReason,
@@ -101,97 +101,97 @@ const Page = () => {
   };
 
   return (
-    <div>
-      {/* Header with breadcrumbs */}
-      <PageTitleWithCrumbs
-        title="Staff Profile"
-        crumbs={[
-          { name: "Dashboard", link: "/dashboard" },
-          { name: "Staff", link: "/staff" },
-          { name: "Staff Profile" },
-        ]}
-      />
+    <HasAccess module="Staff">
+      <div>
+        {/* Header with breadcrumbs */}
+        <PageTitleWithCrumbs
+          title="Staff Profile"
+          crumbs={[
+            { name: "Dashboard", link: "/dashboard" },
+            { name: "Staff", link: "/staff" },
+            { name: "Staff Profile" },
+          ]}
+        />
 
-      {/* Profile Details */}
-      {loading ? (
-        <div className="my-5">Getting staff data...</div>
-      ) : error ? (
-        <div className="my-5 text-red-500">{error}</div>
-      ) : (
-        <div className="mt-5">
-          <StaffDetailsCard
-            staffDetails={staffDetails}
-            refreshData={refreshStaffData}
-          />
+        {/* Profile Details */}
+        {loading ? (
+          <div className="my-5">Getting staff data...</div>
+        ) : error ? (
+          <div className="my-5 text-red-500">{error}</div>
+        ) : (
+          <div className="mt-5">
+            <StaffDetailsCard
+              staffDetails={staffDetails}
+              refreshData={refreshStaffData}
+            />
 
-          {/* Tab Navigation */}
-          <TabNavigation
-            tabs={TABS}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+            {/* Tab Navigation */}
+            <TabNavigation
+              tabs={TABS}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
 
-          {/* Tab Content */}
-          <div className="py-5">
-            {activeTab === "Profile" && profile ? (
-              <StaffProfile profile={profile} />
-            ) : activeTab === "Profile" ? (
-              <div>No profile information available.</div>
-            ) : null}
-            {activeTab === "Assets" && <StaffAssets />}
-            {activeTab === "Projects" && <ProjectList />}
-            {staffOrgnogram.length !== 0 && activeTab === "Organogram" && (
-              <MyOrgChart orgnogramData={staffOrgnogram} />
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Resignation Section */}
-      {/* Termination/Resignation Section */}
-      <div className="mt-8 border-t border-base-300 pt-6">
-        <div className="mb-4">
-          <h3 className="mb-2 text-lg font-semibold">Employee Termination</h3>
-          <p className="mb-4 text-sm text-gray-600">
-            As HR personnel, you can initiate termination procedures for this
-            employee. Please ensure all company policies and legal requirements
-            are followed.
-
-          </p>
-        </div>
-
-        <button
-          onClick={() => setShowResignationModal(true)}
-          className="btn btn-error"
-        >
-          <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
-          Terminate Employee
-        </button>
-      </div>
-
-      {/* Resignation/Termination Modal */}
-      {showResignationModal && (
-        <div className="modal modal-open">
-          <div className="modal-box max-w-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold">Employee Termination</h3>
-              <button
-                onClick={() => {
-                  setShowResignationModal(false);
-                  setSubmitError("");
-                }}
-                className="btn btn-circle btn-ghost btn-sm"
-              >
-                ✕
-              </button>
+            {/* Tab Content */}
+            <div className="py-5">
+              {activeTab === "Profile" && profile ? (
+                <StaffProfile profile={profile} />
+              ) : activeTab === "Profile" ? (
+                <div>No profile information available.</div>
+              ) : null}
+              {activeTab === "Assets" && <StaffAssets />}
+              {activeTab === "Projects" && <ProjectList />}
+              {staffOrgnogram.length !== 0 && activeTab === "Organogram" && (
+                <MyOrgChart orgnogramData={staffOrgnogram} />
+              )}
             </div>
+          </div>
+        )}
 
-            <div className="mb-6">
-              <p className="mb-2 text-sm text-gray-600">
-                Please provide the following details to terminate this employee.
-                This action will initiate the offboarding process.
-              </p>
-              {/* <ul className="text-sm text-gray-600 list-disc pl-5">
+        {/* Resignation Section */}
+        {/* Termination/Resignation Section */}
+        <div className="mt-8 border-t border-base-300 pt-6">
+          <div className="mb-4">
+            <h3 className="mb-2 text-lg font-semibold">Employee Termination</h3>
+            <p className="mb-4 text-sm text-gray-600">
+              As HR personnel, you can initiate termination procedures for this
+              employee. Please ensure all company policies and legal
+              requirements are followed.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setShowResignationModal(true)}
+            className="btn btn-error"
+          >
+            <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
+            Terminate Employee
+          </button>
+        </div>
+
+        {/* Resignation/Termination Modal */}
+        {showResignationModal && (
+          <div className="modal modal-open">
+            <div className="modal-box max-w-2xl">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Employee Termination</h3>
+                <button
+                  onClick={() => {
+                    setShowResignationModal(false);
+                    setSubmitError("");
+                  }}
+                  className="btn btn-circle btn-ghost btn-sm"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="mb-6">
+                <p className="mb-2 text-sm text-gray-600">
+                  Please provide the following details to terminate this
+                  employee. This action will initiate the offboarding process.
+                </p>
+                {/* <ul className="text-sm text-gray-600 list-disc pl-5">
                 {isHR ? (
                   <>
                     <li>Last working day</li>
@@ -206,100 +206,101 @@ const Page = () => {
                   </>
                 )}
               </ul> */}
-            </div>
+              </div>
 
-            <form onSubmit={handleResignationSubmit}>
-              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Termination Date*</span>
-                  </label>
-                  <input
-                    type="date"
-                    className="input input-bordered w-full"
-                    value={resignationDate}
-                    onChange={(e) => setResignationDate(e.target.value)}
-                    required
-                  />
+              <form onSubmit={handleResignationSubmit}>
+                <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Termination Date*</span>
+                    </label>
+                    <input
+                      type="date"
+                      className="input input-bordered w-full"
+                      value={resignationDate}
+                      onChange={(e) => setResignationDate(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Termination Reason*</span>
+                    </label>
+                    <select
+                      className="select select-bordered w-full"
+                      value={resignationReason}
+                      onChange={(e) => setResignationReason(e.target.value)}
+                      required
+                    >
+                      <option value="">Select a reason</option>
+
+                      <option value="Performance Issues">
+                        Performance Issues
+                      </option>
+                      <option value="Policy Violation">Policy Violation</option>
+                      <option value="Redundancy">Redundancy</option>
+                      <option value="Mutual Agreement">Mutual Agreement</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Termination Reason*</span>
-                  </label>
-                  <select
-                    className="select select-bordered w-full"
-                    value={resignationReason}
-                    onChange={(e) => setResignationReason(e.target.value)}
-                    required
+
+                {resignationReason === "Other" && (
+                  <div className="form-control mb-4">
+                    <label className="label">
+                      <span className="label-text">Please specify*</span>
+                    </label>
+                    <textarea
+                      className="textarea textarea-bordered w-full"
+                      placeholder={"Enter termination reason..."}
+                      value={otherReason}
+                      onChange={(e) => setOtherReason(e.target.value)}
+                      required
+                    />
+                  </div>
+                )}
+
+                {submitError && (
+                  <div className="alert alert-error mb-4">
+                    <Icon icon="hugeicons:error-01" className="h-5 w-5" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
+                <div className="modal-action">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowResignationModal(false);
+                      setSubmitError("");
+                      setOtherReason("");
+                    }}
+                    className="btn btn-ghost"
+                    disabled={isSubmitting}
                   >
-                    <option value="">Select a reason</option>
-
-                    <option value="Performance Issues">
-                      Performance Issues
-                    </option>
-                    <option value="Policy Violation">Policy Violation</option>
-                    <option value="Redundancy">Redundancy</option>
-                    <option value="Mutual Agreement">Mutual Agreement</option>
-                    <option value="Other">Other</option>
-                  </select>
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={`btn btn-error`}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="loading loading-spinner"></span>
+                        Submitting...
+                      </>
+                    ) : (
+                      "Confirm Termination"
+                    )}
+                  </button>
                 </div>
-              </div>
-
-              {resignationReason === "Other" && (
-                <div className="form-control mb-4">
-                  <label className="label">
-                    <span className="label-text">Please specify*</span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-bordered w-full"
-                    placeholder={"Enter termination reason..."}
-                    value={otherReason}
-                    onChange={(e) => setOtherReason(e.target.value)}
-                    required
-                  />
-                </div>
-              )}
-
-              {submitError && (
-                <div className="alert alert-error mb-4">
-                  <Icon icon="hugeicons:error-01" className="h-5 w-5" />
-                  <span>{submitError}</span>
-                </div>
-              )}
-
-              <div className="modal-action">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowResignationModal(false);
-                    setSubmitError("");
-                    setOtherReason("");
-                  }}
-                  className="btn btn-ghost"
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={`btn btn-error`}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="loading loading-spinner"></span>
-                      Submitting...
-                    </>
-                  ) : (
-                    "Confirm Termination"
-                  )}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </HasAccess>
   );
 };
 

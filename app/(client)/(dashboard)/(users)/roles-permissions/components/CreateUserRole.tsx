@@ -1,19 +1,15 @@
 import Button from "@/app/components/Button";
 import React, { useState } from "react";
-import PermissionsComponent from "./Permissions";
-import { UserModules } from "../types";
+import PermissionsComponent from "../../users-accounts/components/Permissions";
+import { UserModules } from "../../users-accounts/types";
 
 interface CreateUserRoleProps {
-  setCreateUserRole: React.Dispatch<React.SetStateAction<boolean>>;
-  edit: boolean;
-  setEditUserRole: React.Dispatch<React.SetStateAction<boolean>>;
+  setCreateUserRole?: React.Dispatch<React.SetStateAction<boolean>>;
+  edit?: boolean;
+  setEditUserRole?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateUserRole = ({
-  setCreateUserRole,
-  edit,
-  setEditUserRole,
-}: CreateUserRoleProps) => {
+const CreateUserRole = ({ edit }: CreateUserRoleProps) => {
   const [permissions, setPermissions] = useState<UserModules[] | null>(null);
 
   const getUserPermissions = (data: UserModules[]) => {
@@ -66,15 +62,19 @@ const CreateUserRole = ({
         <div className="!mt-4 flex items-center justify-center">
           {edit ? (
             <Button
-              onClick={() => {
-                setEditUserRole(false);
-                setCreateUserRole(false);
-              }}
+            // onClick={() => {
+            //   setEditUserRole(false);
+            //   setCreateUserRole(false);
+            // }}
             >
               Save
             </Button>
           ) : (
-            <Button onClick={() => setCreateUserRole(false)}>Create</Button>
+            <Button
+            //  onClick={() => setCreateUserRole(false)}
+            >
+              Create
+            </Button>
           )}
         </div>
       </form>

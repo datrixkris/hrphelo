@@ -2,6 +2,9 @@ import React from "react";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import Button from "@/app/components/Button";
 import RolesTable from "./components/RolesTable";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import RoleList from "./components/RoleList";
+import AddRole from "./components/AddRole";
 
 const Page = () => {
   return (
@@ -16,7 +19,7 @@ const Page = () => {
           ]}
         />
         <div>
-          <Button>Add Role</Button>
+          <AddRole />
         </div>
       </div>
 
@@ -24,7 +27,7 @@ const Page = () => {
       <div className="my-5">{/* <FilterAndSearch /> */}</div>
 
       {/* table */}
-      <RolesTable />
+      <RoleList />
     </div>
   );
 };

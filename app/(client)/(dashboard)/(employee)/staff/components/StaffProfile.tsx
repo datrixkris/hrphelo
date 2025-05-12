@@ -110,9 +110,9 @@ const Section = ({
   <div className="rounded-lg bg-base-100 px-5 py-5">
     <div className="flex justify-between py-3">
       <p className="text-2xl">{title}</p>
-      <button className="rounded-full border bg-primary p-2 text-white">
+      {/* <button className="rounded-full border bg-primary p-2 text-white">
         <Icon icon="mdi:pencil-outline" />
-      </button>
+      </button> */}
     </div>
     {content}
   </div>
