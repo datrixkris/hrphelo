@@ -5,11 +5,10 @@ import { UserModules } from "../../users-accounts/types";
 import { useRolesStore } from "../roles-store";
 
 interface CreateUserRoleProps {
-  edit?: boolean;
   closeModal: () => void;
 }
 
-const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
+const CreateUserRole = ({ closeModal }: CreateUserRoleProps) => {
   const [permissions, setPermissions] = useState<UserModules[] | null>(null);
   const [roleName, setRoleName] = useState<string>("");
   const [roleDescription, setRoleDescription] = useState<string>("");
@@ -79,20 +78,9 @@ const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
 
         {/* buttons */}
         <div className="!mt-4 flex items-center justify-center">
-          {edit ? (
-            <Button
-            // onClick={() => {
-            //   setEditUserRole(false);
-            //   setCreateUserRole(false);
-            // }}
-            >
-              Save
-            </Button>
-          ) : (
-            <Button buttonType="submit" disabled={updatingData}>
-              {updatingData ? "Creating..." : "Create"}
-            </Button>
-          )}
+          <Button buttonType="submit" disabled={updatingData}>
+            {updatingData ? "Creating..." : "Create"}
+          </Button>
         </div>
       </form>
     </div>

@@ -2,7 +2,7 @@ import Button from "@/app/components/Button";
 import React, { useEffect, useState } from "react";
 import PermissionsComponent from "../../users-accounts/components/Permissions";
 import { Permissions, UserModules } from "../../users-accounts/types";
-import { useRolesStore } from "../roles-store";
+// import { useRolesStore } from "../roles-store";
 import { Role } from "../types";
 
 interface ViewAndEditProps {
@@ -42,7 +42,7 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (permissions) {
-      const formData = { roleName, roleDescription, permissions };
+      //   const formData = { roleName, roleDescription, permissions };
       //   await editRole(formData);
       closeModal();
     } else {
