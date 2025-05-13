@@ -26,7 +26,7 @@ const AddRole = () => {
           width="w-[90vw] md:w-[700px] lg:w-[750px] "
         >
           <h2 className="mb-5 text-center text-2xl font-bold">Create Role</h2>
-          <CreateUserRole />
+          <CreateUserRole closeModal={() => setIsOpen(false)} />
         </Modal>
       )}
     </div>

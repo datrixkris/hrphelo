@@ -1,19 +1,37 @@
 import Button from "@/app/components/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PermissionsComponent from "../../users-accounts/components/Permissions";
-import { UserModules } from "../../users-accounts/types";
+import { Permissions, UserModules } from "../../users-accounts/types";
 import { useRolesStore } from "../roles-store";
+import { Role } from "../types";
 
-interface CreateUserRoleProps {
+interface ViewAndEditProps {
   edit?: boolean;
   closeModal: () => void;
+  role: Role;
 }
 
-const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
+const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
   const [permissions, setPermissions] = useState<UserModules[] | null>(null);
-  const [roleName, setRoleName] = useState<string>("");
+  const [roleName, setRoleName] = useState<string>(role.name);
   const [roleDescription, setRoleDescription] = useState<string>("");
-  const { updatingData, createRole } = useRolesStore();
+  const [userPermissions, setUserPermissions] = useState<Permissions[]>([]);
+  //   const { updatingData, editRole } = useRolesStore();
+
+  useEffect(() => {
+    const permData = role.permissions.map((permission) => {
+      return {
+        id: permission.id,
+        create: permission.create,
+        read: permission.read,
+        modify: permission.modify,
+        delete: permission.delete,
+        module: permission.module,
+      };
+    });
+
+    setUserPermissions(permData);
+  }, []);
 
   const getUserPermissions = (data: UserModules[]) => {
     console.log(data);
@@ -25,7 +43,7 @@ const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
     e.preventDefault();
     if (permissions) {
       const formData = { roleName, roleDescription, permissions };
-      await createRole(formData);
+      //   await editRole(formData);
       closeModal();
     } else {
       alert("Cannot get permissions");
@@ -48,6 +66,7 @@ const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
               value={roleName}
               onChange={(e) => setRoleName(e.target.value)}
               required
+              readOnly={!edit}
             />
           </label>
         </div>
@@ -63,6 +82,7 @@ const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
               placeholder="Minimal description of the role"
               value={roleDescription}
               onChange={(e) => setRoleDescription(e.target.value)}
+              readOnly={!edit}
             ></textarea>
           </label>
         </div>
@@ -74,29 +94,23 @@ const CreateUserRole = ({ edit, closeModal }: CreateUserRoleProps) => {
               Set access permissions for this role
             </span>
           </div>
-          <PermissionsComponent getUserPermissions={getUserPermissions} />
+          <PermissionsComponent
+            getUserPermissions={getUserPermissions}
+            userPermissions={userPermissions}
+          />
         </div>
 
         {/* buttons */}
-        <div className="!mt-4 flex items-center justify-center">
-          {edit ? (
-            <Button
-            // onClick={() => {
-            //   setEditUserRole(false);
-            //   setCreateUserRole(false);
-            // }}
-            >
-              Save
+        {edit && (
+          <div className="!mt-4 flex items-center justify-center">
+            <Button buttonType="submit" disabled={false}>
+              {false ? "Saving..." : "Save"}
             </Button>
-          ) : (
-            <Button buttonType="submit" disabled={updatingData}>
-              {updatingData ? "Creating..." : "Create"}
-            </Button>
-          )}
-        </div>
+          </div>
+        )}
       </form>
     </div>
   );
 };
 
-export default CreateUserRole;
+export default ViewAndEditRoleForm;

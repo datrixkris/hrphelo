@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { Permissions } from "../users-accounts/types";
+import { UserModules } from "../users-accounts/types";
 import { Role } from "./types";
 
 interface RolesStore {
@@ -22,9 +22,9 @@ interface ApiErrorResponse {
 }
 
 interface CreateRoleInterface {
-  name: string;
-  description?: string;
-  permissions?: Permissions[];
+  roleName: string;
+  roleDescription: string;
+  permissions: UserModules[];
 }
 
 export const useRolesStore = create<RolesStore>((set, get) => ({
@@ -55,10 +55,32 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
   createRole: async (data) => {
     set({ updatingData: true, error: null });
     try {
-      const response = (await api.post("/v1/user/roles", data)).data;
+      // create role with name and description
+      const role = (await api.post("/v1/user/roles", { name: data.roleName }))
+        .data;
+
+      const permData = {
+        userRoleId: role.id,
+        permissions: data.permissions?.map((perm) => ({
+          moduleId: perm.id,
+          create: perm.permissions.create,
+          read: perm.permissions.read,
+          modify: perm.permissions.modify,
+          delete: perm.permissions.delete,
+        })),
+      };
+
+      // assign permissions to created role
+      const permResponse = await api.post(
+        "/v1/user/roles/permissions",
+        permData,
+      );
+
+      console.log(permResponse.data);
+
+      // fetch roles again to update with newly created role
       await get().fetchRoles(false);
       set(() => ({ updatingData: false }));
-      console.log(response);
       toast.success("Role created successfully");
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;

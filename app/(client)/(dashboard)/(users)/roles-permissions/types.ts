@@ -5,5 +5,5 @@ export interface Role {
   name: string;
   description?: string;
   companyId?: number;
-  permissions?: Permissions[];
+  permissions: Permissions[];
 }
