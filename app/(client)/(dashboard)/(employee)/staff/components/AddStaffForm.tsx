@@ -169,7 +169,7 @@ const AddStaffForm = ({
           <h2 className="mb-5 text-center text-2xl font-bold">Add Staff</h2>
 
           <div className="mb-4 flex items-center justify-center">
-            <ImageUpload onImageSelect={(file) => setSelectedImage(file)} />
+            <ImageUpload onImageSelect={(file) => setSelectedImage(file)} id="staff_image" />
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>

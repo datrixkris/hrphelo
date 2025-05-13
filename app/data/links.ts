@@ -75,4 +75,9 @@ export const clientSidebarLinks: SidebarLink[] = [
     icon: "hugeicons:user-account",
     link: "/users-accounts",
   },
+  {
+    name: "Settings",
+    icon: "hugeicons:account-setting-02",
+    link: "/settings",
+  },
 ];
