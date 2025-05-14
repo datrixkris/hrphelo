@@ -97,4 +97,9 @@ export const clientSidebarLinks: SidebarLink[] = [
       },
     ],
   },
+  {
+    name: "Settings",
+    icon: "hugeicons:account-setting-02",
+    link: "/settings",
+  },
 ];
