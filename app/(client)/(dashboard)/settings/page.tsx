@@ -178,36 +178,42 @@ const SettingsPage = () => {
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 {/* Logo Upload Section */}
-<div className="mb-8 flex flex-col gap-6 sm:flex-row">
-  <div className="flex-1">
-    <div className="rounded-lg bg-slate-800 p-4 text-center">
-      <ImageUpload
-        id="light-theme-logo-upload" 
-        onImageSelect={(file) => setLightThemeLogo(file)}
-        image={company?.company_light_theme_logo}
-        disabled={imageLoading || isSubmitting}
-      />
-      <p className="mt-2 text-sm text-white">Light Theme Logo</p>
-      {lightThemeLogo && (
-        <p className="mt-1 text-xs text-gray-300">{lightThemeLogo.name}</p>
-      )}
-    </div>
-  </div>
-  <div className="flex-1">
-    <div className="rounded-lg border bg-white p-4 text-center">
-      <ImageUpload
-        id="dark-theme-logo-upload" 
-        onImageSelect={(file) => setDarkThemeLogo(file)}
-        image={company?.company_dark_theme_logo}
-        disabled={imageLoading || isSubmitting}
-      />
-      <p className="mt-2 text-sm text-black">Dark Theme Logo</p>
-      {darkThemeLogo && (
-        <p className="mt-1 text-xs text-gray-600">{darkThemeLogo.name}</p>
-      )}
-    </div>
-  </div>
-</div>
+                <div className="mb-8 flex flex-col gap-6 sm:flex-row">
+                  <div className="flex-1">
+                    <div className="rounded-lg bg-slate-800 p-4 text-center">
+                      <ImageUpload
+                        id="light-theme-logo-upload"
+                        onImageSelect={(file) => setLightThemeLogo(file)}
+                        image={company?.company_light_theme_logo}
+                        disabled={imageLoading || isSubmitting}
+                      />
+                      <p className="mt-2 text-sm text-white">
+                        Light Theme Logo
+                      </p>
+                      {lightThemeLogo && (
+                        <p className="mt-1 text-xs text-gray-300">
+                          {lightThemeLogo.name}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="rounded-lg border bg-white p-4 text-center">
+                      <ImageUpload
+                        id="dark-theme-logo-upload"
+                        onImageSelect={(file) => setDarkThemeLogo(file)}
+                        image={company?.company_dark_theme_logo}
+                        disabled={imageLoading || isSubmitting}
+                      />
+                      <p className="mt-2 text-sm text-black">Dark Theme Logo</p>
+                      {darkThemeLogo && (
+                        <p className="mt-1 text-xs text-gray-600">
+                          {darkThemeLogo.name}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
 
                 {/* Form Fields */}
                 <div className="grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
