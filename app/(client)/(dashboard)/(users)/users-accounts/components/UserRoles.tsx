@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PermissionsComponent from "./Permissions";
 import { UserModules, Permissions } from "../types";
 import RolesTable from "./RolesTable";
 import Button from "@/app/components/Button";
 import { useUserAccountStore } from "../user-account-store";
+import { useRolesStore } from "../../roles-permissions/roles-store";
+import TableSkeleton from "@/app/components/TableSkeleton";
 
 const UserRoles = ({
   onPermissionsSubmit,
@@ -14,6 +16,24 @@ const UserRoles = ({
 }) => {
   const [permissions, setPermissions] = useState<UserModules[] | null>(null);
   const updatingData = useUserAccountStore((state) => state.updatingData);
+  const { loading, roles, fetchRoles } = useRolesStore();
+  // this is the user permissions that will be editable
+  const [editableUserPermissions, setEditableUserPermissions] = useState<
+    Permissions[] | null
+  >(userPermissions);
+
+  // fetch roles on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      if (roles.length > 0) {
+        // check if roles are available and fetch without loading
+        await fetchRoles(false);
+      } else {
+        await fetchRoles();
+      }
+    };
+    fetchData();
+  }, []);
 
   // get permissions module data from the permissions component anytime a user checks a permission box
   const getUserPermissions = (data: UserModules[]) => {
@@ -43,7 +63,16 @@ const UserRoles = ({
           </span>
         </div>
         {/* roles table */}
-        <RolesTable />
+        {loading ? (
+          <TableSkeleton />
+        ) : (
+          <RolesTable
+            onRoleAssign={(data) => {
+              setEditableUserPermissions(data);
+            }}
+            roles={roles}
+          />
+        )}
       </div>
 
       {/* user permissions component */}
@@ -52,7 +81,7 @@ const UserRoles = ({
           <span className="label-text">Staff permissions</span>
         </div>
         <PermissionsComponent
-          userPermissions={userPermissions}
+          userPermissions={editableUserPermissions}
           getUserPermissions={getUserPermissions}
         />
       </div>
