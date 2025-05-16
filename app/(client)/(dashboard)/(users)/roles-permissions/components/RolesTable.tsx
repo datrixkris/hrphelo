@@ -108,7 +108,7 @@ const TableRow = ({ role }: { role: Role }) => {
         </Modal>
       )}
 
-      {/* confirmation of exiting */}
+      {/* confirmation of exiting  */}
       {showConfirm && (
         <ConfirmationModal
           isOpen={showConfirm}
