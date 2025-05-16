@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
@@ -5,6 +7,7 @@ import { Role } from "../types";
 import Modal from "@/app/components/Modal";
 import ViewAndEditRoleForm from "./ViewAndEditRoleForm";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
+import { useRolesStore } from "../roles-store";
 
 const RolesTable = ({ roles }: { roles: Role[] }) => {
   return (
@@ -37,6 +40,7 @@ const TableRow = ({ role }: { role: Role }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const { updatingData, deleteRole } = useRolesStore();
   return (
     <>
       <tr>
@@ -110,9 +114,12 @@ const TableRow = ({ role }: { role: Role }) => {
           isOpen={showConfirm}
           title="Confirm Delete"
           message="Are you sure you want to delete this role? "
-          onConfirm={() => {}}
+          onConfirm={async () => {
+            await deleteRole(role.id);
+            setShowConfirm(false);
+          }}
           onCancel={() => setShowConfirm(false)}
-          loading={false}
+          loading={updatingData}
           type="delete"
         />
       )}

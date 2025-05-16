@@ -12,7 +12,8 @@ interface RolesStore {
   error: string | null;
   fetchRoles: (optionalLoading?: boolean) => Promise<void>;
   createRole: (data: CreateRoleInterface) => Promise<void>;
-  editRole: (data: string, roleId: number) => Promise<void>;
+  editRole: (data: CreateRoleInterface, roleId: number) => Promise<void>;
+  deleteRole: (roleId: number) => Promise<void>;
 }
 
 interface ApiErrorResponse {
@@ -56,8 +57,12 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
     set({ updatingData: true, error: null });
     try {
       // create role with name and description
-      const role = (await api.post("/v1/user/roles", { name: data.roleName }))
-        .data;
+      const role = (
+        await api.post("/v1/user/roles", {
+          name: data.roleName,
+          description: data.roleDescription,
+        })
+      ).data;
 
       const permData = {
         userRoleId: role.id,
@@ -96,18 +101,64 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
     }
   },
 
-  editRole: async (data: string, roleId: number) => {
+  editRole: async (data, roleId) => {
     set({ updatingData: true, error: null });
     try {
       const response = (
-        await api.put(`/v1/user/roles/${roleId}`, { name: data })
+        await api.put(`/v1/user/roles/${roleId}`, {
+          name: data.roleName,
+          description: data.roleDescription,
+        })
       ).data;
-      await get().fetchRoles(false);
+
+      const permData = {
+        userRoleId: roleId,
+        permissions: data.permissions?.map((perm) => ({
+          moduleId: perm.id,
+          create: perm.permissions.create,
+          read: perm.permissions.read,
+          modify: perm.permissions.modify,
+          delete: perm.permissions.delete,
+        })),
+      };
+
+      // assign permissions to created role
+      const permResponse = await api.post(
+        "/v1/user/roles/permissions",
+        permData,
+      );
+
+      console.log(permResponse.data);
+
+      await get().fetchRoles(false); //refetch roles to update data
       set(() => ({
         updatingData: false,
       }));
       console.log(response);
-      toast.success("Role updated successfully");
+      toast.success(permResponse.data.message);
+    } catch (err) {
+      const axiosError = err as AxiosError<ApiErrorResponse>;
+      set(() => ({
+        error:
+          axiosError?.response?.data.error ??
+          axiosError?.response?.data.message ??
+          axiosError.message,
+        updatingData: false,
+      }));
+      toast.error(get().error);
+      console.error(err);
+    }
+  },
+
+  deleteRole: async (roleId) => {
+    set({ updatingData: true, error: null });
+    try {
+      const response = (await api.delete(`/v1/user/roles/${roleId}`)).data;
+      await get().fetchRoles(false);
+      set(() => ({
+        updatingData: false,
+      }));
+      toast.success(response.message);
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({

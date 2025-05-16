@@ -4,6 +4,7 @@ import PermissionsComponent from "../../users-accounts/components/Permissions";
 import { Permissions, UserModules } from "../../users-accounts/types";
 // import { useRolesStore } from "../roles-store";
 import { Role } from "../types";
+import { useRolesStore } from "../roles-store";
 
 interface ViewAndEditProps {
   edit?: boolean;
@@ -14,9 +15,11 @@ interface ViewAndEditProps {
 const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
   const [permissions, setPermissions] = useState<UserModules[] | null>(null);
   const [roleName, setRoleName] = useState<string>(role.name);
-  const [roleDescription, setRoleDescription] = useState<string>("");
+  const [roleDescription, setRoleDescription] = useState<string>(
+    role?.description || "",
+  );
   const [userPermissions, setUserPermissions] = useState<Permissions[]>([]);
-  //   const { updatingData, editRole } = useRolesStore();
+  const { updatingData, editRole } = useRolesStore();
 
   useEffect(() => {
     const permData = role.permissions.map((permission) => {
@@ -33,6 +36,7 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
     setUserPermissions(permData);
   }, []);
 
+  // get permissions module data from the permissions component anytime a user checks a permission box
   const getUserPermissions = (data: UserModules[]) => {
     console.log(data);
     setPermissions(data);
@@ -42,8 +46,8 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (permissions) {
-      //   const formData = { roleName, roleDescription, permissions };
-      //   await editRole(formData);
+      const formData = { roleName, roleDescription, permissions };
+      await editRole(formData, role.id);
       closeModal();
     } else {
       alert("Cannot get permissions");
@@ -103,8 +107,8 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
         {/* buttons */}
         {edit && (
           <div className="!mt-4 flex items-center justify-center">
-            <Button buttonType="submit" disabled={false}>
-              {false ? "Saving..." : "Save"}
+            <Button buttonType="submit" disabled={updatingData}>
+              {updatingData ? "Saving..." : "Save"}
             </Button>
           </div>
         )}
