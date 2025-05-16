@@ -7,6 +7,7 @@ import NewHireInformation from "../../components/NewHireInformation";
 import NewHireChecklistDetails from "../../components/NewHireChecklistDetails";
 import { useStaffStore } from "../../../(employee)/staff/staff-store";
 import { StaffData, StaffDetail } from "../../../(employee)/staff/types";
+import HasAccess from "@/app/(client)/components/HasAccess";
 
 const Page = () => {
   const { staffId } = useParams();
@@ -25,32 +26,34 @@ const Page = () => {
   }, []);
 
   return (
-    <div>
-      <div className="">
-        {/* Header with breadcrumbs */}
-        <PageTitleWithCrumbs
-          title="Onboarding Details"
-          crumbs={[
-            { name: "Dashboard", link: "/dashboard" },
-            { name: "Onboarding", link: "/onboarding" },
-            { name: "Staff Onboarding details" },
-          ]}
-        />
-      </div>
+    <HasAccess module="Checklist">
+      <div>
+        <div className="">
+          {/* Header with breadcrumbs */}
+          <PageTitleWithCrumbs
+            title="Onboarding Details"
+            crumbs={[
+              { name: "Dashboard", link: "/dashboard" },
+              { name: "Onboarding", link: "/onboarding" },
+              { name: "Staff Onboarding details" },
+            ]}
+          />
+        </div>
 
-      {/* Staff information */}
-      <div className="my-5">
-        <NewHireInformation staff={staffDetails} />
-      </div>
+        {/* Staff information */}
+        <div className="my-5">
+          <NewHireInformation staff={staffDetails} />
+        </div>
 
-      {/* checklists progress */}
-      <div className="my-5">
-        <NewHireChecklistDetails
-          checklists={staffDetails?.company?.checklists}
-          staff={staffDetails as StaffData}
-        />
+        {/* checklists progress */}
+        <div className="my-5">
+          <NewHireChecklistDetails
+            checklists={staffDetails?.company?.checklists}
+            staff={staffDetails as StaffData}
+          />
+        </div>
       </div>
-    </div>
+    </HasAccess>
   );
 };
 

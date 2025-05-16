@@ -14,6 +14,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "@/app/axiosApi/api";
 
 import { toast } from "react-toastify";
+import HasAccess from "@/app/(client)/components/HasAccess";
 import { useAuthStore } from "@/app/stores/auth-store";
 
 const TABS = [
@@ -99,19 +100,20 @@ const Page = () => {
   };
 
   return (
-    <div>
-      {/* Header with breadcrumbs */}
-      <PageTitleWithCrumbs
-        title="Staff Profile"
-        crumbs={[
-          { name: "Dashboard", link: "/dashboard" },
-          { name: "Staff", link: "/staff" },
-          { name: "Staff Profile" },
-        ]}
-      />
-      {/* Profile Details */}
-      {loading ? (
-        <div className="mb-5 grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
+    <HasAccess module="Staff">
+      <div>
+        {/* Header with breadcrumbs */}
+        <PageTitleWithCrumbs
+          title="Staff Profile"
+          crumbs={[
+            { name: "Dashboard", link: "/dashboard" },
+            { name: "Staff", link: "/staff" },
+            { name: "Staff Profile" },
+          ]}
+        />
+        {/* Profile Details */}
+        {loading ? (
+          <div className="mb-5 grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
           <div className="skeleton col-span-2 h-32 w-full"></div>
           <div className="skeleton h-32 w-full"></div>
           <div className="skeleton h-32 w-full"></div>
@@ -119,21 +121,21 @@ const Page = () => {
           <div className="skeleton h-32 w-full"></div>
         </div>
       ) : // <div className="my-5">Getting staff data...</div>
-      error ? (
-        <div className="my-5 text-red-500">{error}</div>
-      ) : (
-        <div className="mt-5">
-          <StaffDetailsCard
-            staffDetails={staffDetails}
-            refreshData={refreshStaffData}
-          />
+        error ? (
+          <div className="my-5 text-red-500">{error}</div>
+        ) : (
+          <div className="mt-5">
+            <StaffDetailsCard
+              staffDetails={staffDetails}
+              refreshData={refreshStaffData}
+            />
 
-          {/* Tab Navigation */}
-          <TabNavigation
-            tabs={TABS}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+            {/* Tab Navigation */}
+            <TabNavigation
+              tabs={TABS}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
 
           {/* Tab Content */}
           <div className="py-5">
@@ -221,72 +223,73 @@ const Page = () => {
                   >
                     <option value="">Select a reason</option>
 
-                    <option value="Performance Issues">
-                      Performance Issues
-                    </option>
-                    <option value="Policy Violation">Policy Violation</option>
-                    <option value="Redundancy">Redundancy</option>
-                    <option value="Mutual Agreement">Mutual Agreement</option>
-                    <option value="Other">Other</option>
-                  </select>
+                      <option value="Performance Issues">
+                        Performance Issues
+                      </option>
+                      <option value="Policy Violation">Policy Violation</option>
+                      <option value="Redundancy">Redundancy</option>
+                      <option value="Mutual Agreement">Mutual Agreement</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
 
-              {resignationReason === "Other" && (
-                <div className="form-control mb-4">
-                  <label className="label">
-                    <span className="label-text">Please specify*</span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-bordered w-full"
-                    placeholder={"Enter termination reason..."}
-                    value={otherReason}
-                    onChange={(e) => setOtherReason(e.target.value)}
-                    required
-                  />
+                {resignationReason === "Other" && (
+                  <div className="form-control mb-4">
+                    <label className="label">
+                      <span className="label-text">Please specify*</span>
+                    </label>
+                    <textarea
+                      className="textarea textarea-bordered w-full"
+                      placeholder={"Enter termination reason..."}
+                      value={otherReason}
+                      onChange={(e) => setOtherReason(e.target.value)}
+                      required
+                    />
+                  </div>
+                )}
+
+                {submitError && (
+                  <div className="alert alert-error mb-4">
+                    <Icon icon="hugeicons:error-01" className="h-5 w-5" />
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
+                <div className="modal-action">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowResignationModal(false);
+                      setSubmitError("");
+                      setOtherReason("");
+                    }}
+                    className="btn btn-ghost"
+                    disabled={isSubmitting}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={`btn btn-error`}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className="loading loading-spinner"></span>
+                        Submitting...
+                      </>
+                    ) : (
+                      "Confirm Termination"
+                    )}
+                  </button>
                 </div>
-              )}
-
-              {submitError && (
-                <div className="alert alert-error mb-4">
-                  <Icon icon="hugeicons:error-01" className="h-5 w-5" />
-                  <span>{submitError}</span>
-                </div>
-              )}
-
-              <div className="modal-action">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowResignationModal(false);
-                    setSubmitError("");
-                    setOtherReason("");
-                  }}
-                  className="btn btn-ghost"
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={`btn btn-error`}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="loading loading-spinner"></span>
-                      Submitting...
-                    </>
-                  ) : (
-                    "Confirm Termination"
-                  )}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </HasAccess>
   );
 };
 

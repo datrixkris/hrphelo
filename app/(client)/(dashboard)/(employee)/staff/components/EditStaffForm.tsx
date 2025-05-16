@@ -233,6 +233,7 @@ const EditStaffForm = ({
 
           <div className="mb-4 flex items-center justify-center">
             <ImageUpload
+              id="staff_image"
               onImageSelect={(file) => setSelectedImage(file)}
               image={staffDetails?.image}
             />

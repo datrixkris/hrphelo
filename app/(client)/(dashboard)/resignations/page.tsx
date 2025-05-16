@@ -1,26 +1,29 @@
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import React from "react";
 import ResignationsList from "./components/ResignationsList";
+import HasAccess from "@/app/(client)/components/HasAccess";
 
 const Page = () => {
   return (
-    <div className="">
-      <div>
-        {/* Header with breadcrumbs */}
-        <PageTitleWithCrumbs
-          title="Resignations"
-          crumbs={[
-            { name: "Dashboard", link: "/dashboard" },
-            { name: "Resignations" },
-          ]}
-        />
-      </div>
+    <HasAccess module="Resignation">
+      <div className="">
+        <div>
+          {/* Header with breadcrumbs */}
+          <PageTitleWithCrumbs
+            title="Resignations"
+            crumbs={[
+              { name: "Dashboard", link: "/dashboard" },
+              { name: "Resignations" },
+            ]}
+          />
+        </div>
 
-      {/* resignations list */}
-      <div className="my-5">
-        <ResignationsList />
+        {/* resignations list */}
+        <div className="my-5">
+          <ResignationsList />
+        </div>
       </div>
-    </div>
+    </HasAccess>
   );
 };
 

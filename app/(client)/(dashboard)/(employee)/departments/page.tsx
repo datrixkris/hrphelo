@@ -10,6 +10,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PageTitleWithCrumbs from "@/app/components/PageTitleWithCrumbs";
 import TableSkeleton from "@/app/components/TableSkeleton";
+import HasAccess from "@/app/(client)/components/HasAccess";
+import { useHasPermission } from "@/app/hooks/permissions";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const departmentSchema = z.object({
   dept_code: z.string().optional(),
@@ -38,6 +41,9 @@ const Page = () => {
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+
+  // permission to create
+  const hasCreatePermission = useHasPermission("create", "Department");
 
   // Function to open the modal
   const openCreateModal = () => setIsCreateModalOpen(true);
@@ -71,116 +77,127 @@ const Page = () => {
   }, []);
 
   return (
-    <div>
+    <HasAccess module="Department">
       <div>
-        <div className="mb-[1.875rem]">
-          <div className="flex items-center justify-between">
-            <PageTitleWithCrumbs
-              title="Departments"
-              crumbs={[
-                { name: "Dashboard", link: "/dashboard" },
-                { name: "Departments" },
-              ]}
-            />
+        <div>
+          <div className="mb-[1.875rem]">
+            <div className="flex items-center justify-between">
+              <PageTitleWithCrumbs
+                title="Departments"
+                crumbs={[
+                  { name: "Dashboard", link: "/dashboard" },
+                  { name: "Departments" },
+                ]}
+              />
 
-            <div>
-              <Button onClick={openCreateModal}>Add Department</Button>
+              {hasCreatePermission && (
+                <div>
+                  <Button onClick={openCreateModal}>
+                    <span className="flex items-center gap-1">
+                      <Icon icon="mdi-light:sitemap" className="text-xl" /> Add
+                      Department
+                    </span>
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
 
-      <div>
-        {loading && departments.length < 1 ? (
-          <div className="rounded text-center">
-            <TableSkeleton />
-          </div>
-        ) : departments.length > 0 ? (
-          <DepartmentTable
-            departments={departments}
-            deleteDepartment={deleteDepartment}
-            updateDepartment={updateDepartment}
-          />
-        ) : (
-          <div className="rounded py-20 text-center">
-            No departments available
+        <div>
+          {loading && departments.length < 1 ? (
+            <div className="rounded text-center">
+              <TableSkeleton />
+            </div>
+          ) : departments.length > 0 ? (
+            <DepartmentTable
+              departments={departments}
+              deleteDepartment={deleteDepartment}
+              updateDepartment={updateDepartment}
+            />
+          ) : (
+            <div className="rounded py-20 text-center">
+              No departments available
+            </div>
+          )}
+        </div>
+
+        {/* Create Department Modal */}
+        {isCreateModalOpen && (
+          <div className={`modal ${isCreateModalOpen ? "modal-open" : ""}`}>
+            <div className="modal-box">
+              <h3 className="text-lg font-bold">Create New Department</h3>
+              <form
+                onSubmit={handleSubmit(handleCreateDepartment)}
+                className="space-y-4"
+              >
+                <div>
+                  <label className="block font-medium text-gray-700">
+                    Department Name
+                  </label>
+                  <input
+                    type="text"
+                    {...register("name")}
+                    className="input input-bordered w-full"
+                  />
+                  {errors.name && (
+                    <p className="text-sm text-red-500">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block font-medium text-gray-700">
+                    Department Code
+                  </label>
+                  <input
+                    type="text"
+                    {...register("dept_code")}
+                    className="input input-bordered w-full"
+                  />
+                  {errors.dept_code && (
+                    <p className="text-sm text-red-500">
+                      {errors.dept_code.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block font-medium text-gray-700">
+                    Description
+                  </label>
+                  <textarea
+                    {...register("description")}
+                    rows={4}
+                    className="textarea textarea-bordered mt-1 w-full"
+                  />
+                </div>
+
+                <div className="modal-action flex justify-end">
+                  <button
+                    type="button"
+                    onClick={closeCreateModal}
+                    className="btn mr-4 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={`btn btn-primary rounded ${
+                      formLoading ? "loading" : ""
+                    }`}
+                  >
+                    {formLoading ? "Creating..." : "Create Department"}
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="modal-backdrop" onClick={closeCreateModal}></div>
           </div>
         )}
       </div>
-
-      {/* Create Department Modal */}
-      {isCreateModalOpen && (
-        <div className={`modal ${isCreateModalOpen ? "modal-open" : ""}`}>
-          <div className="modal-box">
-            <h3 className="text-lg font-bold">Create New Department</h3>
-            <form
-              onSubmit={handleSubmit(handleCreateDepartment)}
-              className="space-y-4"
-            >
-              <div>
-                <label className="block font-medium text-gray-700">
-                  Department Name
-                </label>
-                <input
-                  type="text"
-                  {...register("name")}
-                  className="input input-bordered w-full"
-                />
-                {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name.message}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700">
-                  Department Code
-                </label>
-                <input
-                  type="text"
-                  {...register("dept_code")}
-                  className="input input-bordered w-full"
-                />
-                {errors.dept_code && (
-                  <p className="text-sm text-red-500">
-                    {errors.dept_code.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block font-medium text-gray-700">
-                  Description
-                </label>
-                <textarea
-                  {...register("description")}
-                  rows={4}
-                  className="textarea textarea-bordered mt-1 w-full"
-                />
-              </div>
-
-              <div className="modal-action flex justify-end">
-                <button
-                  type="button"
-                  onClick={closeCreateModal}
-                  className="btn mr-4 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={`btn btn-primary rounded ${
-                    formLoading ? "loading" : ""
-                  }`}
-                >
-                  {formLoading ? "Creating..." : "Create Department"}
-                </button>
-              </div>
-            </form>
-          </div>
-          <div className="modal-backdrop" onClick={closeCreateModal}></div>
-        </div>
-      )}
-    </div>
+    </HasAccess>
   );
 };
 

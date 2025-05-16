@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
-import Button from "@/app/components/Button";
+// import Button from "@/app/components/Button";
 import TableSkeleton from "@/app/components/TableSkeleton";
 import { useUserAccountStore } from "../user-account-store";
 import { Permissions, UserModules } from "../types";
-// import { UserModules } from "../types";
-// import { useForm } from "react-hook-form";
 type UserModulesWithToggle = UserModules & {
   toggle: boolean;
 };
 
-const UserPermissions = ({
-  onPermissionsSubmit,
+const PermissionsComponent = ({
+  getUserPermissions,
   userPermissions,
 }: {
-  onPermissionsSubmit: (permissions: UserModules[]) => void;
-  userPermissions: Permissions[] | null;
+  // this function gets permissions modules to the parent component
+  getUserPermissions: (permissions: UserModules[]) => void;
+  //   this user permissions array is used to set the permissions of the user if any exists
+  userPermissions?: Permissions[] | null;
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
-  const { fetchModules, loading, updatingData } = useUserAccountStore();
+  const {
+    fetchModules,
+    loading,
+    // updatingData
+  } = useUserAccountStore();
   const [permissions, setPermissions] = useState<UserModulesWithToggle[]>([]);
 
   useEffect(() => {
@@ -83,7 +87,7 @@ const UserPermissions = ({
               ...item,
               toggle: !item.toggle,
               permissions: !item.toggle
-                ? { ...item.permissions, read: true } // If toggled on, enable "read"
+                ? { create: true, read: true, modify: true, delete: true } // If toggled on, enable all
                 : { create: false, read: false, modify: false, delete: false }, // If toggled off, disable all
             }
           : item,
@@ -119,11 +123,10 @@ const UserPermissions = ({
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  useEffect(() => {
     // send data to parent component
-    onPermissionsSubmit(
+    console.log(permissions);
+    getUserPermissions(
       permissions.map((item) => {
         return {
           id: item.id,
@@ -132,7 +135,21 @@ const UserPermissions = ({
         };
       }),
     );
-  };
+  }, [permissions]);
+
+  //   const handleSubmit = () => {
+  //     // send data to parent component
+  //     console.log(permissions);
+  //     getUserPermissions(
+  //       permissions.map((item) => {
+  //         return {
+  //           id: item.id,
+  //           name: item.name,
+  //           permissions: { ...item.permissions },
+  //         };
+  //       }),
+  //     );
+  //   };
 
   return (
     <div>
@@ -142,9 +159,11 @@ const UserPermissions = ({
           <TableSkeleton />
         </div>
       ) : errorMessage !== "" ? (
-        <div className="text-center">{errorMessage}</div>
+        <div className="py-5 text-center text-sm text-neutral-400">
+          {errorMessage}
+        </div>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <div>
           {/* table */}
           <div className="overflow-x-auto">
             <table className="table border">
@@ -264,7 +283,7 @@ const UserPermissions = ({
             </table>
           </div>
 
-          <div className="!mt-10">
+          {/* <div className="!mt-10">
             {userPermissions ? (
               <Button className="mx-auto w-1/2" disabled={updatingData}>
                 {updatingData ? "Editing permissions..." : "Edit permissions"}
@@ -274,11 +293,11 @@ const UserPermissions = ({
                 {updatingData ? "Creating user..." : "Create user"}
               </Button>
             )}
-          </div>
-        </form>
+          </div> */}
+        </div>
       )}
     </div>
   );
 };
 
-export default UserPermissions;
+export default PermissionsComponent;

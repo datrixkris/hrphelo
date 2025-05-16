@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import EmployeeSalaryTable from "./components/employee-salary-table";
 import { createStaffPayrollData, usePayrollStore } from "../payroll-store";
 import AmountInput from "@/app/components/AmountInput";
+import HasAccess from "@/app/(client)/components/HasAccess";
+import { useHasPermission } from "@/app/hooks/permissions";
 
 interface PayrollFormData {
   staffId: number | null;
@@ -26,6 +28,9 @@ const Page = () => {
     CreatePayroll,
     loading,
   } = usePayrollStore();
+
+  const hasCreatePermission = useHasPermission("create", "Payroll");
+
   const { staffs, fetchStaff } = useStaffStore();
 
   const memberOptions = staffs?.map((staff) => ({
@@ -147,6 +152,7 @@ const Page = () => {
   }, [staffs, fetchStaff, fetchPayrollPolicy, fetchPayrollPeriod]);
 
   return (
+    <HasAccess module="Payroll">
     <div>
       <div className="mb-[1.875rem]">
         <div className="flex items-center justify-between">
@@ -162,7 +168,7 @@ const Page = () => {
               <Icon icon="hugeicons:file-export" />
               Export
             </button>
-            <Button onClick={openAddSalaryModal}>Compute Payroll</Button>
+            {hasCreatePermission && <Button onClick={openAddSalaryModal}>Compute Payroll</Button>}
           </div>
         </div>
       </div>
@@ -276,6 +282,7 @@ const Page = () => {
         </div>
       )}
     </div>
+    </HasAccess>
   );
 };
 

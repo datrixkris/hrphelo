@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { ProjectData } from "../../types/project-types";
 import { useProjectStore } from "../../stores/project-store";
 import { ProjectDetailsContext } from "../../components/project-details/ProjectDetailsContext";
+import HasAccess from "@/app/(client)/components/HasAccess";
 
 const Project = () => {
   const params = useParams<{ projectId: string; projectSlug: string }>();
@@ -42,7 +43,7 @@ const Project = () => {
   };
 
   return (
-    <>
+    <HasAccess module="Project">
       {loading ? (
         <div className="mx-auto my-5 inline-block">Getting project info...</div>
       ) : (
@@ -82,7 +83,7 @@ const Project = () => {
           </div>
         </div>
       )}
-    </>
+    </HasAccess>
   );
 };
 

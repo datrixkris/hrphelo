@@ -4,11 +4,12 @@ import Modal from "@/app/components/Modal";
 import TabNavigation from "@/app/components/TabNavigation";
 import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import { StaffDetail } from "@/app/(client)/(dashboard)/(employee)/staff/types";
-import UserPermissions from "./UserPermissions";
+// import UserPermissions from "./UserPermissions";
 import UserBasicInformation from "./UserBasicInformation";
 import { UserModules } from "../types";
 import { useUserAccountStore } from "../user-account-store";
 import { UsersInterface } from "./UsersList";
+import UserRoles from "./UserRoles";
 
 interface UserFormProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ interface UserFormProps {
   staffDetails: UsersInterface;
   refreshData: () => Promise<void>;
 }
+
+type Tabs = "Basic Information" | "Roles & Permissions" | "Permissions";
 
 const UserForm = ({
   isOpen,
@@ -26,9 +29,9 @@ const UserForm = ({
   const { updatingData, error, updateStaffDetails } = useStaffStore();
   const createUser = useUserAccountStore((state) => state.createUser);
   const editUser = useUserAccountStore((state) => state.editUser);
-  const tabs = ["Permissions", "Basic Information"];
-  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [isUserCreated, setIsUserCreated] = useState(false);
+  const tabs: Tabs[] = ["Roles & Permissions", "Basic Information"];
+  const [activeTab, setActiveTab] = useState<Tabs>("Roles & Permissions");
 
   useEffect(() => {
     setIsUserCreated(staffDetails.permissions ? true : false);
@@ -63,6 +66,7 @@ const UserForm = ({
       }),
     };
     console.log(permissions);
+    console.log(permissionsData);
     if (staffDetails?.staff.id) {
       isUserCreated
         ? await editUser(permissionsData, staffDetails.staff.user!.id)
@@ -85,7 +89,11 @@ const UserForm = ({
 
   return (
     <div className="overflow-auto">
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        width="w-[90vw] md:w-[700px] lg:w-[750px] "
+      >
         <div className="w-full">
           <h2 className="mb-5 text-center text-2xl font-bold">Staff Account</h2>
 
@@ -94,7 +102,7 @@ const UserForm = ({
               tabs={tabs}
               activeTab={activeTab}
               setActiveTab={(tab) => {
-                setActiveTab(tab);
+                setActiveTab(tab as Tabs);
               }}
             />
           </div>
@@ -108,9 +116,18 @@ const UserForm = ({
             </div>
           )}
 
-          {activeTab === "Permissions" && (
+          {/* {activeTab === "Permissions" && (
             <div>
               <UserPermissions
+                userPermissions={staffDetails.permissions}
+                onPermissionsSubmit={handlePermissionsSubmit}
+              />
+            </div>
+          )} */}
+
+          {activeTab === "Roles & Permissions" && (
+            <div>
+              <UserRoles
                 userPermissions={staffDetails.permissions}
                 onPermissionsSubmit={handlePermissionsSubmit}
               />

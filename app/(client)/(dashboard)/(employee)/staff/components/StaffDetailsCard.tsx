@@ -6,11 +6,13 @@ import EditStaffForm from "./EditStaffForm";
 import { StaffDetail } from "../types";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useHasPermission } from "@/app/hooks/permissions";
+import { useAuthStore } from "@/app/stores/auth-store";
 
 interface StaffDetailsProps {
   staffDetails: StaffDetail | null;
   refreshData: () => Promise<void>;
-  defaultAccount?: boolean;
+  defaultAccount?: boolean; //this is to determine the company owner. and hide sometins
 }
 
 const StaffDetailsCard = ({
@@ -19,6 +21,9 @@ const StaffDetailsCard = ({
   defaultAccount,
 }: StaffDetailsProps) => {
   const [openModal, setOpenModal] = useState(false);
+  const hasEditPermission = useHasPermission("modify", "Staff");
+  const user = useAuthStore((state) => state.user);
+
   return (
     <>
       <div className="relative">
@@ -149,12 +154,17 @@ const StaffDetailsCard = ({
 
         {/* edit button */}
         {!defaultAccount && (
-          <div
-            onClick={() => setOpenModal(true)}
-            className="absolute right-5 top-5 flex size-10 cursor-pointer items-center justify-center rounded-full bg-hr-yellow text-black transition-colors hover:bg-hr-yellow-dark"
-          >
-            <Icon icon="heroicons:pencil" className="text-xl" />
-          </div>
+          <>
+            {/* Check if user has permissions to edit or user is the staff */}
+            {(hasEditPermission || user?.staff.id === staffDetails?.id) && (
+              <div
+                onClick={() => setOpenModal(true)}
+                className="absolute right-5 top-5 flex size-10 cursor-pointer items-center justify-center rounded-full bg-hr-yellow text-black transition-colors hover:bg-hr-yellow-dark"
+              >
+                <Icon icon="heroicons:pencil" className="text-xl" />
+              </div>
+            )}
+          </>
         )}
       </div>
       {openModal && (

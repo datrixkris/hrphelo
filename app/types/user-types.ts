@@ -11,6 +11,8 @@ export interface Company {
   email: string;
   company_size: string;
   checklists: Checklist[];
+  company_light_theme_logo?: string;
+  company_dark_theme_logo?: string;
 }
 
 export interface Staff {
