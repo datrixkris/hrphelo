@@ -7,6 +7,7 @@ import { clientSidebarLinks as links } from "@/app/data/links";
 // import { useHasPermission } from "@/app/hooks/permissions";
 import { hasPermission } from "@/utils/permissions";
 import { useAuthStore } from "@/app/stores/auth-store";
+import CompanyLogo from "@/app/components/CompanyLogo";
 
 const Sidebar = () => {
   const user = useAuthStore((state) => state.user);
@@ -17,12 +18,13 @@ const Sidebar = () => {
         {/* logo  */}
         <div className="flex h-14 items-center justify-center gap-2">
           {/* logo */}
-          <div className="flex size-14 items-center justify-center rounded-full border">
+          {/* <div className="flex size-14 items-center justify-center rounded-full border">
             <Icon
               icon="heroicons:building-office-2"
               className="text-4xl"
             ></Icon>
-          </div>
+          </div> */}
+          <CompanyLogo/>
         </div>
         {/* title  */}
         <div className="mt-4 border-t border-base-300">
