@@ -179,7 +179,7 @@ const Page = () => {
               className="btn btn-error"
             >
               <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
-              End Contract
+              Terminate Contract
             </button>
           )}
         </div>
