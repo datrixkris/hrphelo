@@ -161,7 +161,7 @@ const Page = () => {
       ) : (
         <div className="mt-8 border-t border-base-300 pt-6">
           <div className="mb-4">
-            <h3 className="mb-2 text-lg font-semibold">Employee Termination</h3>
+            <h3 className="mb-2 text-lg font-semibold">Terminate Contract</h3>
             <p className="mb-4 text-sm text-gray-600">
               As HR personnel, you can initiate termination procedures for this
               employee. Please ensure all company policies and legal
