@@ -5,7 +5,7 @@ export const baseURL = "https://hrphelo.wavebeep.com/";
 
 export const api = axios.create({
   baseURL,
-  timeout: 50000,
+  // timeout: 50000,
   headers: {},
 });
 
