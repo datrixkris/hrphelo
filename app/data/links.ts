@@ -6,15 +6,15 @@ export const clientSidebarLinks: SidebarLink[] = [
     link: "/dashboard",
   },
   {
-    name: "Onboarding",
-    icon: "hugeicons:user-add-01",
-    link: "/onboarding",
-    module: "Checklist",
-  },
-  {
     name: "Staff Management",
     icon: "hugeicons:user-group",
     dropdown: [
+      {
+        name: "Checklist",
+        // icon: "hugeicons:user-add-01",
+        link: "/onboarding",
+        module: "Checklist",
+      },
       {
         name: "Staff List",
         link: "/staff",
