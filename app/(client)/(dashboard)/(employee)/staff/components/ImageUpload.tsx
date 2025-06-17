@@ -3,10 +3,10 @@ import { Icon } from "@iconify/react";
 
 interface ImageUploadProps {
   onImageSelect: (file: File | null) => void;
-  image?: string; 
-  disabled?: boolean; 
+  image?: string;
+  disabled?: boolean;
   maxFileSize?: number;
-  id: string; 
+  id: string;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
@@ -52,7 +52,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
       // Validate file size
       if (file.size > maxFileSize) {
-        setError(`Image size must be less than ${maxFileSize / (1024 * 1024)}MB.`);
+        setError(
+          `Image size must be less than ${maxFileSize / (1024 * 1024)}MB.`,
+        );
         onImageSelect(null);
         return;
       }
@@ -68,43 +70,45 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   return (
-    <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-lg border border-base-300">
-      {preview ? (
-        <img
-          src={preview}
-          alt="Image preview"
-          className="h-full w-full object-contain"
-          onError={() => setError("Failed to load image preview.")}
+    <div className="relative h-32 w-32">
+      <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-lg border border-base-content/20">
+        {preview ? (
+          <img
+            src={preview}
+            alt="Image preview"
+            className="h-full w-full object-contain"
+            onError={() => setError("Failed to load image preview.")}
+          />
+        ) : (
+          <Icon
+            icon="heroicons:camera"
+            className="text-4xl text-neutral-400"
+            aria-hidden="true"
+          />
+        )}
+        <label
+          htmlFor={id}
+          className={`absolute bottom-1 right-1 z-30 cursor-pointer rounded-full border border-base-content/20 bg-base-100 p-2 shadow-md transition-colors ${
+            disabled ? "cursor-not-allowed opacity-50" : "hover:bg-base-200"
+          }`}
+          aria-label="Upload image"
+        >
+          <Icon icon="heroicons:pencil" className="text-2xl text-neutral-600" />
+        </label>
+        <input
+          type="file"
+          accept="image/*"
+          id={id}
+          className="hidden"
+          onChange={handleImageChange}
+          disabled={disabled}
         />
-      ) : (
-        <Icon
-          icon="heroicons:camera"
-          className="text-4xl text-neutral-400"
-          aria-hidden="true"
-        />
-      )}
-      <label
-        htmlFor={id} 
-        className={`absolute bottom-2 right-2 cursor-pointer rounded-full bg-base-100 p-2 shadow-md transition-colors ${
-          disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-base-200"
-        }`}
-        aria-label="Upload image"
-      >
-        <Icon icon="heroicons:pencil" className="text-2xl text-neutral-600" />
-      </label>
-      <input
-        type="file"
-        accept="image/*"
-        id={id} 
-        className="hidden"
-        onChange={handleImageChange}
-        disabled={disabled}
-      />
-      {error && (
-        <div className="absolute bottom-0 w-full bg-error bg-opacity-80 p-1 text-center text-xs text-white">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="absolute bottom-0 w-full bg-error bg-opacity-80 p-1 text-center text-xs text-white">
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

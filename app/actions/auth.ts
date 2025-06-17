@@ -1,4 +1,5 @@
 // Import necessary modules and types
+import { toast } from "react-toastify";
 import { api } from "../axiosApi/api";
 import {
   FirstResetData,
@@ -150,10 +151,11 @@ export const requestPasswordResetLink = async (formData: { email: string }) => {
 
     return {
       message: response.data.message,
-      status: response.status,
+      status: response.data.status,
     };
   } catch (error) {
     console.error("Error requesting password reset link:");
+    toast.error("Error requesting password reset link");
 
     // return {
     // //   message: error.response?.data?.message || "An error occurred. Please try again.",

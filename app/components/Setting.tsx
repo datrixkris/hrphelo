@@ -24,7 +24,7 @@ const Setting = ({ handleOnClick }: SettingProps) => {
             htmlFor="my-drawer-4"
             className="btn btn-primary drawer-button fixed bottom-4 right-4 rounded-full text-2xl"
           >
-            <Icon icon="mdi:settings" className="animate-spin" />
+            <Icon icon="ic:round-color-lens" />
           </label>
         </div>
         <div className="drawer-side z-50">

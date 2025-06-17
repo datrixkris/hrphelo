@@ -3,6 +3,7 @@ import { requestPasswordResetLink } from "@/app/actions/auth";
 import Button from "@/app/components/Button";
 import Logo from "@/app/components/Logo";
 import { useAuthStore } from "@/app/stores/auth-store";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useLayoutEffect, useState } from "react";
 
@@ -10,6 +11,7 @@ const Page = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -21,10 +23,11 @@ const Page = () => {
 
       if (response?.message) {
         setMessage(response.message);
+        setStatus(response.status);
       }
     } catch (error) {
       console.error("Error:", error);
-      setMessage("An error occurred. Please try again.");
+      // setMessage("An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -46,15 +49,17 @@ const Page = () => {
     <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-5 flex w-full justify-center text-center">
-            <Logo width={200} height={150} />
+          <div className="mx-auto mb-5 flex max-w-xs justify-center text-center">
+            <Link href="/auth/login">
+              <Logo width={200} height={150} />
+            </Link>
           </div>
         </div>
 
         <div className="relative mx-auto mt-8 max-w-md md:mt-16">
           <div className="overflow-hidden rounded-md bg-base-300 shadow-md">
             <div className="px-4 py-6 sm:px-8 sm:py-7">
-              <div className="mb-10 text-center">
+              <div className="mb-5 text-center">
                 <h2 className="text-2xl font-bold leading-tight">
                   Forgot your password?
                 </h2>
@@ -65,9 +70,17 @@ const Page = () => {
               </div>
 
               {message && (
-                <p className="mt-4 bg-red-200 p-2 text-center text-sm text-red-800">
-                  {message}
-                </p>
+                <div>
+                  {status ? (
+                    <p className="mb-4 bg-green-200 p-2 text-center text-sm text-green-800">
+                      {message}
+                    </p>
+                  ) : (
+                    <p className="mb-4 bg-red-200 p-2 text-center text-sm text-red-800">
+                      {message}
+                    </p>
+                  )}
+                </div>
               )}
               <form onSubmit={onSubmit}>
                 <div className="space-y-5">

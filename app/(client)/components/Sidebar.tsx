@@ -17,14 +17,7 @@ const Sidebar = () => {
       <div className="relative h-full border-r border-base-300 bg-base-100 p-2">
         {/* logo  */}
         <div className="flex h-14 items-center justify-center gap-2">
-          {/* logo */}
-          {/* <div className="flex size-14 items-center justify-center rounded-full border">
-            <Icon
-              icon="heroicons:building-office-2"
-              className="text-4xl"
-            ></Icon>
-          </div> */}
-          <CompanyLogo/>
+          <CompanyLogo />
         </div>
         {/* title  */}
         <div className="mt-4 border-t border-base-300">
