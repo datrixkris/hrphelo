@@ -15,8 +15,7 @@ import { useForm } from "react-hook-form";
 const Page = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false); 
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const router = useRouter();
 
@@ -162,9 +161,9 @@ const Page = () => {
         </div>
 
         {/* Right side - Form */}
-        <div className="flex items-center h-screen  justify-center bg-base-200 px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+        <div className="flex h-screen items-center justify-center bg-base-200 px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
-            <div className="mb-5 flex w-full justify-center text-center">
+            <div className="mx-auto mb-5 flex w-full max-w-xs justify-center text-center">
               <Logo width={200} height={150} />
             </div>
             <h2 className="text-center text-3xl font-bold leading-tight sm:text-4xl">
@@ -209,15 +208,14 @@ const Page = () => {
                   <div className="input input-bordered mt-2 flex items-center gap-2 rounded">
                     <input
                       {...register("password")}
-                      type={passwordVisible ? "text" : "password"} 
+                      type={passwordVisible ? "text" : "password"}
                       className="grow"
                       placeholder="Password"
                     />
                     <Icon
-                      icon={passwordVisible ? "mdi:eye-off" : "mdi:eye"} 
+                      icon={passwordVisible ? "mdi:eye-off" : "mdi:eye"}
                       className="cursor-pointer"
-                      onClick={() => setPasswordVisible(!passwordVisible)} 
-                      
+                      onClick={() => setPasswordVisible(!passwordVisible)}
                     />
                   </div>
                   {errors.password && (

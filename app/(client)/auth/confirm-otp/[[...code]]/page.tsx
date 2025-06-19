@@ -9,6 +9,7 @@ import Button from "@/app/components/Button";
 import Logo from "@/app/components/Logo";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 
@@ -115,12 +116,14 @@ const Page = ({ params }: { params: { code: string } }) => {
     <section className="flex h-screen w-full flex-col items-center justify-center bg-base-200">
       <div className="mx-auto max-w-2xl text-center">
         <div className="mb-7 flex w-full justify-center text-center">
-          <Logo width={200} height={150} />
+          <Link href="/auth/login">
+            <Logo width={200} height={150} />
+          </Link>
         </div>
       </div>
       <div className="w-full max-w-md rounded-lg bg-base-300 px-8 py-10 shadow-md">
         <h1 className="mb-4 text-center text-2xl font-semibold">Enter OTP</h1>
-        <p className="mb-6 text-center text-gray-600 dark:text-gray-200">
+        <p className="mb-6 text-center text-gray-400 dark:text-gray-400">
           Code sent to your email
         </p>
         {message && (
@@ -140,18 +143,18 @@ const Page = ({ params }: { params: { code: string } }) => {
               autoComplete="off"
               value={digit}
               onChange={(e) => handleInputChange(e, index)}
-              className="flex aspect-square w-14 cursor-text items-center justify-center rounded-lg bg-base-100 text-center text-2xl text-gray-700 dark:text-gray-100"
+              className="flex aspect-square w-14 cursor-text items-center justify-center rounded-lg bg-base-100 text-center text-2xl text-gray-400 dark:text-gray-400"
             />
           ))}
         </div>
         <div className="mt-3 flex items-center justify-between">
-          <p className="text-sm text-gray-600 dark:text-gray-200">
+          <p className="text-sm text-gray-400 dark:text-gray-400">
             Didn&apos;t receive code?
           </p>
           <button
             onClick={handleOtpRequest}
             disabled={!canRequestOtp} // Disable the button if OTP can't be requested yet
-            className={`rounded px-3 py-2 text-center text-sm font-medium ${canRequestOtp ? "text-hr-yellow-light hover:bg-hr-yellow" : "text-gray-400"}`}
+            className={`rounded px-3 py-2 text-center text-sm font-medium ${canRequestOtp ? "text-hr-yellow-light hover:text-hr-yellow" : "text-gray-400"}`}
           >
             {canRequestOtp ? "Request Again" : `Request in ${timer}s`}
           </button>

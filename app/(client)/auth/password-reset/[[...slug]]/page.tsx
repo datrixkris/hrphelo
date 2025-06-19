@@ -5,15 +5,16 @@ import Logo from "@/app/components/Logo";
 import { ResetFormData, resetSchema } from "@/app/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const Page = ({ params }: { params: { slug: string } }) => {
   const [loading, setLoading] = useState(false);
-    const [passwordVisible, setPasswordVisible] = useState(false); 
-    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false); 
-  
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
   const router = useRouter();
   const {
     register,
@@ -51,8 +52,10 @@ const Page = ({ params }: { params: { slug: string } }) => {
     <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-5 flex w-full justify-center text-center">
-            <Logo width={200} height={150} />
+          <div className="mx-auto mb-5 flex w-full max-w-xs justify-center text-center">
+            <Link href="/auth/login">
+              <Logo width={200} height={150} />
+            </Link>
           </div>
         </div>
 
@@ -79,11 +82,11 @@ const Page = ({ params }: { params: { slug: string } }) => {
 
                       <input
                         {...register("password")}
-                        type={passwordVisible ? "text" : "password"} 
+                        type={passwordVisible ? "text" : "password"}
                         className="grow"
                         placeholder="Password"
                       />
-                         <Icon
+                      <Icon
                         icon={passwordVisible ? "mdi:eye-off" : "mdi:eye"}
                         className="cursor-pointer"
                         onClick={() => setPasswordVisible(!passwordVisible)}
@@ -104,15 +107,19 @@ const Page = ({ params }: { params: { slug: string } }) => {
                       />
 
                       <input
-                        type={confirmPasswordVisible ? "text" : "password"} 
+                        type={confirmPasswordVisible ? "text" : "password"}
                         {...register("confirmPassword")}
                         className="grow"
                         placeholder="  Confirm Password"
                       />
                       <Icon
-                        icon={confirmPasswordVisible ? "mdi:eye-off" : "mdi:eye"}
+                        icon={
+                          confirmPasswordVisible ? "mdi:eye-off" : "mdi:eye"
+                        }
                         className="cursor-pointer"
-                        onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+                        onClick={() =>
+                          setConfirmPasswordVisible(!confirmPasswordVisible)
+                        }
                       />
                     </div>
                     {errors.confirmPassword && (
