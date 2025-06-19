@@ -115,7 +115,7 @@ const Page = ({ params }: { params: { code: string } }) => {
   return (
     <section className="flex h-screen w-full flex-col items-center justify-center bg-base-200">
       <div className="mx-auto max-w-2xl text-center">
-        <div className="mb-7 flex w-full justify-center text-center">
+        <div className="mx-auto mb-7 flex w-full max-w-xs justify-center text-center">
           <Link href="/auth/login">
             <Logo width={200} height={150} />
           </Link>
