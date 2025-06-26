@@ -21,6 +21,9 @@ const companySchema = z.object({
     .regex(/^\+?[\d\s-]{10,}$/, "Invalid company phone number"),
   email: z.string().email("Invalid email address"),
   company_size: z.string().min(1, "Company size is required"),
+  password_expiry_duration: z.coerce
+    .number()
+    .min(1, "Password expiry duration is required"),
 });
 
 type CompanyFormData = z.infer<typeof companySchema>;
@@ -48,6 +51,7 @@ const SettingsPage = () => {
       contact: "",
       email: "",
       company_size: "",
+      password_expiry_duration: 0,
     },
   });
 
@@ -62,6 +66,7 @@ const SettingsPage = () => {
         contact: company.contact || "",
         email: company.email || "",
         company_size: company.company_size || "",
+        password_expiry_duration: company.password_expiry_duration || 0,
       });
     }
   }, [company, loading, reset]);
@@ -260,6 +265,13 @@ const SettingsPage = () => {
                       label: "Company Size",
                       description: "Update company's size",
                       type: "text",
+                    },
+                    {
+                      name: "password_expiry_duration",
+                      label: "Password Expiry Duration",
+                      description:
+                        "Update password expiry duration in days. (0 for no expiry)",
+                      type: "number",
                     },
                   ].map((field) => (
                     <div key={field.name} className="form-control">

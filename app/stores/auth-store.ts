@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { User } from "../types/user-types";
 import { api } from "../axiosApi/api";
+import dayjs from "dayjs";
 // import { access } from "fs";
 
 interface AuthStore {
@@ -39,7 +40,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
       // Update isAuthenticated based on user and access token
       const isAuthenticated =
         !!getLocalStorage("accessToken") &&
-        response.data.isPasswordReset === true;
+        response.data.isPasswordReset === true &&
+        !dayjs(response.data.nextPasswordResetDate).isBefore(dayjs());
       set({ isAuthenticated });
     } catch (err) {
       console.error("Error fetching user data:", err);

@@ -35,6 +35,17 @@ export const submitLoginForm = async (formData: LoginData) => {
         return { route: "/auth/password-reset" };
       }
 
+      // Check if password is expired and redirect to change password page
+      if (userResponse.data.nextPasswordResetDate) {
+        const nextPasswordResetDate = new Date(
+          userResponse.data.nextPasswordResetDate,
+        );
+        const today = new Date();
+        if (nextPasswordResetDate < today) {
+          return { route: "/auth/change-password" };
+        }
+      }
+
       // Redirect to dashboard
       return { route: "/" };
     } else {
@@ -251,5 +262,85 @@ export const submitForgotPasswordForm = async (formData: ResetFormData) => {
   } catch (error) {
     console.error("Error submitting set form:", error);
     return { error: "Error submitting the password reset form." };
+  }
+};
+
+// Change password for authenticated users - first step (request OTP)
+export const changePassword = async (formData: ResetFormData) => {
+  try {
+    // Store the password data temporarily
+    localStorage.setItem(
+      "changePasswordData",
+      JSON.stringify({
+        password: formData.password,
+        confirm_password: formData.confirmPassword,
+      }),
+    );
+
+    // Request OTP for password change
+    const response = await api.put("/v1/user/password-reset", {
+      password: formData.password,
+      confirm_password: formData.confirmPassword,
+    });
+
+    if (response.data.status === true) {
+      return { success: true, route: "/auth/change-password/otp" };
+    } else {
+      return {
+        success: false,
+        message: response.data.message || "Failed to initiate password change",
+      };
+    }
+  } catch (error: unknown) {
+    console.error("Error initiating password change:", error);
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Error initiating password change";
+    return {
+      success: false,
+      message: errorMessage,
+    };
+  }
+};
+
+// Verify OTP and complete password change
+export const verifyChangePasswordOtp = async (otp: string) => {
+  try {
+    // Retrieve the stored password data
+    const storedData = localStorage.getItem("changePasswordData");
+    const passwordData = storedData ? JSON.parse(storedData) : null;
+
+    if (!passwordData) {
+      return {
+        success: false,
+        message: "Password data not found. Please try again.",
+      };
+    }
+
+    const response = await api.put("/v1/user/password-reset", {
+      password: passwordData.password,
+      confirm_password: passwordData.confirm_password,
+      otp: otp,
+    });
+
+    if (response.data.status === true) {
+      // Clear the stored data
+      localStorage.removeItem("changePasswordData");
+      return { success: true, message: response.data.message };
+    } else {
+      return {
+        success: false,
+        message: response.data.message || "Failed to change password",
+      };
+    }
+  } catch (error: unknown) {
+    console.error("Error verifying OTP for password change:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Error verifying OTP";
+    return {
+      success: false,
+      message: errorMessage,
+    };
   }
 };

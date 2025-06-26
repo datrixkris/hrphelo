@@ -13,6 +13,7 @@ export interface Company {
   checklists: Checklist[];
   company_light_theme_logo?: string;
   company_dark_theme_logo?: string;
+  password_expiry_duration: number;
 }
 
 export interface Staff {
@@ -63,7 +64,8 @@ export interface User {
   staff: Staff;
   permissions: Permission[];
   leaveYear: number;
-  resignation:string;
+  resignation: string;
+  nextPasswordResetDate: string;
   iat: number; // Issued At timestamp
   exp: number; // Expiration timestamp
 }

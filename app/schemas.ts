@@ -7,21 +7,27 @@ export const loginSchema = z.object({
   password: z.string().min(6),
 });
 
-export const resetSchema = z.object({
-  password: z.string().min(6),
-  confirmPassword: z.string().min(6),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+export const resetSchema = z
+  .object({
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 // Example schema for user registration
 export const registerSchema = z
   .object({
     name: z.string().min(2),
     email: z.string().email(),
-    password: z.string().min(6),
-    confirmPassword: z.string().min(6),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
