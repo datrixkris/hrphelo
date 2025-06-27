@@ -8,6 +8,7 @@ import {
   ResetFormData,
 } from "../schemas";
 import { useAuthStore } from "../stores/auth-store";
+import dayjs from "dayjs";
 
 // Submit login form
 export const submitLoginForm = async (formData: LoginData) => {
@@ -37,11 +38,11 @@ export const submitLoginForm = async (formData: LoginData) => {
 
       // Check if password is expired and redirect to change password page
       if (userResponse.data.nextPasswordResetDate) {
-        const nextPasswordResetDate = new Date(
+        const nextPasswordResetDate = dayjs(
           userResponse.data.nextPasswordResetDate,
         );
-        const today = new Date();
-        if (nextPasswordResetDate < today) {
+        const today = dayjs();
+        if (nextPasswordResetDate.isBefore(today)) {
           return { route: "/auth/change-password" };
         }
       }
