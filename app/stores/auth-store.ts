@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       // Update isAuthenticated based on user and access token
       const isAuthenticated =
         !!getLocalStorage("accessToken") &&
-        response.data.isPasswordReset === true &&
+        // response.data.isPasswordReset === true &&
         !dayjs(response.data.nextPasswordResetDate).isBefore(dayjs());
       set({ isAuthenticated });
     } catch (err) {
