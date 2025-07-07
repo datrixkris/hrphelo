@@ -11,6 +11,7 @@ import {
   EmployeeProjectsTable,
   LeaveChart,
 } from "./components/DashboardStatCards";
+import { useAuthStore } from "@/app/stores/auth-store";
 
 // Sample Data
 const kpiCards = [
@@ -97,13 +98,16 @@ const KPISection = () => (
   </div>
 );
 
-const page = () => {
+const Page = () => {
+  const user = useAuthStore((state) => state.user);
+  // console.log(user);
+
   return (
     <div>
       {/* Welcome */}
       <div className="">
         <h1 className="mb-2 text-2xl font-bold">
-          Welcome to your dashboard, Christian!
+          Welcome to your dashboard, {user?.staff.name.split(" ")[0]}!
         </h1>
         <p className="text-gray-600">
           Have a quick overview of your current status and activities.
@@ -149,4 +153,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

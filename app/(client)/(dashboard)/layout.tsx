@@ -10,17 +10,20 @@ import "react-toastify/dist/ReactToastify.css";
 import { Icon } from "@iconify/react";
 import Setting from "@/app/components/Setting";
 import { ThemeContext } from "@/app/context/ThemeContext";
+import Image from "next/image";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [collapse, setCollapse] = useState(false);
   const { changeTheme } = useContext(ThemeContext);
+  const [loading, setLoading] = useState(false);
   // const { socket } = useSocket();
-
 
   useLayoutEffect(() => {
     const fetchUser = async () => {
+      setLoading(true);
       await useAuthStore.getState().fetchUserData();
+      setLoading(false);
       const isAuthenticated = useAuthStore.getState().isAuthenticated;
       if (!isAuthenticated) {
         router.push("/auth/login");
@@ -29,8 +32,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     fetchUser();
   }, [router]);
-
-
 
   // useEffect(() => {
   //   if (socket) {
@@ -45,8 +46,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   //   }
   // }, [socket]);
 
-
- 
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="animate-pulse">
+          <Image src="/images/HR.png" alt="logo" width={100} height={100} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
