@@ -33,7 +33,9 @@ const LinkWithDropdown = ({ links }: DropdownProps) => {
         {/* Icon and name */}
         <div className="flex items-center gap-2">
           <Icon icon={links.icon} />
-          <span>{links.name}</span>
+          <span className="truncate text-ellipsis text-sm lg:text-base">
+            {links.name}
+          </span>
         </div>
 
         {/* icon chevi */}
