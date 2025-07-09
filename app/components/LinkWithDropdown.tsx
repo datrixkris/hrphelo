@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import ActiveLink from "./ActiveLink";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SidebarLink } from "../types/link-types";
+import { usePathname } from "next/navigation";
 
 interface DropdownProps {
   links: SidebarLink;
@@ -12,12 +13,22 @@ interface DropdownProps {
 
 const LinkWithDropdown = ({ links }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Check if any dropdown item is active
+  const isAnyChildActive =
+    links.dropdown?.some((item) => pathname.includes(item.link)) || false;
+
   return (
     <div className="">
       {/* top */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex cursor-pointer items-center justify-between text-neutral-500 transition hover:text-base-content"
+        className={`flex cursor-pointer items-center justify-between rounded-lg px-3 py-2 transition-all duration-200 ${
+          isAnyChildActive
+            ? "bg-neutral text-neutral-content"
+            : "text-neutral-500 hover:bg-neutral/20 hover:text-base-content"
+        }`}
       >
         {/* Icon and name */}
         <div className="flex items-center gap-2">
@@ -42,15 +53,23 @@ const LinkWithDropdown = ({ links }: DropdownProps) => {
         transition={{ duration: 0.3 }}
         className="overflow-hidden"
       >
-        <div className="mt-2 space-y-2 rounded-lg bg-base-200 p-3">
+        <div className="mt-2 space-y-1 rounded-lg bg-base-200 p-2">
           {links?.dropdown?.map((link, index) => {
+            const isChildActive = pathname.includes(link.link);
             return (
               <div className="" key={index}>
-                <ActiveLink href={link.link}>
-                  <div className="flex items-center gap-2 text-sm">
-                    <li className="">{link.name}</li>
+                <Link href={link.link}>
+                  <div
+                    className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all duration-200 ${
+                      isChildActive
+                        ? "bg-neutral/20 text-base-content"
+                        : "text-neutral-500 hover:bg-neutral/20 hover:text-base-content"
+                    }`}
+                  >
+                    {link.icon && <Icon icon={link.icon} />}
+                    <span className="">{link.name}</span>
                   </div>
-                </ActiveLink>
+                </Link>
               </div>
             );
           })}

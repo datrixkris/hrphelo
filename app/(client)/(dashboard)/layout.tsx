@@ -23,11 +23,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const fetchUser = async () => {
       setLoading(true);
       await useAuthStore.getState().fetchUserData();
-      setLoading(false);
       const isAuthenticated = useAuthStore.getState().isAuthenticated;
       if (!isAuthenticated) {
         router.push("/auth/login");
       }
+      setLoading(false);
     };
 
     fetchUser();

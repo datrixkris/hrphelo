@@ -22,7 +22,7 @@ const Sidebar = () => {
         {/* title  */}
         <div className="mt-4 border-t border-base-300">
           {user && (
-            <div className="my-7 space-y-3">
+            <div className="my-7 space-y-1">
               {/* dashboard */}
               {links.map((link, index) => {
                 if (link.dropdown) {

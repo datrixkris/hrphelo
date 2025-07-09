@@ -4,6 +4,7 @@ export interface DropdownLink {
   name: string;
   link: string;
   module: ModuleName; // Optional for links that are not module-specific
+  icon?: string; // Optional icon for dropdown items
 }
 
 export interface SidebarLink {
