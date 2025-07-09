@@ -18,8 +18,8 @@ const ActiveLink = ({ href, children }: ActiveLinkProps) => {
       <div
         className={
           isActive
-            ? "text-base-content transition"
-            : "text-neutral-500 hover:text-base-content transition"
+            ? "rounded-lg bg-neutral px-3 py-2 text-neutral-content transition-all duration-200"
+            : "rounded-lg px-3 py-2 text-neutral-500 transition-all duration-200 hover:bg-neutral/20 hover:text-base-content"
         }
       >
         {children}
