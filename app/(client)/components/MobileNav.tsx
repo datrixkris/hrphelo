@@ -110,7 +110,9 @@ const MobileNav = ({
                             <ActiveLink href={link.link}>
                               <div className="flex items-center gap-2">
                                 <Icon icon={link.icon} />
-                                <span>{link.name}</span>
+                                <span className="truncate text-ellipsis text-sm lg:text-base">
+                                  {link.name}
+                                </span>
                               </div>
                             </ActiveLink>
                           </div>
@@ -125,7 +127,9 @@ const MobileNav = ({
                           <ActiveLink href={link.link}>
                             <div className="flex items-center gap-2">
                               <Icon icon={link.icon} />
-                              <span>{link.name}</span>
+                              <span className="truncate text-ellipsis text-sm lg:text-base">
+                                {link.name}
+                              </span>
                             </div>
                           </ActiveLink>
                         </div>
