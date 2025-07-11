@@ -15,7 +15,7 @@ export default function Page() {
 
   const { fetchStaffPaySlip, loading, payslip } = usePayrollStore();
 
-  const BaseURL = process.env.NEXT_PUBLIC_BaseURL;
+  const BaseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -131,7 +131,7 @@ export default function Page() {
               <div className="flex gap-5">
                 <div className="w-full">
                   <div className="mb-3 divide-y rounded-lg border">
-                    <div className="bg-base-200 p-3 font-medium rounded-lg">
+                    <div className="rounded-lg bg-base-200 p-3 font-medium">
                       <h3 className="text-md font-semibold"> Benefits</h3>
                     </div>
                     {payslip?.benefits.map((entry) => (
@@ -155,7 +155,7 @@ export default function Page() {
                 </div>
                 <div className="w-full">
                   <div className="mb-3 divide-y rounded-lg border">
-                    <div className="bg-base-200 p-3 font-medium rounded-lg">
+                    <div className="rounded-lg bg-base-200 p-3 font-medium">
                       <h6>Deductions</h6>
                     </div>
                     {payslip?.deductions.map((entry) => (

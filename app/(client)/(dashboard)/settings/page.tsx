@@ -28,6 +28,57 @@ const companySchema = z.object({
 
 type CompanyFormData = z.infer<typeof companySchema>;
 
+const fields = [
+  {
+    name: "name",
+    label: "Company Name",
+    description: "Update company's name",
+    type: "text",
+  },
+  {
+    name: "address",
+    label: "Company Address",
+    description: "Update company's address",
+    type: "text",
+  },
+  {
+    name: "contact_person",
+    label: "Contact Person",
+    description: "Update contact person's name",
+    type: "text",
+  },
+  {
+    name: "contact_person_contact",
+    label: "Contact Person Phone",
+    description: "Update contact person's phone number",
+    type: "tel",
+  },
+  {
+    name: "contact",
+    label: "Company Telephone",
+    description: "Update company's telephone contact",
+    type: "tel",
+  },
+  {
+    name: "email",
+    label: "Company Email Address",
+    description: "Update company's email address",
+    type: "email",
+  },
+  {
+    name: "company_size",
+    label: "Company Size",
+    description: "Update company's size",
+    type: "text",
+  },
+  {
+    name: "password_expiry_duration",
+    label: "Password Expiry Duration",
+    description: "Update password expiry duration in days. (0 for no expiry)",
+    type: "number",
+  },
+];
+
 const SettingsPage = () => {
   const { company, loading, updateCompanyDetails, fetchCompany } =
     useSettingsStore();
@@ -183,6 +234,17 @@ const SettingsPage = () => {
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 {/* Logo Upload Section */}
+                <div className="">
+                  <label className="label">
+                    <span className="label-text font-semibold">
+                      Company Logo
+                    </span>
+                  </label>
+                  <p className="label-text-alt text-neutral-400">
+                    Update company logo for light and dark themes. (Use
+                    transparent backgrounds for optimum experience)
+                  </p>
+                </div>
                 <div className="mb-8 flex flex-col gap-6 sm:flex-row">
                   {/* Light Theme Logo */}
                   <div className="flex flex-1 items-start gap-4">
@@ -223,57 +285,7 @@ const SettingsPage = () => {
 
                 {/* Form Fields */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {[
-                    {
-                      name: "name",
-                      label: "Company Name",
-                      description: "Update company's name",
-                      type: "text",
-                    },
-                    {
-                      name: "address",
-                      label: "Company Address",
-                      description: "Update company's address",
-                      type: "text",
-                    },
-                    {
-                      name: "contact_person",
-                      label: "Contact Person",
-                      description: "Update contact person's name",
-                      type: "text",
-                    },
-                    {
-                      name: "contact_person_contact",
-                      label: "Contact Person Phone",
-                      description: "Update contact person's phone number",
-                      type: "tel",
-                    },
-                    {
-                      name: "contact",
-                      label: "Company Telephone",
-                      description: "Update company's telephone contact",
-                      type: "tel",
-                    },
-                    {
-                      name: "email",
-                      label: "Company Email Address",
-                      description: "Update company's email address",
-                      type: "email",
-                    },
-                    {
-                      name: "company_size",
-                      label: "Company Size",
-                      description: "Update company's size",
-                      type: "text",
-                    },
-                    {
-                      name: "password_expiry_duration",
-                      label: "Password Expiry Duration",
-                      description:
-                        "Update password expiry duration in days. (0 for no expiry)",
-                      type: "number",
-                    },
-                  ].map((field) => (
+                  {fields.map((field) => (
                     <div key={field.name} className="form-control">
                       <label className="label">
                         <span className="label-text font-semibold">

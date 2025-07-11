@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useAuthStore } from "../stores/auth-store";
 
-export const baseURL = "https://hrphelo.wavebeep.com/";
-
+// export const baseURL = "https://hrphelo.wavebeep.com/";
+export const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 export const api = axios.create({
   baseURL,
   // timeout: 50000,

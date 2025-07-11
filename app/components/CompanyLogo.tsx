@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useAuthStore } from "@/app/stores/auth-store";
+import { ThemeContext } from "@/app/context/ThemeContext";
+import { themes } from "./Setting";
 
 interface LogoProps {
   className?: string;
@@ -18,11 +20,11 @@ const CompanyLogo = ({
 }: LogoProps) => {
   const [isDark, setIsDark] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
-    const theme = localStorage?.getItem("theme") || "light";
-    setIsDark(theme === "dark" || theme === "black");
-  }, []);
+    setIsDark(themes.darkThemes.includes(theme));
+  }, [theme]);
 
   const hasLogoImages =
     user?.company?.company_dark_theme_logo ||
@@ -30,22 +32,14 @@ const CompanyLogo = ({
 
   let logoSrc = null;
 
-  if (
-    user?.company?.company_dark_theme_logo &&
-    user?.company?.company_light_theme_logo
-  ) {
-    // Both themes exist, set based on current theme
-    logoSrc = isDark
-      ? user?.company?.company_dark_theme_logo
-      : user?.company?.company_light_theme_logo;
-  } else if (user?.company?.company_dark_theme_logo) {
-    // Only dark theme exists
-    logoSrc = user?.company?.company_dark_theme_logo;
-  } else if (user?.company?.company_light_theme_logo) {
-    // Only light theme exists
-    logoSrc = user?.company?.company_light_theme_logo;
+  const darkLogo = user?.company?.company_dark_theme_logo;
+  const lightLogo = user?.company?.company_light_theme_logo;
+
+  if (darkLogo && lightLogo) {
+    logoSrc = isDark ? darkLogo : lightLogo;
+  } else {
+    logoSrc = darkLogo || lightLogo || null;
   }
-  // If neither exists, logoSrc remains null
 
   return (
     <div>

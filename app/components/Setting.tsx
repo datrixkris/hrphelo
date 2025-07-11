@@ -5,6 +5,11 @@ interface SettingProps {
   handleOnClick?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
+export const themes = {
+  lightThemes: ["light", "lofi", "lemonade", "valentine"],
+  darkThemes: ["dark", "black", "coffee", "luxury", "synthwave"],
+};
+
 const Setting = ({ handleOnClick }: SettingProps) => {
   const [selectedTheme, setSelectedTheme] = useState<string>("");
 
@@ -39,18 +44,7 @@ const Setting = ({ handleOnClick }: SettingProps) => {
               <h5>Sidebar Color</h5>
               <h6>Choose a color of Sidebar.</h6>
             </div>
-            {[
-              "light",
-              "dark",
-              "retro",
-              "black",
-              "lofi",
-              "coffee",
-              "lemonade",
-              "luxury",
-              "valentine",
-              "synthwave",
-            ].map((theme) => (
+            {[...themes.lightThemes, ...themes.darkThemes].map((theme) => (
               <li key={theme}>
                 <div className="form-control">
                   <label className="label cursor-pointer gap-4">

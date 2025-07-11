@@ -1,7 +1,8 @@
 import { io, Socket } from "socket.io-client";
 import { useEffect, useState } from "react";
 
-const SOCKET_SERVER_URL = "https://hrphelo.wavebeep.com/";
+// const SOCKET_SERVER_URL = "https://hrphelo.wavebeep.com/";
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -12,11 +13,11 @@ export const useSocket = () => {
   useEffect(() => {
     setSocket(socketInstance);
     socketInstance.connect();
-  
+
     socketInstance.on("connect", () => {
       // console.log("Connected to socket server");
     });
-    
+
     socketInstance.on("connect_error", (error) => {
       console.error("Connection error:", error.message);
     });
@@ -26,7 +27,7 @@ export const useSocket = () => {
     socketInstance.io.on("error", (error) => {
       console.error("Socket.IO error:", error);
     });
-  
+
     return () => {
       socketInstance.disconnect();
     };
