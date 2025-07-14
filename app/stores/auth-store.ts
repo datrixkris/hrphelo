@@ -30,21 +30,30 @@ const getLocalStorage = (key: string) => {
 export const useAuthStore = create<AuthStore>((set) => ({
   accessToken: getLocalStorage("accessToken"),
   refreshToken: getLocalStorage("refreshToken"),
-  user: null,
-  isAuthenticated: false,
+  user: getLocalStorage("userData"),
+  isAuthenticated:
+    !!getLocalStorage("accessToken") && !!getLocalStorage("userData"),
 
   fetchUserData: async () => {
     try {
       const response = await api.get("/v1/user");
-      set({ user: response.data });
+      const userData = response.data;
+
+      // Store user data in localStorage
+      localStorage.setItem("userData", JSON.stringify(userData));
+
       // Update isAuthenticated based on user and access token
       const isAuthenticated =
         !!getLocalStorage("accessToken") &&
-        // response.data.isPasswordReset === true &&
-        !dayjs(response.data.nextPasswordResetDate).isBefore(dayjs());
-      set({ isAuthenticated });
+        // !dayjs(userData.nextPasswordResetDate).isBefore(dayjs());
+        !!userData;
+
+      set({ user: userData, isAuthenticated });
     } catch (err) {
       console.error("Error fetching user data:", err);
+      // If fetch fails, clear cached data
+      localStorage.removeItem("userData");
+      set({ user: null, isAuthenticated: false });
     }
   },
 
@@ -84,6 +93,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
         !!newAccessToken &&
         !dayjs(user.nextPasswordResetDate).isBefore(dayjs());
 
+      // Store updated user data in localStorage
+      localStorage.setItem("userData", JSON.stringify(user));
+
       useAuthStore.setState({
         user,
         isAuthenticated,
@@ -99,6 +111,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   logout: () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userData");
     set({
       accessToken: null,
       user: null,

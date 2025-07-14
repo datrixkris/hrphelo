@@ -34,16 +34,47 @@ const Page = () => {
   };
 
   useLayoutEffect(() => {
-    const fetchUser = async () => {
-      await useAuthStore.getState().fetchUserData();
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
-      if (isAuthenticated) {
-        router.push("/");
+    let isMounted = true;
+
+    const checkAuth = async () => {
+      try {
+        // Check if we have cached user data and tokens
+        const isAuthenticated = useAuthStore.getState().isAuthenticated;
+
+        if (!isAuthenticated) {
+          // No cached data, try to fetch fresh data
+          try {
+            await useAuthStore.getState().fetchUserData();
+            if (isMounted) {
+              const updatedAuth = useAuthStore.getState().isAuthenticated;
+              if (updatedAuth) {
+                router.push("/");
+              }
+            }
+          } catch (error) {
+            console.error("Error checking authentication:", error);
+            // If there's an error, clear the invalid tokens
+            if (isMounted) {
+              useAuthStore.getState().logout();
+            }
+          }
+        } else {
+          // Already authenticated, redirect
+          if (isMounted) {
+            router.push("/");
+          }
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
       }
     };
 
-    fetchUser();
-  }, [router]);
+    checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Remove router dependency to prevent infinite loops
 
   return (
     <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">

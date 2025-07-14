@@ -1,5 +1,4 @@
 import { useAuthStore } from "@/app/stores/auth-store";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { Staff } from "@/app/types/user-types";
@@ -16,7 +15,6 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
   const { logout, user } = useAuthStore();
   const fetchStaffProfile = useStaffStore((state) => state.fetchStaffProfile);
   const [profileData, setProfileData] = useState<StaffProfile | null>(null);
-  const router = useRouter();
   const [profileComplete, setProfileComplete] = useState(true);
 
   useEffect(() => {
@@ -45,7 +43,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
   // logout
   const handleLogout = () => {
     logout();
-    router.push("/auth/login");
+    // No need to manually redirect - logout() function handles it
   };
 
   return (

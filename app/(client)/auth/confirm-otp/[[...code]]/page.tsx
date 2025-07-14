@@ -101,16 +101,39 @@ const Page = ({ params }: { params: { code: string } }) => {
   }, [timer, canRequestOtp]);
 
   useLayoutEffect(() => {
-    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+    let isMounted = true;
 
-    if (params.code) {
-      requestResetOtp(params.code);
-    }
+    const checkAuth = async () => {
+      try {
+        // Check if we have cached user data and tokens
+        const isAuthenticated = useAuthStore.getState().isAuthenticated;
 
-    if (isAuthenticated) {
-      router.push("/");
-    }
-  }, [router]);
+        if (isAuthenticated) {
+          // Already authenticated, redirect
+          if (isMounted) {
+            router.push("/");
+          }
+        }
+
+        // Request OTP if code is provided
+        if (params.code && isMounted) {
+          try {
+            await requestResetOtp(params.code);
+          } catch (error) {
+            console.error("Error requesting OTP:", error);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+      }
+    };
+
+    checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Remove router dependency to prevent infinite loops
 
   return (
     <section className="flex h-screen w-full flex-col items-center justify-center bg-base-200">

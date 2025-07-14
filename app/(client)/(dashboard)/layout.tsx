@@ -20,17 +20,30 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   // const { socket } = useSocket();
 
   useLayoutEffect(() => {
-    const fetchUser = async () => {
+    const checkAuth = async () => {
       setLoading(true);
-      await useAuthStore.getState().fetchUserData();
+
+      // Check if we have cached user data and tokens
       const isAuthenticated = useAuthStore.getState().isAuthenticated;
+
       if (!isAuthenticated) {
-        router.push("/auth/login");
+        // No cached data, try to fetch fresh data
+        try {
+          await useAuthStore.getState().fetchUserData();
+          const updatedAuth = useAuthStore.getState().isAuthenticated;
+          if (!updatedAuth) {
+            router.push("/auth/login");
+          }
+        } catch (error) {
+          console.error("Error checking authentication:", error);
+          router.push("/auth/login");
+        }
       }
+
       setLoading(false);
     };
 
-    fetchUser();
+    checkAuth();
   }, [router]);
 
   // useEffect(() => {

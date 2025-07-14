@@ -119,6 +119,17 @@ api.interceptors.response.use(
           localStorage.setItem("accessToken", JSON.stringify(newToken));
         }
 
+        // Optionally refresh user data to ensure it's up to date
+        try {
+          const userResponse = await api.get("/v1/user");
+          const userData = userResponse.data;
+          localStorage.setItem("userData", JSON.stringify(userData));
+          useAuthStore.setState({ user: userData });
+        } catch (userError) {
+          console.warn("Failed to refresh user data:", userError);
+          // Don't fail the token refresh if user data refresh fails
+        }
+
         // Retry the original request with the new token
         originalRequest.headers.Authorization = newToken;
         return api(originalRequest);

@@ -28,10 +28,16 @@ export const submitLoginForm = async (formData: LoginData) => {
 
       // Fetch user data on successful login
       const userResponse = await api.get("/v1/user");
-      useAuthStore.setState({ user: userResponse.data });
+      const userData = userResponse.data;
+
+      // Store user data in localStorage
+      localStorage.setItem("userData", JSON.stringify(userData));
+
+      // Update store with user data
+      useAuthStore.setState({ user: userData });
 
       // Check if it's a first-time user
-      if (userResponse.data.isPasswordReset === false) {
+      if (userData.isPasswordReset === false) {
         // Provide route to confirm OTP and reset password
         return { route: "/auth/password-reset" };
       }
