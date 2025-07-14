@@ -1,3 +1,4 @@
+import { Designation } from "../(client)/(dashboard)/(employee)/designations/types";
 import { Checklist } from "../(client)/(dashboard)/onboarding/types";
 
 // Define the Company type
@@ -29,6 +30,7 @@ export interface Staff {
   contact: string;
   hiring_date: string;
   designation: string | null;
+  designations: Designation[];
   isDefault: boolean;
   image: string;
   createdAt: string;

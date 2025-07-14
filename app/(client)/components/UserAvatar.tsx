@@ -43,7 +43,6 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
   // logout
   const handleLogout = () => {
     logout();
-    // No need to manually redirect - logout() function handles it
   };
 
   return (
@@ -76,7 +75,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
           ) : (
             <div>
               <div className="avatar">
-                <div className="w-10 rounded-full">
+                <div className="w-10 rounded-full border border-gray-300">
                   <img src={profile?.image} alt="User Avatar" />
                 </div>
               </div>
@@ -87,7 +86,23 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
             <p className="text-sm font-semibold">
               {profile?.name || "User Name"}
             </p>
-            <p className="">{profile?.designation || "Role"}</p>
+            <div className="">
+              {profile?.designations && profile?.designations.length > 0 ? (
+                <p
+                  className="tooltip tooltip-bottom w-48 truncate"
+                  data-tip="Designations"
+                  title={profile?.designations
+                    .map((designation) => designation.name)
+                    .join(" | ")}
+                >
+                  {profile?.designations
+                    .map((designation) => designation.name)
+                    .join(" | ")}
+                </p>
+              ) : (
+                "Role"
+              )}
+            </div>
           </div>
         </div>
       </div>
