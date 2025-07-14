@@ -120,6 +120,7 @@ const SettingsPage = () => {
         password_expiry_duration: company.password_expiry_duration || 0,
       });
     }
+    console.log("company", company);
   }, [company, loading, reset]);
 
   // Fetch company data on mount if not already loaded
@@ -161,8 +162,8 @@ const SettingsPage = () => {
 
   const onSubmit = async (data: CompanyFormData) => {
     try {
-      let lightThemeLogoUrl = "";
-      let darkThemeLogoUrl = "";
+      let lightThemeLogoUrl = company?.company_light_theme_logo || "";
+      let darkThemeLogoUrl = company?.company_dark_theme_logo || "";
 
       if (lightThemeLogo) {
         lightThemeLogoUrl = await uploadImageToCloudinary(lightThemeLogo);

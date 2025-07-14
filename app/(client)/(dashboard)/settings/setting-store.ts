@@ -3,6 +3,7 @@ import { Company } from "@/app/types/user-types";
 import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useAuthStore } from "@/app/stores/auth-store";
 
 export interface EditCompanyDetail {
   name: string;
@@ -62,6 +63,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
     try {
       const response = await api.put(`/v1/company`, data);
+      // refresh user data to get new access token and update user data
+      await useAuthStore.getState().refreshUserData();
       set(() => ({ updatingData: false }));
       console.log(response);
     } catch (err) {

@@ -106,11 +106,21 @@ api.interceptors.response.use(
           refresh_token: refreshToken,
         });
 
-        // Update the accessToken in the auth store
-        useAuthStore.setState({ accessToken: response.data.token });
+        // Update the accessToken in the auth store and localStorage
+        const newToken = response.data.accessToken || response.data.token;
+        if (!newToken) {
+          throw new Error("No access token received from refresh");
+        }
+
+        useAuthStore.setState({ accessToken: newToken });
+
+        // Update localStorage
+        if (typeof window !== "undefined") {
+          localStorage.setItem("accessToken", JSON.stringify(newToken));
+        }
 
         // Retry the original request with the new token
-        originalRequest.headers.Authorization = response.data.token;
+        originalRequest.headers.Authorization = newToken;
         return api(originalRequest);
       } catch (err) {
         console.error("Token refresh failed:", err);

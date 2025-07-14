@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { User } from "../types/user-types";
 import { api } from "../axiosApi/api";
 import dayjs from "dayjs";
-// import { access } from "fs";
+import { toast } from "react-toastify";
 
 interface AuthStore {
   accessToken: string | null;
@@ -50,25 +50,49 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   refreshUserData: async () => {
     try {
-      const response = await api.post("/v1/auth/refresh-token", {
-        refresh_token: useAuthStore.getState().refreshToken,
-      });
-      // Update isAuthenticated based on user and access token
-      useAuthStore.setState({
-        accessToken: response.data.accessToken,
-      });
-      console.log(response.data);
+      const refreshToken = useAuthStore.getState().refreshToken;
+      if (!refreshToken) {
+        throw new Error("No refresh token available");
+      }
 
-      localStorage.setItem(
-        "accessToken",
-        JSON.stringify(response.data.accessToken),
-      );
-      // Fetch user data on successful login
+      const response = await api.post("/v1/auth/refresh-token", {
+        refresh_token: refreshToken,
+      });
+
+      const newAccessToken = response.data.accessToken || response.data.token;
+      if (!newAccessToken) {
+        throw new Error("No access token received from refresh");
+      }
+
+      // Update localStorage first
+      localStorage.removeItem("accessToken");
+      localStorage.setItem("accessToken", JSON.stringify(newAccessToken));
+
+      // Update store state
+      useAuthStore.setState({
+        accessToken: newAccessToken,
+      });
+
+      console.info("Access token refreshed:", newAccessToken);
+
+      // Fetch user with new access token
       const userResponse = await api.get("/v1/user");
-      useAuthStore.setState({ user: userResponse.data });
+      const user = userResponse.data;
+
+      // Update isAuthenticated based on user and access token
+      const isAuthenticated =
+        !!newAccessToken &&
+        !dayjs(user.nextPasswordResetDate).isBefore(dayjs());
+
+      useAuthStore.setState({
+        user,
+        isAuthenticated,
+      });
     } catch (err) {
       console.error("Error refreshing user data:", err);
+      // If refresh fails, logout the user
       // useAuthStore.getState().logout();
+      toast.error("Unable to refresh user data");
     }
   },
 
@@ -81,6 +105,10 @@ export const useAuthStore = create<AuthStore>((set) => ({
       isAuthenticated: false,
       refreshToken: null,
     });
+    // redirect to login page
+    if (typeof window !== "undefined") {
+      window.location.href = "/auth/login";
+    }
   },
 
   resetData: {
