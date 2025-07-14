@@ -46,17 +46,40 @@ const Page = () => {
   };
 
   useLayoutEffect(() => {
+    let isMounted = true;
+
     const fetchUser = async () => {
-      await useAuthStore.getState().fetchUserData();
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
-      // const userData = useAuthStore.getState().user;
-      if (isAuthenticated) {
-        router.push("/");
+      try {
+        // Check if we have a token first
+        const accessToken = useAuthStore.getState().accessToken;
+        if (!accessToken) {
+          // No token, user should stay on login page
+          return;
+        }
+
+        await useAuthStore.getState().fetchUserData();
+
+        if (isMounted) {
+          const isAuthenticated = useAuthStore.getState().isAuthenticated;
+          if (isAuthenticated) {
+            router.push("/");
+          }
+        }
+      } catch (error) {
+        console.error("Error checking authentication:", error);
+        // If there's an error, clear the invalid tokens
+        if (isMounted) {
+          useAuthStore.getState().logout();
+        }
       }
     };
 
     fetchUser();
-  }, [router]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Remove router dependency to prevent infinite loops
 
   return (
     <section className="bg-base-100">

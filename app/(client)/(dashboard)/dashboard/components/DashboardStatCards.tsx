@@ -39,7 +39,7 @@ const department = [
 
 const employees = [
   { id: 1, gender: "Male", value: 74, color: "#038db3" },
-  { id: 1, gender: "Female", value: 32, color: "#c7f933" },
+  { id: 2, gender: "Female", value: 32, color: "#c7f933" },
 ];
 
 type Priority = "high" | "highest" | "medium" | "low";

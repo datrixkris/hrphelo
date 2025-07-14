@@ -73,7 +73,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
         accessToken: newAccessToken,
       });
 
-      console.info("Access token refreshed:", newAccessToken);
+      console.info("Access token refreshed:");
 
       // Fetch user with new access token
       const userResponse = await api.get("/v1/user");

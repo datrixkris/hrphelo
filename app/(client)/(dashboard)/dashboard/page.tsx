@@ -51,7 +51,7 @@ const KPISection = () => (
           <span className="text-xs">May</span>{" "}
         </p>
       </div>
-      <p className="flex justify-between">
+      <div className="flex justify-between">
         <div className="">
           <p className="">
             {" "}
@@ -70,13 +70,13 @@ const KPISection = () => (
             Process Payroll
           </Link>
         </span>
-      </p>
+      </div>
     </div>
 
     {/* Users */}
     <div className="flex flex-col justify-between rounded-md bg-base-100 p-3">
       <h2 className="mb-2 font-semibold">Users</h2>
-      <p className="flex justify-between">
+      <div className="flex justify-between">
         <div className="">
           <p className="">
             {" "}
@@ -93,7 +93,7 @@ const KPISection = () => (
             Add User
           </Link>
         </span>
-      </p>
+      </div>
     </div>
   </div>
 );
