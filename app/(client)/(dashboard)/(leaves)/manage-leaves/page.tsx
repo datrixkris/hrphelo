@@ -71,7 +71,7 @@ const Page = () => {
     if (!leavePolicies.length) fetchLeavePolicies();
     if (!leaves?.leaves.length) fetchLeaves();
     filterLeaves();
-  }, [fetchLeavePolicies, fetchLeaves, leavePolicies, leaves]);
+  }, []);
 
   return (
     <div>
@@ -95,14 +95,14 @@ const Page = () => {
         </div>
       </div>
       <div className="mb-4 grid grid-cols-1 gap-5 md:grid-cols-2">
-        <div className="rounded-[4px] border p-5 text-center">
+        <div className="rounded-[4px] border border-base-content p-5 text-center">
           <h6 className="mb-[5px] text-lg font-normal">Today Presents</h6>
           <h4 className="text-2xl">
             {staffPresent}/{totalNumberOfStaff}
           </h4>
         </div>
 
-        <div className="rounded-[4px] border p-5 text-center">
+        <div className="rounded-[4px] border border-base-content p-5 text-center">
           <h6 className="mb-[5px] text-lg font-normal">Pending Requests</h6>
           <h4 className="text-2xl">{numberOfPendingLeave}</h4>
         </div>
@@ -115,7 +115,7 @@ const Page = () => {
             type="text"
             value={employeeName}
             onChange={(e) => setEmployeeName(e.target.value)}
-            className="peer h-[50px] w-full rounded border bg-transparent px-3 pb-[6px] pt-[21px] placeholder-transparent focus:outline-none focus:dark:border-primary"
+            className="peer h-[50px] w-full rounded border border-base-content bg-transparent px-3 pb-[6px] pt-[21px] placeholder-transparent focus:outline-none focus:dark:border-primary"
             placeholder="Employee Name"
           />
 
@@ -133,7 +133,7 @@ const Page = () => {
           <select
             value={leaveType}
             onChange={(e) => setLeaveType(e.target.value)}
-            className="h-[50px] w-full appearance-none rounded border bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
+            className="h-[50px] w-full appearance-none rounded border border-base-content bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
           >
             <option value="" disabled>
               --Select--
@@ -152,7 +152,7 @@ const Page = () => {
           <select
             value={leaveStatus}
             onChange={(e) => setLeaveStatus(e.target.value)}
-            className="h-[50px] w-full appearance-none rounded border bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
+            className="h-[50px] w-full appearance-none rounded border border-base-content bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
           >
             <option value="" disabled>
               --Select--
@@ -164,7 +164,7 @@ const Page = () => {
         </div>
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">From</label>
-          <div className="relative flex h-[50px] w-full items-center rounded border">
+          <div className="relative flex h-[50px] w-full items-center rounded border border-base-content">
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
@@ -177,7 +177,7 @@ const Page = () => {
 
         <div>
           <label className="absolute top-1 px-3 text-xs font-light">To</label>
-          <div className="relative flex h-[50px] w-full items-center rounded border">
+          <div className="relative flex h-[50px] w-full items-center rounded border border-base-content">
             <DatePicker
               selected={endDate}
               onChange={(date) => setEndDate(date)}

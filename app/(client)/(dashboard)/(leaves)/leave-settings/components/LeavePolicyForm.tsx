@@ -27,9 +27,9 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
     null,
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [leavePolicyToDelete, setLeavePolicyToDelete] = useState<number | null>(
-    null,
-  );
+  const [leavePolicyToDelete, setLeavePolicyToDelete] =
+    useState<LeavePolicy | null>(null);
+  const [editing, setEditing] = useState(false);
 
   const {
     register,
@@ -63,7 +63,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
 
   const handleDelete = async () => {
     if (leavePolicyToDelete !== null) {
-      const success = await deleteLeavePolicy(leavePolicyToDelete);
+      const success = await deleteLeavePolicy(leavePolicyToDelete.id!);
       setIsModalOpen(false);
       setLeavePolicyToDelete(null);
 
@@ -75,8 +75,8 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
     }
   };
 
-  const openConfirmationModal = (leavePolicyId: number) => {
-    setLeavePolicyToDelete(leavePolicyId);
+  const openConfirmationModal = (leavePolicy: LeavePolicy) => {
+    setLeavePolicyToDelete(leavePolicy);
     setIsModalOpen(true);
   };
 
@@ -98,16 +98,23 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
               <div className="flex gap-2">
                 <button
                   onClick={() => {
-                    setSelectedPolicy(policy);
-                    reset(policy);
+                    if (editing) {
+                      setEditing(false);
+                    } else {
+                      setSelectedPolicy(policy);
+                      reset(policy);
+                      setEditing(true);
+                    }
                   }}
                   className="btn btn-outline"
                 >
                   <Icon icon="akar-icons:edit" />
-                  Edit
+                  {editing && selectedPolicy?.id === policy.id
+                    ? "Cancel"
+                    : "Edit"}
                 </button>
                 <button
-                  onClick={() => openConfirmationModal(policy.id!)}
+                  onClick={() => openConfirmationModal(policy!)}
                   className="btn btn-outline btn-error"
                 >
                   <Icon icon="ic:outline-delete" />
@@ -116,7 +123,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
               </div>
             </div>
 
-            {selectedPolicy?.id === policy.id ? (
+            {editing && selectedPolicy?.id === policy.id ? (
               <form
                 onSubmit={handleSubmit((data) =>
                   handleEditLeavePolicy(data, policy.id!),
@@ -184,7 +191,7 @@ const LeavePolicyForm: React.FC<LeavePolicyFormProps> = ({ leavePolicies }) => {
       <ConfirmationModal
         isOpen={isModalOpen}
         title="Confirm Delete"
-        message="Are you sure you want to delete this leave Policy? This action cannot be undone."
+        message={`Are you sure you want to delete leave policy: ${leavePolicyToDelete?.name}? This action cannot be undone.`}
         onConfirm={handleDelete}
         onCancel={closeConfirmationModal}
       />

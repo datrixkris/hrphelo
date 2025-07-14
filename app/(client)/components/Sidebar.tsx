@@ -14,15 +14,15 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="relative h-full border-r border-base-300 bg-base-100 p-2">
-        {/* logo  */}
-        <div className="flex h-14 items-center justify-center gap-2">
+      <div className="relative flex h-full flex-col border-r border-base-300 bg-base-100 p-2">
+        {/* logo - fixed at top */}
+        <div className="flex h-14 shrink-0 items-center justify-center gap-2">
           <CompanyLogo />
         </div>
         {/* title  */}
-        <div className="mt-4 border-t border-base-300">
+        <div className="mt-4 flex-1 overflow-hidden border-t border-base-300">
           {user && (
-            <div className="my-7 space-y-1">
+            <div className="no-scrollbar h-full space-y-1 overflow-y-auto px-2 py-7">
               {/* dashboard */}
               {links.map((link, index) => {
                 if (link.dropdown) {
@@ -49,7 +49,7 @@ const Sidebar = () => {
                           <ActiveLink href={link.link}>
                             <div className="flex items-center gap-2">
                               <Icon icon={link.icon} />
-                              <span className="truncate text-ellipsis text-sm lg:text-base">
+                              <span className="truncate text-ellipsis text-sm lg:text-[15px]">
                                 {link.name}
                               </span>
                             </div>
@@ -79,13 +79,15 @@ const Sidebar = () => {
             </div>
           )}
           {!user && (
-            <div className="my-7 space-y-7">
-              <div className="skeleton h-4 w-[80%]"></div>
-              <div className="skeleton h-4 w-full"></div>
-              <div className="skeleton h-4 w-[60%]"></div>
-              <div className="skeleton h-4 w-[90%]"></div>
-              <div className="skeleton h-4 w-[75%]"></div>
-              <div className="skeleton h-4 w-full"></div>
+            <div className="no-scrollbar h-full overflow-y-auto px-2 py-7">
+              <div className="space-y-7">
+                <div className="skeleton h-4 w-[80%]"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-[60%]"></div>
+                <div className="skeleton h-4 w-[90%]"></div>
+                <div className="skeleton h-4 w-[75%]"></div>
+                <div className="skeleton h-4 w-full"></div>
+              </div>
             </div>
           )}
         </div>

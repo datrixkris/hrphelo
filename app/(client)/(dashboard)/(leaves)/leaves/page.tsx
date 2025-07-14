@@ -21,15 +21,18 @@ const Page = () => {
   const appliedLeave = leaves?.leaves.length || 0;
 
   // Count number of leave days taken by summing the days of the leaves with status 'approved'
-  const leaveDaysTaken = leaves?.leaves
-    .filter((leave) => leave.status === "approved")
-    .reduce((totalDays, leave) => totalDays + leave.duration, 0) || 0;
+  const leaveDaysTaken =
+    leaves?.leaves
+      .filter((leave) => leave.status === "approved")
+      .reduce((totalDays, leave) => totalDays + leave.duration, 0) || 0;
 
   // Count number of leaves approved by counting the leaves with status 'approved'
-  const approvedLeave = leaves?.leaves.filter((leave) => leave.status === "approved").length || 0;
+  const approvedLeave =
+    leaves?.leaves.filter((leave) => leave.status === "approved").length || 0;
 
   // Count number of leaves rejected by counting the leaves with status 'rejected'
-  const rejectedLeave = leaves?.leaves.filter((leave) => leave.status === "rejected").length || 0;
+  const rejectedLeave =
+    leaves?.leaves.filter((leave) => leave.status === "rejected").length || 0;
 
   // Total number of available leave days remaining
   const totalLeaveDaysRemaining = totalLeaveDays - leaveDaysTaken;
@@ -64,30 +67,31 @@ const Page = () => {
           <div>
             <Button onClick={openApplyModal}>
               <span className="flex items-center gap-1">
-                <Icon icon="hugeicons:calendar-add-01" className="text-xl" /> Apply for Leave
+                <Icon icon="hugeicons:calendar-add-01" className="text-xl" />{" "}
+                Apply for Leave
               </span>
             </Button>
           </div>
         </div>
       </div>
       <div className="mb-4 grid grid-cols-1 gap-5 md:grid-cols-5">
-        <div className="rounded-2 border p-4 text-center">
+        <div className="rounded-2 border border-base-content p-4 text-center">
           <h6 className="mb-2 text-lg font-normal">Annual Leave</h6>
           <h4 className="text-2xl">{totalLeaveDays}</h4>
         </div>
-        <div className="rounded-2 border p-4 text-center">
+        <div className="rounded-2 border border-base-content p-4 text-center">
           <h6 className="mb-2 text-lg font-normal">Applied Leaves</h6>
           <h4 className="text-2xl">{appliedLeave}</h4>
         </div>
-        <div className="rounded-2 border p-4 text-center">
+        <div className="rounded-2 border border-base-content p-4 text-center">
           <h6 className="mb-2 text-lg font-normal">Approved Leaves</h6>
           <h4 className="text-2xl">{approvedLeave}</h4>
         </div>
-        <div className="rounded-2 border p-4 text-center">
+        <div className="rounded-2 border border-base-content p-4 text-center">
           <h6 className="mb-2 text-lg font-normal">Rejected Leaves</h6>
           <h4 className="text-2xl">{rejectedLeave}</h4>
         </div>
-        <div className="rounded-2 border p-4 text-center">
+        <div className="rounded-2 border border-base-content p-4 text-center">
           <h6 className="mb-2 text-lg font-normal">Remaining Leave</h6>
           <h4 className="text-2xl">{totalLeaveDaysRemaining}</h4>
         </div>
