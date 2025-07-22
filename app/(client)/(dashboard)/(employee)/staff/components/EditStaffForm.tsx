@@ -14,6 +14,7 @@ import SearchAndResultsInputComponent, {
   Data as SearchAndResultsComponentType,
 } from "@/app/components/SearchAndResultsInputComponent";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useAuthStore } from "@/app/stores/auth-store";
 
 interface EditStaffProps {
   isOpen: boolean;
@@ -217,6 +218,7 @@ const EditStaffForm = ({
       console.log(error, updatingData);
       // onClose();
       await refreshData();
+      await useAuthStore.getState().refreshUserData();
       toast.success("Staff data updated");
       reset();
       onClose();

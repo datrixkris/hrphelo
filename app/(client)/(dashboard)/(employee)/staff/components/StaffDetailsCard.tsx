@@ -88,7 +88,7 @@ const StaffDetailsCard = ({
                 {/* Email */}
                 <tr>
                   <td className="py-2 pr-3 font-semibold lg:w-32">Email:</td>
-                  <td className="text-neutral-400">
+                  <td className="max-w-52 break-words text-neutral-400">
                     {staffDetails?.email ? staffDetails?.email : "N/A"}
                   </td>
                 </tr>
