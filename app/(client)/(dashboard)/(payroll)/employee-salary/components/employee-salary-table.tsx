@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import { usePayrollStore } from "../../payroll-store";
 import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff-store";
 import TableSkeleton from "@/app/components/TableSkeleton";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const EmployeeSalaryTable = () => {
   const { payrolls, fetchPayroll } = usePayrollStore();
@@ -40,7 +41,7 @@ const EmployeeSalaryTable = () => {
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
             <th scope="col">Designation</th>
-            <th scope="col">Joining Date</th>
+            {/* <th scope="col">Joining Date</th> */}
             <th scope="col">Salary</th>
             <th scope="col">Payslip</th>
             {/* <th scope="col"></th> */}
@@ -52,18 +53,27 @@ const EmployeeSalaryTable = () => {
               <tr key={index} className="!text-sm">
                 <td>{payroll.to.id}</td>
                 <td>{payroll.to.name}</td>
-                <td>{payroll.to.email}</td>
+                <td
+                  className="max-w-52 truncate break-words"
+                  title={payroll.to.email}
+                >
+                  {payroll.to.email}
+                </td>
                 <td>{payroll.to.phone}</td>
-                <td>tester</td>
-                <td>78888</td>
+                <td>Tester</td>
+                {/* <td>78888</td> */}
                 <td>
                   {payroll.netPay.currency}
                   {payroll.netPay.value}
                 </td>
                 <td>
                   <Link href={`employee-salary/payslip/${payroll.payslipNo}`}>
-                    <button className="btn bg-green-400">
-                      <span className="text-sm">View Slip</span>
+                    <button className="text-nowrap rounded bg-success px-2 py-1 font-semibold text-white">
+                      <Icon
+                        icon="heroicons:eye-16-solid"
+                        className="inline-block text-lg"
+                      />
+                      <span className="relative ml-0.5 text-xs">View Slip</span>
                     </button>
                   </Link>
                 </td>

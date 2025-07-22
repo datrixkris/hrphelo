@@ -102,7 +102,7 @@ const Page = () => {
             type="radio"
             name="my_tabs_2"
             role="tab"
-            className="tab"
+            className="tab whitespace-nowrap"
             aria-label="Payroll Policies"
             defaultChecked
           />
@@ -119,7 +119,7 @@ const Page = () => {
             type="radio"
             name="my_tabs_2"
             role="tab"
-            className="tab"
+            className="tab whitespace-nowrap"
             aria-label="Payroll Period"
           />
           <div
@@ -129,7 +129,7 @@ const Page = () => {
             <Calendar />
           </div>
 
-          <input
+          {/* <input
             type="radio"
             name="my_tabs_2"
             role="tab"
@@ -141,7 +141,7 @@ const Page = () => {
             className="tab-content rounded-box border-base-300 bg-base-100 p-6"
           >
             Tab content 3
-          </div>
+          </div> */}
         </div>
 
         {/* Add salary Modal */}
