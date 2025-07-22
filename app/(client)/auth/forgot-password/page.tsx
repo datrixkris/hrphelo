@@ -41,29 +41,14 @@ const Page = () => {
         // Check if we have cached user data and tokens
         const isAuthenticated = useAuthStore.getState().isAuthenticated;
 
-        if (!isAuthenticated) {
-          // No cached data, try to fetch fresh data
-          try {
-            await useAuthStore.getState().fetchUserData();
-            if (isMounted) {
-              const updatedAuth = useAuthStore.getState().isAuthenticated;
-              if (updatedAuth) {
-                router.push("/");
-              }
-            }
-          } catch (error) {
-            console.error("Error checking authentication:", error);
-            // If there's an error, clear the invalid tokens
-            if (isMounted) {
-              useAuthStore.getState().logout();
-            }
-          }
-        } else {
-          // Already authenticated, redirect
+        if (isAuthenticated) {
+          // Already authenticated, redirect to dashboard
           if (isMounted) {
             router.push("/");
           }
         }
+        // If not authenticated, stay on the forgot password page
+        // Don't try to fetch user data on public pages
       } catch (error) {
         console.error("Error checking authentication:", error);
       }

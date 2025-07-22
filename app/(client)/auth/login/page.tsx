@@ -48,33 +48,25 @@ const Page = () => {
   useLayoutEffect(() => {
     let isMounted = true;
 
-    const fetchUser = async () => {
+    const checkAuth = async () => {
       try {
-        // Check if we have a token first
-        const accessToken = useAuthStore.getState().accessToken;
-        if (!accessToken) {
-          // No token, user should stay on login page
-          return;
-        }
+        // Check if we have cached authentication data
+        const isAuthenticated = useAuthStore.getState().isAuthenticated;
 
-        await useAuthStore.getState().fetchUserData();
-
-        if (isMounted) {
-          const isAuthenticated = useAuthStore.getState().isAuthenticated;
-          if (isAuthenticated) {
+        if (isAuthenticated) {
+          // Already authenticated, redirect to dashboard
+          if (isMounted) {
             router.push("/");
           }
         }
+        // If not authenticated, stay on the login page
+        // Don't try to fetch user data on public pages
       } catch (error) {
         console.error("Error checking authentication:", error);
-        // If there's an error, clear the invalid tokens
-        if (isMounted) {
-          useAuthStore.getState().logout();
-        }
       }
     };
 
-    fetchUser();
+    checkAuth();
 
     return () => {
       isMounted = false;
