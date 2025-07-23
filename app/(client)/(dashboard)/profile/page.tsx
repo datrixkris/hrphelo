@@ -14,8 +14,8 @@ import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff
 import StaffDetailsCard from "@/app/(client)/(dashboard)/(employee)/staff/components/StaffDetailsCard";
 import { ProfileDataContext } from "./profileDataContext";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { api } from "@/app/axiosApi/api";
-import { toast } from "react-toastify";
+// import { api } from "@/app/axiosApi/api";
+// import { toast } from "react-toastify";
 import ResignationForm from "./components/ResignationForm";
 
 const TABS = ["Profile", "Projects", "Bank and Statutory", "Assets"];
