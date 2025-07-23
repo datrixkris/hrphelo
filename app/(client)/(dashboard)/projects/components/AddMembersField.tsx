@@ -141,7 +141,10 @@ const AddMembersField = ({
                 <div className="tooltip" data-tip={staff.name} key={staff.id}>
                   <div className="avatar">
                     <div className="w-11 rounded-full border">
-                      <img src={staff.image} alt={staff.name} />
+                      <img
+                        src={staff.image || "/images/avatar.png"}
+                        alt={staff.name}
+                      />
                     </div>
                   </div>
                   {!multiple && <p className="text-xs">{staff.name}</p>}

@@ -159,7 +159,10 @@ const AddChecklistForm = ({
                           <div className="tooltip" data-tip={staff.name}>
                             <div className="avatar relative">
                               <div className="w-11 rounded-full border">
-                                <img src={staff.image} alt={staff.name} />
+                                <img
+                                  src={staff.image || "/images/avatar.png"}
+                                  alt={staff.name}
+                                />
                               </div>
                               <Icon
                                 icon="heroicons:x-circle"

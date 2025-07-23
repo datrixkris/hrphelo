@@ -62,7 +62,7 @@ export const ManageLeaveTable = ({ filteredLeaves }: ManageLeaveProp) => {
                     >
                       <img
                         alt={leave.staff.name}
-                        src={leave.staff.image}
+                        src={leave.staff.image || "/images/avatar.png"}
                         className="w-full rounded-full"
                       />
                     </a>

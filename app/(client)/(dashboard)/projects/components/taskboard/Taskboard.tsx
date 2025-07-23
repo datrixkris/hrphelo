@@ -34,7 +34,7 @@ const Taskboard = ({ project }: TaskboardProps) => {
                 <div className="avatar">
                   <div className="w-10 rounded-full">
                     <img
-                      src={project?.project_lead?.image}
+                      src={project?.project_lead?.image || "/images/avatar.png"}
                       alt={project?.project_lead?.name}
                     />
                   </div>
@@ -59,7 +59,7 @@ const Taskboard = ({ project }: TaskboardProps) => {
                       <div className="avatar">
                         <div className="w-10 rounded-full border">
                           <img
-                            src={member.staff.image}
+                            src={member.staff.image || "/images/avatar.png"}
                             alt={member.staff.name}
                           />
                         </div>

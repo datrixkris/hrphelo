@@ -1,5 +1,6 @@
 import { Designation } from "../(client)/(dashboard)/(employee)/designations/types";
 import { Checklist } from "../(client)/(dashboard)/onboarding/types";
+import { Resignation } from "../(client)/(dashboard)/resignations/types";
 
 // Define the Company type
 export interface Company {
@@ -31,6 +32,7 @@ export interface Staff {
   hiring_date: string;
   designation: string | null;
   designations: Designation[];
+  resignation: Resignation;
   isDefault: boolean;
   image: string;
   createdAt: string;

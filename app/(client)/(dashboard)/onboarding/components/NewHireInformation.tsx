@@ -11,7 +11,10 @@ const NewHireInformation = ({ staff }: { staff: StaffDetail | null }) => {
         {/* image */}
         <div className="avatar mx-auto shrink-0 sm:mx-0">
           <div className={`w-32 rounded-full bg-base-300 lg:w-36`}>
-            <img src={staff?.image} />
+            <img
+              src={staff?.image || "/images/avatar.png"}
+              alt={staff?.name}
+            />
           </div>
         </div>
 

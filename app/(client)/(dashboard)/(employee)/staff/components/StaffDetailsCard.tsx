@@ -36,7 +36,10 @@ const StaffDetailsCard = ({
                 <div
                   className={`rounded-full ${defaultAccount ? "w-24 lg:w-28" : "w-32 lg:w-36"}`}
                 >
-                  <img src={staffDetails?.image} />
+                  <img
+                    src={staffDetails?.image || "/images/avatar.png"}
+                    alt={staffDetails?.name}
+                  />
                 </div>
               </div>
 

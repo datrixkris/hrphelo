@@ -60,7 +60,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
               >
                 <div className="w-10 rounded-full">
                   <img
-                    src={profile?.image || "/default-avatar.png"}
+                    src={profile?.image || "/images/avatar.png"}
                     alt="User Avatar"
                   />
                 </div>
@@ -76,7 +76,10 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
             <div>
               <div className="avatar">
                 <div className="w-10 rounded-full border border-gray-300">
-                  <img src={profile?.image} alt="User Avatar" />
+                  <img
+                    src={profile?.image || "/images/avatar.png"}
+                    alt="User Avatar"
+                  />
                 </div>
               </div>
             </div>
@@ -89,7 +92,7 @@ export const UserAvatar = ({ profile }: UserAvatarProp) => {
             <div className="">
               {profile?.designations && profile?.designations.length > 0 ? (
                 <p
-                  className="tooltip tooltip-bottom w-48 truncate"
+                  className="w-48 truncate"
                   data-tip="Designations"
                   title={profile?.designations
                     .map((designation) => designation.name)

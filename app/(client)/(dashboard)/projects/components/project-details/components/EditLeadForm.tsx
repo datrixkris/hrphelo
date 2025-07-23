@@ -85,7 +85,7 @@ const EditLeadForm = ({
                 <div className="avatar shrink-0">
                   <div className="w-14 rounded-full">
                     <img
-                      src={project?.project_lead?.image}
+                      src={project?.project_lead?.image || "/images/avatar.png"}
                       alt={project?.project_lead?.name}
                     />
                   </div>
@@ -114,7 +114,10 @@ const EditLeadForm = ({
                   {/* image */}
                   <div className="avatar shrink-0">
                     <div className="w-14 rounded-full">
-                      <img src={replacement?.image} alt={replacement?.name} />
+                      <img
+                        src={replacement?.image || "/images/avatar.png"}
+                        alt={replacement?.name}
+                      />
                     </div>
                   </div>
 

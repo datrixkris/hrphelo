@@ -23,7 +23,10 @@ const ProjectMembers = () => {
                 {/* image */}
                 <div className="avatar shrink-0">
                   <div className="w-12 rounded-full">
-                    <img src={member.staff.image} alt={member.staff.name} />
+                    <img
+                      src={member.staff.image || "/images/avatar.png"}
+                      alt={member.staff.name}
+                    />
                   </div>
                 </div>
 

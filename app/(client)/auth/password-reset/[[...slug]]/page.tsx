@@ -134,7 +134,7 @@ const Page = ({ params }: { params: { slug: string } }) => {
                       {loading ? (
                         <Icon icon="line-md:loading-loop" className="h-7 w-7" />
                       ) : (
-                        "continue"
+                        "Continue"
                       )}
                     </Button>
                   </div>

@@ -17,7 +17,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
   const [leaveToDelete, setLeaveToDelete] = useState<number | null>(null);
 
   console.log(leaves);
-  
+
   const handleDelete = async () => {
     if (leaveToDelete !== null) {
       const success = await deleteLeave(leaveToDelete);
@@ -128,7 +128,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                   >
                     <img
                       alt={leave.staff.name}
-                      src={leave.staff.image}
+                      src={leave.staff.image || "/images/avatar.png"}
                       className="w-full rounded-full border"
                     />
                   </a>

@@ -23,7 +23,7 @@ const ProjectLead = () => {
           <div className="avatar shrink-0">
             <div className="w-12 rounded-full">
               <img
-                src={project?.project_lead?.image}
+                src={project?.project_lead?.image || "/images/avatar.png"}
                 alt={project?.project_lead?.name}
               />
             </div>

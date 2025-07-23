@@ -32,7 +32,10 @@ const StaffTable = ({ staff, hideColumn }: StaffTableProps) => {
                   <div className="flex items-center gap-3 capitalize">
                     <div className="avatar">
                       <div className="mask mask-squircle size-12">
-                        <img src={member.image} alt={member.name} />
+                        <img
+                          src={member.image || "/images/avatar.png"}
+                          alt={member.name}
+                        />
                       </div>
                     </div>
                     <div>

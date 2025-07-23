@@ -79,7 +79,7 @@ export const SelectorStaff = ({ onSelect }: SelectorStaffProps) => {
                 onClick={() => handleSelect(staff)}
               >
                 <img
-                  src={staff.image}
+                  src={staff.image || "/images/avatar.png"}
                   alt={staff.name}
                   className="mr-2 inline-block h-6 w-6 rounded-full"
                 />

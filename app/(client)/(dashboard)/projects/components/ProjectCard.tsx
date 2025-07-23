@@ -36,7 +36,7 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
             <div className="avatar">
               <div className="w-12 rounded-full">
                 <img
-                  src={project.projectLead?.image}
+                  src={project.projectLead?.image || "/images/avatar.png"}
                   alt={project.projectLead?.name}
                 />
               </div>
@@ -51,7 +51,10 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
                 return (
                   <div className="avatar" key={member.id}>
                     <div className="w-10">
-                      <img src={member.staff.image} alt={member.staff.name} />
+                      <img
+                        src={member.staff.image || "/images/avatar.png"}
+                        alt={member.staff.name}
+                      />
                     </div>
                   </div>
                 );
