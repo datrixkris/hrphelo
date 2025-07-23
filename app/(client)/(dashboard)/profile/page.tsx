@@ -32,11 +32,11 @@ const Page = () => {
   const [activeTab, setActiveTab] = useState<string>("Profile");
 
   const [showResignationModal, setShowResignationModal] = useState(false);
-  const [resignationDate, setResignationDate] = useState("");
-  const [resignationReason, setResignationReason] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
-  const [otherReason, setOtherReason] = useState("");
+  // const [resignationDate, setResignationDate] = useState("");
+  // const [resignationReason, setResignationReason] = useState("");
+  // const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [submitError, setSubmitError] = useState("");
+  // const [otherReason, setOtherReason] = useState("");
 
   // Fetch staff details
 
@@ -50,34 +50,34 @@ const Page = () => {
     setStaffDetails(staffData);
   };
 
-  const handleResignationSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitError("");
+  // const handleResignationSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+  //   setSubmitError("");
 
-    try {
-      const payload = {
-        resignation_date: resignationDate,
-        reason: resignationReason === "Other" ? otherReason : resignationReason,
-      };
+  //   try {
+  //     const payload = {
+  //       resignation_date: resignationDate,
+  //       reason: resignationReason === "Other" ? otherReason : resignationReason,
+  //     };
 
-      await api.post("/v1/resignations", payload);
+  //     await api.post("/v1/resignations", payload);
 
-      // Reset form and close modal
-      setResignationDate("");
-      setResignationReason("");
-      setOtherReason("");
-      setShowResignationModal(false);
-      await useAuthStore.getState().refreshUserData();
+  //     // Reset form and close modal
+  //     setResignationDate("");
+  //     setResignationReason("");
+  //     setOtherReason("");
+  //     setShowResignationModal(false);
+  //     await useAuthStore.getState().refreshUserData();
 
-      toast.success("Resignation submitted successfully");
-    } catch (err) {
-      console.error(err);
-      setSubmitError(`Failed to submit resignation. Please try again.`);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  //     toast.success("Resignation submitted successfully");
+  //   } catch (err) {
+  //     console.error(err);
+  //     setSubmitError(`Failed to submit resignation. Please try again.`);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
