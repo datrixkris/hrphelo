@@ -23,7 +23,7 @@ const companySchema = z.object({
   company_size: z.string().min(1, "Company size is required"),
   password_expiry_duration: z.coerce
     .number()
-    .min(1, "Password expiry duration is required"),
+    .min(0, "Password expiry duration is required"),
 });
 
 type CompanyFormData = z.infer<typeof companySchema>;
