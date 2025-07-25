@@ -3,3 +3,10 @@ Extracted Resignation Form UI from the profile page into its own component - Mak
 Removed Resignation information on the profile page if the account is the owner account
 Added default avatar for when there is no image available for staff on various pages
 Show resignation initiated notice if staff has already initiated resignation on the profile page
+
+24th July
+Removed toast message if payroll error message is "no payroll periods found for the company."
+Settings, Password expiry duration field updated to take 0
+
+25th July
+Dashboard UI - quick actions and checklist

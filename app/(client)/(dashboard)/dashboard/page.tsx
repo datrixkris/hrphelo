@@ -137,13 +137,68 @@ const Page = () => {
         <div className="w-1/5">
           <div className="grid gap-4">
             <DashCard>
-              <div className="h-[250px]">
-                <h2 className="mb-2 font-semibold">Quick Actions</h2>
+              <div className="min-h-[200px]">
+                <h2 className="my-2 font-semibold">Quick Actions</h2>
+                <hr />
+
+                <div className="mt-2 space-y-2">
+                  {/* leave approved */}
+                  <div className="">
+                    <p className="text-sm font-semibold">Leave approved</p>
+                    <div className="flex items-end justify-between text-xs">
+                      <p className="t text-gray-400">Today 11:30 AM</p>
+                      <button className="btn btn-xs">View</button>
+                    </div>
+                  </div>
+
+                  {/* new project created */}
+                  <div className="">
+                    <p className="text-sm font-semibold">New project</p>
+                    <div className="flex items-end justify-between text-xs">
+                      <p className="t text-gray-400">Today 11:30 AM</p>
+                      <button className="btn btn-xs">View</button>
+                    </div>
+                  </div>
+                  {/* new resignation */}
+                  <div className="">
+                    <p className="text-sm font-semibold">New resignation</p>
+                    <div className="flex items-end justify-between text-xs">
+                      <p className="t text-gray-400">Yesterday 11:30 AM</p>
+                      <button className="btn btn-xs">View</button>
+                    </div>
+                  </div>
+                  {/* leave request */}
+                  <div className="">
+                    <p className="text-sm font-semibold">New leave request</p>
+                    <div className="flex items-end justify-between text-xs">
+                      <p className="t text-gray-400">
+                        23rd July, 2025 11:30 AM
+                      </p>
+                      <button className="btn btn-xs">View</button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </DashCard>
             <DashCard>
               <div className="h-[250px]">
                 <h2 className="mb-2 font-semibold">Checklists</h2>
+                <hr />
+
+                <div className="mt-2 space-y-2">
+                  <div className="">
+                    <p className="text-sm font-semibold">
+                      <span className="text-hr-yellow">Laptop</span> -{" "}
+                      <span className="text-gray-400">
+                        HP Pavilion 15-dk0000ng
+                      </span>
+                    </p>
+                    <p className="text-xs text-gray-400">IT Department</p>
+                  </div>
+                </div>
+                {/* <p className="mt-16 text-center text-sm text-gray-400">
+                  No checklists found
+                </p> */}
               </div>
             </DashCard>
           </div>
