@@ -9,6 +9,19 @@ export const api = axios.create({
   headers: {},
 });
 
+// Helper function to check if we're on an auth page
+const isAuthPage = (): boolean => {
+  if (typeof window === "undefined") return false;
+
+  const pathname = window.location.pathname;
+  return pathname.startsWith("/auth/login");
+};
+
+// Helper function to check if the request is for auth-related endpoints
+const isAuthEndpoint = (url: string): boolean => {
+  return url.includes("/v1/auth/login");
+};
+
 // Add a request interceptor
 api.interceptors.request.use(
   async (config) => {
@@ -89,6 +102,15 @@ api.interceptors.response.use(
 
       // Prevent retrying the refresh-token API itself
       if (originalRequest.url.includes("/v1/auth/refresh-token")) {
+        return Promise.reject(error);
+      }
+
+      // Skip logout for auth pages and auth endpoints
+      if (isAuthPage() || isAuthEndpoint(originalRequest.url)) {
+        console.log(
+          "Skipping logout for auth page/endpoint:",
+          originalRequest.url,
+        );
         return Promise.reject(error);
       }
 
