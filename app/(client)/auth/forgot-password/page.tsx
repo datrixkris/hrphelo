@@ -62,7 +62,7 @@ const Page = () => {
   }, []); // Remove router dependency to prevent infinite loops
 
   return (
-    <section className="h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
+    <section className="min-h-screen bg-base-200 py-10 sm:py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mx-auto mb-5 flex max-w-xs justify-center text-center">

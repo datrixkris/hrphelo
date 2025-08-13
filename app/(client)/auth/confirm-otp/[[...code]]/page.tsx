@@ -136,7 +136,7 @@ const Page = ({ params }: { params: { code: string } }) => {
   }, []); // Remove router dependency to prevent infinite loops
 
   return (
-    <section className="flex h-screen w-full flex-col items-center justify-center bg-base-200">
+    <section className="flex min-h-screen w-full flex-col items-center justify-center bg-base-200">
       <div className="mx-auto max-w-2xl text-center">
         <div className="mx-auto mb-7 flex w-full max-w-xs justify-center text-center">
           <Link href="/auth/login">

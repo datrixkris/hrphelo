@@ -12,6 +12,10 @@ const StaffOnboardingProgress = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [checklistData, setChecklistData] = useState<TOnboarding[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClosingOnboarding, setIsClosingOnboarding] = useState(false);
+
+  // Get user data from store
+  const { user, fetchUserData, refreshUserData } = useAuthStore();
 
   // Group items by department
   const groupedByDepartment = checklistData.reduce(
@@ -52,32 +56,54 @@ const StaffOnboardingProgress = () => {
   };
 
   const closeOnboarding = async () => {
-    const user = useAuthStore.getState().user;
-    if (!user) return;
-    await api.get(`/v1/staff/${user.staff.id}/onboarding-complete`);
-    useAuthStore.getState().refreshUserData();
+    try {
+      setIsClosingOnboarding(true);
+
+      // Get fresh user data to ensure it's current
+      const currentUser = useAuthStore.getState().user;
+      if (!currentUser?.staff?.id) {
+        console.error("User or staff data not available");
+        return;
+      }
+
+      await api.get(`/v1/staff/${currentUser.staff.id}/onboarding-complete`);
+      await refreshUserData();
+    } catch (error) {
+      console.error("Error closing onboarding:", error);
+    } finally {
+      setIsClosingOnboarding(false);
+    }
   };
 
   useEffect(() => {
     if (!socket) return;
 
-    const fetchUser = async () => {
-      await useAuthStore.getState().fetchUserData();
-      const user = useAuthStore.getState().user;
-      return user;
-    };
-
     const handleConnect = async () => {
-      const user = await fetchUser();
+      try {
+        // Use existing user data from store - no need to fetch again
+        const currentUser = useAuthStore.getState().user;
 
-      console.log("Socket is fully connected, ID:", socket.id);
-      if (user) {
-        console.log("Registering socket with ID:", user.id);
-        socket.emit("registerSocket", user.id);
+        console.log("Socket is fully connected, ID:", socket.id);
+
+        if (currentUser?.id) {
+          console.log("Registering socket with ID:", currentUser.id);
+          socket.emit("registerSocket", currentUser.id);
+        } else {
+          console.warn("User data not available for socket registration");
+          // Only fetch user data if it's not available
+          await fetchUserData();
+          const refreshedUser = useAuthStore.getState().user;
+          if (refreshedUser?.id) {
+            socket.emit("registerSocket", refreshedUser.id);
+          }
+        }
+
+        await api.get("/v1/mychecklists");
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error in socket connection setup:", error);
+        setIsLoading(false);
       }
-
-      await api.get("/v1/mychecklists");
-      setIsLoading(false);
     };
 
     const handleChecklists = (data: TOnboarding[]) => {
@@ -92,7 +118,12 @@ const StaffOnboardingProgress = () => {
       socket.off("connect", handleConnect);
       socket.off("mychecklists", handleChecklists);
     };
-  }, [socket]);
+  }, [socket, fetchUserData]);
+
+  // Don't render if user is not available
+  if (!user) {
+    return null;
+  }
 
   if (isLoading) {
     return null;
@@ -216,12 +247,19 @@ const StaffOnboardingProgress = () => {
               </p>
               <button
                 className={`btn btn-sm ${progress === 100 ? "btn-primary" : "btn-disabled"}`}
-                disabled={progress !== 100}
+                disabled={progress !== 100 || isClosingOnboarding}
                 onClick={() => {
                   closeOnboarding();
                 }}
               >
-                Close Onboarding
+                {isClosingOnboarding ? (
+                  <>
+                    <span className="loading loading-spinner loading-xs"></span>
+                    Closing...
+                  </>
+                ) : (
+                  "Close Onboarding"
+                )}
               </button>
             </div>
           </ul>

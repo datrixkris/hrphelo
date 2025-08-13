@@ -176,7 +176,7 @@ const Page = () => {
         </div>
 
         {/* Right side - Form */}
-        <div className="flex h-screen items-center justify-center bg-base-200 px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+        <div className="h-screen items-center justify-center overflow-y-auto bg-base-200 px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24 [@media(min-height:600px)]:flex">
           <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
             <div className="mx-auto mb-5 flex w-full max-w-xs justify-center text-center">
               <Logo width={200} height={150} />
