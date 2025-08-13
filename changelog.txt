@@ -13,3 +13,6 @@ Dashboard UI - quick actions and checklist
 
 29th July
 Fix on login page (When users are on the login page and get a 401 error (incorrect credentials), the logout function won't run and the page won't refresh).
+
+August 13th
+UI fixes on all auth pages
