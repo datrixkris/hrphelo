@@ -16,3 +16,6 @@ Fix on login page (When users are on the login page and get a 401 error (incorre
 
 August 13th
 UI fixes on all auth pages
+
+August 18th
+Dashboard UI change... adding admin and staff

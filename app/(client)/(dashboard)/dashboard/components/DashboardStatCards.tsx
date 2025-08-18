@@ -18,10 +18,10 @@ interface DataItems extends Record<string, string | number | boolean> {
 
 // Sample Data
 const leaveData = [
-  { id: 1, type: "Annual", value: 12, color: "#FF6F61" },
-  { id: 2, type: "Sick", value: 5, color: "#6A5ACD" },
-  { id: 3, type: "Maternity", value: 2, color: "#32CD32" },
-  { id: 4, type: "Friendly", value: 2, color: "#FFD700" },
+  { id: 1, type: "Pending", value: 12, color: "#FF6F61" },
+  { id: 2, type: "Approved", value: 5, color: "#6A5ACD" },
+  { id: 3, type: "Rejected", value: 2, color: "#32CD32" },
+  // { id: 4, type: "Friendly", value: 2, color: "#FFD700" },
 ];
 
 const employeeLeaveData = [
@@ -38,8 +38,9 @@ const department = [
 ];
 
 const employees = [
-  { id: 1, gender: "Male", value: 74, color: "#038db3" },
-  { id: 2, gender: "Female", value: 32, color: "#c7f933" },
+  { id: 1, gender: "Active", value: 74, color: "#038db3" },
+  { id: 2, gender: "On Leave", value: 32, color: "#c7f933" },
+  { id: 2, gender: "On Probation", value: 32, color: "#c7f933" },
 ];
 
 type Priority = "high" | "highest" | "medium" | "low";
@@ -75,6 +76,22 @@ const projects = [
     deadline: "2025-06-07",
     status: "Pending Review",
   },
+];
+
+const leaveHistory = [
+  { date: "2025-01-01", type: "Annual", status: "Approved" },
+  { date: "2025-01-02", type: "Sick", status: "Pending" },
+  { date: "2025-01-03", type: "Maternity", status: "Rejected" },
+  { date: "2025-01-04", type: "Annual", status: "Approved" },
+  { date: "2025-01-05", type: "Sick", status: "Pending" },
+];
+
+const payrollHistory = [
+  { date: "2025-01-01", amount: 1000 },
+  { date: "2025-01-02", amount: 2000 },
+  { date: "2025-01-03", amount: 3000 },
+  { date: "2025-01-04", amount: 4000 },
+  { date: "2025-01-05", amount: 5000 },
 ];
 
 export function SimpleDonutChart({
@@ -138,9 +155,9 @@ export const DepartmentsChart = () => {
           />
         </div>
       </div>
-      <div className="mt-4 border-t pt-3">
+      {/* <div className="mt-4 border-t pt-3">
         <button className="btn btn-primary w-full">Add Department</button>
-      </div>
+      </div> */}
     </DashCard>
   );
 };
@@ -175,9 +192,9 @@ export const EmployeeChart = () => {
           />
         </div>
       </div>
-      <div className="mt-4 border-t pt-3">
+      {/* <div className="mt-4 border-t pt-3">
         <button className="btn btn-primary w-full">Add Staff</button>
-      </div>
+      </div> */}
     </DashCard>
   );
 };
@@ -210,10 +227,10 @@ export const LeaveChart = () => {
           />
         </div>
       </div>
-      <p className="text-sm font-semibold text-warning">Pending leaves: 5</p>
+      {/* <p className="text-sm font-semibold text-warning">Pending leaves: 5</p>
       <div className="mt-4 border-t pt-3">
         <button className="btn btn-primary w-full">Process leaves</button>
-      </div>
+      </div> */}
     </DashCard>
   );
 };
@@ -319,3 +336,63 @@ export const EmployeeProjectsTable = () => (
     </div>
   </DashCard>
 );
+
+export const LeaveHistoryTable = () => {
+  return (
+    <DashCard>
+      <div className="mb-5">
+        <h2 className="font-semibold">Leave History</h2>
+        <p className="text-xs italic">Your leave history</p>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra table-sm">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leaveHistory.map((item) => (
+              <tr key={item.date}>
+                <td>{dayjs(item.date).format("DD MMM YYYY")}</td>
+                <td>{item.type}</td>
+                <td>{item.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </DashCard>
+  );
+};
+
+export const PayrollHistoryTable = () => {
+  return (
+    <DashCard>
+      <div className="mb-5">
+        <h2 className="font-semibold">Payroll History</h2>
+        <p className="text-xs italic">Your payroll history</p>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra table-sm">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {payrollHistory.map((item) => (
+              <tr key={item.date}>
+                <td>{dayjs(item.date).format("DD MMM YYYY")}</td>
+                <td>{item.amount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </DashCard>
+  );
+};

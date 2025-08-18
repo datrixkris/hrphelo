@@ -1,109 +1,16 @@
 "use client";
-
-import DashCard from "@/app/components/DashCard";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import Link from "next/link";
 import React from "react";
-import {
-  DepartmentsChart,
-  EmployeeChart,
-  EmployeeLeaveChart,
-  EmployeeProjectsTable,
-  LeaveChart,
-} from "./components/DashboardStatCards";
+
 import { useAuthStore } from "@/app/stores/auth-store";
-
-// Sample Data
-const kpiCards = [
-  { title: "Total Employees", value: 152 },
-  { title: "Departments", value: 4 },
-  { title: "New Hires", value: 3 },
-  { title: "Resignations", value: 3 },
-];
-
-const KPISection = () => (
-  <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-    {kpiCards.map((card, i) => (
-      <div
-        key={i}
-        className="flex flex-col justify-between rounded-md bg-base-100 p-3"
-      >
-        <h2 className="mb-2 font-semibold">{card.title}</h2>
-        <p className="flex justify-between">
-          <span className="text-2xl font-bold text-primary">{card.value}</span>
-          <span className="self-end">
-            <Link
-              href="/dashboard"
-              className="hover:text-primar text-xs underline"
-            >
-              View
-            </Link>
-          </span>
-        </p>
-      </div>
-    ))}
-    {/* Payroll */}
-    <div className="flex flex-col justify-between rounded-md bg-base-100 p-3">
-      <div className="flex items-start justify-between">
-        <h2 className="mb-2 font-semibold">Payroll Processed</h2>
-        <p className="btn btn-xs">
-          <Icon icon="hugeicons:calendar-03" className="inline" />{" "}
-          <span className="text-xs">May</span>{" "}
-        </p>
-      </div>
-      <div className="flex justify-between">
-        <div className="">
-          <p className="">
-            {" "}
-            <span className="text-2xl font-bold text-primary">148</span>{" "}
-            <span className="text-sm font-semibold text-green-600">
-              Processed
-            </span>{" "}
-          </p>
-          <p className="text-xs text-warning">4 pending</p>
-        </div>
-        <span className="self-end">
-          <Link
-            href="/dashboard"
-            className="text-xs underline hover:text-primary"
-          >
-            Process Payroll
-          </Link>
-        </span>
-      </div>
-    </div>
-
-    {/* Users */}
-    <div className="flex flex-col justify-between rounded-md bg-base-100 p-3">
-      <h2 className="mb-2 font-semibold">Users</h2>
-      <div className="flex justify-between">
-        <div className="">
-          <p className="">
-            {" "}
-            <span className="text-2xl font-bold text-primary">148</span>{" "}
-            <span className="text-sm font-semibold text-green-600">Active</span>{" "}
-          </p>
-          <p className="text-xs text-warning">4 pending</p>
-        </div>
-        <span className="self-end">
-          <Link
-            href="/dashboard"
-            className="text-xs underline hover:text-primary"
-          >
-            Add User
-          </Link>
-        </span>
-      </div>
-    </div>
-  </div>
-);
+import CompanyOverview from "./components/CompanyOverview";
+import StaffOverview from "./components/StaffOverview";
 
 const Page = () => {
   const user = useAuthStore((state) => state.user);
   // console.log(user);
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Welcome */}
       <div className="">
         <h1 className="mb-2 text-2xl font-bold">
@@ -114,96 +21,9 @@ const Page = () => {
         </p>
       </div>
 
-      {/* dashboard split into two */}
-      <div className="mt-10 flex gap-4">
-        {/* statistics */}
-        <div className="w-4/5">
-          {/* KPI Section */}
-          <KPISection />
-
-          {/* Leave Chart */}
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <EmployeeChart />
-            <DepartmentsChart />
-            <LeaveChart />
-            <EmployeeLeaveChart />
-            <div className="col-span-2">
-              <EmployeeProjectsTable />
-            </div>
-          </div>
-        </div>
-
-        {/* notifs, quick action and checklist */}
-        <div className="w-1/5">
-          <div className="grid gap-4">
-            <DashCard>
-              <div className="min-h-[200px]">
-                <h2 className="my-2 font-semibold">Quick Actions</h2>
-                <hr />
-
-                <div className="mt-2 space-y-2">
-                  {/* leave approved */}
-                  <div className="">
-                    <p className="text-sm font-semibold">Leave approved</p>
-                    <div className="flex items-end justify-between text-xs">
-                      <p className="t text-gray-400">Today 11:30 AM</p>
-                      <button className="btn btn-xs">View</button>
-                    </div>
-                  </div>
-
-                  {/* new project created */}
-                  <div className="">
-                    <p className="text-sm font-semibold">New project</p>
-                    <div className="flex items-end justify-between text-xs">
-                      <p className="t text-gray-400">Today 11:30 AM</p>
-                      <button className="btn btn-xs">View</button>
-                    </div>
-                  </div>
-                  {/* new resignation */}
-                  <div className="">
-                    <p className="text-sm font-semibold">New resignation</p>
-                    <div className="flex items-end justify-between text-xs">
-                      <p className="t text-gray-400">Yesterday 11:30 AM</p>
-                      <button className="btn btn-xs">View</button>
-                    </div>
-                  </div>
-                  {/* leave request */}
-                  <div className="">
-                    <p className="text-sm font-semibold">New leave request</p>
-                    <div className="flex items-end justify-between text-xs">
-                      <p className="t text-gray-400">
-                        23rd July, 2025 11:30 AM
-                      </p>
-                      <button className="btn btn-xs">View</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </DashCard>
-            <DashCard>
-              <div className="h-[250px]">
-                <h2 className="mb-2 font-semibold">Checklists</h2>
-                <hr />
-
-                <div className="mt-2 space-y-2">
-                  <div className="">
-                    <p className="text-sm font-semibold">
-                      <span className="text-hr-yellow">Laptop</span> -{" "}
-                      <span className="text-gray-400">
-                        HP Pavilion 15-dk0000ng
-                      </span>
-                    </p>
-                    <p className="text-xs text-gray-400">IT Department</p>
-                  </div>
-                </div>
-                {/* <p className="mt-16 text-center text-sm text-gray-400">
-                  No checklists found
-                </p> */}
-              </div>
-            </DashCard>
-          </div>
-        </div>
-      </div>
+      <CompanyOverview />
+      <hr />
+      <StaffOverview />
     </div>
   );
 };
