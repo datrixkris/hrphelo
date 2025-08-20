@@ -4,10 +4,17 @@ import React from "react";
 import { useAuthStore } from "@/app/stores/auth-store";
 import CompanyOverview from "./components/CompanyOverview";
 import StaffOverview from "./components/StaffOverview";
+import { api } from "@/app/axiosApi/api";
+import { useQuery } from "@tanstack/react-query";
 
 const Page = () => {
   const user = useAuthStore((state) => state.user);
   // console.log(user);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: () => api.get("/v1/dashboard"),
+  });
+  console.log(data, isLoading, error);
 
   return (
     <div className="space-y-6">
