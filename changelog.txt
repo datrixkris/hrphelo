@@ -19,3 +19,8 @@ UI fixes on all auth pages
 
 August 18th
 Dashboard UI change... adding admin and staff
+
+August 20th
+Installing and integrating tanstack query
+Integrating dashboard endpoint
+Responsive UI for dashboard
