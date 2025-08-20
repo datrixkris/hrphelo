@@ -20,50 +20,53 @@ const CompanyOverview = ({ data }: { data: AdminDashboard }) => {
 
       <div className="mt-5">
         <h3 className="mb-2 text-lg font-medium">Quick Actions</h3>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <Link
             href="/staff"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:plus-sign-circle"
-              className="inline text-2xl"
+              className="inline text-xl 2xl:text-2xl"
             />
-            <span className="">Add Employee</span>
+            <span className="whitespace-nowrap">Add Employee</span>
           </Link>
           <Link
             href="/employee-salary"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:bitcoin-money-01"
-              className="inline text-2xl"
+              className="inline text-xl 2xl:text-2xl"
             />
-            <span className="">Run Payroll</span>
+            <span className="whitespace-nowrap">Run Payroll</span>
           </Link>
           <Link
             href="/manage-leaves"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:checkmark-circle-01"
-              className="inline text-2xl"
+              className="inline text-xl 2xl:text-2xl"
             />
-            <span className="">Approve Leave</span>
+            <span className="whitespace-nowrap">Approve Leave</span>
           </Link>
           <Link
             href="/departments"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
-            <Icon icon="hugeicons:building-01" className="inline text-2xl" />
-            <span className="">Add Department</span>
+            <Icon
+              icon="hugeicons:building-01"
+              className="inline text-xl 2xl:text-2xl"
+            />
+            <span className="whitespace-nowrap">Add Department</span>
           </Link>
         </div>
       </div>
 
       <div className="mt-5">
         <h3 className="mb-2 text-lg font-medium">Core Overview</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <EmployeeChart data={data.employee_overview} />
           <DepartmentsChart data={data.department_overview} />
           <LeaveChart data={data.leave_overview} />

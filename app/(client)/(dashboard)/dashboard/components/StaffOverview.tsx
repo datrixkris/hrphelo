@@ -17,32 +17,35 @@ const StaffOverview = ({ data }: { data: StaffDashboard }) => {
 
       <div className="mt-5">
         <h3 className="mb-2 text-lg font-medium">Quick Actions</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/leaves"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:checkmark-square-01"
-              className="inline text-2xl"
+              className="inline text-xl 2xl:text-2xl"
             />
             <span className="">Request Leave</span>
           </Link>
           <Link
             href="/employee-salary"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:document-validation"
-              className="inline text-2xl"
+              className="inline text-xl 2xl:text-2xl"
             />
             <span className="">View Payslip</span>
           </Link>
           <Link
             href="/profile"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg"
+            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
-            <Icon icon="hugeicons:user-circle" className="inline text-2xl" />
+            <Icon
+              icon="hugeicons:user-circle"
+              className="inline text-xl 2xl:text-2xl"
+            />
             <span className="">Update Profile</span>
           </Link>
         </div>
@@ -50,7 +53,7 @@ const StaffOverview = ({ data }: { data: StaffDashboard }) => {
 
       <div className="mt-5">
         <h3 className="mb-2 text-lg font-medium">Personal Overview</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
           <LeaveHistoryTable data={data.leave_history} />
           <PayrollHistoryTable data={data.payrol_history} />
         </div>
