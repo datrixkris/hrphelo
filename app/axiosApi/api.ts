@@ -27,7 +27,7 @@ api.interceptors.request.use(
   async (config) => {
     const token = useAuthStore.getState().accessToken;
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     // console.log("Api request intercepted");
     return config;

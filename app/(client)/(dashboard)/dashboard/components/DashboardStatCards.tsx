@@ -10,6 +10,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import PriorityComponent from "../../projects/components/PriorityComponent";
+import {
+  DepartmentOverview,
+  EmployeeOverview,
+  LeaveHistoryItem,
+  LeaveOverview,
+  PayrollHistoryItem,
+} from "../types";
 
 interface DataItems extends Record<string, string | number | boolean> {
   name: string;
@@ -17,30 +24,12 @@ interface DataItems extends Record<string, string | number | boolean> {
 }
 
 // Sample Data
-const leaveData = [
-  { id: 1, type: "Pending", value: 12, color: "#FF6F61" },
-  { id: 2, type: "Approved", value: 5, color: "#6A5ACD" },
-  { id: 3, type: "Rejected", value: 2, color: "#32CD32" },
-  // { id: 4, type: "Friendly", value: 2, color: "#FFD700" },
-];
 
 const employeeLeaveData = [
   { id: 1, type: "Annual", value: 5, color: "#FF6F61" },
   { id: 2, type: "Sick", value: 5, color: "#6A5ACD" },
   { id: 3, type: "Maternity", value: 2, color: "#32CD32" },
   { id: 4, type: "Friendly", value: 0, color: "#FFD700" },
-];
-
-const department = [
-  { id: 1, department: "Human Resource", value: 32, color: "#ff000080" },
-  { id: 2, department: "Development", value: 14, color: "#00ff0080" },
-  { id: 3, department: "UI/UX", value: 55, color: "#0000ff80" },
-];
-
-const employees = [
-  { id: 1, gender: "Active", value: 74, color: "#038db3" },
-  { id: 2, gender: "On Leave", value: 32, color: "#c7f933" },
-  { id: 2, gender: "On Probation", value: 32, color: "#c7f933" },
 ];
 
 type Priority = "high" | "highest" | "medium" | "low";
@@ -78,21 +67,21 @@ const projects = [
   },
 ];
 
-const leaveHistory = [
-  { date: "2025-01-01", type: "Annual", status: "Approved" },
-  { date: "2025-01-02", type: "Sick", status: "Pending" },
-  { date: "2025-01-03", type: "Maternity", status: "Rejected" },
-  { date: "2025-01-04", type: "Annual", status: "Approved" },
-  { date: "2025-01-05", type: "Sick", status: "Pending" },
-];
+// const leaveHistory = [
+//   { date: "2025-01-01", type: "Annual", status: "Approved" },
+//   { date: "2025-01-02", type: "Sick", status: "Pending" },
+//   { date: "2025-01-03", type: "Maternity", status: "Rejected" },
+//   { date: "2025-01-04", type: "Annual", status: "Approved" },
+//   { date: "2025-01-05", type: "Sick", status: "Pending" },
+// ];
 
-const payrollHistory = [
-  { date: "2025-01-01", amount: 1000 },
-  { date: "2025-01-02", amount: 2000 },
-  { date: "2025-01-03", amount: 3000 },
-  { date: "2025-01-04", amount: 4000 },
-  { date: "2025-01-05", amount: 5000 },
-];
+// const payrollHistory = [
+//   { date: "2025-01-01", amount: 1000 },
+//   { date: "2025-01-02", amount: 2000 },
+//   { date: "2025-01-03", amount: 3000 },
+//   { date: "2025-01-04", amount: 4000 },
+//   { date: "2025-01-05", amount: 5000 },
+// ];
 
 export function SimpleDonutChart({
   data,
@@ -102,7 +91,7 @@ export function SimpleDonutChart({
   colors: string[];
 }) {
   return (
-    <ResponsiveContainer width="100%" height={200}>
+    <ResponsiveContainer width="100%" height={150}>
       <PieChart>
         <Pie
           data={data}
@@ -125,7 +114,18 @@ export function SimpleDonutChart({
   );
 }
 
-export const DepartmentsChart = () => {
+export const DepartmentsChart = ({ data }: { data: DepartmentOverview }) => {
+  const department = Object.values(data).map((item, index) => {
+    return {
+      id: index + 1,
+      department:
+        Object.keys(data)[index].charAt(0).toUpperCase() +
+        Object.keys(data)[index].slice(1),
+      value: item,
+      color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+    };
+  });
+
   return (
     <DashCard>
       <div className="mb-5">
@@ -133,7 +133,7 @@ export const DepartmentsChart = () => {
         <p className="text-xs italic">Employee distribution over departments</p>
       </div>
       <div className="flex">
-        <div className="w-[30%]">
+        <div className="w-[40%]">
           {department.map((item) => (
             <div key={item.id}>
               <span
@@ -141,12 +141,12 @@ export const DepartmentsChart = () => {
                 style={{ backgroundColor: item.color }}
               ></span>{" "}
               <span className="relative bottom-[1px] text-xs">
-                {item.department}
+                {item.department} - {item.value}
               </span>
             </div>
           ))}
         </div>
-        <div className="w-[70%]">
+        <div className="w-[60%]">
           <SimpleDonutChart
             colors={department.map((item) => item.color)}
             data={department.map((item) => {
@@ -162,15 +162,30 @@ export const DepartmentsChart = () => {
   );
 };
 
-export const EmployeeChart = () => {
+export const EmployeeChart = ({ data }: { data: EmployeeOverview }) => {
+  const employees = [
+    { id: 1, status: "Active", value: data.active, color: "#038db3" },
+    {
+      id: 2,
+      status: "On Leave",
+      value: data.on_leave,
+      color: "#c7f933",
+    },
+    {
+      id: 3,
+      status: "On Probation",
+      value: data.on_probation,
+      color: "#c7f933",
+    },
+  ];
   return (
     <DashCard>
       <div className="mb-5">
         <h2 className="font-semibold">Employee Overview</h2>
-        <p className="text-xs italic">Employee gender distribution</p>
+        <p className="text-xs italic">Employee status distribution</p>
       </div>
       <div className="flex">
-        <div className="w-[30%]">
+        <div className="w-[40%]">
           {employees.map((item) => (
             <div key={item.id}>
               <span
@@ -178,16 +193,16 @@ export const EmployeeChart = () => {
                 style={{ backgroundColor: item.color }}
               ></span>{" "}
               <span className="relative bottom-[1px] text-xs">
-                {item.gender}
+                {item.status} - {item.value}
               </span>
             </div>
           ))}
         </div>
-        <div className="w-[70%]">
+        <div className="w-[60%]">
           <SimpleDonutChart
             colors={employees.map((item) => item.color)}
             data={employees.map((item) => {
-              return { name: item.gender, ...item };
+              return { name: item.status, ...item };
             })}
           />
         </div>
@@ -199,26 +214,34 @@ export const EmployeeChart = () => {
   );
 };
 
-export const LeaveChart = () => {
+export const LeaveChart = ({ data }: { data: LeaveOverview }) => {
+  const leaveData = [
+    { id: 1, type: "Pending", value: data.pending, color: "#FF6F61" },
+    { id: 2, type: "Approved", value: data.approved, color: "#6A5ACD" },
+    { id: 3, type: "Rejected", value: data.rejected, color: "#32CD32" },
+  ];
+
   return (
     <DashCard>
       <div className="mb-5">
         <h2 className="font-semibold">Leaves Overview</h2>
-        <p className="text-xs italic">Employees on leave: 44</p>
+        <p className="text-xs italic">Leave status distribution</p>
       </div>
       <div className="flex">
-        <div className="w-[30%]">
+        <div className="w-[40%]">
           {leaveData.map((item) => (
             <div key={item.id}>
               <span
                 className={`inline-block size-3 rounded-full`}
                 style={{ backgroundColor: item.color }}
               ></span>{" "}
-              <span className="relative bottom-[1px] text-xs">{item.type}</span>
+              <span className="relative bottom-[1px] text-xs">
+                {item.type} - {item.value}
+              </span>
             </div>
           ))}
         </div>
-        <div className="w-[70%]">
+        <div className="w-[60%]">
           <SimpleDonutChart
             colors={leaveData.map((item) => item.color)}
             data={leaveData.map((item) => {
@@ -337,7 +360,7 @@ export const EmployeeProjectsTable = () => (
   </DashCard>
 );
 
-export const LeaveHistoryTable = () => {
+export const LeaveHistoryTable = ({ data }: { data: LeaveHistoryItem[] }) => {
   return (
     <DashCard>
       <div className="mb-5">
@@ -354,7 +377,7 @@ export const LeaveHistoryTable = () => {
             </tr>
           </thead>
           <tbody>
-            {leaveHistory.map((item) => (
+            {data.map((item) => (
               <tr key={item.date}>
                 <td>{dayjs(item.date).format("DD MMM YYYY")}</td>
                 <td>{item.type}</td>
@@ -363,12 +386,21 @@ export const LeaveHistoryTable = () => {
             ))}
           </tbody>
         </table>
+        {data.length == 0 && (
+          <div className="flex justify-center py-4">
+            <p className="text-sm text-gray-500">No leave history</p>
+          </div>
+        )}
       </div>
     </DashCard>
   );
 };
 
-export const PayrollHistoryTable = () => {
+export const PayrollHistoryTable = ({
+  data,
+}: {
+  data: PayrollHistoryItem[];
+}) => {
   return (
     <DashCard>
       <div className="mb-5">
@@ -384,7 +416,7 @@ export const PayrollHistoryTable = () => {
             </tr>
           </thead>
           <tbody>
-            {payrollHistory.map((item) => (
+            {data.map((item) => (
               <tr key={item.date}>
                 <td>{dayjs(item.date).format("DD MMM YYYY")}</td>
                 <td>{item.amount}</td>
@@ -392,6 +424,12 @@ export const PayrollHistoryTable = () => {
             ))}
           </tbody>
         </table>
+
+        {data.length == 0 && (
+          <div className="flex justify-center py-4">
+            <p className="text-sm text-gray-500">No payroll history</p>
+          </div>
+        )}
       </div>
     </DashCard>
   );

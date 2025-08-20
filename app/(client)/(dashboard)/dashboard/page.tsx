@@ -6,15 +6,22 @@ import CompanyOverview from "./components/CompanyOverview";
 import StaffOverview from "./components/StaffOverview";
 import { api } from "@/app/axiosApi/api";
 import { useQuery } from "@tanstack/react-query";
+import { DashboardData } from "./types";
+import DashboardSkeleton from "./components/DashboardSkeleton";
 
 const Page = () => {
   const user = useAuthStore((state) => state.user);
   // console.log(user);
-  const { data, isLoading, error } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["dashboard"],
-    queryFn: () => api.get("/v1/dashboard"),
+    queryFn: getDashboardData,
   });
-  console.log(data, isLoading, error);
+  console.log(data, isPending, error);
+
+  async function getDashboardData(): Promise<DashboardData> {
+    const response = await api.get("/v1/dashboard");
+    return response.data;
+  }
 
   return (
     <div className="space-y-6">
@@ -28,9 +35,15 @@ const Page = () => {
         </p>
       </div>
 
-      <CompanyOverview />
-      <hr />
-      <StaffOverview />
+      {isPending ? (
+        <DashboardSkeleton />
+      ) : (
+        <>
+          {data && <CompanyOverview data={data.admin} />}
+          <hr />
+          {data && <StaffOverview data={data.staff} />}
+        </>
+      )}
     </div>
   );
 };
