@@ -1,22 +1,5 @@
 import { User } from "@/app/types/user-types";
-
-export type ModuleName =
-  | "User Role"
-  | "Resignation"
-  | "Payroll Policy"
-  | "Payroll Period"
-  | "Project Board"
-  | "Board"
-  | "Staff Checklist"
-  | "Checklist"
-  | "Payroll"
-  | "Module"
-  | "User"
-  | "Staff"
-  | "Leave"
-  | "Department"
-  | "Task"
-  | "Project";
+import { ModuleName } from "@/app/(client)/(dashboard)/(users)/roles-permissions/types";
 
 export type PermissionType = "create" | "read" | "modify" | "delete";
 
@@ -25,7 +8,7 @@ export const hasPermission = (
   permission: PermissionType,
   module: ModuleName,
 ): boolean => {
-  const userPermission = user?.permissions?.find(
+  const userPermission = user?.role?.permissions?.find(
     (perm) => perm.module.name === module,
   );
 

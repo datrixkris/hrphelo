@@ -17,11 +17,12 @@ export interface UsersInterface {
 const UsersList = () => {
   const { fetchStaff } = useStaffStore();
   const { fetchUsers } = useUserAccountStore();
-  const [userFormData, setUserFormData] = useState<UsersInterface | null>(null);
-  const [openModal, setOpenModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [usersList, setUsersList] = useState<UsersInterface[]>([]);
+  const [userFormData, setUserFormData] = useState<UsersInterface | null>(null); // this is the data of the user that will be displayed in the user form
+  const [openModal, setOpenModal] = useState(false); // this is the state of the user form modal
+  const [loading, setLoading] = useState(false); // this is the loading state of the users list
+  const [usersList, setUsersList] = useState<UsersInterface[]>([]); // this is the list of users that will be displayed in the table
 
+  // initialize the users list
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -35,13 +36,13 @@ const UsersList = () => {
       }
 
       const usersData = useStaffStore.getState().staffs.map((staff) => {
-        // check if staff has an account in the useraccounts data
+        // if staff has an account in the useraccounts data, get the permissions of the user
         const userCreatedData = useUserAccountStore
           .getState()
           .userAccounts.find((user) => user.staff.id === staff.id);
 
         return userCreatedData
-          ? { staff, permissions: userCreatedData.permissions }
+          ? { staff, permissions: userCreatedData.role.permissions }
           : { staff, permissions: null };
       });
       setUsersList(usersData);
@@ -61,7 +62,7 @@ const UsersList = () => {
         .userAccounts.find((user) => user.staff.id === staff.id);
 
       return userCreatedData
-        ? { staff, permissions: userCreatedData.permissions }
+        ? { staff, permissions: userCreatedData.role.permissions }
         : { staff, permissions: null };
     });
     setUsersList(usersData);
@@ -93,6 +94,7 @@ const UsersList = () => {
         )}
       </div>
 
+      {/* User Form... Show only if userFormData is not null */}
       {userFormData && (
         <UserForm
           isOpen={openModal}

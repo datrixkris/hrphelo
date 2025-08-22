@@ -41,21 +41,21 @@ export interface Staff {
   onboarding_complete: boolean;
 }
 
-interface Permission {
-  id: number;
-  create: boolean;
-  read: boolean;
-  modify: boolean;
-  delete: boolean;
-  userId: number;
-  moduleId: number;
-  module: Module;
-}
+// interface Permission {
+//   id: number;
+//   create: boolean;
+//   read: boolean;
+//   modify: boolean;
+//   delete: boolean;
+//   userId: number;
+//   moduleId: number;
+//   module: Module;
+// }
 
-interface Module {
-  id: number;
-  name: string;
-}
+// interface Module {
+//   id: number;
+//   name: string;
+// }
 
 export interface User {
   id: number;
@@ -64,12 +64,87 @@ export interface User {
   isPasswordReset: boolean;
   isDefault: boolean;
   refreshToken: string;
+  roleId: number;
   company: Company;
   staff: Staff;
-  permissions: Permission[];
+  // permissions: Permission[];
+  role: Role;
   leaveYear: number;
   resignation: string;
   nextPasswordResetDate: string;
   iat: number; // Issued At timestamp
   exp: number; // Expiration timestamp
+}
+
+// export interface DashboardUser {
+//   id: number;
+//   email: string;
+//   isPasswordReset: boolean;
+//   passwordResetDate: string;
+//   isDefault: boolean;
+//   roleId: number;
+//   company: Company;
+//   staff: Staff;
+//   role: Role;
+//   leaveYear: number;
+//   nextPasswordResetDate: string;
+//   iat: number;
+//   exp: number;
+// }
+
+//  interface Company {
+//   id: number;
+//   name: string;
+//   address: string;
+// }
+
+//  interface Staff {
+//   id: number;
+//   departmentId: number;
+//   staffId: string;
+//   name: string;
+//   gender: string;
+//   date_of_birth: string;
+//   email: string;
+//   contact: string;
+//   hiring_date: string;
+//   image: string;
+//   onboarding_complete: boolean;
+//   designations: Designation[];
+//   resignation: null | string;
+// }
+
+// interface Designation {
+//   id: number;
+//   departmentId: number;
+//   companyId: number;
+//   name: string;
+//   createdAt: string;
+//   updatedAt: string;
+//   deletedAt: string | null;
+//   StaffDesignations: StaffDesignation;
+// }
+
+// interface StaffDesignation {
+//   staffId: number;
+//   designationId: number;
+// }
+
+interface Role {
+  name: string;
+  permissions: RolePermission[];
+}
+
+interface RolePermission {
+  create: boolean;
+  read: boolean;
+  modify: boolean;
+  delete: boolean;
+  roleId: number;
+  moduleId: number;
+  module: RoleModule;
+}
+
+interface RoleModule {
+  name: string;
 }

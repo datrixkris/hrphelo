@@ -45,7 +45,7 @@ const TableRow = ({ role }: { role: Role }) => {
     <>
       <tr>
         <td className="font-semibold">{role.name}</td>
-        <td>{role?.description}</td>
+        <td>{role?.description ?? "No description"}</td>
         <td>
           <div className="flex items-center justify-center gap-2">
             {/* edit */}

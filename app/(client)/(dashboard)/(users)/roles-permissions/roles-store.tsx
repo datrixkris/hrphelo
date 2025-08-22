@@ -37,7 +37,7 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
   fetchRoles: async (optionalLoading = true) => {
     set({ loading: optionalLoading, error: null });
     try {
-      const response = (await api.get("/v1/user/roles")).data;
+      const response = (await api.get("/v1/user/roles/permissions")).data;
       set(() => ({ roles: response, loading: false }));
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;

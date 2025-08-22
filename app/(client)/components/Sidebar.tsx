@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import LinkWithDropdown from "@/app/components/LinkWithDropdown";
 import { clientSidebarLinks as links } from "@/app/data/links";
 // import { useHasPermission } from "@/app/hooks/permissions";
-import { hasPermission } from "@/utils/permissions";
+// import { hasPermission } from "@/utils/permissions";
 import { useAuthStore } from "@/app/stores/auth-store";
 import CompanyLogo from "@/app/components/CompanyLogo";
 
@@ -27,36 +27,37 @@ const Sidebar = () => {
               {links.map((link, index) => {
                 if (link.dropdown) {
                   // check every dropdown item to see if user has permissions. All must be true to show this dropdown
-                  if (
-                    link.dropdown.every(
-                      (item) =>
-                        hasPermission(user, "read", item.module) === true,
-                    )
-                  ) {
-                    return (
-                      <div className="" key={index}>
-                        <LinkWithDropdown links={link} />
-                      </div>
-                    );
-                  }
+                  // if (
+                  //   link.dropdown.every(
+                  //     (item) =>
+                  //       hasPermission(user, "read", item.module) === true,
+                  //   )
+                  // )
+                  // {
+                  return (
+                    <div className="" key={index}>
+                      <LinkWithDropdown links={link} />
+                    </div>
+                  );
+                  // }
                 } else if (link.link) {
                   // if link has module,
                   if (link.module) {
                     // check if user has permission to access the module
-                    if (hasPermission(user, "read", link.module)) {
-                      return (
-                        <div className="" key={index}>
-                          <ActiveLink href={link.link}>
-                            <div className="flex items-center gap-2">
-                              <Icon icon={link.icon} />
-                              <span className="truncate text-ellipsis text-sm lg:text-[15px]">
-                                {link.name}
-                              </span>
-                            </div>
-                          </ActiveLink>
-                        </div>
-                      );
-                    }
+                    // if (hasPermission(user, "read", link.module)) {
+                    return (
+                      <div className="" key={index}>
+                        <ActiveLink href={link.link}>
+                          <div className="flex items-center gap-2">
+                            <Icon icon={link.icon} />
+                            <span className="truncate text-ellipsis text-sm lg:text-[15px]">
+                              {link.name}
+                            </span>
+                          </div>
+                        </ActiveLink>
+                      </div>
+                    );
+                    // }
                   }
 
                   // if link has no module, like Dashboard

@@ -29,10 +29,11 @@ const UserForm = ({
   const { updatingData, error, updateStaffDetails } = useStaffStore();
   const createUser = useUserAccountStore((state) => state.createUser);
   const editUser = useUserAccountStore((state) => state.editUser);
-  const [isUserCreated, setIsUserCreated] = useState(false);
+  const [isUserCreated, setIsUserCreated] = useState(false); // boolean to check if the user is created
   const tabs: Tabs[] = ["Roles & Permissions", "Basic Information"];
   const [activeTab, setActiveTab] = useState<Tabs>("Roles & Permissions");
 
+  // set the isUserCreated state to true if the user is created
   useEffect(() => {
     setIsUserCreated(staffDetails.permissions ? true : false);
   }, [staffDetails.permissions]);

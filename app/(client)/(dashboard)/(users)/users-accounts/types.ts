@@ -4,6 +4,7 @@ export interface UserModules {
   id: number;
   name: string;
   permissions: Permissions;
+  parentId: number | null;
 }
 
 export interface Staff {
@@ -29,6 +30,7 @@ export interface Permissions {
   modify: boolean;
   delete: boolean;
   module?: Module;
+  moduleId?: number;
 }
 
 export interface UserData {
@@ -37,5 +39,11 @@ export interface UserData {
   staffId: number;
   companyId: number;
   staff: StaffDetail;
+  role: Role;
+}
+
+interface Role {
+  id: number;
+  name: string;
   permissions: Permissions[];
 }

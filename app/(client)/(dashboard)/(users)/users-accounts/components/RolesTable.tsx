@@ -25,15 +25,16 @@ const RolesTable = ({ roles, onRoleAssign }: RolesTableProps) => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {roles.map((role) => (
-              <TableRow
-                role={role}
-                key={role.id}
-                onRoleAssign={onRoleAssign}
-                setRoleAssigned={setRoleAssigned}
-                roleAssigned={roleAssigned}
-              />
-            ))}
+            {roles &&
+              roles.map((role) => (
+                <TableRow
+                  role={role}
+                  key={role.id}
+                  onRoleAssign={onRoleAssign}
+                  setRoleAssigned={setRoleAssigned}
+                  roleAssigned={roleAssigned}
+                />
+              ))}
           </tbody>
         </table>
       </div>
@@ -66,6 +67,7 @@ export const TableRow = ({
         modify: permission.modify,
         delete: permission.delete,
         module: permission.module,
+        moduleId: permission.moduleId ?? permission.module?.id, // if the moduleId is not available, use the id from the module
       };
     });
 
