@@ -1,5 +1,9 @@
 import { useAuthStore } from "@/app/stores/auth-store";
-import { hasPermission, ModuleName, PermissionType } from "@/utils/permissions";
+import { hasPermission } from "@/utils/permissions";
+import {
+  ModuleName,
+  PermissionType,
+} from "@/app/(client)/(dashboard)/(users)/roles-permissions/types";
 
 export const useHasPermission = (
   permission: PermissionType,
