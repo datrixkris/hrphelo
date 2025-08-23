@@ -21,7 +21,7 @@ const StaffDetailsCard = ({
   defaultAccount,
 }: StaffDetailsProps) => {
   const [openModal, setOpenModal] = useState(false);
-  const hasEditPermission = useHasPermission("modify", "Staff");
+  const hasEditPermission = useHasPermission("modify", "Staff List");
   const user = useAuthStore((state) => state.user);
 
   return (

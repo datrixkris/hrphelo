@@ -30,8 +30,8 @@ export const DepartmentTable = ({
   >(null);
 
   // permissions
-  const hasDeletePermission = useHasPermission("delete", "Department");
-  const hasEditPermission = useHasPermission("modify", "Department");
+  const hasDeletePermission = useHasPermission("delete", "Departments");
+  const hasEditPermission = useHasPermission("modify", "Departments");
 
   // Function to open the Edit modal and set the department ID
   const openEditModal = (id: number) => {
