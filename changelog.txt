@@ -24,3 +24,6 @@ August 20th
 Installing and integrating tanstack query
 Integrating dashboard endpoint
 Responsive UI for dashboard
+
+Autgust 21st - 23rd
+Roles and permissions refactor
