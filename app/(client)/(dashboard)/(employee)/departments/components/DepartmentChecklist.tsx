@@ -25,7 +25,8 @@ const DepartmentChecklist = () => {
       setLoading(true);
       const list = await fetchChecklistByDepartment(department.id);
       setLoading(false);
-      setChecklists(list);
+      console.log(list);
+      if (list) setChecklists(list);
     }
   }, []);
 
@@ -40,7 +41,7 @@ const DepartmentChecklist = () => {
       setLoading(true);
       const cQueries = await fetchChecklistQueries(department.id);
       setLoading(false);
-      setQueries(cQueries);
+      if (cQueries) setQueries(cQueries);
     }
   }, []);
 
@@ -70,7 +71,7 @@ const DepartmentChecklist = () => {
           onClick={() => setActiveTab("checklists")}
         >
           Checklists
-          <div className="badge badge-info">{checklists.length}</div>
+          <div className="badge badge-info">{checklists?.length}</div>
         </button>
 
         {/* new hires' progress */}
