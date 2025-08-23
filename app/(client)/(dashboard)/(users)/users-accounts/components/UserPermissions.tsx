@@ -22,10 +22,10 @@ const UserPermissions = ({
   };
 
   // get permissions module data from the permissions component anytime a user checks a permission box
-  const getUserPermissions = (data: UserModules[]) => {
-    console.log(data);
-    setPermissions(data);
-  };
+  // const getUserPermissions = (data: UserModules[]) => {
+  //   console.log(data);
+  //   setPermissions(data);
+  // };
 
   return (
     <div>
