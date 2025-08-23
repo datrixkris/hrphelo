@@ -26,7 +26,7 @@ const Page = () => {
   }, []);
 
   return (
-    <HasAccess module="Checklist">
+    <HasAccess module="Checklists">
       <div>
         <div className="">
           {/* Header with breadcrumbs */}

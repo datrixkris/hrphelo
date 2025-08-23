@@ -100,7 +100,7 @@ const Page = () => {
   };
 
   return (
-    <HasAccess module="Staff">
+    <HasAccess module="Staff List">
       <div>
         {/* Header with breadcrumbs */}
         <PageTitleWithCrumbs
@@ -114,13 +114,13 @@ const Page = () => {
         {/* Profile Details */}
         {loading ? (
           <div className="mb-5 grid grid-cols-1 gap-5 py-5 md:grid-cols-2">
-          <div className="skeleton col-span-2 h-32 w-full"></div>
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-32 w-full"></div>
-          <div className="skeleton h-32 w-full"></div>
-        </div>
-      ) : // <div className="my-5">Getting staff data...</div>
+            <div className="skeleton col-span-2 h-32 w-full"></div>
+            <div className="skeleton h-32 w-full"></div>
+            <div className="skeleton h-32 w-full"></div>
+            <div className="skeleton h-32 w-full"></div>
+            <div className="skeleton h-32 w-full"></div>
+          </div>
+        ) : // <div className="my-5">Getting staff data...</div>
         error ? (
           <div className="my-5 text-red-500">{error}</div>
         ) : (
@@ -137,91 +137,92 @@ const Page = () => {
               setActiveTab={setActiveTab}
             />
 
-          {/* Tab Content */}
-          <div className="py-5">
-            {activeTab === "Profile" && profile ? (
-              <StaffProfile profile={profile} />
-            ) : activeTab === "Profile" ? (
-              <div>No profile information available.</div>
-            ) : null}
-            {activeTab === "Assets" && <StaffAssets />}
-            {activeTab === "Projects" && <ProjectList />}
-            {staffOrgnogram.length !== 0 && activeTab === "Organogram" && (
-              <MyOrgChart orgnogramData={staffOrgnogram} />
-            )}
-          </div>
-        </div>
-      )}
-      {loading ? (
-        <div className="flex w-full flex-col gap-4">
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-4 w-full"></div>
-          <div className="skeleton h-32 w-full"></div>
-        </div>
-      ) : (
-        <div className="mt-8 border-t border-base-300 pt-6">
-          <div className="mb-4">
-            <h3 className="mb-2 text-lg font-semibold">Terminate Contract</h3>
-            <p className="mb-4 text-sm text-gray-600">
-              As HR personnel, you can initiate termination procedures for this
-              employee. Please ensure all company policies and legal
-              requirements are followed.
-            </p>
-          </div>
-          {user?.resignation ? (
-            <p className="mb-4 text-sm text-gray-600">
-              Contact termination has already been initiated. Please contact the
-              employee for further details.
-            </p>
-          ) : (
-            <button
-              onClick={() => setShowResignationModal(true)}
-              className="btn btn-error"
-            >
-              <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
-              Terminate Contract
-            </button>
-          )}
-        </div>
-      )}{" "}
-      {/* Termination Section */}
-      {/* Resignation/Termination Modal */}
-      {showResignationModal && (
-        <div className="modal modal-open">
-          <div className="modal-box max-w-2xl">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold">Contract Termination</h3>
-              <button
-                onClick={() => {
-                  setShowResignationModal(false);
-                  setSubmitError("");
-                }}
-                className="btn btn-circle btn-ghost btn-sm"
-              >
-                ✕
-              </button>
+            {/* Tab Content */}
+            <div className="py-5">
+              {activeTab === "Profile" && profile ? (
+                <StaffProfile profile={profile} />
+              ) : activeTab === "Profile" ? (
+                <div>No profile information available.</div>
+              ) : null}
+              {activeTab === "Assets" && <StaffAssets />}
+              {activeTab === "Projects" && <ProjectList />}
+              {staffOrgnogram.length !== 0 && activeTab === "Organogram" && (
+                <MyOrgChart orgnogramData={staffOrgnogram} />
+              )}
             </div>
-
-            <div className="mb-6">
-              <p className="mb-2 text-sm text-gray-600">
-                Please provide the following details to terminate this employee
-                contract. This action will initiate the offboarding process.
+          </div>
+        )}
+        {loading ? (
+          <div className="flex w-full flex-col gap-4">
+            <div className="skeleton h-4 w-full"></div>
+            <div className="skeleton h-4 w-full"></div>
+            <div className="skeleton h-32 w-full"></div>
+          </div>
+        ) : (
+          <div className="mt-8 border-t border-base-300 pt-6">
+            <div className="mb-4">
+              <h3 className="mb-2 text-lg font-semibold">Terminate Contract</h3>
+              <p className="mb-4 text-sm text-gray-600">
+                As HR personnel, you can initiate termination procedures for
+                this employee. Please ensure all company policies and legal
+                requirements are followed.
               </p>
             </div>
+            {user?.resignation ? (
+              <p className="mb-4 text-sm text-gray-600">
+                Contact termination has already been initiated. Please contact
+                the employee for further details.
+              </p>
+            ) : (
+              <button
+                onClick={() => setShowResignationModal(true)}
+                className="btn btn-error"
+              >
+                <Icon icon="hugeicons:user-block" className="mr-2 h-4 w-4" />
+                Terminate Contract
+              </button>
+            )}
+          </div>
+        )}{" "}
+        {/* Termination Section */}
+        {/* Resignation/Termination Modal */}
+        {showResignationModal && (
+          <div className="modal modal-open">
+            <div className="modal-box max-w-2xl">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold">Contract Termination</h3>
+                <button
+                  onClick={() => {
+                    setShowResignationModal(false);
+                    setSubmitError("");
+                  }}
+                  className="btn btn-circle btn-ghost btn-sm"
+                >
+                  ✕
+                </button>
+              </div>
 
-            <form onSubmit={handleResignationSubmit}>
-              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Termination Reason*</span>
-                  </label>
-                  <select
-                    className="select select-bordered w-full"
-                    value={resignationReason}
-                    onChange={(e) => setResignationReason(e.target.value)}
-                    required
-                  >
-                    <option value="">Select a reason</option>
+              <div className="mb-6">
+                <p className="mb-2 text-sm text-gray-600">
+                  Please provide the following details to terminate this
+                  employee contract. This action will initiate the offboarding
+                  process.
+                </p>
+              </div>
+
+              <form onSubmit={handleResignationSubmit}>
+                <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text">Termination Reason*</span>
+                    </label>
+                    <select
+                      className="select select-bordered w-full"
+                      value={resignationReason}
+                      onChange={(e) => setResignationReason(e.target.value)}
+                      required
+                    >
+                      <option value="">Select a reason</option>
 
                       <option value="Performance Issues">
                         Performance Issues

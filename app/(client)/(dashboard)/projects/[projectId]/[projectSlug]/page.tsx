@@ -43,7 +43,7 @@ const Project = () => {
   };
 
   return (
-    <HasAccess module="Project">
+    <HasAccess module="Projects">
       {loading ? (
         <div className="mx-auto my-5 inline-block">Getting project info...</div>
       ) : (
