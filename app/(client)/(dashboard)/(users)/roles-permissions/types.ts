@@ -50,7 +50,7 @@ export interface Permission {
 
 export interface Role {
   id: number;
-  companyId: number;
+  companyId?: number;
   name: string;
   description?: string;
   permissions: Permission[];

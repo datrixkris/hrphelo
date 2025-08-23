@@ -10,6 +10,7 @@ import { UserModules } from "../types";
 import { useUserAccountStore } from "../user-account-store";
 import { UsersInterface } from "./UsersList";
 import UserRoles from "./UserRoles";
+import { Permission } from "../../roles-permissions/types";
 
 interface UserFormProps {
   isOpen: boolean;
@@ -56,33 +57,29 @@ const UserForm = ({
     }
   };
 
-  const handlePermissionsSubmit = async (permissions: UserModules[]) => {
-    const permissionsData = {
+  const handleRoleSubmit = async (roleId: number) => {
+    const roleData = {
       email: staffDetails.staff.email!,
-      permissions: permissions.map((item) => {
-        return {
-          moduleId: item.id,
-          ...item.permissions,
-        };
-      }),
+      roleId: roleId,
     };
-    console.log(permissions);
-    console.log(permissionsData);
+    console.log(roleId);
+    console.log(roleData);
     if (staffDetails?.staff.id) {
       isUserCreated
-        ? await editUser(permissionsData, staffDetails.staff.user!.id)
-        : await createUser(permissionsData, staffDetails.staff.id);
+        ? await editUser(roleData, staffDetails.staff.user!.id)
+        : await createUser(roleData, staffDetails.staff.id);
     } else {
       alert("cannot find staff id to fetch data");
     }
     if (!useUserAccountStore.getState().error) {
       console.log(error, updatingData);
       // onClose();
-      await refreshData();
       isUserCreated
         ? toast.success("User permissions edited")
         : toast.success("User has been created successfully");
-      onClose();
+      await refreshData();
+
+      // onClose();
     } else {
       toast.error(useUserAccountStore.getState().error);
     }
@@ -129,8 +126,9 @@ const UserForm = ({
           {activeTab === "Roles & Permissions" && (
             <div>
               <UserRoles
-                userPermissions={staffDetails.permissions}
-                onPermissionsSubmit={handlePermissionsSubmit}
+                userPermissions={staffDetails.permissions as Permission[]}
+                onPermissionsSubmit={handleRoleSubmit}
+                role={staffDetails.role}
               />
             </div>
           )}

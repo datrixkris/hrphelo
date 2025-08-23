@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { Role } from "../../roles-permissions/types";
-import { Permissions } from "../types";
+import { Permission } from "../../roles-permissions/types";
 // import { Icon } from "@iconify/react/dist/iconify.js";
+import { Role as RoleType } from "../types";
 
 interface RolesTableProps {
-  onRoleAssign: (data: Permissions[]) => void;
+  onRoleAssign: (data: Permission[], roleId: number) => void;
   roles: Role[];
+  role: RoleType | null;
 }
 
-const RolesTable = ({ roles, onRoleAssign }: RolesTableProps) => {
-  const [roleAssigned, setRoleAssigned] = useState(""); // to keep track of the role assigned during user creation
+const RolesTable = ({ roles, onRoleAssign, role }: RolesTableProps) => {
+  const [roleAssigned, setRoleAssigned] = useState<string | null>(
+    role?.name || null,
+  ); // to keep track of the role assigned during user creation
 
   return (
     <div>
@@ -46,9 +50,9 @@ export default RolesTable;
 
 interface TableRowProps {
   role: Role;
-  onRoleAssign: (data: Permissions[]) => void;
-  setRoleAssigned: React.Dispatch<React.SetStateAction<string>>;
-  roleAssigned: string;
+  onRoleAssign: (data: Permission[], roleId: number) => void;
+  setRoleAssigned: React.Dispatch<React.SetStateAction<string | null>>;
+  roleAssigned: string | null;
 }
 
 // Table row
@@ -72,7 +76,7 @@ export const TableRow = ({
     });
 
     setRoleAssigned(role.name);
-    onRoleAssign(permData);
+    onRoleAssign(permData, role.id);
   }
 
   return (

@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from "react";
-import PermissionsComponent from "./Permissions";
+// import Permissionss from "./Permissionss";
 import { UserModules, Permissions } from "../types";
 import RolesTable from "./RolesTable";
 import Button from "@/app/components/Button";
 import { useUserAccountStore } from "../user-account-store";
 import { useRolesStore } from "../../roles-permissions/roles-store";
 import TableSkeleton from "@/app/components/TableSkeleton";
+import Permissionss, {
+  FormattedPermissionsForRoleCreation,
+} from "./Permissionss";
+import { Permission } from "../../roles-permissions/types";
+import { Role } from "../types";
 
 const UserRoles = ({
   onPermissionsSubmit,
   userPermissions,
+  role,
 }: {
-  onPermissionsSubmit: (permissions: UserModules[]) => void;
-  userPermissions: Permissions[] | null;
+  onPermissionsSubmit: (roleId: number) => void;
+  userPermissions: Permission[] | null;
+  role: Role | null;
 }) => {
-  const [permissions, setPermissions] = useState<UserModules[] | null>(null);
+  const [permissions, setPermissions] = useState<Permission[] | null>(
+    userPermissions,
+  );
+  const [roleId, setRoleId] = useState<number | null>(null);
   const updatingData = useUserAccountStore((state) => state.updatingData);
   const { loading, roles, fetchRoles } = useRolesStore();
   // this is the user permissions that will be editable
-  const [editableUserPermissions, setEditableUserPermissions] = useState<
-    Permissions[] | null
-  >(userPermissions);
+  // const [editableUserPermissions, setEditableUserPermissions] = useState<
+  //   Permissions[] | null
+  // >(userPermissions);
 
   // fetch roles on mount
   useEffect(() => {
@@ -36,16 +46,16 @@ const UserRoles = ({
   }, []);
 
   // get permissions module data from the permissions component anytime a user checks a permission box
-  const getUserPermissions = (data: UserModules[]) => {
+  const getUserPermissions = (data: FormattedPermissionsForRoleCreation[]) => {
     console.log(data);
-    setPermissions(data);
-    console.log(permissions);
+    // setPermissions(data);
+    // console.log(permissions);
   };
 
   const handleSubmit = () => {
     // send data to parent component
-    if (permissions) {
-      onPermissionsSubmit(permissions);
+    if (roleId) {
+      onPermissionsSubmit(roleId);
     }
   };
 
@@ -67,22 +77,25 @@ const UserRoles = ({
           <TableSkeleton />
         ) : (
           <RolesTable
-            onRoleAssign={(data) => {
-              setEditableUserPermissions(data);
+            onRoleAssign={(data, roleId) => {
+              setPermissions(data);
+              setRoleId(roleId);
             }}
             roles={roles}
+            role={role}
           />
         )}
       </div>
 
       {/* user permissions component */}
       <div className="">
-        <div className="label">
+        <div className="divider">
           <span className="label-text">Staff permissions</span>
         </div>
-        <PermissionsComponent
-          userPermissions={editableUserPermissions}
-          getUserPermissions={getUserPermissions}
+        <Permissionss
+          editable={false}
+          rolePermissions={permissions}
+          getRolePermissions={getUserPermissions}
         />
       </div>
 
@@ -94,7 +107,7 @@ const UserRoles = ({
             disabled={updatingData}
             onClick={() => handleSubmit()}
           >
-            {updatingData ? "Editing permissions..." : "Edit permissions"}
+            {updatingData ? "Saving..." : "Save"}
           </Button>
         ) : (
           <Button

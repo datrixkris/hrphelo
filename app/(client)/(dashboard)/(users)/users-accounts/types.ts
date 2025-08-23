@@ -42,7 +42,7 @@ export interface UserData {
   role: Role;
 }
 
-interface Role {
+export interface Role {
   id: number;
   name: string;
   permissions: Permissions[];

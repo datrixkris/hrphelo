@@ -7,11 +7,12 @@ import UsersTable from "./UsersTable";
 import { StaffData } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 import UserForm from "./UserForm";
 import { useUserAccountStore } from "../user-account-store";
-import { Permissions } from "../types";
+import { Permissions, Role } from "../types";
 
 export interface UsersInterface {
   staff: StaffData;
   permissions: Permissions[] | null;
+  role: Role | null;
 }
 
 const UsersList = () => {
@@ -42,8 +43,12 @@ const UsersList = () => {
           .userAccounts.find((user) => user.staff.id === staff.id);
 
         return userCreatedData
-          ? { staff, permissions: userCreatedData.role.permissions }
-          : { staff, permissions: null };
+          ? {
+              staff,
+              permissions: userCreatedData.role.permissions,
+              role: userCreatedData.role,
+            }
+          : { staff, permissions: null, role: null };
       });
       setUsersList(usersData);
       setLoading(false);
@@ -54,7 +59,7 @@ const UsersList = () => {
 
   const refreshData = async () => {
     await fetchStaff(); //fetch staff data... this is all staff, account bearing or not
-    await fetchUsers(); //fetch user data... this is staff that have accounts
+    await fetchUsers(false); //fetch user data... this is staff that have accounts
     const usersData = useStaffStore.getState().staffs.map((staff) => {
       // check if staff has an account in the useraccounts data
       const userCreatedData = useUserAccountStore
@@ -62,8 +67,12 @@ const UsersList = () => {
         .userAccounts.find((user) => user.staff.id === staff.id);
 
       return userCreatedData
-        ? { staff, permissions: userCreatedData.role.permissions }
-        : { staff, permissions: null };
+        ? {
+            staff,
+            permissions: userCreatedData.role.permissions,
+            role: userCreatedData.role,
+          }
+        : { staff, permissions: null, role: null };
     });
     setUsersList(usersData);
   };
@@ -94,7 +103,7 @@ const UsersList = () => {
         )}
       </div>
 
-      {/* User Form... Show only if userFormData is not null */}
+      {/* User Form... Show only if */}
       {userFormData && (
         <UserForm
           isOpen={openModal}

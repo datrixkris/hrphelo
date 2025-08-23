@@ -7,13 +7,7 @@ import { Module } from "../roles-permissions/types";
 
 interface CreateUserInterface {
   email: string;
-  permissions: {
-    moduleId: number;
-    create: boolean;
-    read: boolean;
-    modify: boolean;
-    delete: boolean;
-  }[];
+  roleId: number;
 }
 
 interface UserAccountStore {

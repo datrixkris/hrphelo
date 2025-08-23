@@ -26,11 +26,13 @@ export interface FormattedPermissionsForRoleCreation {
 const Permissionss = ({
   rolePermissions,
   getRolePermissions,
+  editable = true,
 }: {
   rolePermissions?: Permission[] | null;
   getRolePermissions: (
     permissions: FormattedPermissionsForRoleCreation[],
   ) => void;
+  editable?: boolean;
 }) => {
   // Get modules data from the store
   const { modules, loading, fetchModules } = useUserAccountStore();
@@ -536,7 +538,9 @@ const Permissionss = ({
           {errorMessage}
         </div>
       ) : (
-        <div>
+        <div
+          className={`${editable ? "opacity-100" : "pointer-events-none opacity-70"}`}
+        >
           {/* Permissions Table */}
           <div className="overflow-x-auto">
             <table className="table border">
