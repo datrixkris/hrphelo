@@ -1,7 +1,8 @@
 import Button from "@/app/components/Button";
 import React, { useState } from "react";
-import PermissionsComponent from "../../users-accounts/components/Permissions";
-import { UserModules } from "../../users-accounts/types";
+import Permissionss, {
+  FormattedPermissionsForRoleCreation,
+} from "../../users-accounts/components/Permissionss";
 import { useRolesStore } from "../roles-store";
 
 interface CreateUserRoleProps {
@@ -9,12 +10,14 @@ interface CreateUserRoleProps {
 }
 
 const CreateUserRole = ({ closeModal }: CreateUserRoleProps) => {
-  const [permissions, setPermissions] = useState<UserModules[] | null>(null);
+  const [permissions, setPermissions] = useState<
+    FormattedPermissionsForRoleCreation[] | null
+  >(null);
   const [roleName, setRoleName] = useState<string>("");
   const [roleDescription, setRoleDescription] = useState<string>("");
   const { updatingData, createRole } = useRolesStore();
 
-  const getUserPermissions = (data: UserModules[]) => {
+  const getRolePermissions = (data: FormattedPermissionsForRoleCreation[]) => {
     console.log(data);
     setPermissions(data);
     console.log(permissions);
@@ -73,7 +76,7 @@ const CreateUserRole = ({ closeModal }: CreateUserRoleProps) => {
               Set access permissions for this role
             </span>
           </div>
-          <PermissionsComponent getUserPermissions={getUserPermissions} />
+          <Permissionss getRolePermissions={getRolePermissions} />
         </div>
 
         {/* buttons */}

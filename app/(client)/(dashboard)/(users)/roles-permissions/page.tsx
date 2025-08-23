@@ -24,7 +24,8 @@ const Page = () => {
               { name: "Roles and Permissions" },
             ]}
           />
-          <div>{hasCreatePermission && <AddRole />}</div>
+          <div>{<AddRole />}</div>
+          {/* <div>{hasCreatePermission && <AddRole />}</div> */}
         </div>
 
         {/* search and filter */}

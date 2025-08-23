@@ -1,10 +1,13 @@
 import Button from "@/app/components/Button";
 import React, { useEffect, useState } from "react";
-import PermissionsComponent from "../../users-accounts/components/Permissions";
-import { Permissions, UserModules } from "../../users-accounts/types";
+// import PermissionsComponent from "../../users-accounts/components/Permissions";
+// import { Permissions, UserModules } from "../../users-accounts/types";
 // import { useRolesStore } from "../roles-store";
-import { Role } from "../types";
+import { Permission, Role } from "../types";
 import { useRolesStore } from "../roles-store";
+import Permissionss, {
+  FormattedPermissionsForRoleCreation,
+} from "../../users-accounts/components/Permissionss";
 
 interface ViewAndEditProps {
   edit?: boolean;
@@ -13,12 +16,14 @@ interface ViewAndEditProps {
 }
 
 const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
-  const [permissions, setPermissions] = useState<UserModules[] | null>(null);
+  const [permissions, setPermissions] = useState<
+    FormattedPermissionsForRoleCreation[] | null
+  >(null);
   const [roleName, setRoleName] = useState<string>(role.name);
   const [roleDescription, setRoleDescription] = useState<string>(
     role?.description || "",
   );
-  const [userPermissions, setUserPermissions] = useState<Permissions[]>([]);
+  const [userPermissions, setUserPermissions] = useState<Permission[]>([]);
   const { updatingData, editRole } = useRolesStore();
 
   useEffect(() => {
@@ -29,6 +34,7 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
         read: permission.read,
         modify: permission.modify,
         delete: permission.delete,
+        moduleId: permission.moduleId,
         module: permission.module,
       };
     });
@@ -37,10 +43,9 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
   }, []);
 
   // get permissions module data from the permissions component anytime a user checks a permission box
-  const getUserPermissions = (data: UserModules[]) => {
+  const getRolePermissions = (data: FormattedPermissionsForRoleCreation[]) => {
     console.log(data);
     setPermissions(data);
-    console.log(permissions);
   };
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -91,16 +96,11 @@ const ViewAndEditRoleForm = ({ edit, closeModal, role }: ViewAndEditProps) => {
           </label>
         </div>
 
-        {/* user permissions component */}
-        <div className="!my-2">
-          <div className="label">
-            <span className="label-text">
-              Set access permissions for this role
-            </span>
-          </div>
-          <PermissionsComponent
-            getUserPermissions={getUserPermissions}
-            userPermissions={userPermissions}
+        <div className="">
+          <div className="divider">Permissions</div>
+          <Permissionss
+            rolePermissions={userPermissions}
+            getRolePermissions={getRolePermissions}
           />
         </div>
 

@@ -25,7 +25,7 @@ interface Submodule {
 }
 
 // A module can have submodules
-interface Module {
+export interface Module {
   id: number;
   name: ModuleName;
   parentId: number | null;
@@ -33,16 +33,16 @@ interface Module {
 }
 
 // The main permission object
-interface Permission {
+export interface Permission {
   id: number;
   create: boolean;
   read: boolean;
   modify: boolean;
   delete: boolean;
-  roleId: number;
+  roleId?: number;
   moduleId: number;
-  createdAt: string; // or Date, if you parse it
-  updatedAt: string; // or Date
+  createdAt?: string; // or Date, if you parse it
+  updatedAt?: string; // or Date
   module: Module;
 }
 

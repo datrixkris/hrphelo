@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { UserModules } from "../users-accounts/types";
 import { Role } from "./types";
+import { FormattedPermissionsForRoleCreation } from "../users-accounts/components/Permissionss";
 
 interface RolesStore {
   roles: Role[];
@@ -25,7 +26,7 @@ interface ApiErrorResponse {
 interface CreateRoleInterface {
   roleName: string;
   roleDescription: string;
-  permissions: UserModules[];
+  permissions: FormattedPermissionsForRoleCreation[];
 }
 
 export const useRolesStore = create<RolesStore>((set, get) => ({
@@ -58,30 +59,12 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
     try {
       // create role with name and description
       const role = (
-        await api.post("/v1/user/roles", {
+        await api.post("/v1/user/roles/permissions", {
           name: data.roleName,
           description: data.roleDescription,
+          permissions: data.permissions,
         })
       ).data;
-
-      const permData = {
-        userRoleId: role.id,
-        permissions: data.permissions?.map((perm) => ({
-          moduleId: perm.id,
-          create: perm.permissions.create,
-          read: perm.permissions.read,
-          modify: perm.permissions.modify,
-          delete: perm.permissions.delete,
-        })),
-      };
-
-      // assign permissions to created role
-      const permResponse = await api.post(
-        "/v1/user/roles/permissions",
-        permData,
-      );
-
-      console.log(permResponse.data);
 
       // fetch roles again to update with newly created role
       await get().fetchRoles(false);
@@ -108,34 +91,16 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
         await api.put(`/v1/user/roles/${roleId}`, {
           name: data.roleName,
           description: data.roleDescription,
+          permissions: data.permissions,
         })
       ).data;
-
-      const permData = {
-        userRoleId: roleId,
-        permissions: data.permissions?.map((perm) => ({
-          moduleId: perm.id,
-          create: perm.permissions.create,
-          read: perm.permissions.read,
-          modify: perm.permissions.modify,
-          delete: perm.permissions.delete,
-        })),
-      };
-
-      // assign permissions to created role
-      const permResponse = await api.post(
-        "/v1/user/roles/permissions",
-        permData,
-      );
-
-      console.log(permResponse.data);
 
       await get().fetchRoles(false); //refetch roles to update data
       set(() => ({
         updatingData: false,
       }));
       console.log(response);
-      toast.success(permResponse.data.message);
+      toast.success(response.message);
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
