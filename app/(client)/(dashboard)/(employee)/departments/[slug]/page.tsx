@@ -76,7 +76,12 @@ const Page = ({ params }: { params: { slug: string } }) => {
             {activeTab === "Staff" && (
               <DepartmentStaffList department={department} />
             )}
-            {activeTab === "Designations" && <DepartmentDesignations />}
+            {activeTab === "Designations" && (
+              <DepartmentDesignations
+                designations={department.designations}
+                department={department}
+              />
+            )}
             {activeTab === "Onboarding" && <DepartmentChecklist />}
             {activeTab === "Resignations" && <Resignations />}
           </div>
