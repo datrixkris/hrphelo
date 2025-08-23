@@ -6,7 +6,7 @@ import HasAccess from "../../components/HasAccess";
 
 const Page = () => {
   return (
-    <HasAccess module="Checklist">
+    <HasAccess module="Checklists">
       <div className="">
         <div>
           {/* Header with breadcrumbs */}

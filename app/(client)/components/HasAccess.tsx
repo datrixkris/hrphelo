@@ -1,19 +1,26 @@
 "use client";
 
 import { useHasPermission } from "@/app/hooks/permissions";
-import { ModuleName } from "@/utils/permissions";
+import {
+  ModuleName,
+  PermissionType,
+} from "@/app/(client)/(dashboard)/(users)/roles-permissions/types";
 import React from "react";
 
 interface HasAccessProps {
   module: ModuleName;
-  //   permission: PermissionType
+  permission?: PermissionType;
   children: React.ReactNode;
 }
 
-const HasAccess = ({ module, children }: HasAccessProps) => {
-  const hasAccess = useHasPermission("read", module);
+const HasAccess = ({
+  module,
+  permission = "read",
+  children,
+}: HasAccessProps) => {
+  const hasAccess = useHasPermission(permission, module);
 
-  if (!true) {
+  if (!hasAccess) {
     return (
       <div className="p-4">
         <h1 className="text-center text-lg font-semibold">

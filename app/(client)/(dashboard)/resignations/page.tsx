@@ -5,7 +5,7 @@ import HasAccess from "@/app/(client)/components/HasAccess";
 
 const Page = () => {
   return (
-    <HasAccess module="Resignation">
+    <HasAccess module="Resignations">
       <div className="">
         <div>
           {/* Header with breadcrumbs */}

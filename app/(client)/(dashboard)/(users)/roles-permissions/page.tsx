@@ -11,9 +11,9 @@ import { useHasPermission } from "@/app/hooks/permissions";
 
 const Page = () => {
   // permission
-  const hasCreatePermission = useHasPermission("create", "User Role");
+  const hasCreatePermission = useHasPermission("create", "User Management");
   return (
-    <HasAccess module="User Role">
+    <HasAccess module="User Management">
       <div>
         {/* header plus breadcrumbs */}
         <div className="flex items-center justify-between">
@@ -24,8 +24,7 @@ const Page = () => {
               { name: "Roles and Permissions" },
             ]}
           />
-          <div>{<AddRole />}</div>
-          {/* <div>{hasCreatePermission && <AddRole />}</div> */}
+          <div>{hasCreatePermission && <AddRole />}</div>
         </div>
 
         {/* search and filter */}

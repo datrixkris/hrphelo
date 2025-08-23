@@ -43,7 +43,7 @@ const Page = () => {
   const [formLoading, setFormLoading] = useState(false);
 
   // permission to create
-  const hasCreatePermission = useHasPermission("create", "Department");
+  const hasCreatePermission = useHasPermission("create", "Departments");
 
   // Function to open the modal
   const openCreateModal = () => setIsCreateModalOpen(true);
@@ -77,7 +77,7 @@ const Page = () => {
   }, []);
 
   return (
-    <HasAccess module="Department">
+    <HasAccess module="Departments">
       <div>
         <div>
           <div className="mb-[1.875rem]">

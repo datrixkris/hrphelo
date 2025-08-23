@@ -17,6 +17,8 @@ export type ModuleName =
   | "Staff List"
   | "Leave Settings";
 
+export type PermissionType = "read" | "create" | "modify" | "delete";
+
 // A submodule always has a parentId
 interface Submodule {
   id: number;

@@ -8,9 +8,9 @@ import HasAccess from "@/app/(client)/components/HasAccess";
 import { useHasPermission } from "@/app/hooks/permissions";
 
 const Page = () => {
-  const hasCreatePermission = useHasPermission("create", "Staff");
+  const hasCreatePermission = useHasPermission("create", "Staff List");
   return (
-    <HasAccess module="Staff">
+    <HasAccess module="Staff List">
       <div>
         {/* header plus breadcrumbs */}
         <div className="flex items-center justify-between">

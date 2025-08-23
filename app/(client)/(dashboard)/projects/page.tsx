@@ -10,9 +10,9 @@ import { useHasPermission } from "@/app/hooks/permissions";
 
 const ProjectsPage = () => {
   // permission to create
-  const hasCreatePermission = useHasPermission("create", "Project");
+  const hasCreatePermission = useHasPermission("create", "Projects");
   return (
-    <HasAccess module="Project">
+    <HasAccess module="Projects">
       <div>
         {/* header plus breadcrumbs */}
         <div className="flex flex-wrap items-center justify-between gap-5">

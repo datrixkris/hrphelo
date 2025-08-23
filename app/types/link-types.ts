@@ -1,4 +1,4 @@
-import { ModuleName } from "@/utils/permissions";
+import { ModuleName } from "@/app/(client)/(dashboard)/(users)/roles-permissions/types";
 
 export interface DropdownLink {
   name: string;

@@ -6,7 +6,7 @@ import HasAccess from "@/app/(client)/components/HasAccess";
 
 const Page = () => {
   return (
-    <HasAccess module="Module">
+    <HasAccess module="User Management">
       <div>
         {/* header plus breadcrumbs */}
         <div className="flex items-center justify-between">

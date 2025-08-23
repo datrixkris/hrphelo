@@ -29,7 +29,7 @@ const Page = () => {
     loading,
   } = usePayrollStore();
 
-  const hasCreatePermission = useHasPermission("create", "Payroll");
+  const hasCreatePermission = useHasPermission("create", "Employee Salary");
 
   const { staffs, fetchStaff } = useStaffStore();
 
@@ -44,10 +44,10 @@ const Page = () => {
   }));
 
   const benefits = payrollPolicies.filter(
-    (policy) => policy.pol_type === "Benefit"
+    (policy) => policy.pol_type === "Benefit",
   );
   const deduction = payrollPolicies.filter(
-    (policy) => policy.pol_type === "Deduction"
+    (policy) => policy.pol_type === "Deduction",
   );
 
   const [selectedStaff, setSelectedStaff] = useState<number | undefined>();
@@ -78,7 +78,7 @@ const Page = () => {
 
   const handleCurrencyChange = (
     policyId: number,
-    event: React.ChangeEvent<HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -152,136 +152,138 @@ const Page = () => {
   }, [staffs, fetchStaff, fetchPayrollPolicy, fetchPayrollPeriod]);
 
   return (
-    <HasAccess module="Payroll">
-    <div>
-      <div className="mb-[1.875rem]">
-        <div className="flex items-center justify-between">
-          <PageTitleWithCrumbs
-            title="Employee Salary"
-            crumbs={[
-              { name: "Dashboard", link: "/dashboard" },
-              { name: "Employee Salary" },
-            ]}
-          />
-          <div className="flex items-center gap-5">
-            <button className="btn btn-outline">
-              <Icon icon="hugeicons:file-export" />
-              Export
-            </button>
-            {hasCreatePermission && <Button onClick={openAddSalaryModal}>Compute Payroll</Button>}
-          </div>
-        </div>
-      </div>
-
+    <HasAccess module="Employee Salary">
       <div>
-        <EmployeeSalaryTable />
-      </div>
-
-      {/* Add salary Modal */}
-      {isModalOpen && (
-        <div className={`modal ${isModalOpen ? "modal-open" : ""}`}>
-          <div className="modal-box w-11/12 max-w-5xl">
-            <h3 className="text-lg font-bold">Add Employee Salary</h3>
-            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex gap-5">
-                <div className="w-full">
-                  <label className="block font-medium text-gray-700">
-                    Staff
-                  </label>
-                  <Select
-                    options={memberOptions}
-                    onChange={(selected) => setSelectedStaff(selected?.value)}
-                    isDisabled={loading}
-                    placeholder="Select staff"
-                  />
-                </div>
-              </div>
-              <div className="flex gap-5">
-                <div className="w-full">
-                  <label className="block font-medium text-gray-700">
-                    Payroll period
-                  </label>
-                  <Select
-                    options={payrollPeriodsOptions}
-                    onChange={(selected) =>
-                      setSelectedPayrollPeriod(selected?.value)
-                    }
-                    isDisabled={loading}
-                    placeholder="Select payroll period"
-                  />
-                </div>
-              </div>
-
-              {/* Benefits */}
-              <div>
-                <h5>Benefits</h5>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  {benefits.map((policy) => (
-                    <AmountInput
-                      key={policy.id}
-                      label={policy.name}
-                      value={formData.amounts[policy.id] || ""}
-                      onInputChange={(e) =>
-                        handleInputChange(policy.id, e.target.value)
-                      }
-                      currencyValue={formData.currencies[policy.id] || "GHS"}
-                      onCurrencyChange={(e) =>
-                        handleCurrencyChange(policy.id, e)
-                      }
-                      currencies={["GHS","USD", "EUR", "GBP"]}
-                      placeholder="0.00"
-                      disabled={loading}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Deductions */}
-              <div>
-                <h5>Deductions</h5>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                  {deduction.map((policy) => (
-                    <AmountInput
-                      key={policy.id}
-                      label={policy.name}
-                      value={formData.amounts[policy.id] || ""}
-                      onInputChange={(e) =>
-                        handleInputChange(policy.id, e.target.value)
-                      }
-                      currencyValue={formData.currencies[policy.id] || "GHS"}
-                      onCurrencyChange={(e) =>
-                        handleCurrencyChange(policy.id, e)
-                      }
-                      currencies={["GHS","USD", "EUR", "GBP"]}
-                      placeholder="0.00"
-                      disabled={loading}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Modal Action Buttons */}
-              <div className="modal-action flex justify-end">
-                <button
-                  type="button"
-                  onClick={closeCreateModal}
-                  className="btn mr-4 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className={`btn btn-primary rounded ${loading ? "loading" : ""}`}
-                >
-                  {loading ? "Saving..." : "Save Salary"}
-                </button>
-              </div>
-            </form>
+        <div className="mb-[1.875rem]">
+          <div className="flex items-center justify-between">
+            <PageTitleWithCrumbs
+              title="Employee Salary"
+              crumbs={[
+                { name: "Dashboard", link: "/dashboard" },
+                { name: "Employee Salary" },
+              ]}
+            />
+            <div className="flex items-center gap-5">
+              <button className="btn btn-outline">
+                <Icon icon="hugeicons:file-export" />
+                Export
+              </button>
+              {hasCreatePermission && (
+                <Button onClick={openAddSalaryModal}>Compute Payroll</Button>
+              )}
+            </div>
           </div>
-          <div className="modal-backdrop" onClick={closeCreateModal}></div>
         </div>
-      )}
-    </div>
+
+        <div>
+          <EmployeeSalaryTable />
+        </div>
+
+        {/* Add salary Modal */}
+        {isModalOpen && (
+          <div className={`modal ${isModalOpen ? "modal-open" : ""}`}>
+            <div className="modal-box w-11/12 max-w-5xl">
+              <h3 className="text-lg font-bold">Add Employee Salary</h3>
+              <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+                <div className="flex gap-5">
+                  <div className="w-full">
+                    <label className="block font-medium text-gray-700">
+                      Staff
+                    </label>
+                    <Select
+                      options={memberOptions}
+                      onChange={(selected) => setSelectedStaff(selected?.value)}
+                      isDisabled={loading}
+                      placeholder="Select staff"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-5">
+                  <div className="w-full">
+                    <label className="block font-medium text-gray-700">
+                      Payroll period
+                    </label>
+                    <Select
+                      options={payrollPeriodsOptions}
+                      onChange={(selected) =>
+                        setSelectedPayrollPeriod(selected?.value)
+                      }
+                      isDisabled={loading}
+                      placeholder="Select payroll period"
+                    />
+                  </div>
+                </div>
+
+                {/* Benefits */}
+                <div>
+                  <h5>Benefits</h5>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    {benefits.map((policy) => (
+                      <AmountInput
+                        key={policy.id}
+                        label={policy.name}
+                        value={formData.amounts[policy.id] || ""}
+                        onInputChange={(e) =>
+                          handleInputChange(policy.id, e.target.value)
+                        }
+                        currencyValue={formData.currencies[policy.id] || "GHS"}
+                        onCurrencyChange={(e) =>
+                          handleCurrencyChange(policy.id, e)
+                        }
+                        currencies={["GHS", "USD", "EUR", "GBP"]}
+                        placeholder="0.00"
+                        disabled={loading}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Deductions */}
+                <div>
+                  <h5>Deductions</h5>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    {deduction.map((policy) => (
+                      <AmountInput
+                        key={policy.id}
+                        label={policy.name}
+                        value={formData.amounts[policy.id] || ""}
+                        onInputChange={(e) =>
+                          handleInputChange(policy.id, e.target.value)
+                        }
+                        currencyValue={formData.currencies[policy.id] || "GHS"}
+                        onCurrencyChange={(e) =>
+                          handleCurrencyChange(policy.id, e)
+                        }
+                        currencies={["GHS", "USD", "EUR", "GBP"]}
+                        placeholder="0.00"
+                        disabled={loading}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Modal Action Buttons */}
+                <div className="modal-action flex justify-end">
+                  <button
+                    type="button"
+                    onClick={closeCreateModal}
+                    className="btn mr-4 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={`btn btn-primary rounded ${loading ? "loading" : ""}`}
+                  >
+                    {loading ? "Saving..." : "Save Salary"}
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="modal-backdrop" onClick={closeCreateModal}></div>
+          </div>
+        )}
+      </div>
     </HasAccess>
   );
 };

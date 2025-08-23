@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import { ManageLeaveTable } from "./components/ManageLeaveTable";
 import { LeaveRecord } from "../types";
+import HasAccess from "@/app/(client)/components/HasAccess";
 // import { useAuthStore } from "@/app/stores/auth-store";
 
 const Page = () => {
@@ -74,188 +75,198 @@ const Page = () => {
   }, []);
 
   return (
-    <div>
-      <div className="mb-7">
-        <div className="flex items-center justify-between">
-          <PageTitleWithCrumbs
-            title="Manage Staff Leaves"
-            crumbs={[
-              { name: "Dashboard", link: "/dashboard" },
-              { name: "Manage leaves" },
-            ]}
-          />
-          <div>
-            {/* <Button>
+    <HasAccess module="Manage Leaves">
+      <div>
+        <div className="mb-7">
+          <div className="flex items-center justify-between">
+            <PageTitleWithCrumbs
+              title="Manage Staff Leaves"
+              crumbs={[
+                { name: "Dashboard", link: "/dashboard" },
+                { name: "Manage leaves" },
+              ]}
+            />
+            <div>
+              {/* <Button>
               <span className="flex items-center gap-1">
                 <Icon icon="hugeicons:calendar-add-01" className="text-xl" />{" "}
                 Add Leave
               </span>
             </Button> */}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="mb-4 grid grid-cols-1 gap-5 md:grid-cols-2">
-        <div className="rounded-[4px] border border-base-content p-5 text-center">
-          <h6 className="mb-[5px] text-lg font-normal">Today Presents</h6>
-          <h4 className="text-2xl">
-            {staffPresent}/{totalNumberOfStaff}
-          </h4>
-        </div>
+        <div className="mb-4 grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="rounded-[4px] border border-base-content p-5 text-center">
+            <h6 className="mb-[5px] text-lg font-normal">Today Presents</h6>
+            <h4 className="text-2xl">
+              {staffPresent}/{totalNumberOfStaff}
+            </h4>
+          </div>
 
-        <div className="rounded-[4px] border border-base-content p-5 text-center">
-          <h6 className="mb-[5px] text-lg font-normal">Pending Requests</h6>
-          <h4 className="text-2xl">{numberOfPendingLeave}</h4>
+          <div className="rounded-[4px] border border-base-content p-5 text-center">
+            <h6 className="mb-[5px] text-lg font-normal">Pending Requests</h6>
+            <h4 className="text-2xl">{numberOfPendingLeave}</h4>
+          </div>
         </div>
-      </div>
-      <div className="mb-4 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
-        <div className="relative h-16">
-          <input
-            id="empName"
-            name="empName"
-            type="text"
-            value={employeeName}
-            onChange={(e) => setEmployeeName(e.target.value)}
-            className="peer h-[50px] w-full rounded border border-base-content bg-transparent px-3 pb-[6px] pt-[21px] placeholder-transparent focus:outline-none focus:dark:border-primary"
-            placeholder="Employee Name"
-          />
+        <div className="mb-4 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-6">
+          <div className="relative h-16">
+            <input
+              id="empName"
+              name="empName"
+              type="text"
+              value={employeeName}
+              onChange={(e) => setEmployeeName(e.target.value)}
+              className="peer h-[50px] w-full rounded border border-base-content bg-transparent px-3 pb-[6px] pt-[21px] placeholder-transparent focus:outline-none focus:dark:border-primary"
+              placeholder="Employee Name"
+            />
 
-          <label
-            htmlFor="empName"
-            className="absolute left-3 top-1 text-xs opacity-100 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:opacity-[0.4] peer-focus:top-1 peer-focus:text-xs peer-focus:opacity-100"
-          >
-            Employee Name
-          </label>
-        </div>
-        <div className="relative">
-          <label className="absolute top-1 px-3 text-xs font-light">
-            Leave Type
-          </label>
-          <select
-            value={leaveType}
-            onChange={(e) => setLeaveType(e.target.value)}
-            className="h-[50px] w-full appearance-none rounded border border-base-content bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
-          >
-            <option value="" disabled>
-              --Select--
-            </option>
-            {leavePolicies.map((leavePolicy) => (
-              <option key={leavePolicy.id} value={leavePolicy.id}>
-                {leavePolicy.name}
+            <label
+              htmlFor="empName"
+              className="absolute left-3 top-1 text-xs opacity-100 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:opacity-[0.4] peer-focus:top-1 peer-focus:text-xs peer-focus:opacity-100"
+            >
+              Employee Name
+            </label>
+          </div>
+          <div className="relative">
+            <label className="absolute top-1 px-3 text-xs font-light">
+              Leave Type
+            </label>
+            <select
+              value={leaveType}
+              onChange={(e) => setLeaveType(e.target.value)}
+              className="h-[50px] w-full appearance-none rounded border border-base-content bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
+            >
+              <option value="" disabled>
+                --Select--
               </option>
-            ))}
-          </select>
-        </div>
-        <div className="relative">
-          <label className="absolute top-1 px-3 text-xs font-light">
-            Leave Status
-          </label>
-          <select
-            value={leaveStatus}
-            onChange={(e) => setLeaveStatus(e.target.value)}
-            className="h-[50px] w-full appearance-none rounded border border-base-content bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
-          >
-            <option value="" disabled>
-              --Select--
-            </option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="declined">Declined</option>
-          </select>
-        </div>
-        <div>
-          <label className="absolute top-1 px-3 text-xs font-light">From</label>
-          <div className="relative flex h-[50px] w-full items-center rounded border border-base-content">
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
-              placeholderText="From "
-              className="block h-full w-full bg-transparent pl-3 focus:outline-none"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="absolute top-1 px-3 text-xs font-light">To</label>
-          <div className="relative flex h-[50px] w-full items-center rounded border border-base-content">
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              placeholderText="To"
-              className="block !h-full w-full bg-transparent pl-3 focus:outline-none"
-              minDate={new Date()}
-              filterDate={(date) => date.getDay() !== 0 && date.getDay() !== 6}
-            />
-          </div>
-        </div>
-        <div>
-          <button
-            type="button"
-            className="btn btn-primary w-full uppercase"
-            onClick={filterLeaves}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-      {loading ? (
-        <div className="">
-          <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
-            <thead>
-              <tr className="text-left">
-                <th>Leave Type</th>
-                <th>From</th>
-                <th>To</th>
-                <th>No of Days</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Approved by</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Display multiple skeleton rows to indicate loading state */}
-              {[...Array(3)].map((_, index) => (
-                <tr key={index} className="overflow-x-auto">
-                  <td>
-                    <div className="skeleton h-4 w-24"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-20"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-20"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-16"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-32"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-24"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-20"></div>
-                  </td>
-                  <td>
-                    <div className="skeleton h-4 w-20"></div>
-                  </td>
-                </tr>
+              {leavePolicies.map((leavePolicy) => (
+                <option key={leavePolicy.id} value={leavePolicy.id}>
+                  {leavePolicy.name}
+                </option>
               ))}
-            </tbody>
-          </table>
+            </select>
+          </div>
+          <div className="relative">
+            <label className="absolute top-1 px-3 text-xs font-light">
+              Leave Status
+            </label>
+            <select
+              value={leaveStatus}
+              onChange={(e) => setLeaveStatus(e.target.value)}
+              className="h-[50px] w-full appearance-none rounded border border-base-content bg-transparent px-3 pb-2 pt-5 shadow-transparent outline-none focus:shadow-transparent focus:outline-none"
+            >
+              <option value="" disabled>
+                --Select--
+              </option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="declined">Declined</option>
+            </select>
+          </div>
+          <div>
+            <label className="absolute top-1 px-3 text-xs font-light">
+              From
+            </label>
+            <div className="relative flex h-[50px] w-full items-center rounded border border-base-content">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                filterDate={(date) =>
+                  date.getDay() !== 0 && date.getDay() !== 6
+                }
+                placeholderText="From "
+                className="block h-full w-full bg-transparent pl-3 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="absolute top-1 px-3 text-xs font-light">To</label>
+            <div className="relative flex h-[50px] w-full items-center rounded border border-base-content">
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                placeholderText="To"
+                className="block !h-full w-full bg-transparent pl-3 focus:outline-none"
+                minDate={new Date()}
+                filterDate={(date) =>
+                  date.getDay() !== 0 && date.getDay() !== 6
+                }
+              />
+            </div>
+          </div>
+          <div>
+            <button
+              type="button"
+              className="btn btn-primary w-full uppercase"
+              onClick={filterLeaves}
+            >
+              Search
+            </button>
+          </div>
         </div>
-      ) : (
-        <div>
-          {filteredLeaves && filteredLeaves.length > 0 ? (
-            <ManageLeaveTable filteredLeaves={filteredLeaves} />
-          ) : (
-            <div className="rounded py-20 text-center">No leaves available</div>
-          )}
-        </div>
-      )}
-    </div>
+        {loading ? (
+          <div className="">
+            <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
+              <thead>
+                <tr className="text-left">
+                  <th>Leave Type</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>No of Days</th>
+                  <th>Reason</th>
+                  <th>Status</th>
+                  <th>Approved by</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {/* Display multiple skeleton rows to indicate loading state */}
+                {[...Array(3)].map((_, index) => (
+                  <tr key={index} className="overflow-x-auto">
+                    <td>
+                      <div className="skeleton h-4 w-24"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-20"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-20"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-16"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-32"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-24"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-20"></div>
+                    </td>
+                    <td>
+                      <div className="skeleton h-4 w-20"></div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div>
+            {filteredLeaves && filteredLeaves.length > 0 ? (
+              <ManageLeaveTable filteredLeaves={filteredLeaves} />
+            ) : (
+              <div className="rounded py-20 text-center">
+                No leaves available
+              </div>
+            )}
+          </div>
+        )}
+      </div>{" "}
+    </HasAccess>
   );
 };
 

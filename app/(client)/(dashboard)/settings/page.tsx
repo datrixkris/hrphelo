@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "react-toastify";
 import { useSettingsStore } from "./setting-store";
+import { useHasPermission } from "@/app/hooks/permissions";
+import HasAccess from "../../components/HasAccess";
 
 // Define form schema with Zod
 const companySchema = z.object({
@@ -80,6 +82,7 @@ const fields = [
 ];
 
 const SettingsPage = () => {
+  const hasCreatePermission = useHasPermission("create", "Settings");
   const { company, loading, updateCompanyDetails, fetchCompany } =
     useSettingsStore();
   const [activeTab, setActiveTab] = useState("general");
@@ -190,174 +193,179 @@ const SettingsPage = () => {
     { id: "other", label: "Other Settings" },
   ];
 
-  if (loading) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <span className="loading loading-spinner loading-lg"></span>
-        <span className="ml-2">Fetching company details...</span>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-6 flex items-center justify-between">
-        <PageTitleWithCrumbs
-          title="Company Settings"
-          crumbs={[
-            { name: "Dashboard", link: "/dashboard" },
-            { name: "Company Settings" },
-          ]}
-        />
-      </div>
+    <HasAccess module="Settings">
+      {loading ? (
+        <div className="flex h-64 items-center justify-center">
+          <span className="loading loading-spinner loading-lg"></span>
+          <span className="ml-2">Fetching company details...</span>
+        </div>
+      ) : (
+        <div className="container mx-auto p-6">
+          <div className="mb-6 flex items-center justify-between">
+            <PageTitleWithCrumbs
+              title="Company Settings"
+              crumbs={[
+                { name: "Dashboard", link: "/dashboard" },
+                { name: "Company Settings" },
+              ]}
+            />
+          </div>
 
-      <div className="tabs-boxed tabs rounded-lg bg-base-100">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`tab ${activeTab === tab.id ? "tab-active" : ""}`}
-            onClick={() => setActiveTab(tab.id)}
-            disabled={isSubmitting || imageLoading}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+          <div className="tabs-boxed tabs rounded-lg bg-base-100">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={`tab ${activeTab === tab.id ? "tab-active" : ""}`}
+                onClick={() => setActiveTab(tab.id)}
+                disabled={isSubmitting || imageLoading}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-      <div className="mt-6">
-        {activeTab === "general" && (
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">General Settings</h2>
-              <p className="mb-6 text-neutral-500">
-                Update your company information and preferences.
-              </p>
-
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                {/* Logo Upload Section */}
-                <div className="">
-                  <label className="label">
-                    <span className="label-text font-semibold">
-                      Company Logo
-                    </span>
-                  </label>
-                  <p className="label-text-alt text-neutral-400">
-                    Update company logo for light and dark themes. (Use
-                    transparent backgrounds for optimum experience)
+          <div className="mt-6">
+            {activeTab === "general" && (
+              <div className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">General Settings</h2>
+                  <p className="mb-6 text-neutral-500">
+                    Update your company information and preferences.
                   </p>
-                </div>
-                <div className="mb-8 flex flex-col gap-6 sm:flex-row">
-                  {/* Light Theme Logo */}
-                  <div className="flex flex-1 items-start gap-4">
-                    <div className="rounded-lg bg-white">
-                      <ImageUpload
-                        id="light-theme-logo-upload"
-                        onImageSelect={(file) => setLightThemeLogo(file)}
-                        image={company?.company_light_theme_logo}
-                        disabled={imageLoading || isSubmitting}
-                      />
-                    </div>
-                    <div className="">
-                      <p className="mt-2 text-sm">Light Theme Logo</p>
-                      {lightThemeLogo && (
-                        <p className="mt-1 text-xs">{lightThemeLogo.name}</p>
-                      )}
-                    </div>
-                  </div>
 
-                  {/* Dark Theme Logo */}
-                  <div className="flex flex-1 items-start gap-4">
-                    <div className="rounded-lg bg-neutral-900">
-                      <ImageUpload
-                        id="dark-theme-logo-upload"
-                        onImageSelect={(file) => setDarkThemeLogo(file)}
-                        image={company?.company_dark_theme_logo}
-                        disabled={imageLoading || isSubmitting}
-                      />
-                    </div>
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                    {/* Logo Upload Section */}
                     <div className="">
-                      <p className="mt-2 text-sm">Dark Theme Logo</p>
-                      {darkThemeLogo && (
-                        <p className="mt-1 text-xs">{darkThemeLogo.name}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Form Fields */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  {fields.map((field) => (
-                    <div key={field.name} className="form-control">
                       <label className="label">
                         <span className="label-text font-semibold">
-                          {field.label}
+                          Company Logo
                         </span>
                       </label>
-                      <Controller
-                        name={field.name as keyof CompanyFormData}
-                        control={control}
-                        render={({ field: formField }) => (
-                          <input
-                            {...formField}
-                            type={field.type}
-                            placeholder={`Enter ${field.label.toLowerCase()}`}
-                            className={`input input-bordered w-full ${
-                              errors[field.name as keyof CompanyFormData]
-                                ? "input-error"
-                                : ""
-                            }`}
-                            disabled={isSubmitting || imageLoading}
-                          />
-                        )}
-                      />
-                      <label className="label">
-                        <span className="label-text-alt text-neutral-400">
-                          {field.description}
-                        </span>
-                      </label>
-                      {errors[field.name as keyof CompanyFormData] && (
-                        <p className="mt-1 text-sm text-error">
-                          {errors[field.name as keyof CompanyFormData]?.message}
-                        </p>
-                      )}
+                      <p className="label-text-alt text-neutral-400">
+                        Update company logo for light and dark themes. (Use
+                        transparent backgrounds for optimum experience)
+                      </p>
                     </div>
-                  ))}
-                </div>
+                    <div className="mb-8 flex flex-col gap-6 sm:flex-row">
+                      {/* Light Theme Logo */}
+                      <div className="flex flex-1 items-start gap-4">
+                        <div className="rounded-lg bg-white">
+                          <ImageUpload
+                            id="light-theme-logo-upload"
+                            onImageSelect={(file) => setLightThemeLogo(file)}
+                            image={company?.company_light_theme_logo}
+                            disabled={imageLoading || isSubmitting}
+                          />
+                        </div>
+                        <div className="">
+                          <p className="mt-2 text-sm">Light Theme Logo</p>
+                          {lightThemeLogo && (
+                            <p className="mt-1 text-xs">
+                              {lightThemeLogo.name}
+                            </p>
+                          )}
+                        </div>
+                      </div>
 
-                {/* Submit Button */}
-                <div className="card-actions justify-end">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={isSubmitting || imageLoading}
-                  >
-                    {isSubmitting || imageLoading ? (
-                      <>
-                        <span className="loading loading-spinner"></span>
-                        Saving...
-                      </>
-                    ) : (
-                      "Save Changes"
-                    )}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+                      {/* Dark Theme Logo */}
+                      <div className="flex flex-1 items-start gap-4">
+                        <div className="rounded-lg bg-neutral-900">
+                          <ImageUpload
+                            id="dark-theme-logo-upload"
+                            onImageSelect={(file) => setDarkThemeLogo(file)}
+                            image={company?.company_dark_theme_logo}
+                            disabled={imageLoading || isSubmitting}
+                          />
+                        </div>
+                        <div className="">
+                          <p className="mt-2 text-sm">Dark Theme Logo</p>
+                          {darkThemeLogo && (
+                            <p className="mt-1 text-xs">{darkThemeLogo.name}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
 
-        {activeTab === "other" && (
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">Other Settings</h2>
-              <p className="text-neutral-500">
-                Additional settings will be implemented here.
-              </p>
-            </div>
+                    {/* Form Fields */}
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                      {fields.map((field) => (
+                        <div key={field.name} className="form-control">
+                          <label className="label">
+                            <span className="label-text font-semibold">
+                              {field.label}
+                            </span>
+                          </label>
+                          <Controller
+                            name={field.name as keyof CompanyFormData}
+                            control={control}
+                            render={({ field: formField }) => (
+                              <input
+                                {...formField}
+                                type={field.type}
+                                placeholder={`Enter ${field.label.toLowerCase()}`}
+                                className={`input input-bordered w-full ${
+                                  errors[field.name as keyof CompanyFormData]
+                                    ? "input-error"
+                                    : ""
+                                }`}
+                                disabled={isSubmitting || imageLoading}
+                              />
+                            )}
+                          />
+                          <label className="label">
+                            <span className="label-text-alt text-neutral-400">
+                              {field.description}
+                            </span>
+                          </label>
+                          {errors[field.name as keyof CompanyFormData] && (
+                            <p className="mt-1 text-sm text-error">
+                              {
+                                errors[field.name as keyof CompanyFormData]
+                                  ?.message
+                              }
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="card-actions justify-end">
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={isSubmitting || imageLoading}
+                      >
+                        {isSubmitting || imageLoading ? (
+                          <>
+                            <span className="loading loading-spinner"></span>
+                            Saving...
+                          </>
+                        ) : (
+                          "Save Changes"
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "other" && (
+              <div className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">Other Settings</h2>
+                  <p className="text-neutral-500">
+                    Additional settings will be implemented here.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </HasAccess>
   );
 };
 
