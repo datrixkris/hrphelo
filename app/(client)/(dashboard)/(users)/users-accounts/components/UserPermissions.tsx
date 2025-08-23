@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "@/app/components/Button";
 import { Permissions, UserModules } from "../types";
-import PermissionsComponent from "./Permissions";
+// import PermissionsComponent from "./Permissions";
 import { useUserAccountStore } from "../user-account-store";
 
 const UserPermissions = ({
@@ -29,10 +29,10 @@ const UserPermissions = ({
 
   return (
     <div>
-      <PermissionsComponent
+      {/* <PermissionsComponent
         userPermissions={userPermissions}
         getUserPermissions={getUserPermissions}
-      />
+      /> */}
 
       <div className="!mt-10">
         {userPermissions ? (
