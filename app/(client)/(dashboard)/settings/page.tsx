@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "react-toastify";
 import { useSettingsStore } from "./setting-store";
-import { useHasPermission } from "@/app/hooks/permissions";
+// import { useHasPermission } from "@/app/hooks/permissions";
 import HasAccess from "../../components/HasAccess";
 
 // Define form schema with Zod
@@ -82,7 +82,7 @@ const fields = [
 ];
 
 const SettingsPage = () => {
-  const hasCreatePermission = useHasPermission("create", "Settings");
+  // const hasCreatePermission = useHasPermission("create", "Settings");
   const { company, loading, updateCompanyDetails, fetchCompany } =
     useSettingsStore();
   const [activeTab, setActiveTab] = useState("general");

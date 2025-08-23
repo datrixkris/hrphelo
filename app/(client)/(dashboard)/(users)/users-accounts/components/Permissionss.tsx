@@ -150,8 +150,8 @@ const Permissionss = ({
         // Filter out modules with submodules from rolePermissions
         const standaloneModulePermissions = rolePermissions.filter(
           (rolePerm) => {
-            const module = modules.find((m) => m.id === rolePerm.moduleId);
-            return module && module.submodules.length === 0;
+            const modulle = modules.find((m) => m.id === rolePerm.moduleId);
+            return modulle && modulle.submodules.length === 0;
           },
         );
 
@@ -177,11 +177,11 @@ const Permissionss = ({
 
         // Initialize submodule permissions from rolePermissions
         rolePermissions.forEach((rolePerm) => {
-          const module = modules.find((m) => m.id === rolePerm.moduleId);
-          if (module && module.submodules.length > 0) {
+          const modulle = modules.find((m) => m.id === rolePerm.moduleId);
+          if (modulle && modulle.submodules.length > 0) {
             // This is a parent module, check if any of its submodules have permissions
             const submodulePerms = rolePermissions.filter((rp) =>
-              module.submodules.some((sub) => sub.id === rp.moduleId),
+              modulle.submodules.some((sub) => sub.id === rp.moduleId),
             );
 
             if (submodulePerms.length > 0) {
@@ -214,7 +214,7 @@ const Permissionss = ({
                   subPerm.delete,
               );
               if (hasAnySubmodulePermission) {
-                initialToggles[module.id] = true;
+                initialToggles[modulle.id] = true;
               }
             }
           }
@@ -244,14 +244,14 @@ const Permissionss = ({
       [moduleId]: newToggleState,
     }));
 
-    const module = modules.find((m) => m.id === moduleId);
-    if (module && module.submodules.length > 0) {
+    const modulle = modules.find((m) => m.id === moduleId);
+    if (modulle && modulle.submodules.length > 0) {
       // Handle modules with submodules
       if (newToggleState) {
         // Turning ON: Enable all submodules and check all permissions
         setSubmoduleToggles((prev) => {
           const updated = { ...prev };
-          module.submodules.forEach((submodule) => {
+          modulle.submodules.forEach((submodule) => {
             updated[submodule.id] = true;
           });
           return updated;
@@ -259,7 +259,7 @@ const Permissionss = ({
 
         setSubmodulePermissions((prev) => {
           const updated = { ...prev };
-          module.submodules.forEach((submodule) => {
+          modulle.submodules.forEach((submodule) => {
             updated[submodule.id] = {
               read: true,
               create: true,
@@ -273,7 +273,7 @@ const Permissionss = ({
         // Turning OFF: Reset all submodules and their permissions
         setSubmoduleToggles((prev) => {
           const updated = { ...prev };
-          module.submodules.forEach((submodule) => {
+          modulle.submodules.forEach((submodule) => {
             updated[submodule.id] = false;
           });
           return updated;
@@ -281,7 +281,7 @@ const Permissionss = ({
 
         setSubmodulePermissions((prev) => {
           const updated = { ...prev };
-          module.submodules.forEach((submodule) => {
+          modulle.submodules.forEach((submodule) => {
             updated[submodule.id] = {
               read: false,
               create: false,

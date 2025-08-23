@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { UserModules } from "../users-accounts/types";
+// import { UserModules } from "../users-accounts/types";
 import { Role } from "./types";
 import { FormattedPermissionsForRoleCreation } from "../users-accounts/components/Permissionss";
 
@@ -69,6 +69,7 @@ export const useRolesStore = create<RolesStore>((set, get) => ({
       // fetch roles again to update with newly created role
       await get().fetchRoles(false);
       set(() => ({ updatingData: false }));
+      console.log(role);
       toast.success("Role created successfully");
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;

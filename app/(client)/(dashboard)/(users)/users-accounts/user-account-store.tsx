@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { api } from "@/app/axiosApi/api";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
-import { UserData, UserModules } from "./types";
+import { UserData } from "./types";
 import { Module } from "../roles-permissions/types";
 
 interface CreateUserInterface {

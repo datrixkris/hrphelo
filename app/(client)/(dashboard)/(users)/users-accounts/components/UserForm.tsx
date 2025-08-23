@@ -6,7 +6,7 @@ import { useStaffStore } from "@/app/(client)/(dashboard)/(employee)/staff/staff
 import { StaffDetail } from "@/app/(client)/(dashboard)/(employee)/staff/types";
 // import UserPermissions from "./UserPermissions";
 import UserBasicInformation from "./UserBasicInformation";
-import { UserModules } from "../types";
+// import { UserModules } from "../types";
 import { useUserAccountStore } from "../user-account-store";
 import { UsersInterface } from "./UsersList";
 import UserRoles from "./UserRoles";

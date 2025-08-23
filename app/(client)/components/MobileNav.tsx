@@ -1,13 +1,13 @@
 // import Image from "next/image";
 import React from "react";
-import ActiveLink from "../../components/ActiveLink";
+// import ActiveLink from "../../components/ActiveLink";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { clientSidebarLinks as links } from "@/app/data/links";
-import LinkWithDropdown from "@/app/components/LinkWithDropdown";
-import CompanyLogo from "@/app/components/CompanyLogo";
-import { hasPermission } from "@/utils/permissions";
-import { useAuthStore } from "@/app/stores/auth-store";
+// import { clientSidebarLinks as links } from "@/app/data/links";
+// import LinkWithDropdown from "@/app/components/LinkWithDropdown";
+// import CompanyLogo from "@/app/components/CompanyLogo";
+// import { hasPermission } from "@/utils/permissions";
+// import { useAuthStore } from "@/app/stores/auth-store";
 import Sidebar from "./Sidebar";
 
 const MobileNav = ({
@@ -17,7 +17,7 @@ const MobileNav = ({
   closeMobileNav: () => void;
   isOpen: boolean;
 }) => {
-  const user = useAuthStore((state) => state.user);
+  // const user = useAuthStore((state) => state.user);
 
   // Sidebar animation variants
   const sidebarVariants = {
