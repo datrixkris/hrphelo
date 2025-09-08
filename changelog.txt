@@ -30,3 +30,6 @@ Roles and permissions refactor
 
 September 5th
 Dashboard colors.
+
+September 7th
+Project fixes, Resignation fixes
