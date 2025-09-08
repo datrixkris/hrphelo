@@ -23,7 +23,7 @@ const CompanyOverview = ({ data }: { data: AdminDashboard }) => {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <Link
             href="/staff"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:plus-sign-circle"
@@ -33,7 +33,7 @@ const CompanyOverview = ({ data }: { data: AdminDashboard }) => {
           </Link>
           <Link
             href="/employee-salary"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:bitcoin-money-01"
@@ -43,7 +43,7 @@ const CompanyOverview = ({ data }: { data: AdminDashboard }) => {
           </Link>
           <Link
             href="/manage-leaves"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:checkmark-circle-01"
@@ -53,7 +53,7 @@ const CompanyOverview = ({ data }: { data: AdminDashboard }) => {
           </Link>
           <Link
             href="/departments"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:building-01"
@@ -97,17 +97,17 @@ const KPISection = ({ data }: { data: AdminDashboard }) => {
         >
           <h2 className="mb-2 font-semibold">{card.title}</h2>
           <p className="flex justify-between">
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-2xl font-bold text-neutral">
               {card.value}
             </span>
-            <span className="self-end">
+            {/* <span className="self-end">
               <Link
                 href="/dashboard"
                 className="hover:text-primar text-xs underline"
               >
                 View
               </Link>
-            </span>
+            </span> */}
           </p>
         </div>
       ))}
@@ -115,16 +115,16 @@ const KPISection = ({ data }: { data: AdminDashboard }) => {
       <div className="flex flex-col justify-between rounded-md bg-base-100 p-3">
         <div className="flex items-start justify-between">
           <h2 className="mb-2 font-semibold">Payroll Processed</h2>
-          <p className="btn btn-xs">
+          {/* <p className="btn btn-xs">
             <Icon icon="hugeicons:calendar-03" className="inline" />{" "}
             <span className="text-xs">May</span>{" "}
-          </p>
+          </p> */}
         </div>
         <div className="flex justify-between">
           <div className="">
             <p className="">
               {" "}
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-2xl font-bold text-neutral">
                 {data.payroll_processed}
               </span>{" "}
               <span className="text-sm font-semibold text-green-600">

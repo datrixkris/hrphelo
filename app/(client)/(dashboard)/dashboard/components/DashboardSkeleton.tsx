@@ -20,7 +20,7 @@ const SkeletonCard = ({ children }: { children?: React.ReactNode }) => (
 );
 
 const SkeletonButton = () => (
-  <div className="btn btn-primary flex h-20 items-center gap-2 py-4 text-lg">
+  <div className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-lg">
     <SkeletonBar className="h-6 w-6 rounded-full" />
     <SkeletonBar className="h-4 w-28" />
   </div>

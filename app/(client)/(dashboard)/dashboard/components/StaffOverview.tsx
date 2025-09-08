@@ -20,7 +20,7 @@ const StaffOverview = ({ data }: { data: StaffDashboard }) => {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/leaves"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:checkmark-square-01"
@@ -30,7 +30,7 @@ const StaffOverview = ({ data }: { data: StaffDashboard }) => {
           </Link>
           <Link
             href="/employee-salary"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:document-validation"
@@ -40,7 +40,7 @@ const StaffOverview = ({ data }: { data: StaffDashboard }) => {
           </Link>
           <Link
             href="/profile"
-            className="btn btn-primary flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
+            className="btn btn-neutral flex h-20 items-center gap-2 py-4 text-base 2xl:text-lg"
           >
             <Icon
               icon="hugeicons:user-circle"
@@ -83,7 +83,7 @@ const KPISection = ({ data }: { data: StaffDashboard }) => {
         >
           <h2 className="mb-2 font-semibold">{card.title}</h2>
           <p className="flex justify-between">
-            <span className="text-2xl font-bold text-primary">
+            <span className="text-2xl font-bold text-neutral">
               {card.value}
             </span>
             {/* <span className="self-end">

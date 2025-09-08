@@ -17,6 +17,7 @@ import {
   LeaveOverview,
   PayrollHistoryItem,
 } from "../types";
+import useRandomGrey from "../hooks/useRandomGrey";
 
 interface DataItems extends Record<string, string | number | boolean> {
   name: string;
@@ -115,6 +116,7 @@ export function SimpleDonutChart({
 }
 
 export const DepartmentsChart = ({ data }: { data: DepartmentOverview }) => {
+  const randomGrey = useRandomGrey();
   const department = Object.values(data).map((item, index) => {
     return {
       id: index + 1,
@@ -122,7 +124,7 @@ export const DepartmentsChart = ({ data }: { data: DepartmentOverview }) => {
         Object.keys(data)[index].charAt(0).toUpperCase() +
         Object.keys(data)[index].slice(1),
       value: item,
-      color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+      color: randomGrey(),
     };
   });
 
@@ -216,9 +218,9 @@ export const EmployeeChart = ({ data }: { data: EmployeeOverview }) => {
 
 export const LeaveChart = ({ data }: { data: LeaveOverview }) => {
   const leaveData = [
-    { id: 1, type: "Pending", value: data.pending, color: "#FF6F61" },
-    { id: 2, type: "Approved", value: data.approved, color: "#6A5ACD" },
-    { id: 3, type: "Rejected", value: data.rejected, color: "#32CD32" },
+    { id: 1, type: "Pending", value: data.pending, color: "#ff980d" },
+    { id: 2, type: "Approved", value: data.approved, color: "#4CAF50" },
+    { id: 3, type: "Rejected", value: data.rejected, color: "#B22222" },
   ];
 
   return (
