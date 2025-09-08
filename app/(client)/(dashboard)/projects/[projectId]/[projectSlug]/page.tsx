@@ -47,7 +47,7 @@ const Project = () => {
       {loading ? (
         <div className="mx-auto my-5 inline-block">Getting project info...</div>
       ) : (
-        <div>
+        <div className="min-h-screen">
           {/* bread crumbs */}
           <div className="flex flex-wrap items-center justify-between gap-5">
             <PageTitleWithCrumbs

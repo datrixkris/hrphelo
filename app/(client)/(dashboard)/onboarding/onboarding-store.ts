@@ -39,6 +39,7 @@ interface OnboardingStore {
     staffId: number,
     optionalLoading?: boolean,
   ) => Promise<Checklist[]>;
+  isChecklistCleared: (departmentId: number, checklists: Checklist[]) => boolean;
 }
 
 export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
@@ -49,7 +50,6 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
   error: null,
 
   // all functions
-
   fetchAllChecklists: async (optionalLoading = true) => {
     set({ loading: optionalLoading, error: null });
 
@@ -233,5 +233,16 @@ export const useOnboardingStore = create<OnboardingStore>((set, get) => ({
       toast.error(get().error);
       console.error(err);
     }
+  },
+
+  // function to check if checklist is cleared by staff
+  isChecklistCleared: (departmentId: number, checklists: Checklist[]) => {
+    // check if any checklist with status apply
+    const status = checklists
+      .filter((checklist) => checklist.departmentId === departmentId)
+      .some((checklist) => checklist.staffChecklists?.status === "apply");
+
+    // if there is a checklist with status apply, return false
+    return !status;
   },
 }));

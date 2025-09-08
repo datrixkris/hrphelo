@@ -101,7 +101,7 @@ const EditTask = ({
         ></div>
 
         {/* Modal */}
-        <div className="modal-box relative z-20 w-full max-w-md rounded-md bg-white p-6 shadow-lg">
+        <div className="modal-box relative z-20 w-full max-w-md rounded-md bg-base-100 p-6 shadow-lg">
           <div className="mb-4 flex items-center justify-between">
             <h4 className="text-lg font-semibold">Edit Task</h4>
             <button

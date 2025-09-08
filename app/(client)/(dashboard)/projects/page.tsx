@@ -13,7 +13,7 @@ const ProjectsPage = () => {
   const hasCreatePermission = useHasPermission("create", "Projects");
   return (
     <HasAccess module="Projects">
-      <div>
+      <div className="">
         {/* header plus breadcrumbs */}
         <div className="flex flex-wrap items-center justify-between gap-5">
           <PageTitleWithCrumbs

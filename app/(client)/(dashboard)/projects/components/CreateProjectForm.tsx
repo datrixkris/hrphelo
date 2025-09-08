@@ -338,7 +338,10 @@ const CreateProjectForm = ({
                           >
                             <div className="avatar">
                               <div className="w-11 rounded-full border">
-                                <img src={staff.image} alt={staff.name} />
+                                <img
+                                  src={staff.image || "/images/avatar.png"}
+                                  alt={staff.name}
+                                />
                               </div>
                             </div>
                           </div>

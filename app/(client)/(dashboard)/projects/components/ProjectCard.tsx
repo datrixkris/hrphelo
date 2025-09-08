@@ -52,8 +52,8 @@ const ProjectCard = ({ project }: { project: ProjectData }) => {
                   <div className="avatar" key={member.id}>
                     <div className="w-10">
                       <img
-                        src={member.staff.image || "/images/avatar.png"}
-                        alt={member.staff.name}
+                        src={member.staff?.image || "/images/avatar.png"}
+                        alt={member.staff?.name}
                       />
                     </div>
                   </div>

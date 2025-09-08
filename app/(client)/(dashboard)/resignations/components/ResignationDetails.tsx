@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Checklist } from "../../onboarding/types";
 import { useDepartmentStore } from "../../(employee)/departments/department-store";
+import { useOnboardingStore } from "../../onboarding/onboarding-store";
 // import { StaffData } from "../../(employee)/staff/types";
 
 const ResignationDetails = ({
@@ -11,6 +12,7 @@ const ResignationDetails = ({
   // staff: StaffData;
 }) => {
   const { fetchDepartments, departments, loading } = useDepartmentStore();
+  const { isChecklistCleared } = useOnboardingStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,15 +23,15 @@ const ResignationDetails = ({
   }, []);
 
   //  this function checks if checklist contains one with status apply and returns true else false
-  function isChecklistCleared(
-    departmentId: number,
-    checklists: Checklist[],
-  ): boolean {
-    const notCleared = checklists
-      .filter((checklist) => checklist.departmentId === departmentId)
-      .some((checklist) => checklist.staffChecklists?.status === "apply");
-    return !notCleared;
-  }
+  // function isChecklistCleared(
+  //   departmentId: number,
+  //   checklists: Checklist[],
+  // ): boolean {
+  //   const notCleared = checklists
+  //     .filter((checklist) => checklist.departmentId === departmentId)
+  //     .some((checklist) => checklist.staffChecklists?.status === "apply");
+  //   return !notCleared;
+  // }
 
   return (
     <div className="rounded bg-base-100 p-5">

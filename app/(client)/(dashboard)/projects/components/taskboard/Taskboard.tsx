@@ -53,14 +53,14 @@ const Taskboard = ({ project }: TaskboardProps) => {
                   return (
                     <div
                       className="tooltip"
-                      data-tip={member.staff.name}
+                      data-tip={member.staff?.name}
                       key={member.id}
                     >
                       <div className="avatar">
                         <div className="w-10 rounded-full border">
                           <img
-                            src={member.staff.image || "/images/avatar.png"}
-                            alt={member.staff.name}
+                            src={member.staff?.image || "/images/avatar.png"}
+                            alt={member.staff?.name}
                           />
                         </div>
                       </div>
@@ -93,7 +93,7 @@ const Taskboard = ({ project }: TaskboardProps) => {
       </div>
 
       {/* taskboard */}
-      <div className="mt-5 h-[65vh] text-center">
+      <div className="mt-5 min-h-[65vh] text-center">
         <KanbanBoard onEditColumn={handleEditColumn} />
       </div>
 

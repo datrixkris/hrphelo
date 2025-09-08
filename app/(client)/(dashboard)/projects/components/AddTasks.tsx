@@ -63,7 +63,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
       ></div>
 
       {/* Modal */}
-      <div className="modal-box relative z-20 w-full max-w-md rounded-md bg-white p-6 shadow-lg">
+      <div className="modal-box relative z-20 w-full max-w-md rounded-md bg-base-100 p-6 shadow-lg">
         <div className="mb-4 flex items-center justify-between">
           <h4 className="text-lg font-semibold">Add Task</h4>
           <button
@@ -156,7 +156,7 @@ export const AddTasks: React.FC<AddTaskProps> = ({ onClose, columnId }) => {
               className="btn btn-primary"
               disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "Adding Task..." : "Add Task"}
             </button>
           </div>
         </form>

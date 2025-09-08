@@ -6,6 +6,7 @@ import { Resignation } from "../types";
 import { useStaffStore } from "../../(employee)/staff/staff-store";
 import { useRouter } from "next/navigation";
 import ConfirmationModal from "@/app/components/ConfirmationModal";
+import { useOnboardingStore } from "../../onboarding/onboarding-store";
 
 const StaffDetails = ({
   staff,
@@ -15,8 +16,15 @@ const StaffDetails = ({
   resignation: Resignation | null;
 }) => {
   const { loading, archiveStaff } = useStaffStore();
+  const { isChecklistCleared } = useOnboardingStore();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+
+  // Check if checklist is cleared for this staff member
+  const isCleared =
+    staff?.department?.id && staff?.company?.checklists
+      ? isChecklistCleared(staff.department.id, staff.company.checklists)
+      : false;
 
   async function archiveThisStaff(staffId: number | undefined) {
     if (staffId) {
@@ -90,9 +98,18 @@ const StaffDetails = ({
 
       {/* clear staff */}
       <div className="mt-5 flex items-center justify-end gap-3">
-        <Button onClick={() => setIsOpen(true)} disabled={loading}>
-          Exit Staff
-        </Button>
+        {!isCleared ? (
+          <div className="text-red-500">
+            Ensure all checklist items are cleared to exit staff
+          </div>
+        ) : (
+          <Button
+            onClick={() => setIsOpen(true)}
+            disabled={loading || !isCleared}
+          >
+            Exit Staff
+          </Button>
+        )}
       </div>
 
       {/* confirmation of exiting */}

@@ -26,7 +26,7 @@ const ResignationsList = () => {
       </div>
 
       <div className="overflow-x-auto">
-        {loading ? (
+        {loading && resignations.length === 0 ? (
           <TableSkeleton />
         ) : (
           <div>
