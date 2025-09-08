@@ -27,3 +27,6 @@ Responsive UI for dashboard
 
 Autgust 21st - 23rd
 Roles and permissions refactor
+
+September 5th
+Dashboard colors.
