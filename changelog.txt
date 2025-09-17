@@ -33,3 +33,6 @@ Dashboard colors.
 
 September 7th
 Project fixes, Resignation fixes
+
+September 17th
+User reset password login refresh resolved
