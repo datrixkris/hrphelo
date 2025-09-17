@@ -48,12 +48,6 @@ export const submitLoginForm = async (formData: LoginData) => {
           userResponse.data.nextPasswordResetDate,
         );
         const today = dayjs();
-        console.log("nextPasswordResetDate", nextPasswordResetDate);
-        console.log("today", today);
-        console.log(
-          "nextPasswordResetDate.isBefore(today)",
-          nextPasswordResetDate.isBefore(today),
-        );
         if (nextPasswordResetDate.isBefore(today)) {
           return { route: "/auth/change-password" };
         }

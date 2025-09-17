@@ -4,6 +4,7 @@ import Button from "@/app/components/Button";
 import Logo from "@/app/components/Logo";
 import { LoginData, loginSchema } from "@/app/schemas";
 import { useAuthStore } from "@/app/stores/auth-store";
+import { isDateBeforeToday } from "@/utils/checkDate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 // import Image from "next/image";
@@ -53,7 +54,16 @@ const Page = () => {
         // Check if we have cached authentication data
         const isAuthenticated = useAuthStore.getState().isAuthenticated;
 
-        if (isAuthenticated) {
+        // Check if user password reset date is before today
+        const user = useAuthStore.getState().user;
+        let userMustResetPassword = false;
+        if (user?.nextPasswordResetDate) {
+          if (isDateBeforeToday(user.nextPasswordResetDate)) {
+            userMustResetPassword = true;
+          }
+        }
+
+        if (isAuthenticated && !userMustResetPassword) {
           // Already authenticated, redirect to dashboard
           if (isMounted) {
             router.push("/");
