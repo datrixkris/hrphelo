@@ -11,6 +11,7 @@ import { Icon } from "@iconify/react";
 import Setting from "@/app/components/Setting";
 import { ThemeContext } from "@/app/context/ThemeContext";
 import Image from "next/image";
+import useInactivityTimer from "@/app/hooks/useInactivityTimer";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -18,6 +19,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { changeTheme } = useContext(ThemeContext);
   const [loading, setLoading] = useState(false);
   // const { socket } = useSocket();
+
+  useInactivityTimer(() => {
+    console.log("Inactivity timer expired");
+    useAuthStore.getState().logout();
+  });
 
   useLayoutEffect(() => {
     const checkAuth = async () => {

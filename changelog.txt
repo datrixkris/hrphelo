@@ -36,3 +36,6 @@ Project fixes, Resignation fixes
 
 September 17th
 User reset password login refresh resolved
+
+September 29th
+User inactive logout for an hour...
