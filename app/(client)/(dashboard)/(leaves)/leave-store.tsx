@@ -118,7 +118,7 @@ export const useLeaveStore = create<LeaveStore>((set, get) => ({
     try {
       const response = await api.put(`/v1/leaves/${id}/requests`, data);
       await get().fetchLeaves();
-      toast.success(response.data.message);
+      toast.success(response.data.message || "Leave processed successfully");
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       set(() => ({
@@ -128,9 +128,10 @@ export const useLeaveStore = create<LeaveStore>((set, get) => ({
           axiosError.message,
         loading: false,
       }));
-      toast.error(get().error);
+      toast.error(get().error || "Leave processing failed");
     }
   },
+
   declineLeave: async (id, data) => {
     set({ loading: true, error: null });
     try {

@@ -44,7 +44,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
 
   if (loading || !leaves?.leaves || leaves.leaves.length < 1) {
     return (
-      <div className="">
+      <div className="overflow-x-auto">
         <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
           <thead>
             <tr className="text-left">
@@ -95,7 +95,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
   }
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <table className="table table-lg w-full rounded border border-base-300 bg-base-100">
         <thead>
           <tr className="text-left">
@@ -105,13 +105,13 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
             <th>No of Days</th>
             <th>Reason</th>
             <th>Status</th>
-            <th>Approved by</th>
+            {/* <th>Approved by</th> */}
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody className="overflow-x-auto">
+        <tbody className="">
           {leaves.leaves.map((leave) => (
-            <tr key={leave.id}>
+            <tr key={leave.id} className="!text-sm">
               <td>{leave.leavetype?.name}</td>
               <td>{dayjs(leave.start_date).format("MMM D, YYYY")}</td>
               <td>{dayjs(leave.end_date).format("MMM D, YYYY")}</td>
@@ -120,7 +120,7 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
               <td className="text-center">
                 <Status leave={leave} />
               </td>
-              <td>
+              {/* <td>
                 <h2 className="inline-flex items-center whitespace-nowrap align-middle text-[15px] font-normal">
                   <a
                     href="profile.html"
@@ -136,41 +136,32 @@ const LeaveTable: React.FC<LeaveTableProps> = ({ onEditLeave }) => {
                     {leave.staff.name}
                   </a>
                 </h2>
-              </td>
+              </td> */}
               <td>
-                <details className="dropdown dropdown-end">
-                  <summary className="btn m-1">
-                    <Icon icon="mdi:dots-vertical" className="text-xl" />
-                  </summary>
-                  <ul className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow">
-                    <li>
-                      <a
-                        onClick={() => onEditLeave(leave.id)}
-                        className={`${
-                          leave.status === "approved" ||
-                          leave.status === "declined"
-                            ? "pointer-events-none cursor-not-allowed text-gray-400"
-                            : ""
-                        }`}
-                      >
-                        Edit
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        onClick={() => openConfirmationModal(leave.id)}
-                        className={`${
-                          leave.status === "approved" ||
-                          leave.status === "declined"
-                            ? "pointer-events-none cursor-not-allowed text-gray-400"
-                            : ""
-                        }`}
-                      >
-                        Delete
-                      </a>
-                    </li>
-                  </ul>
-                </details>
+                <div className="flex items-center gap-1.5">
+                  <Icon
+                    icon="mage:edit"
+                    // className="cursor-pointer text-xl text-info"
+                    aria-label="Edit department"
+                    onClick={() => onEditLeave(leave.id)}
+                    className={`cursor-pointer text-xl text-info ${
+                      leave.status === "approved" || leave.status === "declined"
+                        ? "pointer-events-none !cursor-not-allowed !text-gray-400"
+                        : ""
+                    }`}
+                  />
+
+                  <Icon
+                    icon="weui:delete-outlined"
+                    className={`cursor-pointer text-xl text-error ${
+                      leave.status === "approved" || leave.status === "declined"
+                        ? "pointer-events-none !cursor-not-allowed text-gray-400"
+                        : ""
+                    }`}
+                    aria-label="Delete department"
+                    onClick={() => openConfirmationModal(leave.id)}
+                  />
+                </div>
               </td>
             </tr>
           ))}

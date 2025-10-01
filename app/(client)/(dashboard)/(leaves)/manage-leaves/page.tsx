@@ -74,6 +74,10 @@ const Page = () => {
     filterLeaves();
   }, []);
 
+  useEffect(() => {
+    filterLeaves();
+  }, [leaves]);
+
   return (
     <HasAccess module="Manage Leaves">
       <div>
