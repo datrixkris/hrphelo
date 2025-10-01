@@ -39,3 +39,6 @@ User reset password login refresh resolved
 
 September 29th
 User inactive logout for an hour...
+
+October 1st
+Leave approval feedback
