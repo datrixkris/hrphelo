@@ -42,3 +42,6 @@ User inactive logout for an hour...
 
 October 1st
 Leave approval feedback
+
+October 6th
+Remove currency symbol from payroll
