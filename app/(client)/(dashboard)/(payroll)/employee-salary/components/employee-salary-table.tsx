@@ -63,7 +63,7 @@ const EmployeeSalaryTable = () => {
                 <td>Tester</td>
                 {/* <td>78888</td> */}
                 <td>
-                  {payroll.netPay.currency}
+                  {/* {payroll.netPay.currency} */}
                   {payroll.netPay.value}
                 </td>
                 <td>
