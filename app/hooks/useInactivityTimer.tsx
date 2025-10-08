@@ -10,7 +10,6 @@ export default function useInactivityTimer(
   useEffect(() => {
     const resetTimer = () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      console.log("Resetting timer");
       // Save current activity timestamp to localStorage
       localStorage.setItem(STORAGE_KEY, Date.now().toString());
 

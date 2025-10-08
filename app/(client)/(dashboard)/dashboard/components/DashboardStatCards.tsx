@@ -418,8 +418,8 @@ export const PayrollHistoryTable = ({
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <tr key={item.date}>
+            {data.map((item, i) => (
+              <tr key={i}>
                 <td>{dayjs(item.date).format("DD MMM YYYY")}</td>
                 <td>{item.amount}</td>
               </tr>

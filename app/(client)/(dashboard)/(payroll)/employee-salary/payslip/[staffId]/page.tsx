@@ -62,12 +62,14 @@ export default function Page() {
           </button>
         </div>
       </div>
+
+      {/* Payslip */}
       <div>
         <div className="card bg-base-100">
           <div className="card-body">
             <div className="mb-3 flex items-center justify-between border-b">
               <div className="mb-3">
-                <div className="mb-2">
+                <div className="mb-2 w-32">
                   <Logo />
                 </div>
                 <p>ARS 32 St</p>
@@ -94,7 +96,7 @@ export default function Page() {
                   <h4 className="mb-1 text-xl font-semibold">
                     {payslip?.from.name}
                   </h4>
-                  <p className="mb-1">address</p>
+                  {/* <p className="mb-1">address</p> */}
                   <p className="mb-1">
                     Email :{" "}
                     <span className="font-medium">{payslip?.from.email}</span>
@@ -112,7 +114,7 @@ export default function Page() {
                     {" "}
                     {payslip?.to.name}
                   </h4>
-                  <p className="mb-1">Web Designer</p>
+                  {/* <p className="mb-1">Web Designer</p> */}
                   <p className="mb-1">
                     Email :{" "}
                     <span className="font-medium">{payslip?.to.email}</span>
@@ -138,7 +140,7 @@ export default function Page() {
                       <div className="p-3" key={entry.name}>
                         <div className="flex justify-between">
                           <span>{entry.name}</span>
-                          <span className="font-medium">${entry.amount}</span>
+                          <span className="font-medium">{entry.amount}</span>
                         </div>
                       </div>
                     ))}
@@ -179,9 +181,9 @@ export default function Page() {
               </div>
               <div>
                 <p>
-                  Net Salary :{" "}
+                  Net Salary:{" "}
                   <span className="font-medium text-gray-900">
-                    {payslip?.netPay.currency}
+                    {/* {payslip?.netPay.currency} */}
                     {payslip?.netPay.value}
                   </span>
                 </p>
