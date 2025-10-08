@@ -20,10 +20,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(false);
   // const { socket } = useSocket();
 
-  useInactivityTimer(() => {
-    console.log("Inactivity timer expired");
-    useAuthStore.getState().logout();
-  });
+  useInactivityTimer(
+    () => {
+      console.log("Inactivity timer expired");
+      useAuthStore.getState().logout();
+    },
+    30 * 60 * 1000,
+  );
 
   useLayoutEffect(() => {
     const checkAuth = async () => {
