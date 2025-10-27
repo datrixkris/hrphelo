@@ -215,52 +215,60 @@ const Page = () => {
                 </div>
 
                 {/* Benefits */}
-                <div>
-                  <h5>Benefits</h5>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    {benefits.map((policy) => (
-                      <AmountInput
-                        key={policy.id}
-                        label={policy.name}
-                        value={formData.amounts[policy.id] || ""}
-                        onInputChange={(e) =>
-                          handleInputChange(policy.id, e.target.value)
-                        }
-                        currencyValue={formData.currencies[policy.id] || "GHS"}
-                        onCurrencyChange={(e) =>
-                          handleCurrencyChange(policy.id, e)
-                        }
-                        currencies={["GHS", "USD", "EUR", "GBP"]}
-                        placeholder="0.00"
-                        disabled={loading}
-                      />
-                    ))}
+                {benefits.length > 0 && (
+                  <div>
+                    <h5>Benefits</h5>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      {benefits.map((policy) => (
+                        <AmountInput
+                          key={policy.id}
+                          label={policy.name}
+                          value={formData.amounts[policy.id] || ""}
+                          onInputChange={(e) =>
+                            handleInputChange(policy.id, e.target.value)
+                          }
+                          currencyValue={
+                            formData.currencies[policy.id] || "GHS"
+                          }
+                          onCurrencyChange={(e) =>
+                            handleCurrencyChange(policy.id, e)
+                          }
+                          currencies={["GHS", "USD", "EUR", "GBP"]}
+                          placeholder="0.00"
+                          disabled={loading}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Deductions */}
-                <div>
-                  <h5>Deductions</h5>
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    {deduction.map((policy) => (
-                      <AmountInput
-                        key={policy.id}
-                        label={policy.name}
-                        value={formData.amounts[policy.id] || ""}
-                        onInputChange={(e) =>
-                          handleInputChange(policy.id, e.target.value)
-                        }
-                        currencyValue={formData.currencies[policy.id] || "GHS"}
-                        onCurrencyChange={(e) =>
-                          handleCurrencyChange(policy.id, e)
-                        }
-                        currencies={["GHS", "USD", "EUR", "GBP"]}
-                        placeholder="0.00"
-                        disabled={loading}
-                      />
-                    ))}
+                {deduction.length > 0 && (
+                  <div>
+                    <h5>Deductions</h5>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      {deduction.map((policy) => (
+                        <AmountInput
+                          key={policy.id}
+                          label={policy.name}
+                          value={formData.amounts[policy.id] || ""}
+                          onInputChange={(e) =>
+                            handleInputChange(policy.id, e.target.value)
+                          }
+                          currencyValue={
+                            formData.currencies[policy.id] || "GHS"
+                          }
+                          onCurrencyChange={(e) =>
+                            handleCurrencyChange(policy.id, e)
+                          }
+                          currencies={["GHS", "USD", "EUR", "GBP"]}
+                          placeholder="0.00"
+                          disabled={loading}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Modal Action Buttons */}
                 <div className="modal-action flex justify-end">

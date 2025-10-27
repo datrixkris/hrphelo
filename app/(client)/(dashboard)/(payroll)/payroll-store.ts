@@ -172,11 +172,13 @@ export const usePayrollStore = create<PayrollStore>((set, get) => ({
     try {
       await api.post<ApiResponse>("/v1/payroll/policy", data);
       set(() => ({ loading: false }));
+      await get().fetchPayrollPolicy();
       return true;
     } catch (err) {
       return false;
     }
   },
+
   CreatePayrollPeriod: async (data) => {
     set({ loading: true, error: null });
     try {

@@ -173,10 +173,13 @@ const Page = () => {
                     Policy Type
                   </label>
                   <select
-                    {...register("pol_type")}
+                    {...register("pol_type", {
+                      required: "Policy type is required",
+                    })}
+                    defaultValue=""
                     className="select select-bordered w-full"
                   >
-                    <option disabled selected>
+                    <option disabled value="">
                       Policy type
                     </option>
                     <option value="Deduction">Deduction</option>
